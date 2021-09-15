@@ -7,7 +7,7 @@ Frontend:
 * javascript
 * html
 * css
-* Bootstrap
+* Leaflet
 
 Backend:
 
