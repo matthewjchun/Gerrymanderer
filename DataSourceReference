@@ -1,7 +1,22 @@
 Data Source Reference for Arizona:
+https://azsos.gov/elections/voter-registration-historical-election-data
 
 Data Source Reference for Michigan:
+https://www.michigan.gov/sos/0,4670,7-127-1633_8722---,00.html
 
 Data Source Reference for Virginia:
 https://www.elections.virginia.gov/resultsreports/registration-statistics/2021-registration-statistics/
 https://historical.elections.virginia.gov/elections/view/144567/
+
+General GeoJson:
+https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html
+
+GeoJson Arizona:
+https://openprecincts.org/az/
+
+GeoJson Michigan:
+https://openprecincts.org/mi/
+https://gis-michigan.opendata.arcgis.com/
+
+GeoJson Virginia:
+https://openprecincts.org/va/
