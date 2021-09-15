@@ -1,11 +1,9 @@
-import './App.css';
-import Map from './components/Map';
-
-export default function App() {
-
+import { ChakraProvider } from '@chakra-ui/react';
+function MyApp({ Component, pageProps }) {
   return (
-  <div className="App">
-    <Map></Map>
-  </div>
+    <ChakraProvider>
+      <Component {...pageProps} />
+    </ChakraProvider>
   );
 }
+export default MyApp;
