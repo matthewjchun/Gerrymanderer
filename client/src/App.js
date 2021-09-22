@@ -1,7 +1,6 @@
 import './App.css';
-import Map from './components/Map';
+// import Map from './components/Map';
 import TopBar from './components/TopBar';
-
 import React, { useState } from 'react';
 import ReactMapGL from 'react-map-gl';
 
@@ -19,21 +18,21 @@ export default function App() {
     latitude: 38.2749,
     longitude: -98.35,
     zoom: 2.8,
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: '100vw',
+    height: '93vh'
   });
 
   return (
-    <>
+    <div>
       <TopBar />
       <ReactMapGL
         mapboxApiAccessToken={
-          'pk.eyJ1IjoibWpjaHVuIiwiYSI6ImNrdHV3Mmc5ZDIzd2cyb28ycjIxZHNkMjYifQ.60vjXo3tkAUMrL5aFgOkkQ'
+          "pk.eyJ1IjoibWpjaHVuIiwiYSI6ImNrdHV3Mmc5ZDIzd2cyb28ycjIxZHNkMjYifQ.60vjXo3tkAUMrL5aFgOkkQ"
         }
         {...viewport}
-        onViewportChange={(newView) => setViewport(newView)}
+        // onViewportChange={(newView) => setViewport(newView)}
       ></ReactMapGL>
-    </>
+    </div>
   );
 }
 */
