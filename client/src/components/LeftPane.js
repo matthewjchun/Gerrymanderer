@@ -27,8 +27,10 @@ export default function LeftPane(props) {
         </DrawerHeader>
 
         <DrawerBody>
-          <HStack>
-            <Text>Population Equality</Text>
+          <HStack p='5'>
+            <Text pl='5' pr='5'>
+              Population Equality
+            </Text>
             <Slider aria-label='population-equality' defaultValue={0}>
               <SliderTrack>
                 <SliderFilledTrack />
@@ -36,8 +38,10 @@ export default function LeftPane(props) {
               <SliderThumb />
             </Slider>
           </HStack>
-          <HStack>
-            <Text>Majority Minority Districts</Text>
+          <HStack p='5'>
+            <Text pl='5' pr='5'>
+              Majority-Minority Districts
+            </Text>
             <Slider aria-label='majority-minority-districts' defaultValue={0}>
               <SliderTrack>
                 <SliderFilledTrack />
@@ -45,8 +49,10 @@ export default function LeftPane(props) {
               <SliderThumb />
             </Slider>
           </HStack>
-          <HStack>
-            <Text>Racial Deviation</Text>
+          <HStack p='5'>
+            <Text pl='5' pr='5'>
+              Racial Deviation
+            </Text>
             <Slider aria-label='racial-deviation' defaultValue={0}>
               <SliderTrack>
                 <SliderFilledTrack />

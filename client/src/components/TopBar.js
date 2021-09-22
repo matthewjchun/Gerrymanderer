@@ -7,9 +7,9 @@ export default function TopBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <HStack>
+    <HStack p='5'>
       <Button onClick={onOpen}>
-        <Text>Open</Text>
+        <Text>Redistricting Settings</Text>
       </Button>
       <LeftPane isOpen={isOpen} onClose={onClose}></LeftPane>
     </HStack>

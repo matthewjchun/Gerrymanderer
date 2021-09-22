@@ -5,14 +5,16 @@ import TopBar from './components/TopBar';
 import React, { useState } from 'react';
 import ReactMapGL from 'react-map-gl';
 
-/*export default function App() {
+export default function App() {
   return (
     <div className='App'>
       <TopBar />
       <Map></Map>
-    </div>*/
+    </div>
+  );
+}
 
-export default function App() {
+/*export default function App() {
   let [viewport, setViewport] = useState({
     latitude: 38.2749,
     longitude: -98.35,
@@ -34,3 +36,4 @@ export default function App() {
     </>
   );
 }
+*/
