@@ -7,7 +7,7 @@ import {
   DrawerContent,
   DrawerCloseButton,
 } from '@chakra-ui/react';
-import { Text, HStack } from '@chakra-ui/react';
+import { Text, Button, Flex, HStack, Grid, GridItem } from '@chakra-ui/react';
 import {
   Slider,
   SliderTrack,
@@ -27,42 +27,38 @@ export default function LeftPane(props) {
         </DrawerHeader>
 
         <DrawerBody>
-          <HStack p='5'>
-            <Text pl='5' pr='5'>
-              Population Equality
-            </Text>
+          <Grid>
+            <Text>Population Equality</Text>
             <Slider aria-label='population-equality' defaultValue={0}>
               <SliderTrack>
                 <SliderFilledTrack />
               </SliderTrack>
               <SliderThumb />
             </Slider>
-          </HStack>
-          <HStack p='5'>
-            <Text pl='5' pr='5'>
-              Majority-Minority Districts
-            </Text>
+            <Text>Majority-Minority Districts</Text>
             <Slider aria-label='majority-minority-districts' defaultValue={0}>
               <SliderTrack>
                 <SliderFilledTrack />
               </SliderTrack>
               <SliderThumb />
             </Slider>
-          </HStack>
-          <HStack p='5'>
-            <Text pl='5' pr='5'>
-              Racial Deviation
-            </Text>
+            <Text>Racial Deviation</Text>
             <Slider aria-label='racial-deviation' defaultValue={0}>
               <SliderTrack>
                 <SliderFilledTrack />
               </SliderTrack>
               <SliderThumb />
             </Slider>
-          </HStack>
+          </Grid>
         </DrawerBody>
 
-        <DrawerFooter></DrawerFooter>
+        <DrawerFooter textAlign='center'>
+          <Flex align='center' justify='center'>
+            <Button>
+              <Text>Generate</Text>
+            </Button>
+          </Flex>
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );
