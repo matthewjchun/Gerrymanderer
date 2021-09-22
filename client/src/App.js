@@ -18,8 +18,8 @@ export default function App() {
     latitude: 38.2749,
     longitude: -98.35,
     zoom: 2.8,
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: '100vw',
+    height: '93vh'
   });
 
   return (
