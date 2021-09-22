@@ -1,8 +1,5 @@
 import './App.css';
-<<<<<<< HEAD
 import Map from './components/Map';
-=======
->>>>>>> 502f573528c7ee3b255e59565de731d21e5c49ac
 import TopBar from './components/TopBar';
 import React, { useState } from 'react';
 import ReactMapGL from 'react-map-gl';
@@ -13,20 +10,22 @@ export default function App() {
     longitude: -75,
     width: '100vw',
     height: '100vh',
-    zoom: 11
+    zoom: 11,
   });
 
   return (
     <div>
       <TopBar />
       <ReactMapGL
-      {...viewport}
-      mapboxApiAccessToken = {'pk.eyJ1IjoiY2VsdGljczQxNiIsImEiOiJja3R2MGM5dTQxajY4Mm5sNWV5YnNhNHg0In0.t9oiLZZUeZi0QpqUIik13w'}
-      mapStyle="mapbox://styles/celtics416/cktv0fpu01ddn17nygi0ck49g"
-      onViewportChange={viewport => {
-        setViewport(viewport);}}
-      >
-      </ReactMapGL>
+        {...viewport}
+        mapboxApiAccessToken={
+          'pk.eyJ1IjoiY2VsdGljczQxNiIsImEiOiJja3R2MGM5dTQxajY4Mm5sNWV5YnNhNHg0In0.t9oiLZZUeZi0QpqUIik13w'
+        }
+        mapStyle='mapbox://styles/celtics416/cktv0fpu01ddn17nygi0ck49g'
+        onViewportChange={(viewport) => {
+          setViewport(viewport);
+        }}
+      ></ReactMapGL>
     </div>
   );
 }

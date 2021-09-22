@@ -7,7 +7,15 @@ import {
   DrawerContent,
   DrawerCloseButton,
 } from '@chakra-ui/react';
-import { Text, Button, Flex, HStack, Grid, GridItem } from '@chakra-ui/react';
+import {
+  Text,
+  Button,
+  Flex,
+  HStack,
+  VStack,
+  Grid,
+  GridItem,
+} from '@chakra-ui/react';
 import {
   Slider,
   SliderTrack,
@@ -27,7 +35,7 @@ export default function LeftPane(props) {
         </DrawerHeader>
 
         <DrawerBody>
-          <Grid>
+          <VStack align='left' spacing='5'>
             <Text>Population Equality</Text>
             <Slider aria-label='population-equality' defaultValue={0}>
               <SliderTrack>
@@ -49,7 +57,7 @@ export default function LeftPane(props) {
               </SliderTrack>
               <SliderThumb />
             </Slider>
-          </Grid>
+          </VStack>
         </DrawerBody>
 
         <DrawerFooter textAlign='center'>
