@@ -1,8 +1,8 @@
 import './App.css';
 // import Map from './components/Map';
 import TopBar from './components/TopBar';
-import React, { useState } from "react";
-import ReactMapGL from "react-map-gl";
+import React, { useState } from 'react';
+import ReactMapGL from 'react-map-gl';
 
 /*export default function App() {
   return (
@@ -19,7 +19,7 @@ export default function App() {
     longitude: -98.35,
     zoom: 2.8,
     width: window.innerWidth,
-    height: window.innerHeight
+    height: window.innerHeight,
   });
 
   return (
