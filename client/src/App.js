@@ -1,5 +1,5 @@
 import './App.css';
-// import Map from './components/Map';
+import Map from './components/Map';
 import TopBar from './components/TopBar';
 import React, { useState } from 'react';
 import ReactMapGL from 'react-map-gl';
