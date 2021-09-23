@@ -3,7 +3,8 @@ import './App.css';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import TopBar from './components/TopBar';
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiY2VsdGljczQxNiIsImEiOiJja3R2MGM5dTQxajY4Mm5sNWV5YnNhNHg0In0.t9oiLZZUeZi0QpqUIik13w';
+mapboxgl.accessToken =
+  'pk.eyJ1IjoiY2VsdGljczQxNiIsImEiOiJja3R2MGM5dTQxajY4Mm5sNWV5YnNhNHg0In0.t9oiLZZUeZi0QpqUIik13w';
 
 export default function App() {
   const mapContainer = useRef(null);
@@ -18,7 +19,7 @@ export default function App() {
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [lng, lat],
-      zoom: zoom
+      zoom: zoom,
     });
   });
 
@@ -32,12 +33,12 @@ export default function App() {
   });
 
   return (
-    <div>
+    <>
       <TopBar />
-      <div className="sidebar">
+      <div className='sidebar'>
         Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
       </div>
-      <div ref={mapContainer} className="map-container" />
-    </div>
+      <div ref={mapContainer} className='map-container' />
+    </>
   );
 }
