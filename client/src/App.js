@@ -14,25 +14,116 @@ export default function App() {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [lng, setLng] = useState(-100.445882);
-  const [lat, setLat] = useState(39.7837304);
+  const [lat, setLat] = useState(37.7837304);
   const [zoom, setZoom] = useState(4);
 
   useEffect(() => {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/streets-v11',
+      style: 'mapbox://styles/celtics416/cktw1ft0304ye18p9i6etuxh2',
       center: [lng, lat],
       zoom: zoom,
+      dragPan: false
     });
   });
+
+  useEffect(() => {
+    if (!map.current) return;
+    map.current.on('load', () => {
+      // Add a data source containing GeoJSON data.
+      map.current.addSource('arizona', {
+          'type': 'geojson',
+          'data': 'https://raw.githubusercontent.com/glynnbird/usstatesgeojson/master/arizona.geojson'
+          
+      });
+
+      map.current.addSource('michigan', {
+        'type': 'geojson',
+        'data': 'https://raw.githubusercontent.com/glynnbird/usstatesgeojson/master/michigan.geojson'
+      });
+
+    map.current.addSource('virginia', {
+      'type': 'geojson',
+      'data': 'https://raw.githubusercontent.com/glynnbird/usstatesgeojson/master/virginia.geojson'
+    });
+  
+      // Add a new layer to visualize the polygon.
+    map.current.addLayer({
+        'id': 'arizona',
+        'type': 'fill',
+        'source': 'arizona', // reference the data source
+        'layout': {},
+        'paint': {
+            'fill-color': '#abd67a', // green color fill
+            'fill-opacity': 0.5
+        },
+    });
+
+    // Add a new layer to visualize the polygon.
+    map.current.addLayer({
+      'id': 'michigan',
+      'type': 'fill',
+      'source': 'michigan', // reference the data source
+      'layout': {},
+      'paint': {
+          'fill-color': '#abd67a', // green color fill
+          'fill-opacity': 0.5
+      },
+    });
+
+    // Add a new layer to visualize the polygon.
+    map.current.addLayer({
+      'id': 'virginia',
+      'type': 'fill',
+      'source': 'virginia', // reference the data source
+      'layout': {},
+      'paint': {
+          'fill-color': '#abd67b', // green color fill
+          'fill-opacity': 0.5
+      },
+    });
+    // Add a black outline around the polygon.
+    map.current.addLayer({
+        'id': 'outline',
+        'type': 'line',
+        'source': 'arizona',
+        'layout': {},
+        'paint': {
+            'line-color': '#000',
+            'line-width': 3
+        }
+    });
+
+    map.current.addLayer({
+      'id': 'outline_mi',
+      'type': 'line',
+      'source': 'michigan',
+      'layout': {},
+      'paint': {
+          'line-color': '#000',
+          'line-width': 3
+      }
+    });
+    map.current.addLayer({
+      'id': 'outline_va',
+      'type': 'line',
+      'source': 'virginia',
+      'layout': {},
+      'paint': {
+          'line-color': '#000',
+          'line-width': 3
+      }
+    });
+    });
+  })
 
   useEffect(() => {
     if (!map.current) return; // wait for map to initialize
     map.current.on('move', () => {
       setLng(map.current.getCenter().lng.toFixed(4));
       setLat(map.current.getCenter().lat.toFixed(4));
-      setZoom(map.current.getZoom().toFixed(2));
+      //setZoom(map.current.getZoom().toFixed(2));
     });
   });
 
@@ -41,6 +132,7 @@ export default function App() {
   return (
     <>
       <TopBar />
+      <div ref={mapContainer} className="map-container" />
       <Flex
         className='content'
         direction='column'
