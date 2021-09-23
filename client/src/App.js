@@ -153,9 +153,6 @@ export default function App() {
   return (
     <>
       <TopBar />
-      <div className="sidebar">
-        Longitude: {lng} | Latitude: {lat}
-      </div>
       <div ref={mapContainer} className="map-container" />
       <Flex
         className='content'
