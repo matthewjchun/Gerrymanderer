@@ -39,10 +39,6 @@ export default function App() {
         Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
       </div>
       <div ref={mapContainer} className='map-container' />
-<<<<<<< HEAD
-    </div>
-=======
     </>
->>>>>>> a81f4e3686292e4bb834455d06e92e4b5f2d3195
   );
 }
