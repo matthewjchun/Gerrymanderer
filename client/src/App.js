@@ -49,7 +49,7 @@ export default function App() {
         'data': {
             'type': 'Feature',
             'geometry': {
-                'type': 'Polygon',
+                'type': 'MultiPolygon',
                 'coordinates': mi.geometry.coordinates
             }
         }
@@ -60,7 +60,7 @@ export default function App() {
       'data': {
           'type': 'Feature',
           'geometry': {
-              'type': 'Polygon',
+              'type': 'MultiPolygon',
               'coordinates': va.geometry.coordinates
           }
       }

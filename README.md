@@ -7,7 +7,7 @@ Frontend:
 * javascript
 * html
 * css
-* Leaflet
+* Mapbox
 
 Backend:
 
