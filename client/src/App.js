@@ -4,6 +4,8 @@ import { Flex } from '@chakra-ui/react';
 
 import './App.css';
 import TopBar from './components/TopBar';
+import StateDrawer from './components/StateDrawer';
+// import { useDisclosure } from '@chakra-ui/react';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiY2VsdGljczQxNiIsImEiOiJja3R2MGM5dTQxajY4Mm5sNWV5YnNhNHg0In0.t9oiLZZUeZi0QpqUIik13w';
@@ -34,6 +36,8 @@ export default function App() {
     });
   });
 
+  // const { isOpen, onOpen, onClose } = useDisclosure();    // figure out where to better put this later
+
   return (
     <>
       <TopBar />
@@ -47,6 +51,7 @@ export default function App() {
           Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
         </div>
         <div ref={mapContainer} className='mapContainer' />
+        {/* <StateDrawer isOpen={true}></StateDrawer>  // closing aint workin so ill figure out tmw*/} 
       </Flex>
     </>
   );
