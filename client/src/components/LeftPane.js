@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Drawer,
   DrawerBody,
@@ -22,9 +23,27 @@ import {
   SliderFilledTrack,
   SliderThumb,
 } from '@chakra-ui/react';
+import {
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+} from '@chakra-ui/react';
+
+import themes from '../themes';
+import { BoxZoomHandler } from 'mapbox-gl';
 
 export default function LeftPane(props) {
   const { isOpen, onClose } = props;
+  const [popEquality, setPopEquality] = useState(0);
+  const [majorityMinority, setMajorityMinority] = useState(0);
+  const [racialDeviation, setRacialDeviation] = useState(0);
+
+  const handlePopEqualityInput = (val) => setPopEquality(val);
+  const handleMajorityMinorityInput = (val) => setMajorityMinority(val);
+  const handleRacialDeviationInput = (val) => setRacialDeviation(val);
+
   return (
     <Drawer isOpen={isOpen} onClose={onClose} placement={'left'}>
       <DrawerOverlay />
@@ -37,26 +56,83 @@ export default function LeftPane(props) {
         <DrawerBody>
           <VStack align='left' spacing='5'>
             <Text>Population Equality</Text>
-            <Slider aria-label='population-equality' defaultValue={0}>
-              <SliderTrack>
-                <SliderFilledTrack />
-              </SliderTrack>
-              <SliderThumb />
-            </Slider>
+            <HStack spacing='5'>
+              <Slider
+                aria-label='population-equality'
+                value={popEquality}
+                onChange={handlePopEqualityInput}
+                focusThumbOnChange={false}
+              >
+                <SliderTrack>
+                  <SliderFilledTrack />
+                </SliderTrack>
+                <SliderThumb bg={themes.colors.blue[500]} />
+              </Slider>
+              <NumberInput
+                value={popEquality}
+                min={0}
+                max={100}
+                onChange={handlePopEqualityInput}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </HStack>
             <Text>Majority-Minority Districts</Text>
-            <Slider aria-label='majority-minority-districts' defaultValue={0}>
-              <SliderTrack>
-                <SliderFilledTrack />
-              </SliderTrack>
-              <SliderThumb />
-            </Slider>
+            <HStack>
+              <Slider
+                aria-label='majority-minority-districts'
+                defaultValue={majorityMinority}
+                onChange={handleMajorityMinorityInput}
+                focusThumbOnChange={false}
+              >
+                <SliderTrack>
+                  <SliderFilledTrack />
+                </SliderTrack>
+                <SliderThumb bg={themes.colors.blue[500]} />
+              </Slider>
+              <NumberInput
+                value={majorityMinority}
+                min={0}
+                max={100}
+                onChange={handleMajorityMinorityInput}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </HStack>
             <Text>Racial Deviation</Text>
-            <Slider aria-label='racial-deviation' defaultValue={0}>
-              <SliderTrack>
-                <SliderFilledTrack />
-              </SliderTrack>
-              <SliderThumb />
-            </Slider>
+            <HStack>
+              <Slider
+                aria-label='racial-deviation'
+                defaultValue={racialDeviation}
+                onChange={handleRacialDeviationInput}
+                focusThumbOnChange={false}
+              >
+                <SliderTrack>
+                  <SliderFilledTrack />
+                </SliderTrack>
+                <SliderThumb bg={themes.colors.blue[500]} />
+              </Slider>
+              <NumberInput
+                value={racialDeviation}
+                min={0}
+                max={100}
+                onChange={handleRacialDeviationInput}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </HStack>
           </VStack>
         </DrawerBody>
 
