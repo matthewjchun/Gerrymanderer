@@ -4,9 +4,6 @@ import { Flex } from '@chakra-ui/react';
 
 import './App.css';
 import TopBar from './components/TopBar';
-import az from './data/az.json';
-import mi from './data/mi.json';
-import va from './data/va.json';
 import StateDrawer from './components/StateDrawer';
 // import { useDisclosure } from '@chakra-ui/react';
 
@@ -37,36 +34,18 @@ export default function App() {
       // Add a data source containing GeoJSON data.
       map.current.addSource('arizona', {
           'type': 'geojson',
-          'data': {
-              'type': 'Feature',
-              'geometry': {
-                  'type': 'Polygon',
-                  'coordinates': 
-                  az.geometry.coordinates
-              }
-          }
+          'data': 'https://raw.githubusercontent.com/glynnbird/usstatesgeojson/master/arizona.geojson'
+          
       });
 
       map.current.addSource('michigan', {
         'type': 'geojson',
-        'data': {
-            'type': 'Feature',
-            'geometry': {
-                'type': 'MultiPolygon',
-                'coordinates': mi.geometry.coordinates
-            }
-        }
+        'data': 'https://raw.githubusercontent.com/glynnbird/usstatesgeojson/master/michigan.geojson'
       });
 
     map.current.addSource('virginia', {
       'type': 'geojson',
-      'data': {
-          'type': 'Feature',
-          'geometry': {
-              'type': 'MultiPolygon',
-              'coordinates': va.geometry.coordinates
-          }
-      }
+      'data': 'https://raw.githubusercontent.com/glynnbird/usstatesgeojson/master/virginia.geojson'
     });
   
       // Add a new layer to visualize the polygon.
