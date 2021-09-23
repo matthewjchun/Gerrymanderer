@@ -160,7 +160,6 @@ export default function App() {
         Longitude: {lng} | Latitude: {lat}
       </div>
       <div ref={mapContainer} className="map-container" />
-    </div>
       <Flex
         className='content'
         direction='column'
