@@ -19,8 +19,6 @@ export default function App() {
   const [lng, setLng] = useState(-100.445882);
   const [lat, setLat] = useState(37.7837304);
   const [zoom, setZoom] = useState(4);
-  //console.log("az:" + az.geometry.coordinates);
-  console.log("mi" + mi.geometry.coordinates);
 
   useEffect(() => {
     if (map.current) return; // initialize map only once
@@ -58,7 +56,7 @@ export default function App() {
                 'coordinates': mi.geometry.coordinates
             }
         }
-    });
+      });
 
     map.current.addSource('virginia', {
       'type': 'geojson',
@@ -69,31 +67,32 @@ export default function App() {
               'coordinates': va.geometry.coordinates
           }
       }
-  });
+    });
   
       // Add a new layer to visualize the polygon.
-      map.current.addLayer({
-          'id': 'arizona',
-          'type': 'fill',
-          'source': 'arizona', // reference the data source
-          'layout': {},
-          'paint': {
-              'fill-color': '#abd67a', // green color fill
-              'fill-opacity': 0.5
-          },
-      });
-
-      // Add a new layer to visualize the polygon.
-      map.current.addLayer({
-        'id': 'michigan',
+    map.current.addLayer({
+        'id': 'arizona',
         'type': 'fill',
-        'source': 'michigan', // reference the data source
+        'source': 'arizona', // reference the data source
         'layout': {},
         'paint': {
             'fill-color': '#abd67a', // green color fill
             'fill-opacity': 0.5
         },
     });
+
+    // Add a new layer to visualize the polygon.
+    map.current.addLayer({
+      'id': 'michigan',
+      'type': 'fill',
+      'source': 'michigan', // reference the data source
+      'layout': {},
+      'paint': {
+          'fill-color': '#abd67a', // green color fill
+          'fill-opacity': 0.5
+      },
+    });
+
     // Add a new layer to visualize the polygon.
     map.current.addLayer({
       'id': 'virginia',
@@ -104,28 +103,28 @@ export default function App() {
           'fill-color': '#abd67b', // green color fill
           'fill-opacity': 0.5
       },
-  });
-      // Add a black outline around the polygon.
-      map.current.addLayer({
-          'id': 'outline',
-          'type': 'line',
-          'source': 'arizona',
-          'layout': {},
-          'paint': {
-              'line-color': '#000',
-              'line-width': 3
-          }
-      });
-
-      map.current.addLayer({
-        'id': 'outline_mi',
+    });
+    // Add a black outline around the polygon.
+    map.current.addLayer({
+        'id': 'outline',
         'type': 'line',
-        'source': 'michigan',
+        'source': 'arizona',
         'layout': {},
         'paint': {
             'line-color': '#000',
             'line-width': 3
         }
+    });
+
+    map.current.addLayer({
+      'id': 'outline_mi',
+      'type': 'line',
+      'source': 'michigan',
+      'layout': {},
+      'paint': {
+          'line-color': '#000',
+          'line-width': 3
+      }
     });
     map.current.addLayer({
       'id': 'outline_va',
@@ -136,9 +135,7 @@ export default function App() {
           'line-color': '#000',
           'line-width': 3
       }
-  });
-
-
+    });
     });
   })
 
