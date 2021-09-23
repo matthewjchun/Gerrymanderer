@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
-import './App.css';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+import { Flex } from '@chakra-ui/react';
+
+import './App.css';
 import TopBar from './components/TopBar';
 
 mapboxgl.accessToken =
@@ -35,10 +37,17 @@ export default function App() {
   return (
     <>
       <TopBar />
-      <div className='sidebar'>
-        Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-      </div>
-      <div ref={mapContainer} className='map-container' />
+      <Flex
+        className='content'
+        direction='column'
+        align='center'
+        justify='center'
+      >
+        <div className='coordinates'>
+          Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
+        </div>
+        <div ref={mapContainer} className='mapContainer' />
+      </Flex>
     </>
   );
 }

@@ -60,12 +60,10 @@ export default function LeftPane(props) {
           </VStack>
         </DrawerBody>
 
-        <DrawerFooter textAlign='center'>
-          <Flex align='center' justify='center'>
-            <Button>
-              <Text>Generate</Text>
-            </Button>
-          </Flex>
+        <DrawerFooter>
+          <Button>
+            <Text>Generate</Text>
+          </Button>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
