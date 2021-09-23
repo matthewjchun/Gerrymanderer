@@ -1,12 +1,17 @@
 import React, { useRef, useEffect, useState } from 'react';
-import './App.css';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+import { Flex } from '@chakra-ui/react';
+
+import './App.css';
 import TopBar from './components/TopBar';
 import az from './data/az.json';
 import mi from './data/mi.json';
 import va from './data/va.json';
+import StateDrawer from './components/StateDrawer';
+// import { useDisclosure } from '@chakra-ui/react';
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiY2VsdGljczQxNiIsImEiOiJja3R2MGM5dTQxajY4Mm5sNWV5YnNhNHg0In0.t9oiLZZUeZi0QpqUIik13w';
+mapboxgl.accessToken =
+  'pk.eyJ1IjoiY2VsdGljczQxNiIsImEiOiJja3R2MGM5dTQxajY4Mm5sNWV5YnNhNHg0In0.t9oiLZZUeZi0QpqUIik13w';
 
 export default function App() {
   const mapContainer = useRef(null);
@@ -146,14 +151,28 @@ export default function App() {
     });
   });
 
+  // const { isOpen, onOpen, onClose } = useDisclosure();    // figure out where to better put this later
+
   return (
-    <div>
+    <>
       <TopBar />
       <div className="sidebar">
         Longitude: {lng} | Latitude: {lat}
       </div>
       <div ref={mapContainer} className="map-container" />
     </div>
-
+      <Flex
+        className='content'
+        direction='column'
+        align='center'
+        justify='center'
+      >
+        <div className='coordinates'>
+          Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
+        </div>
+        <div ref={mapContainer} className='mapContainer' />
+        {/* <StateDrawer isOpen={true}></StateDrawer>  // closing aint workin so ill figure out tmw*/} 
+      </Flex>
+    </>
   );
 }
