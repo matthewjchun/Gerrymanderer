@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
-import './App.css';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+import { Flex } from '@chakra-ui/react';
+
+import './App.css';
 import TopBar from './components/TopBar';
 import StateDrawer from './components/StateDrawer';
 // import { useDisclosure } from '@chakra-ui/react';
@@ -37,13 +39,20 @@ export default function App() {
   // const { isOpen, onOpen, onClose } = useDisclosure();    // figure out where to better put this later
 
   return (
-    <div className='container'>
+    <>
       <TopBar />
-      {/* <div className='sidebar'>
-        Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-      </div> */}
-      <div ref={mapContainer} className='map-container' />
-      {/* <StateDrawer isOpen={true} onClose={onClose}></StateDrawer>  */}
-    </div>
+      <Flex
+        className='content'
+        direction='column'
+        align='center'
+        justify='center'
+      >
+        <div className='coordinates'>
+          Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
+        </div>
+        <div ref={mapContainer} className='mapContainer' />
+        {/* <StateDrawer isOpen={true}></StateDrawer>  // closing aint workin so ill figure out tmw*/} 
+      </Flex>
+    </>
   );
 }
