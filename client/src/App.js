@@ -8,7 +8,6 @@ import { Flex } from '@chakra-ui/react';
 import './App.css';
 import TopBar from './components/TopBar';
 
-import stateout from './data/state-outlines.json';
 
 import StateDrawer from './components/StateDrawer';
 // import { useDisclosure } from '@chakra-ui/react';
@@ -81,7 +80,7 @@ export default function App() {
       });
       map.current.addSource('states', {
         type: 'geojson',
-        data: stateout,
+        data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/state-outlines.json',
       });
 
       map.current.addLayer({
