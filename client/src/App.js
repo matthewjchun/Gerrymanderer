@@ -322,21 +322,6 @@ export default function App() {
         {/* <StateDrawer isOpen={true}></StateDrawer> */}
       </Flex>
 
-      <Swiper
-      spaceBetween={50}
-      slidesPerView={3}
-      onSlideChange={() => console.log('slide change')}
-      onSwiper={(swiper) => console.log(swiper)}
-    >
-      <SwiperSlide>
-      <img src={require("./img/az.jpg")} className="entity-img" />
-      </SwiperSlide>
-      <SwiperSlide>
-      <img src={require("./img/az.jpg")} className="entity-img" />
-      </SwiperSlide>
-      <SwiperSlide><img src={require("./img/az.jpg")} className="entity-img" /></SwiperSlide>
-      <SwiperSlide><img src={require("./img/az.jpg")} className="entity-img" /></SwiperSlide>
-    </Swiper>
     </>
   );
 }
