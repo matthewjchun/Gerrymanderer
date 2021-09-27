@@ -14,6 +14,9 @@ import azcd from './data/az_cd.json';
 import micd from './data/mi_cd.json';
 import vacd from './data/va_cd.json';
 import StateDrawer from './components/StateDrawer';
+import 'swiper/swiper-bundle.css';
+import SwiperCore, { Navigation, EffectCoverflow, Controller } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
 // import { useDisclosure } from '@chakra-ui/react';
 
 mapboxgl.accessToken =
@@ -21,6 +24,7 @@ mapboxgl.accessToken =
 
 export default function App() {
   const mapContainer = useRef(null);
+  const [controlledSwiper, setControlledSwiper] = useState(null);
   const map = useRef(null);
   const [lng, setLng] = useState(-100.445882);
   const [lat, setLat] = useState(37.7837304);
@@ -84,6 +88,35 @@ export default function App() {
 
       // VISUALIZE STATES AS POLYGONS
       map.current.addLayer({
+
+          'id': 'arizona',
+          'type': 'fill',
+          'source': 'arizona', // reference the data source
+          'layout': {},
+          'paint': {
+              'fill-color': '#523e3c', // green color fill
+              'fill-opacity': 0.5
+          },
+      });
+      map.current.addLayer({
+        'id': 'michigan',
+        'type': 'fill',
+        'source': 'michigan', // reference the data source
+        'layout': {},
+        'paint': {
+            'fill-color': '#523e3c', // green color fill
+            'fill-opacity': 0.5
+        },
+      });
+      map.current.addLayer({
+        'id': 'virginia',
+        'type': 'fill',
+        'source': 'virginia', // reference the data source
+        'layout': {},
+        'paint': {
+            'fill-color': '#523e3c', // green color fill
+            'fill-opacity': 0.5
+
         id: 'arizona',
         type: 'fill',
         source: 'arizona', // reference the data source
@@ -111,6 +144,7 @@ export default function App() {
         paint: {
           'fill-color': '#abd67b', // green color fill
           'fill-opacity': 0.5,
+
         },
       });
 
@@ -154,20 +188,36 @@ export default function App() {
           zoom: 6.2,
         });
         map.current.addLayer({
+
+          'id': 'azprec-boundary',
+          'type': 'line',
+          'source': 'azprecincts',
+          'paint': {
+            'line-color': '#ebd8d3'
+
           id: 'azprec-boundary',
           type: 'line',
           source: 'azprecincts',
           paint: {
             'line-color': '#917a7a',
+
           },
           filter: ['==', '$type', 'Polygon'],
         });
         map.current.addLayer({
+
+          'id': 'azcd_lines',
+          'type': 'line',
+          'source': 'azcd',
+          'paint': {
+            'line-color': '#45322f'
+
           id: 'azcd_lines',
           type: 'line',
           source: 'azcd',
           paint: {
             'line-color': '#3aadd6',
+
           },
           filter: ['==', '$type', 'Polygon'],
         });
@@ -183,20 +233,36 @@ export default function App() {
           zoom: 6.2,
         });
         map.current.addLayer({
+
+          'id': 'miprec-boundary',
+          'type': 'line',
+          'source': 'miprecincts',
+          'paint': {
+            'line-color': '#ebd8d3'
+
           id: 'miprec-boundary',
           type: 'line',
           source: 'miprecincts',
           paint: {
             'line-color': '#917a7a',
+
           },
           filter: ['==', '$type', 'Polygon'],
         });
         map.current.addLayer({
+
+          'id': 'micd_lines',
+          'type': 'line',
+          'source': 'micd',
+          'paint': {
+            'line-color': '#45322f'
+
           id: 'micd_lines',
           type: 'line',
           source: 'micd',
           paint: {
             'line-color': '#3aadd6',
+
           },
           filter: ['==', '$type', 'Polygon'],
         });
@@ -210,20 +276,36 @@ export default function App() {
         });
 
         map.current.addLayer({
+
+          'id': 'vaprec-boundary',
+          'type': 'line',
+          'source': 'vaprecincts',
+          'paint': {
+            'line-color': '#ebd8d3'
+
           id: 'vaprec-boundary',
           type: 'line',
           source: 'vaprecincts',
           paint: {
             'line-color': '#917a7a',
+
           },
           filter: ['==', '$type', 'Polygon'],
         });
         map.current.addLayer({
+
+          'id': 'vacd_lines',
+          'type': 'line',
+          'source': 'vacd',
+          'paint': {
+            'line-color': '#45322f'
+
           id: 'vacd_lines',
           type: 'line',
           source: 'vacd',
           paint: {
             'line-color': '#3aadd6',
+
           },
           filter: ['==', '$type', 'Polygon'],
         });
@@ -255,8 +337,24 @@ export default function App() {
           Longitude: {lng} | Latitude: {lat}
         </div>
         <div ref={mapContainer} className='mapContainer' />
-        {/* <StateDrawer isOpen={true}></StateDrawer>  //closing aint workin so ill figure out tmw  */}
+        {/* <StateDrawer isOpen={true}></StateDrawer> */}
       </Flex>
+
+      <Swiper
+      spaceBetween={50}
+      slidesPerView={3}
+      onSlideChange={() => console.log('slide change')}
+      onSwiper={(swiper) => console.log(swiper)}
+    >
+      <SwiperSlide>
+      <img src={require("./img/az.jpg")} className="entity-img" />
+      </SwiperSlide>
+      <SwiperSlide>
+      <img src={require("./img/az.jpg")} className="entity-img" />
+      </SwiperSlide>
+      <SwiperSlide><img src={require("./img/az.jpg")} className="entity-img" /></SwiperSlide>
+      <SwiperSlide><img src={require("./img/az.jpg")} className="entity-img" /></SwiperSlide>
+    </Swiper>
     </>
   );
 }
