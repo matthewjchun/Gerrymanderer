@@ -11,6 +11,9 @@ import azcd from './data/az_cd.json';
 import micd from './data/mi_cd.json';
 import vacd from './data/va_cd.json';
 import StateDrawer from './components/StateDrawer';
+import 'swiper/swiper-bundle.css';
+import SwiperCore, { Navigation, EffectCoverflow, Controller } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
 // import { useDisclosure } from '@chakra-ui/react';
 
 mapboxgl.accessToken =
@@ -18,6 +21,7 @@ mapboxgl.accessToken =
 
 export default function App() {
   const mapContainer = useRef(null);
+  const [controlledSwiper, setControlledSwiper] = useState(null);
   const map = useRef(null);
   const [lng, setLng] = useState(-100.445882);
   const [lat, setLat] = useState(37.7837304);
@@ -83,7 +87,7 @@ export default function App() {
           'source': 'arizona', // reference the data source
           'layout': {},
           'paint': {
-              'fill-color': '#abd67a', // green color fill
+              'fill-color': '#523e3c', // green color fill
               'fill-opacity': 0.5
           },
       });
@@ -93,7 +97,7 @@ export default function App() {
         'source': 'michigan', // reference the data source
         'layout': {},
         'paint': {
-            'fill-color': '#abd67a', // green color fill
+            'fill-color': '#523e3c', // green color fill
             'fill-opacity': 0.5
         },
       });
@@ -103,7 +107,7 @@ export default function App() {
         'source': 'virginia', // reference the data source
         'layout': {},
         'paint': {
-            'fill-color': '#abd67b', // green color fill
+            'fill-color': '#523e3c', // green color fill
             'fill-opacity': 0.5
         },
       });
@@ -152,7 +156,7 @@ export default function App() {
           'type': 'line',
           'source': 'azprecincts',
           'paint': {
-            'line-color': '#917a7a'
+            'line-color': '#ebd8d3'
           },
           'filter': ['==', '$type', 'Polygon']
         });
@@ -161,7 +165,7 @@ export default function App() {
           'type': 'line',
           'source': 'azcd',
           'paint': {
-            'line-color': '#3aadd6'
+            'line-color': '#45322f'
           },
           'filter': ['==', '$type', 'Polygon']
         });
@@ -180,7 +184,7 @@ export default function App() {
           'type': 'line',
           'source': 'miprecincts',
           'paint': {
-            'line-color': '#917a7a'
+            'line-color': '#ebd8d3'
           },
           'filter': ['==', '$type', 'Polygon']
         });
@@ -189,7 +193,7 @@ export default function App() {
           'type': 'line',
           'source': 'micd',
           'paint': {
-            'line-color': '#3aadd6'
+            'line-color': '#45322f'
           },
           'filter': ['==', '$type', 'Polygon']
         });
@@ -206,7 +210,7 @@ export default function App() {
           'type': 'line',
           'source': 'vaprecincts',
           'paint': {
-            'line-color': '#917a7a'
+            'line-color': '#ebd8d3'
           },
           'filter': ['==', '$type', 'Polygon']
         });
@@ -215,7 +219,7 @@ export default function App() {
           'type': 'line',
           'source': 'vacd',
           'paint': {
-            'line-color': '#3aadd6'
+            'line-color': '#45322f'
           },
           'filter': ['==', '$type', 'Polygon']
         });
@@ -248,6 +252,18 @@ export default function App() {
         <div ref={mapContainer} className='mapContainer' />
         {/* <StateDrawer isOpen={true}></StateDrawer>  //closing aint workin so ill figure out tmw  */}
       </Flex>
+
+      <Swiper
+      spaceBetween={50}
+      slidesPerView={3}
+      onSlideChange={() => console.log('slide change')}
+      onSwiper={(swiper) => console.log(swiper)}
+    >
+      <SwiperSlide>Slide 1</SwiperSlide>
+      <SwiperSlide>Slide 2</SwiperSlide>
+      <SwiperSlide>Slide 3</SwiperSlide>
+      <SwiperSlide>Slide 4</SwiperSlide>
+    </Swiper>
     </>
   );
 }
