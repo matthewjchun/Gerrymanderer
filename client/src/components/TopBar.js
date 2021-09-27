@@ -16,14 +16,13 @@ export default function TopBar(props) {
         <Text>Redistricting Settings</Text>
       </Button>
       <LeftPane isOpen={isOpen} onClose={onClose}></LeftPane>
-      {/*<Text fontWeight='bold' fontSize='1.5em' m='auto'>
+      <Text flex='1' fontWeight='bold' fontSize='1.5em' m='auto' align='center'>
         {activeState}
-  </Text>*/}
-      <Box flex='3' />
+      </Text>
       <Select
         flex='1'
         value={activeState}
-        placeholder={activeState}
+        placeholder='Select state'
         onChange={(e) => {
           setActiveState(e.target.value);
         }}

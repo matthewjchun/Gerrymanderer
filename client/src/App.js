@@ -241,6 +241,85 @@ export default function App() {
   });
   // const { isOpen, onOpen, onClose } = useDisclosure();    // figure out where to better put this later
 
+  // useEffect hook for zooming to state when activeState changes
+  useEffect(() => {
+    if (!map.current) return;
+    if (activeState == 'Arizona') {
+      map.current.flyTo({
+        center: [-112.0693, 34.2537],
+        essential: true,
+        zoom: 6.2,
+      });
+      map.current.addLayer({
+        id: 'azprec-boundary',
+        type: 'line',
+        source: 'azprecincts',
+        paint: {
+          'line-color': '#917a7a',
+        },
+        filter: ['==', '$type', 'Polygon'],
+      });
+      map.current.addLayer({
+        id: 'azcd_lines',
+        type: 'line',
+        source: 'azcd',
+        paint: {
+          'line-color': '#3aadd6',
+        },
+        filter: ['==', '$type', 'Polygon'],
+      });
+    } else if (activeState == 'Michigan') {
+      map.current.flyTo({
+        center: [-84.3271772, 44.2330917],
+        essential: true,
+        zoom: 6.2,
+      });
+      map.current.addLayer({
+        id: 'miprec-boundary',
+        type: 'line',
+        source: 'miprecincts',
+        paint: {
+          'line-color': '#917a7a',
+        },
+        filter: ['==', '$type', 'Polygon'],
+      });
+      map.current.addLayer({
+        id: 'micd_lines',
+        type: 'line',
+        source: 'micd',
+        paint: {
+          'line-color': '#3aadd6',
+        },
+        filter: ['==', '$type', 'Polygon'],
+      });
+    } else if (activeState == 'Virginia') {
+      map.current.flyTo({
+        center: [-77.4525481898, 37.672247311],
+        essential: true,
+        zoom: 7,
+      });
+
+      map.current.addLayer({
+        id: 'vaprec-boundary',
+        type: 'line',
+        source: 'vaprecincts',
+        paint: {
+          'line-color': '#917a7a',
+        },
+        filter: ['==', '$type', 'Polygon'],
+      });
+      map.current.addLayer({
+        id: 'vacd_lines',
+        type: 'line',
+        source: 'vacd',
+        paint: {
+          'line-color': '#3aadd6',
+        },
+        filter: ['==', '$type', 'Polygon'],
+      });
+    }
+  }, [activeState]);
+
   return (
     <>
       <TopBar />
