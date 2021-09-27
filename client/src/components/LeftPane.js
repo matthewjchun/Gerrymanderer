@@ -50,7 +50,7 @@ export default function LeftPane(props) {
       <DrawerContent>
         <DrawerCloseButton />
         <DrawerHeader>
-          <Text>Redistricting Settings</Text>
+          <Text>User Measure Limits</Text>
         </DrawerHeader>
 
         <DrawerBody>
