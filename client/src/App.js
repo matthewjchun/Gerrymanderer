@@ -4,7 +4,9 @@ import { Flex } from '@chakra-ui/react';
 
 import './App.css';
 import TopBar from './components/TopBar';
-import az from './data/az.json';
+import azprecincts from './data/az_2020.json';
+import miprecincts from './data/mi_2020.json';
+import vaprecincts from './data/va_2019.json';
 import StateDrawer from './components/StateDrawer';
 // import { useDisclosure } from '@chakra-ui/react';
 
@@ -25,8 +27,7 @@ export default function App() {
       container: mapContainer.current,
       style: 'mapbox://styles/celtics416/cktw1ft0304ye18p9i6etuxh2',
       center: [lng, lat],
-      zoom: zoom,
-      doubleClickZoom: false
+      zoom: zoom
     });
   });
 
@@ -47,7 +48,20 @@ export default function App() {
         'type': 'geojson',
         'data': 'https://raw.githubusercontent.com/glynnbird/usstatesgeojson/master/virginia.geojson'
       });
-  
+      map.current.addSource('azprecincts', {
+        'type': 'geojson',
+        'data': azprecincts
+      });
+      map.current.addSource('miprecincts', {
+        'type': 'geojson',
+        'data': miprecincts
+      });
+      map.current.addSource('vaprecincts', {
+        'type': 'geojson',
+        'data': vaprecincts
+      });
+
+
       // VISUALIZE STATES AS POLYGONS
       map.current.addLayer({
           'id': 'arizona',
@@ -79,6 +93,7 @@ export default function App() {
             'fill-opacity': 0.5
         },
       });
+  
       // ADD OUTLINES TO STATES
       map.current.addLayer({
           'id': 'outline',
@@ -118,6 +133,15 @@ export default function App() {
           essential: true,
           zoom: 6.2
         });
+        map.current.addLayer({
+          'id': 'azprec-boundary',
+          'type': 'line',
+          'source': 'azprecincts',
+          'paint': {
+            'line-color': '#917a7a'
+          },
+          'filter': ['==', '$type', 'Polygon']
+        });
         /*new mapboxgl.Popup().setLngLat(e.lngLat)
         .setHTML(e.features[0].properties.name)
         .addTo(map.current);*/
@@ -128,12 +152,31 @@ export default function App() {
           essential: true,
           zoom: 6.2
         });
+        map.current.addLayer({
+          'id': 'miprec-boundary',
+          'type': 'line',
+          'source': 'miprecincts',
+          'paint': {
+            'line-color': '#917a7a'
+          },
+          'filter': ['==', '$type', 'Polygon']
+        });
       });
       map.current.on('click', 'virginia', (e) => {
         map.current.flyTo({
           center: [-77.4525481898, 37.672247311],
           essential: true,
           zoom: 7
+        });
+
+        map.current.addLayer({
+          'id': 'vaprec-boundary',
+          'type': 'line',
+          'source': 'vaprecincts',
+          'paint': {
+            'line-color': '#917a7a'
+          },
+          'filter': ['==', '$type', 'Polygon']
         });
       });
     });
@@ -167,3 +210,4 @@ export default function App() {
     </>
   );
 }
+
