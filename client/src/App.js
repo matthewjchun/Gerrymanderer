@@ -170,14 +170,14 @@ export default function App() {
         map.current.flyTo({
           center: [-112.0693, 34.2537],
           essential: true,
-          zoom: 6.2,
+          zoom: 7,
         });
         map.current.addLayer({
           id: 'azprec-boundary',
           type: 'line',
           source: 'azprecincts',
           paint: {
-            'line-color': '#ebd8d3',
+            'line-color': '#0042b0',
           },
           filter: ['==', '$type', 'Polygon'],
         });
@@ -186,7 +186,7 @@ export default function App() {
           type: 'line',
           source: 'azcd',
           paint: {
-            'line-color': '#15ed73'
+            'line-color': '#FFFFFF'
           },
           filter: ['==', '$type', 'Polygon'],
         });
