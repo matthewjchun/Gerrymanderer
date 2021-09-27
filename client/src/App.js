@@ -1,11 +1,7 @@
-import React, {
-  useRef,
-  useEffect,
-  useState,
-  useReducer,
-  createContext,
-} from 'react';
-import { reducer, initialState } from './reducer';
+import React, { useRef, useEffect, useState, useContext } from 'react';
+import { StateContext } from './contexts/State/index';
+import { StateProvider } from './contexts/State/index';
+
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { Flex } from '@chakra-ui/react';
 
@@ -23,21 +19,6 @@ import StateDrawer from './components/StateDrawer';
 mapboxgl.accessToken =
   'pk.eyJ1IjoiY2VsdGljczQxNiIsImEiOiJja3R2MGM5dTQxajY4Mm5sNWV5YnNhNHg0In0.t9oiLZZUeZi0QpqUIik13w';
 
-export const StateContext = createContext({
-  state: initalState,
-  dispatch: () => null,
-});
-
-export const StateProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  return (
-    <StateContext.Provider value={[state, dispatch]}>
-      {children}
-    </StateContext.Provider>
-  );
-};
-
 export default function App() {
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -46,7 +27,8 @@ export default function App() {
   const [zoom, setZoom] = useState(3.5);
   var arizona = useRef(null);
 
-  const [activeState, setActiveState] = useState('');
+  //const [activeState, setActiveState] = useState('');
+  const [activeState, setActiveState] = useContext(StateContext);
 
   useEffect(() => {
     if (map.current) return; // initialize map only once
@@ -261,7 +243,7 @@ export default function App() {
 
   return (
     <>
-      <TopBar activeState={activeState} />
+      <TopBar />
       <div ref={mapContainer} className='map-container' />
       <Flex
         className='content'
