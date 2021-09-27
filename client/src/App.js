@@ -250,7 +250,7 @@ export default function App() {
           Longitude: {lng} | Latitude: {lat}
         </div>
         <div ref={mapContainer} className='mapContainer' />
-        {/* <StateDrawer isOpen={true}></StateDrawer>  //closing aint workin so ill figure out tmw  */}
+        {/* <StateDrawer isOpen={true}></StateDrawer> */}
       </Flex>
 
       <Swiper
@@ -259,10 +259,14 @@ export default function App() {
       onSlideChange={() => console.log('slide change')}
       onSwiper={(swiper) => console.log(swiper)}
     >
-      <SwiperSlide>Slide 1</SwiperSlide>
-      <SwiperSlide>Slide 2</SwiperSlide>
-      <SwiperSlide>Slide 3</SwiperSlide>
-      <SwiperSlide>Slide 4</SwiperSlide>
+      <SwiperSlide>
+      <img src={require("./img/az.jpg")} className="entity-img" />
+      </SwiperSlide>
+      <SwiperSlide>
+      <img src={require("./img/az.jpg")} className="entity-img" />
+      </SwiperSlide>
+      <SwiperSlide><img src={require("./img/az.jpg")} className="entity-img" /></SwiperSlide>
+      <SwiperSlide><img src={require("./img/az.jpg")} className="entity-img" /></SwiperSlide>
     </Swiper>
     </>
   );
