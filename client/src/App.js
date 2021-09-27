@@ -8,9 +8,6 @@ import { Flex } from '@chakra-ui/react';
 import './App.css';
 import TopBar from './components/TopBar';
 import StateDrawer from './components/StateDrawer';
-import 'swiper/swiper-bundle.css';
-import SwiperCore, { Navigation, EffectCoverflow, Controller } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
 // import { useDisclosure } from '@chakra-ui/react';
 
 mapboxgl.accessToken =
