@@ -7,6 +7,9 @@ import TopBar from './components/TopBar';
 import azprecincts from './data/az_2020.json';
 import miprecincts from './data/mi_2020.json';
 import vaprecincts from './data/va_2019.json';
+import azcd from './data/az_cd.json';
+import micd from './data/mi_cd.json';
+import vacd from './data/va_cd.json';
 import StateDrawer from './components/StateDrawer';
 // import { useDisclosure } from '@chakra-ui/react';
 
@@ -60,7 +63,18 @@ export default function App() {
         'type': 'geojson',
         'data': vaprecincts
       });
-
+      map.current.addSource('azcd', {
+        'type': 'geojson',
+        'data': azcd
+      });
+      map.current.addSource('micd', {
+        'type': 'geojson',
+        'data': micd
+      });
+      map.current.addSource('vacd', {
+        'type': 'geojson',
+        'data': vacd
+      });
 
       // VISUALIZE STATES AS POLYGONS
       map.current.addLayer({
@@ -142,6 +156,15 @@ export default function App() {
           },
           'filter': ['==', '$type', 'Polygon']
         });
+        map.current.addLayer({
+          'id': 'azcd_lines',
+          'type': 'line',
+          'source': 'azcd',
+          'paint': {
+            'line-color': '#3aadd6'
+          },
+          'filter': ['==', '$type', 'Polygon']
+        });
         /*new mapboxgl.Popup().setLngLat(e.lngLat)
         .setHTML(e.features[0].properties.name)
         .addTo(map.current);*/
@@ -161,6 +184,15 @@ export default function App() {
           },
           'filter': ['==', '$type', 'Polygon']
         });
+        map.current.addLayer({
+          'id': 'micd_lines',
+          'type': 'line',
+          'source': 'micd',
+          'paint': {
+            'line-color': '#3aadd6'
+          },
+          'filter': ['==', '$type', 'Polygon']
+        });
       });
       map.current.on('click', 'virginia', (e) => {
         map.current.flyTo({
@@ -175,6 +207,15 @@ export default function App() {
           'source': 'vaprecincts',
           'paint': {
             'line-color': '#917a7a'
+          },
+          'filter': ['==', '$type', 'Polygon']
+        });
+        map.current.addLayer({
+          'id': 'vacd_lines',
+          'type': 'line',
+          'source': 'vacd',
+          'paint': {
+            'line-color': '#3aadd6'
           },
           'filter': ['==', '$type', 'Polygon']
         });
