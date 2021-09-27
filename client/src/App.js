@@ -88,15 +88,14 @@ export default function App() {
 
       // VISUALIZE STATES AS POLYGONS
       map.current.addLayer({
-
-          'id': 'arizona',
-          'type': 'fill',
-          'source': 'arizona', // reference the data source
-          'layout': {},
-          'paint': {
-              'fill-color': '#523e3c', // green color fill
-              'fill-opacity': 0.5
-          },
+        id: 'arizona',
+        type: 'fill',
+        source: 'arizona', // reference the data source
+        layout: {},
+        paint: {
+          'fill-color': '#523e3c', // green color fill
+          'fill-opacity': 0.5,
+        },
       });
       map.current.addLayer({
         'id': 'michigan',
@@ -116,15 +115,7 @@ export default function App() {
         'paint': {
             'fill-color': '#523e3c', // green color fill
             'fill-opacity': 0.5
-
-        id: 'arizona',
-        type: 'fill',
-        source: 'arizona', // reference the data source
-        layout: {},
-        paint: {
-          'fill-color': '#abd67a', // green color fill
-          'fill-opacity': 0.5,
-        },
+        }
       });
       map.current.addLayer({
         id: 'michigan',
@@ -188,36 +179,20 @@ export default function App() {
           zoom: 6.2,
         });
         map.current.addLayer({
-
-          'id': 'azprec-boundary',
-          'type': 'line',
-          'source': 'azprecincts',
-          'paint': {
-            'line-color': '#ebd8d3'
-
           id: 'azprec-boundary',
           type: 'line',
           source: 'azprecincts',
           paint: {
-            'line-color': '#917a7a',
-
+            'line-color': '#ebd8d3',
           },
           filter: ['==', '$type', 'Polygon'],
         });
         map.current.addLayer({
-
-          'id': 'azcd_lines',
-          'type': 'line',
-          'source': 'azcd',
-          'paint': {
-            'line-color': '#45322f'
-
           id: 'azcd_lines',
           type: 'line',
           source: 'azcd',
           paint: {
-            'line-color': '#3aadd6',
-
+            'line-color': '#45322f',
           },
           filter: ['==', '$type', 'Polygon'],
         });
@@ -233,35 +208,20 @@ export default function App() {
           zoom: 6.2,
         });
         map.current.addLayer({
-
-          'id': 'miprec-boundary',
-          'type': 'line',
-          'source': 'miprecincts',
-          'paint': {
-            'line-color': '#ebd8d3'
-
           id: 'miprec-boundary',
           type: 'line',
           source: 'miprecincts',
           paint: {
-            'line-color': '#917a7a',
-
+            'line-color': '#ebd8d3',
           },
           filter: ['==', '$type', 'Polygon'],
         });
         map.current.addLayer({
-
-          'id': 'micd_lines',
-          'type': 'line',
-          'source': 'micd',
-          'paint': {
-            'line-color': '#45322f'
-
           id: 'micd_lines',
           type: 'line',
           source: 'micd',
           paint: {
-            'line-color': '#3aadd6',
+            'line-color': '#45322f',
 
           },
           filter: ['==', '$type', 'Polygon'],
@@ -276,35 +236,21 @@ export default function App() {
         });
 
         map.current.addLayer({
-
-          'id': 'vaprec-boundary',
-          'type': 'line',
-          'source': 'vaprecincts',
-          'paint': {
-            'line-color': '#ebd8d3'
-
           id: 'vaprec-boundary',
           type: 'line',
           source: 'vaprecincts',
           paint: {
-            'line-color': '#917a7a',
+            'line-color': '#ebd8d3',
 
           },
           filter: ['==', '$type', 'Polygon'],
         });
         map.current.addLayer({
-
-          'id': 'vacd_lines',
-          'type': 'line',
-          'source': 'vacd',
-          'paint': {
-            'line-color': '#45322f'
-
           id: 'vacd_lines',
           type: 'line',
           source: 'vacd',
           paint: {
-            'line-color': '#3aadd6',
+            'line-color': '#45322f',
 
           },
           filter: ['==', '$type', 'Polygon'],
