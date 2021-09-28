@@ -42,6 +42,14 @@ export default function StateDrawer(props){
 
     const [ activeState ] = useContext(StateContext);
 
+    const data = [
+        { title: 'White', value: 2849063, color: '#E38627' },
+        { title: 'Black or African', value: 178788, color: '#C13C37' },
+        { title: 'American Indian', value: 171607, color: '#FC4040' },
+        { title: 'Asian', value: 147661, color: '#71DE6A' },
+        { title: 'Hispanic', value: 1121876, color: '#6A2135' },
+    ]
+
     return(
         <Drawer isOpen={isOpen} onClose={onClose} size="sm" placement="right" variant="permanent">
             <DrawerContent>
@@ -113,14 +121,15 @@ export default function StateDrawer(props){
                                 <Divider />
                                 <p id="chartTitle">Demographics</p>
                                 <PieChart
-                                    data={[
-                                        { title: 'White', value: 2849063, color: '#E38627' },
-                                        { title: 'Black or African', value: 178788, color: '#C13C37' },
-                                        { title: 'American Indian', value: 171607, color: '#F6FF33' },
-                                        { title: 'Asian', value: 147661, color: '#71DE6A' },
-                                        { title: 'Native Hawaiian', value: 8560, color: '#6AD2DE' },
-                                        { title: 'Hispanic', value: 1121876, color: '#6A2135' },
-                                    ]}
+                                    data={data}
+                                    label={({ dataEntry }) => Math.round(dataEntry.percentage) + '%'}
+                                    labelStyle={(index) => ({
+                                        fill: data[index].color,
+                                        fontSize: '5px',
+                                        fontFamily: 'sans-serif',
+                                    })}
+                                    radius={42}
+                                    labelPosition={112}
                                 />
                                 <Table variant="simple">
                                     <TableCaption>Demographics</TableCaption>
@@ -150,17 +159,12 @@ export default function StateDrawer(props){
                                         <Tr>
                                         <Td>American Indian</Td>
                                         <Td>171,607</Td>
-                                        <Td bg='#F6FF33'></Td>
+                                        <Td bg='#FC4040'></Td>
                                         </Tr>
                                         <Tr>
                                         <Td>Asian</Td>
                                         <Td>147,661</Td>
                                         <Td bg='#71DE6A'></Td>
-                                        </Tr>
-                                        <Tr>
-                                        <Td>Native Hawaiian</Td>
-                                        <Td>8,560</Td>
-                                        <Td bg='#6AD2DE'></Td>
                                         </Tr>
                                     </Tbody>
                                 </Table>
