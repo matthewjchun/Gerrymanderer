@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState, useContext } from 'react';
 import { StateContext } from './contexts/State/index';
-import { StateProvider } from './contexts/State/index';
 
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { Flex } from '@chakra-ui/react';
@@ -98,24 +97,24 @@ export default function App() {
         },
       });
       map.current.addLayer({
-        'id': 'michigan',
-        'type': 'fill',
-        'source': 'michigan', // reference the data source
-        'layout': {},
-        'paint': {
-            'fill-color': '#523e3c', // green color fill
-            'fill-opacity': 0.5
+        id: 'michigan',
+        type: 'fill',
+        source: 'michigan', // reference the data source
+        layout: {},
+        paint: {
+          'fill-color': '#523e3c', // green color fill
+          'fill-opacity': 0.5,
         },
       });
       map.current.addLayer({
-        'id': 'virginia',
-        'type': 'fill',
-        'source': 'virginia', // reference the data source
-        'layout': {},
-        'paint': {
-            'fill-color': '#523e3c', // green color fill
-            'fill-opacity': 0.5
-        }
+        id: 'virginia',
+        type: 'fill',
+        source: 'virginia', // reference the data source
+        layout: {},
+        paint: {
+          'fill-color': '#523e3c', // green color fill
+          'fill-opacity': 0.5,
+        },
       });
       map.current.addLayer({
         id: 'michigan',
@@ -135,7 +134,6 @@ export default function App() {
         paint: {
           'fill-color': '#abd67b', // green color fill
           'fill-opacity': 0.5,
-
         },
       });
 
@@ -222,7 +220,6 @@ export default function App() {
           source: 'micd',
           paint: {
             'line-color': '#45322f',
-
           },
           filter: ['==', '$type', 'Polygon'],
         });
@@ -241,7 +238,6 @@ export default function App() {
           source: 'vaprecincts',
           paint: {
             'line-color': '#ebd8d3',
-
           },
           filter: ['==', '$type', 'Polygon'],
         });
@@ -251,7 +247,6 @@ export default function App() {
           source: 'vacd',
           paint: {
             'line-color': '#45322f',
-
           },
           filter: ['==', '$type', 'Polygon'],
         });
@@ -269,7 +264,7 @@ export default function App() {
   });
   // const { isOpen, onOpen, onClose } = useDisclosure();    // figure out where to better put this later
 
-  // useEffect hook for zooming to state when activeState changes
+  // useEffect hook for performing actions when activeState changes
   useEffect(() => {
     if (!map.current) return;
     if (activeState == 'Arizona') {
@@ -365,21 +360,25 @@ export default function App() {
         {/* <StateDrawer isOpen={true}></StateDrawer> */}
       </Flex>
 
-      <Swiper
-      spaceBetween={50}
-      slidesPerView={3}
-      onSlideChange={() => console.log('slide change')}
-      onSwiper={(swiper) => console.log(swiper)}
-    >
-      <SwiperSlide>
-      <img src={require("./img/az.jpg")} className="entity-img" />
-      </SwiperSlide>
-      <SwiperSlide>
-      <img src={require("./img/az.jpg")} className="entity-img" />
-      </SwiperSlide>
-      <SwiperSlide><img src={require("./img/az.jpg")} className="entity-img" /></SwiperSlide>
-      <SwiperSlide><img src={require("./img/az.jpg")} className="entity-img" /></SwiperSlide>
-    </Swiper>
+      {/*<Swiper
+        spaceBetween={50}
+        slidesPerView={3}
+        onSlideChange={() => console.log('slide change')}
+        onSwiper={(swiper) => console.log(swiper)}
+      >
+        <SwiperSlide>
+          <img src={require('./img/az.jpg')} className='entity-img' />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src={require('./img/az.jpg')} className='entity-img' />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src={require('./img/az.jpg')} className='entity-img' />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src={require('./img/az.jpg')} className='entity-img' />
+        </SwiperSlide>
+      </Swiper>*/}
     </>
   );
 }
