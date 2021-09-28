@@ -424,7 +424,7 @@ export default function App() {
           type: 'line',
           source: 'miprecincts',
           paint: {
-            'line-color': '#ebd8d3',
+            'line-color': '#e6d1b5',
           },
           filter: ['==', '$type', 'Polygon'],
           layout: {
@@ -520,7 +520,7 @@ export default function App() {
           type: 'line',
           source: 'vaprecincts',
           paint: {
-            'line-color': '#ebd8d3',
+            'line-color': '#e6d1b5',
           },
           filter: ['==', '$type', 'Polygon'],
           layout: {
@@ -588,7 +588,7 @@ export default function App() {
         type: 'line',
         source: 'azprecincts',
         paint: {
-          'line-color': '#917a7a',
+          'line-color': '#e6d1b5',
         },
         filter: ['==', '$type', 'Polygon'],
       });
@@ -612,7 +612,7 @@ export default function App() {
         type: 'line',
         source: 'miprecincts',
         paint: {
-          'line-color': '#917a7a',
+          'line-color': '#e6d1b5',
         },
         filter: ['==', '$type', 'Polygon'],
       });
@@ -621,7 +621,7 @@ export default function App() {
         type: 'line',
         source: 'micd',
         paint: {
-          'line-color': '#3aadd6',
+          'line-color': '#0000000',
         },
         filter: ['==', '$type', 'Polygon'],
       });
@@ -637,7 +637,7 @@ export default function App() {
         type: 'line',
         source: 'vaprecincts',
         paint: {
-          'line-color': '#917a7a',
+          'line-color': '#e6d1b5',
         },
         filter: ['==', '$type', 'Polygon'],
       });
