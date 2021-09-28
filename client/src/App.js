@@ -594,7 +594,7 @@ export default function App() {
         map.current.flyTo({
           center: [-100.445882, 37.7837304],
           essential: true,
-          zoom: 3.5,
+          zoom: 4.3,
         });
         onClose();
         // arizona
