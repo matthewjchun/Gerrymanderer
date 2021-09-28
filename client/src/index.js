@@ -6,10 +6,11 @@ import { StateProvider } from './contexts/State';
 
 import './index.css';
 import App from './App';
+import theme from './theme';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <StateProvider>
         <App />
       </StateProvider>

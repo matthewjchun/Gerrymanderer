@@ -4,7 +4,7 @@ import React, { useState, createContext } from 'react';
 export const StateContext = createContext();
 
 export const StateProvider = ({ children }) => {
-  const [activeState, setActiveState] = useState('');
+  const [activeState, setActiveState] = useState('Celtics');
 
   return (
     <StateContext.Provider value={[activeState, setActiveState]}>
