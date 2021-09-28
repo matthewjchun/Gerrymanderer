@@ -32,10 +32,30 @@ export default function App() {
   const [lat, setLat] = useState(37.7837304);
   const [zoom, setZoom] = useState(4.3);
   let hoveredStateId = null;
+  const bounds = [
+    [-116.895133, 32.868129], // Southwest coordinates
+    [-68.230605, 47.251530] // Northeast coordinates
+    ];
 
   //const [activeState, setActiveState] = useState('');
   const [activeState, setActiveState] = useContext(StateContext);
+  let azd1, azd2, azd3, azd4, azd5, azd6, azd7, azd8, azd9 = null;
 
+  const hide = () => {
+    let markers = document.getElementsByClassName("mapboxgl-marker mapboxgl-marker-anchor-center");
+    for (let i = 0; i < markers.length; i++) {
+        markers[i].style.visibility = "hidden";
+    }
+    console.log("hiding");
+    console.log(markers);
+  }
+
+  const show = () => {
+    let markers = document.getElementsByClassName("marker");
+    for (let i = 0; i < markers.length; i++) {
+        markers[i].style.visibility = "visible";
+    }
+  }
   const zoomArizona = (map) => {
     map.current.flyTo({
       center: [-112.0693, 34.2537],
@@ -69,39 +89,39 @@ export default function App() {
       }
     });
     // AZ CONGRESSIONAL DISTRICTS
-    const azd1 = new mapboxgl.Marker({color: "#cfaf5b"})
+    azd1 = new mapboxgl.Marker({color: "#cfaf5b"})
     .setLngLat([-110.7258455,34.9691324])
     .setPopup(new mapboxgl.Popup().setHTML('<strong>District 1</strong><p><br><b>Total Population:</b> 724,868<br><b>Democratic:</b> 50.1%<br><b>Republican:</b> 48.4%<br><br><b>Race:</b> 64.1% White, 23.2% Am. Indian, 2.4% Black, 1.7% Asian<br><b>Ethnicity:</b> 20.4% Hispanic<br><br><b>Unemployment:</b> 14.2%<br><b>Median household income:</b> $43,377'))
     .addTo(map.current);
-  const azd2 = new mapboxgl.Marker({color: "#cfaf5b"})
+    azd2 = new mapboxgl.Marker({color: "#cfaf5b"})
     .setLngLat([-109.9566824,31.9274371])
     .setPopup(new mapboxgl.Popup().setHTML('<strong>District 2</strong><p><br><b>Total Population:</b> 724,868<br><b>Democratic:</b> 54.5%<br><b>Republican:</b> 43.9%<br><br><b>Race:</b> 64.1% White, 23.2% Am. Indian, 2.4% Black, 1.7% Asian<br><b>Ethnicity:</b> 20.4% Hispanic<br><br><b>Unemployment:</b> 14.2%<br><b>Median household income:</b> $43,377'))
     .addTo(map.current);  
-  const azd3 = new mapboxgl.Marker({color: "#cfaf5b"})
+   azd3 = new mapboxgl.Marker({color: "#cfaf5b"})
     .setLngLat([-112.4379116,32.3667129])
     .setPopup(new mapboxgl.Popup().setHTML('<strong>District 3</strong><p><br><b>Total Population:</b> 724,868<br><b>Democratic:</b> 54.5%<br><b>Republican:</b> 43.9%<br><br><b>Race:</b> 64.1% White, 23.2% Am. Indian, 2.4% Black, 1.7% Asian<br><b>Ethnicity:</b> 20.4% Hispanic<br><br><b>Unemployment:</b> 14.2%<br><b>Median household income:</b> $43,377'))
     .addTo(map.current);
-  const azd4 = new mapboxgl.Marker({color: "#cfaf5b"})
+   azd4 = new mapboxgl.Marker({color: "#cfaf5b"})
     .setLngLat([-113.2180629,34.5988732])
     .setPopup(new mapboxgl.Popup().setHTML('<strong>District 4</strong><p><br><b>Total Population:</b> 724,868<br><b>Democratic:</b> 54.5%<br><b>Republican:</b> 43.9%<br><br><b>Race:</b> 64.1% White, 23.2% Am. Indian, 2.4% Black, 1.7% Asian<br><b>Ethnicity:</b> 20.4% Hispanic<br><br><b>Unemployment:</b> 14.2%<br><b>Median household income:</b> $43,377'))
     .addTo(map.current);
-  const azd5 = new mapboxgl.Marker({color: "#cfaf5b"})
+   azd5 = new mapboxgl.Marker({color: "#cfaf5b"})
     .setLngLat([-111.7146593,33.3377517])
     .setPopup(new mapboxgl.Popup().setHTML('<strong>District 5</strong><p><br><b>Total Population:</b> 724,868<br><b>Democratic:</b> 54.5%<br><b>Republican:</b> 43.9%<br><br><b>Race:</b> 64.1% White, 23.2% Am. Indian, 2.4% Black, 1.7% Asian<br><b>Ethnicity:</b> 20.4% Hispanic<br><br><b>Unemployment:</b> 14.2%<br><b>Median household income:</b> $43,377'))
     .addTo(map.current);
-  const azd6 = new mapboxgl.Marker({color: "#cfaf5b"})
+   azd6 = new mapboxgl.Marker({color: "#cfaf5b"})
     .setLngLat([-111.8903340,33.6672906])
     .setPopup(new mapboxgl.Popup().setHTML('<strong>District 6</strong><p><br><b>Total Population:</b> 724,868<br><b>Democratic:</b> 54.5%<br><b>Republican:</b> 43.9%<br><br><b>Race:</b> 64.1% White, 23.2% Am. Indian, 2.4% Black, 1.7% Asian<br><b>Ethnicity:</b> 20.4% Hispanic<br><br><b>Unemployment:</b> 14.2%<br><b>Median household income:</b> $43,377'))
     .addTo(map.current);
-  const azd7 = new mapboxgl.Marker({color: "#cfaf5b"})
+   azd7 = new mapboxgl.Marker({color: "#cfaf5b"})
     .setLngLat([	-112.1190594,33.4286611])
     .setPopup(new mapboxgl.Popup().setHTML('<strong>District 7</strong><p><br><b>Total Population:</b> 724,868<br><b>Democratic:</b> 54.5%<br><b>Republican:</b> 43.9%<br><br><b>Race:</b> 64.1% White, 23.2% Am. Indian, 2.4% Black, 1.7% Asian<br><b>Ethnicity:</b> 20.4% Hispanic<br><br><b>Unemployment:</b> 14.2%<br><b>Median household income:</b> $43,377'))
     .addTo(map.current);
-  const azd8 = new mapboxgl.Marker({color: "#cfaf5b"})
+   azd8 = new mapboxgl.Marker({color: "#cfaf5b"})
     .setLngLat([-112.3000605,33.6925203])
     .setPopup(new mapboxgl.Popup().setHTML('<strong>District 8</strong><p><br><b>Total Population:</b> 724,868<br><b>Democratic:</b> 54.5%<br><b>Republican:</b> 43.9%<br><br><b>Race:</b> 64.1% White, 23.2% Am. Indian, 2.4% Black, 1.7% Asian<br><b>Ethnicity:</b> 20.4% Hispanic<br><br><b>Unemployment:</b> 14.2%<br><b>Median household income:</b> $43,377'))
     .addTo(map.current);
-  const azd9 = new mapboxgl.Marker({color: "#cfaf5b"})
+   azd9 = new mapboxgl.Marker({color: "#cfaf5b"})
     .setLngLat([-111.9492214,33.4062567])
     .setPopup(new mapboxgl.Popup().setHTML('<strong>District 9</strong><p><br><b>Total Population:</b> 724,868<br><b>Democratic:</b> 54.5%<br><b>Republican:</b> 43.9%<br><br><b>Race:</b> 64.1% White, 23.2% Am. Indian, 2.4% Black, 1.7% Asian<br><b>Ethnicity:</b> 20.4% Hispanic<br><br><b>Unemployment:</b> 14.2%<br><b>Median household income:</b> $43,377'))
     .addTo(map.current);
@@ -455,7 +475,10 @@ export default function App() {
         if (visibility === 'visible') {
           map.current.setLayoutProperty('azcd_lines', 'visibility', 'none');
         }
-
+        if (visibility === 'visible') {
+          hide();
+        }
+        
         // michigan
         visibility = map.current.getLayoutProperty(
           'miprec-boundary',
@@ -471,6 +494,9 @@ export default function App() {
         visibility = map.current.getLayoutProperty('micd_lines', 'visibility');
         if (visibility === 'visible') {
           map.current.setLayoutProperty('micd_lines', 'visibility', 'none');
+        }
+        if (visibility === 'visible') {
+          hide();
         }
 
         // virginia
@@ -488,6 +514,9 @@ export default function App() {
         visibility = map.current.getLayoutProperty('vacd_lines', 'visibility');
         if (visibility === 'visible') {
           map.current.setLayoutProperty('vacd_lines', 'visibility', 'none');
+        }
+        if (visibility === 'visible') {
+          hide();
         }
 
         setActiveState("");
