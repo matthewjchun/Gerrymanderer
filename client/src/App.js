@@ -729,27 +729,56 @@ export default function App() {
   useEffect(() => {
     if (!map.current) return; // wait for map to initialize
     var district = document.getElementById("districtLegend");
+    var county = document.getElementById("countyLegend");
+    var precinct = document.getElementById("precinctLegend");
     district.onclick = function(e) {  
       if (showDistrict) {
-        if (map.current.getLayer("azcd_lines") != "undefined") {
+        if (map.current.getLayer("azcd_lines") !== "undefined") {
           map.current.setLayoutProperty("azcd_lines", "visibility", "none");
         }
-        if (map.current.getLayer("azcd_lines") != "undefined") {
+        if (map.current.getLayer("micd_lines") !== "undefined") {
           map.current.setLayoutProperty("micd_lines", "visibility", "none");
         }
-        if (map.current.getLayer("azcd_lines") != "undefined") {
+        if (map.current.getLayer("vacd_lines") !== "undefined") {
           map.current.setLayoutProperty("vacd_lines", "visibility", "none");
         }
       }
       if (!showDistrict) {
-        if (map.current.getLayer("azcd_lines") != "undefined") {
+        if (map.current.getLayer("azcd_lines") !== "undefined") {
           map.current.setLayoutProperty("azcd_lines", "visibility", "visible");
         }
-        if (map.current.getLayer("azcd_lines") != "undefined") {
+        if (map.current.getLayer("micd_lines") !== "undefined") {
           map.current.setLayoutProperty("micd_lines", "visibility", "visible");
         }
-        if (map.current.getLayer("azcd_lines") != "undefined") {
+        if (map.current.getLayer("vacd_lines") !== "undefined") {
           map.current.setLayoutProperty("vacd_lines", "visibility", "visible");
+        }
+      }
+    }
+    county.onclick = function (e) {
+      console.log("will be implemented");
+    }
+    precinct.onclick = function (e) {
+      if (showPrecinct) {
+        if (map.current.getLayer("azprec-boundary") !== "undefined") {
+          map.current.setLayoutProperty("azprec-boundary", "visibility", "none");
+        }
+        if (map.current.getLayer("miprec-boundary") !== "undefined") {
+          map.current.setLayoutProperty("miprec-boundary", "visibility", "none");
+        }
+        if (map.current.getLayer("vaprec-boundary") !== "undefined") {
+          map.current.setLayoutProperty("vaprec-boundary", "visibility", "none");
+        }
+      }
+      if (!showPrecinct) {
+        if (map.current.getLayer("azprec-boundary") !== "undefined") {
+          map.current.setLayoutProperty("azprec-boundary", "visibility", "visible");
+        }
+        if (map.current.getLayer("miprec-boundary") !== "undefined") {
+          map.current.setLayoutProperty("miprec-boundary", "visibility", "visible");
+        }
+        if (map.current.getLayer("vaprec-boundary") !== "undefined") {
+          map.current.setLayoutProperty("vaprec-boundary", "visibility", "visible");
         }
       }
     }
