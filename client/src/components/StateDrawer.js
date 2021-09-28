@@ -110,6 +110,18 @@ export default function StateDrawer(props){
                                         </StatHelpText>
                                     </Stat>
                                 </StatGroup>
+                                <Divider />
+                                <Text>Demographics</Text>
+                                <PieChart
+                                    data={[
+                                        { title: 'White', value: 2849063, color: '#E38627' },
+                                        { title: 'Black or African', value: 178788, color: '#C13C37' },
+                                        { title: 'American Indian', value: 171607, color: '#F6FF33' },
+                                        { title: 'Asian', value: 147661, color: '#71DE6A' },
+                                        { title: 'Native Hawaiian', value: 8560, color: '#6AD2DE' },
+                                        { title: 'Hispanic', value: 1121876, color: '#6A2135' },
+                                    ]}
+                                />;
                             </TabPanel>
                             <TabPanel>
                                 <Table variant="striped" colorScheme="teal">
