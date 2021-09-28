@@ -30,6 +30,9 @@ export default function App() {
   const map = useRef(null);
   const [lng, setLng] = useState(-100.445882);
   const [lat, setLat] = useState(37.7837304);
+  var showDistrict = true;
+  var showCounty = true;
+  var showPrecinct = true;
   const [zoom, setZoom] = useState(4);
   let hoveredStateId = null;
   const bounds = [
@@ -723,9 +726,101 @@ export default function App() {
     }
   }, [activeState]);
 
+  useEffect(() => {
+    if (!map.current) return; // wait for map to initialize
+    var district = document.getElementById("districtLegend");
+    var county = document.getElementById("countyLegend");
+    var precinct = document.getElementById("precinctLegend");
+    district.onclick = function(e) {  
+      if (showDistrict) {
+        if (map.current.getLayer("azcd_lines") !== "undefined") {
+          map.current.setLayoutProperty("azcd_lines", "visibility", "none");
+        }
+        if (map.current.getLayer("micd_lines") !== "undefined") {
+          map.current.setLayoutProperty("micd_lines", "visibility", "none");
+        }
+        if (map.current.getLayer("vacd_lines") !== "undefined") {
+          map.current.setLayoutProperty("vacd_lines", "visibility", "none");
+        }
+      }
+      if (!showDistrict) {
+        if (map.current.getLayer("azcd_lines") !== "undefined") {
+          map.current.setLayoutProperty("azcd_lines", "visibility", "visible");
+        }
+        if (map.current.getLayer("micd_lines") !== "undefined") {
+          map.current.setLayoutProperty("micd_lines", "visibility", "visible");
+        }
+        if (map.current.getLayer("vacd_lines") !== "undefined") {
+          map.current.setLayoutProperty("vacd_lines", "visibility", "visible");
+        }
+      }
+    }
+    county.onclick = function (e) {
+      console.log("will be implemented");
+    }
+    precinct.onclick = function (e) {
+      if (showPrecinct) {
+        if (map.current.getLayer("azprec-boundary") !== "undefined") {
+          map.current.setLayoutProperty("azprec-boundary", "visibility", "none");
+        }
+        if (map.current.getLayer("miprec-boundary") !== "undefined") {
+          map.current.setLayoutProperty("miprec-boundary", "visibility", "none");
+        }
+        if (map.current.getLayer("vaprec-boundary") !== "undefined") {
+          map.current.setLayoutProperty("vaprec-boundary", "visibility", "none");
+        }
+      }
+      if (!showPrecinct) {
+        if (map.current.getLayer("azprec-boundary") !== "undefined") {
+          map.current.setLayoutProperty("azprec-boundary", "visibility", "visible");
+        }
+        if (map.current.getLayer("miprec-boundary") !== "undefined") {
+          map.current.setLayoutProperty("miprec-boundary", "visibility", "visible");
+        }
+        if (map.current.getLayer("vaprec-boundary") !== "undefined") {
+          map.current.setLayoutProperty("vaprec-boundary", "visibility", "visible");
+        }
+      }
+    }
+  });
+
+  function toggleDistrict() {
+    if (showDistrict) {
+      showDistrict = false;
+      document.getElementById("districtColor").style.backgroundColor = "#FFFFFF";
+    } else {
+      showDistrict = true;
+      document.getElementById("districtColor").style.backgroundColor = "#45322f";
+    }
+  }
+  function toggleCounty() {
+    if (showCounty) {
+      showCounty = false;
+      document.getElementById("countyColor").style.backgroundColor = "#FFFFFF";
+    } else {
+      showCounty = true;
+      document.getElementById("countyColor").style.backgroundColor = "#000000";
+    }
+  }
+  function togglePrecinct() {
+    if (showPrecinct) {
+      showPrecinct = false;
+      document.getElementById("precinctColor").style.backgroundColor = "#FFFFFF";
+    } else {
+      showPrecinct = true;
+      document.getElementById("precinctColor").style.backgroundColor = "#ebd8d3";
+    }
+  }
+
   return (
     <>
       <TopBar />
+      <div className="legend">
+        <h4 style={{fontWeight: "bold"}}>Legend</h4>
+        <div id="districtLegend" onClick={toggleDistrict}><span id="districtColor" style={{backgroundColor: "#45322f"}}></span>Districts</div>
+        <div id="countyLegend" onClick={toggleCounty}><span id="countyColor" style={{backgroundColor:  "#000000"}}></span>Counties</div>
+        <div id="precinctLegend" onClick={togglePrecinct}><span id="precinctColor" style={{backgroundColor: "#ebd8d3"}}></span>Precincts</div>
+      </div>
       <Flex className='content' direction='column' justify='center'>
         <div ref={mapContainer} className='mapContainer' />
         <StateDrawer isOpen={isOpen} onClose={onClose} active={activeState} />
