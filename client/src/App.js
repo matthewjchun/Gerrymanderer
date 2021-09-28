@@ -8,7 +8,7 @@ import './App.css';
 import TopBar from './components/TopBar';
 
 import StateDrawer from './components/StateDrawer';
-// import { useDisclosure } from '@chakra-ui/react';
+import { useDisclosure } from '@chakra-ui/react';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiY2VsdGljczQxNiIsImEiOiJja3R2MGM5dTQxajY4Mm5sNWV5YnNhNHg0In0.t9oiLZZUeZi0QpqUIik13w';
@@ -448,11 +448,8 @@ export default function App() {
       setLat(map.current.getCenter().lat.toFixed(4));
     });
   });
-  // const { isOpen, onOpen, onClose } = useDisclosure();    // figure out where to better put this later
-  // const zoomOut = () => {
-  //   // map zoom out
 
-  // }
+  const { isOpen, onOpen, onClose } = useDisclosure();    // figure out where to better put this later
 
   // useEffect hook for performing actions when activeState changes
   useEffect(() => {
@@ -463,6 +460,7 @@ export default function App() {
         essential: true,
         zoom: 6.2,
       });
+      onOpen();
       map.current.addLayer({
         id: 'azprec-boundary',
         type: 'line',
@@ -481,6 +479,7 @@ export default function App() {
         },
         filter: ['==', '$type', 'Polygon'],
       });
+      
     } else if (activeState == 'Michigan') {
       map.current.flyTo({
         center: [-84.3271772, 44.2330917],
@@ -544,7 +543,7 @@ export default function App() {
         justify='center'
       >
         <div ref={mapContainer} className='mapContainer' />
-        {/* <StateDrawer isOpen={true}></StateDrawer> */}
+        <StateDrawer isOpen={isOpen} onClose={onClose}></StateDrawer>
       </Flex>
     </>
   );
