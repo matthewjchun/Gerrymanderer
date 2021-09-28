@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { StateContext } from '../contexts/State';
 import {
   Drawer,
   DrawerBody,
@@ -40,6 +41,32 @@ import az from '../img/az.jpg';
 import mi from '../img/mi.jpg';
 import va from '../img/va.jpg';
 import { BoxZoomHandler } from 'mapbox-gl';
+
+// maps property names to display names
+const measureMap = {
+  popEquality: 'Population Equality',
+  compactness: 'Compactness',
+  majorityMinority: 'Majority-Minority',
+  enactedDeviation: 'Deviation from Enacted Districting',
+};
+
+// returns an array of best measures for each redistricting in a given state
+const bestMeasure = (data) => {
+  let best = [];
+  for (let i = 0; i < data.length; i++) {
+    let districting = data[i];
+    let maxProp = 'popEquality';
+    let max = districting.popEquality;
+    for (let measure in districting) {
+      if (districting[measure] > max) {
+        maxProp = measure;
+        max = districting.measure;
+      }
+    }
+    best.push([districting.number, maxProp]);
+  }
+  return best;
+};
 
 const azData = [
   {
@@ -221,9 +248,8 @@ const azData = [
     compactness: '71',
     majorityMinority: '65',
     enactedDeviation: '13',
-  }
+  },
 ];
-
 const vaData = [
   {
     popEquality: '53',
@@ -404,7 +430,7 @@ const vaData = [
     compactness: '71',
     majorityMinority: '65',
     enactedDeviation: '13',
-  }
+  },
 ];
 const miData = [
   {
@@ -586,7 +612,7 @@ const miData = [
     compactness: '71',
     majorityMinority: '65',
     enactedDeviation: '13',
-  }
+  },
 ];
 
 export default function LeftPane(props) {
@@ -595,6 +621,7 @@ export default function LeftPane(props) {
   const [compactness, setCompactness] = useState(0);
   const [majorityMinority, setMajorityMinority] = useState(0);
   const [enactedDeviation, setEnactedDeviation] = useState(0);
+  const [activeState, setActiveState] = useContext(StateContext);
 
   const handlePopEqualityInput = (val) => setPopEquality(val);
   const handleCompactnessInput = (val) => setCompactness(val);
@@ -776,26 +803,66 @@ export default function LeftPane(props) {
               </DrawerBody>
             </TabPanel>
             <TabPanel>
-              <VStack spacing='3'>
-                <HStack spacing='3'>
-                  <Redistricting
-                    number='0'
-                    thumbnail={az}
-                    features='Equal Population'
-                  />
-                  <Redistricting
-                    number='1'
-                    thumbnail={az}
-                    features='Equal Population'
-                  />
-
-                  <Redistricting
-                    number='2'
-                    thumbnail={az}
-                    features='Equal Population'
-                  />
-                </HStack>
-              </VStack>
+              {activeState == 'Arizona' ? (
+                <VStack spacing='3'>
+                  {azData.map((set) => {
+                    const [number, best] = bestMeasure(set);
+                    return (
+                      <HStack spacing='3'>
+                        {best.map((measure) => {
+                          return (
+                            <Redistricting
+                              number={number}
+                              thumbnail={az}
+                              features={measureMap[measure]}
+                            />
+                          );
+                        })}
+                      </HStack>
+                    );
+                  })}
+                </VStack>
+              ) : null}
+              {activeState == 'Michigan' ? (
+                <VStack spacing='3'>
+                  {miData.map((set) => {
+                    const [number, best] = bestMeasure(set);
+                    return (
+                      <HStack spacing='3'>
+                        {best.map((measure) => {
+                          return (
+                            <Redistricting
+                              number={number}
+                              thumbnail={mi}
+                              features={measureMap[measure]}
+                            />
+                          );
+                        })}
+                      </HStack>
+                    );
+                  })}
+                </VStack>
+              ) : null}
+              {activeState == 'Virginia' ? (
+                <VStack spacing='3'>
+                  {vaData.map((set) => {
+                    const [number, best] = bestMeasure(set);
+                    return (
+                      <HStack spacing='3'>
+                        {best.map((measure) => {
+                          return (
+                            <Redistricting
+                              number={number}
+                              thumbnail={va}
+                              features={measureMap[measure]}
+                            />
+                          );
+                        })}
+                      </HStack>
+                    );
+                  })}
+                </VStack>
+              ) : null}
             </TabPanel>
           </TabPanels>
         </Tabs>
