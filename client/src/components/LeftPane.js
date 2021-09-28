@@ -790,6 +790,11 @@ export default function LeftPane(props) {
     console.log(e.target.number);
   };
 
+  const redistrictingTabTooltip =
+    'Select one of the following 30 redistrictings to improve on.';
+  const constraintsTabTooltip =
+    'Optionally modify thresholds for the following measures for the improved redistricting.';
+
   const popEqualityTooltip =
     'Set the minimum percentage threshold population equality for the improved redistricting. [0, 100]';
   const compactnessTooltip =
@@ -815,8 +820,30 @@ export default function LeftPane(props) {
         </DrawerHeader>
         <Tabs isFitted variant='enclosed'>
           <TabList mb='1em'>
-            <Tab>SeaWulf Redistrictings</Tab>
-            <Tab>Constraints on Measures</Tab>
+            <Tab>
+              <HStack spacing='5'>
+                <Text>SeaWulf Redistrictings</Text>
+                <Tooltip
+                  label={redistrictingTabTooltip}
+                  fontSize='md'
+                  placement='right'
+                >
+                  <QuestionIcon />
+                </Tooltip>
+              </HStack>
+            </Tab>
+            <Tab>
+              <HStack spacing='5'>
+                <Text>Constraints on Measures</Text>
+                <Tooltip
+                  label={constraintsTabTooltip}
+                  fontSize='md'
+                  placement='right'
+                >
+                  <QuestionIcon />
+                </Tooltip>
+              </HStack>
+            </Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
