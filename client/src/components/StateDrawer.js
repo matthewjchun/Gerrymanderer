@@ -30,7 +30,7 @@ export default function StateDrawer(props){
     const { isOpen, onOpen, onClose } = props;
 
     return(
-        <Drawer isOpen={isOpen} onClose={onClose} size="sm" placement="right">
+        <Drawer isOpen={isOpen} onClose={onClose} size="sm" placement="right" variant="permanent">
             <DrawerContent>
                 <DrawerCloseButton />
                 <DrawerHeader>

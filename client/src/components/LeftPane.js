@@ -52,7 +52,7 @@ export default function LeftPane(props) {
   const handleRacialDeviationInput = (val) => setRacialDeviation(val);
 
   return (
-    <Drawer isOpen={isOpen} onClose={onClose} placement={'left'}>
+    <Drawer isOpen={isOpen} onClose={onClose} placement={'left'} variant="permanent">
       {/* <DrawerOverlay /> */}
       <DrawerContent>
         <DrawerCloseButton />
