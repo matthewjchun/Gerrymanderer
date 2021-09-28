@@ -334,20 +334,6 @@ export default function App() {
           }
         }); */
 
-        let visibility = 
-        map.current.getLayoutProperty(
-              'case',
-              ['boolean', ['feature-state', 'hover'], false],
-              1,
-              0.5,
-            ],
-          },
-          filter: ['==', '$type', 'Polygon'],
-          layout: {
-            visibility: 'visible',
-          },
-        });
-
         let visibility = map.current.getLayoutProperty(
           'azprec-boundary',
           'visibility'
