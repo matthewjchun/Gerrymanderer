@@ -1,11 +1,13 @@
-body {
+body,
+#root {
   padding: 0;
   margin: 0;
+  height: 100vh;
 }
 
 .content {
   width: 100vw;
-  height: 100vh;
+  height: 88.75%;
   max-width: 100%;
 }
 
@@ -15,7 +17,7 @@ body {
 }
 
 .mapboxgl-popup {
-  max-width: 600px!important;
+  max-width: 600px !important;
   height: 600px;
   font: 14px 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: black;
