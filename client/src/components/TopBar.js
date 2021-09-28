@@ -12,11 +12,18 @@ export default function TopBar(props) {
 
   return (
     <HStack w='100%' p='5' align='center' justify='center'>
-      <Button flex='1' mr='auto' onClick={onOpen}>
-        <Text>Redistricting Settings</Text>
-      </Button>
-      <LeftPane isOpen={isOpen} onClose={onClose}></LeftPane>
-      <Text flex='3' fontWeight='bold' fontSize='1.5em' m='auto' align='center'>
+      {activeState != '' ? (
+        <Box flex='1' mr='auto'>
+          <Button onClick={onOpen}>
+            <Text>User Settings</Text>
+          </Button>
+
+          <LeftPane isOpen={isOpen} onClose={onClose}></LeftPane>
+        </Box>
+      ) : (
+        <Box flex='1' mr='auto' />
+      )}
+      <Text flex='1' fontWeight='bold' fontSize='1.5em' m='auto' align='center'>
         {activeState}
       </Text>
       <Select

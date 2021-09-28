@@ -1,13 +1,11 @@
 import React, { useRef, useEffect, useState, useContext } from 'react';
 import { StateContext } from './contexts/State/index';
-import { StateProvider } from './contexts/State/index';
 
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { Flex } from '@chakra-ui/react';
 
 import './App.css';
 import TopBar from './components/TopBar';
-
 
 import StateDrawer from './components/StateDrawer';
 import { Container } from "@chakra-ui/react";
@@ -117,24 +115,24 @@ export default function App() {
         },
       });
       map.current.addLayer({
-        'id': 'michigan',
-        'type': 'fill',
-        'source': 'michigan', // reference the data source
-        'layout': {},
-        'paint': {
-            'fill-color': '#523e3c', // green color fill
-            'fill-opacity': 0.5
+        id: 'michigan',
+        type: 'fill',
+        source: 'michigan', // reference the data source
+        layout: {},
+        paint: {
+          'fill-color': '#523e3c', // green color fill
+          'fill-opacity': 0.5,
         },
       });
       map.current.addLayer({
-        'id': 'virginia',
-        'type': 'fill',
-        'source': 'virginia', // reference the data source
-        'layout': {},
-        'paint': {
-            'fill-color': '#523e3c', // green color fill
-            'fill-opacity': 0.5
-        }
+        id: 'virginia',
+        type: 'fill',
+        source: 'virginia', // reference the data source
+        layout: {},
+        paint: {
+          'fill-color': '#523e3c', // green color fill
+          'fill-opacity': 0.5,
+        },
       });
       map.current.addLayer({
         id: 'michigan',
@@ -154,7 +152,6 @@ export default function App() {
         paint: {
           'fill-color': '#abd67b', // green color fill
           'fill-opacity': 0.5,
-
         },
       });
 
@@ -197,65 +194,56 @@ export default function App() {
           essential: true,
           zoom: 3.5,
         });
-  
+
         // arizona
-        let visibility = 
-          map.current.getLayoutProperty(
+        let visibility = map.current.getLayoutProperty(
+          'azprec-boundary',
+          'visibility'
+        );
+        if (visibility === 'visible') {
+          map.current.setLayoutProperty(
             'azprec-boundary',
-            'visibility'
+            'visibility',
+            'none'
           );
-        if(visibility === 'visible'){
-          map.current.setLayoutProperty('azprec-boundary', 'visibility',
-          'none');
         }
-        visibility = 
-          map.current.getLayoutProperty(
-            'azcd_lines',
-            'visibility'
-          );
-        if(visibility === 'visible'){
-          map.current.setLayoutProperty('azcd_lines', 'visibility',
-          'none');
+        visibility = map.current.getLayoutProperty('azcd_lines', 'visibility');
+        if (visibility === 'visible') {
+          map.current.setLayoutProperty('azcd_lines', 'visibility', 'none');
         }
 
         // michigan
-        visibility = 
-        map.current.getLayoutProperty(
+        visibility = map.current.getLayoutProperty(
           'miprec-boundary',
           'visibility'
         );
-        if(visibility === 'visible'){
-          map.current.setLayoutProperty('miprec-boundary', 'visibility',
-          'none');
+        if (visibility === 'visible') {
+          map.current.setLayoutProperty(
+            'miprec-boundary',
+            'visibility',
+            'none'
+          );
         }
-        visibility = 
-        map.current.getLayoutProperty(
-          'micd_lines',
-          'visibility'
-        );
-        if(visibility === 'visible'){
-          map.current.setLayoutProperty('micd_lines', 'visibility',
-          'none');
+        visibility = map.current.getLayoutProperty('micd_lines', 'visibility');
+        if (visibility === 'visible') {
+          map.current.setLayoutProperty('micd_lines', 'visibility', 'none');
         }
-        
+
         // virginia
-        visibility = 
-        map.current.getLayoutProperty(
+        visibility = map.current.getLayoutProperty(
           'vaprec-boundary',
           'visibility'
         );
-        if(visibility === 'visible'){
-          map.current.setLayoutProperty('vaprec-boundary', 'visibility',
-          'none');
+        if (visibility === 'visible') {
+          map.current.setLayoutProperty(
+            'vaprec-boundary',
+            'visibility',
+            'none'
+          );
         }
-        visibility = 
-        map.current.getLayoutProperty(
-          'vacd_lines',
-          'visibility'
-        );
-        if(visibility === 'visible'){
-          map.current.setLayoutProperty('vacd_lines', 'visibility',
-          'none');
+        visibility = map.current.getLayoutProperty('vacd_lines', 'visibility');
+        if (visibility === 'visible') {
+          map.current.setLayoutProperty('vacd_lines', 'visibility', 'none');
         }
 
         setActiveState(null);
@@ -314,8 +302,8 @@ export default function App() {
           },
           filter: ['==', '$type', 'Polygon'],
           layout: {
-            'visibility': 'visible'
-          }
+            visibility: 'visible',
+          },
         });
         map.current.addLayer({
           id: 'azcd_lines',
@@ -323,6 +311,7 @@ export default function App() {
           source: 'azcd',
           paint: {
             'line-color': '#000000'
+
           },
           filter: ['==', '$type', 'Polygon'],
           layout: {
@@ -347,40 +336,33 @@ export default function App() {
 
         let visibility = 
         map.current.getLayoutProperty(
+              'case',
+              ['boolean', ['feature-state', 'hover'], false],
+              1,
+              0.5,
+            ],
+          },
+          filter: ['==', '$type', 'Polygon'],
+          layout: {
+            visibility: 'visible',
+          },
+        });
+
+        let visibility = map.current.getLayoutProperty(
           'azprec-boundary',
           'visibility'
         );
-        if(visibility === 'none'){
-          map.current.setLayoutProperty('azprec-boundary', 'visibility',
-          'visible');
-        }
-        visibility = 
-        map.current.getLayoutProperty(
-          'azcd_lines',
-          'visibility'
-        );
-        if(visibility === 'none'){
-          map.current.setLayoutProperty('azcd_lines', 'visibility',
-          'visible');
-        }
-
-        // HOVER OVER DISTRICTS
-        /* map.current.on('mousemove', 'azcd_fill', (e) => {
-          if (e.features.length > 0) {
-          if (hoveredStateId !== null) {
-            map.current.setFeatureState(
-              { source: 'azcd', id: hoveredStateId },
-              { hover: false }
-            );
-          }
-          hoveredStateId = e.features[0].properties.GEOID20;
-         
-          map.current.setFeatureState(
-            { source: 'azcd', id: hoveredStateId },
-            { hover: true }
+        if (visibility === 'none') {
+          map.current.setLayoutProperty(
+            'azprec-boundary',
+            'visibility',
+            'visible'
           );
-          }
-          }); */
+        }
+        visibility = map.current.getLayoutProperty('azcd_lines', 'visibility');
+        if (visibility === 'none') {
+          map.current.setLayoutProperty('azcd_lines', 'visibility', 'visible');
+        }
 
         setActiveState('Arizona');
       });
@@ -460,8 +442,8 @@ export default function App() {
           },
           filter: ['==', '$type', 'Polygon'],
           layout: {
-            'visibility': 'visible'
-          }
+            visibility: 'visible',
+          },
         });
         map.current.addLayer({
           id: 'micd_lines',
@@ -472,27 +454,24 @@ export default function App() {
           },
           filter: ['==', '$type', 'Polygon'],
           layout: {
-            'visibility': 'visible'
-          }
+            visibility: 'visible',
+          },
         });
 
-        let visibility = 
-        map.current.getLayoutProperty(
+        let visibility = map.current.getLayoutProperty(
           'miprec-boundary',
           'visibility'
         );
-        if(visibility === 'none'){
-          map.current.setLayoutProperty('miprec-boundary', 'visibility',
-          'visible');
+        if (visibility === 'none') {
+          map.current.setLayoutProperty(
+            'miprec-boundary',
+            'visibility',
+            'visible'
+          );
         }
-        visibility = 
-        map.current.getLayoutProperty(
-          'micd_lines',
-          'visibility'
-        );
-        if(visibility === 'none'){
-          map.current.setLayoutProperty('micd_lines', 'visibility',
-          'visible');
+        visibility = map.current.getLayoutProperty('micd_lines', 'visibility');
+        if (visibility === 'none') {
+          map.current.setLayoutProperty('micd_lines', 'visibility', 'visible');
         }
 
         setActiveState('Michigan');
@@ -559,8 +538,8 @@ export default function App() {
           },
           filter: ['==', '$type', 'Polygon'],
           layout: {
-            'visibility': 'visible'
-          }
+            visibility: 'visible',
+          },
         });
         map.current.addLayer({
           id: 'vacd_lines',
@@ -571,27 +550,24 @@ export default function App() {
           },
           filter: ['==', '$type', 'Polygon'],
           layout: {
-            'visibility': 'visible'
-          }
+            visibility: 'visible',
+          },
         });
 
-        let visibility = 
-        map.current.getLayoutProperty(
+        let visibility = map.current.getLayoutProperty(
           'vaprec-boundary',
           'visibility'
         );
-        if(visibility === 'none'){
-          map.current.setLayoutProperty('vaprec-boundary', 'visibility',
-          'visible');
+        if (visibility === 'none') {
+          map.current.setLayoutProperty(
+            'vaprec-boundary',
+            'visibility',
+            'visible'
+          );
         }
-        visibility = 
-        map.current.getLayoutProperty(
-          'vacd_lines',
-          'visibility'
-        );
-        if(visibility === 'none'){
-          map.current.setLayoutProperty('vacd_lines', 'visibility',
-          'visible');
+        visibility = map.current.getLayoutProperty('vacd_lines', 'visibility');
+        if (visibility === 'none') {
+          map.current.setLayoutProperty('vacd_lines', 'visibility', 'visible');
         }
 
         setActiveState('Virginia');
@@ -612,7 +588,7 @@ export default function App() {
 
   // }
 
-  // useEffect hook for zooming to state when activeState changes
+  // useEffect hook for performing actions when activeState changes
   useEffect(() => {
     if (!map.current) return;
     if (activeState == 'Arizona') {
@@ -704,7 +680,6 @@ export default function App() {
         <div ref={mapContainer} className='mapContainer' />
         {/* <StateDrawer isOpen={true} ></StateDrawer> */}
       </Flex>
-
     </>
   );
 }
