@@ -279,8 +279,6 @@ export default function App() {
   });
   // const { isOpen, onOpen, onClose } = useDisclosure();    // figure out where to better put this later
 
-  
-      
   useEffect(() => {
     if (!map.current) return; // wait for map to initialize
     var district = document.getElementById("districtLegend");
@@ -289,24 +287,25 @@ export default function App() {
         if (map.current.getLayer("azcd_lines") != "undefined") {
           map.current.setLayoutProperty("azcd_lines", "visibility", "none");
         }
+        if (map.current.getLayer("azcd_lines") != "undefined") {
+          map.current.setLayoutProperty("micd_lines", "visibility", "none");
+        }
+        if (map.current.getLayer("azcd_lines") != "undefined") {
+          map.current.setLayoutProperty("vacd_lines", "visibility", "none");
+        }
       }
       if (!showDistrict) {
         if (map.current.getLayer("azcd_lines") != "undefined") {
           map.current.setLayoutProperty("azcd_lines", "visibility", "visible");
         }
+        if (map.current.getLayer("azcd_lines") != "undefined") {
+          map.current.setLayoutProperty("micd_lines", "visibility", "visible");
+        }
+        if (map.current.getLayer("azcd_lines") != "undefined") {
+          map.current.setLayoutProperty("vacd_lines", "visibility", "visible");
+        }
       }
     }
-    // else if (map.current.getLayer("azcd_lines") != "undefined") {
-    //   map.current.setLayoutProperty("azcd_lines", "visibility", "none");
-    // }
-    // map.current.getLayer("micd_lines");
-    // map.current.getLayer("vacd_lines");
-    // if (showCounty) {
-    //   return;
-    // }
-    // if (showPrecinct) {
-    //   return;
-    // }
   });
 
   function toggleDistrict() {
@@ -317,7 +316,6 @@ export default function App() {
       showDistrict = true;
       document.getElementById("districtColor").style.backgroundColor = "#45322f";
     }
-    console.log("Show District: " + showDistrict);
   }
   function toggleCounty() {
     if (showCounty) {
@@ -327,7 +325,6 @@ export default function App() {
       showCounty = true;
       document.getElementById("countyColor").style.backgroundColor = "#000000";
     }
-    console.log("Show County: " + showCounty);
   }
   function togglePrecinct() {
     if (showPrecinct) {
@@ -337,8 +334,8 @@ export default function App() {
       showPrecinct = true;
       document.getElementById("precinctColor").style.backgroundColor = "#ebd8d3";
     }
-    console.log("Show Precinct: " + showPrecinct);
   }
+
   return (
     <>
       <TopBar />
