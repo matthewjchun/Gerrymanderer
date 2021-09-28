@@ -32,10 +32,29 @@ export default function App() {
   const [lat, setLat] = useState(37.7837304);
   const [zoom, setZoom] = useState(4.3);
   let hoveredStateId = null;
+  const bounds = [
+    [-116.895133, 32.868129], // Southwest coordinates
+    [-68.230605, 47.251530] // Northeast coordinates
+    ];
 
   //const [activeState, setActiveState] = useState('');
   const [activeState, setActiveState] = useContext(StateContext);
 
+  const hide = () => {
+    let markers = document.getElementsByClassName("mapboxgl-marker mapboxgl-marker-anchor-center");
+    for (let i = 0; i < markers.length; i++) {
+        markers[i].style.visibility = "hidden";
+    }
+    console.log("hiding");
+    console.log(markers);
+  }
+
+  const show = () => {
+    let markers = document.getElementsByClassName("marker");
+    for (let i = 0; i < markers.length; i++) {
+        markers[i].style.visibility = "visible";
+    }
+  }
   const zoomArizona = (map) => {
     map.current.flyTo({
       center: [-112.0693, 34.2537],
@@ -594,7 +613,10 @@ export default function App() {
         if (visibility === 'visible') {
           map.current.setLayoutProperty('azcd_lines', 'visibility', 'none');
         }
-
+        if (visibility === 'visible') {
+          hide();
+        }
+        
         // michigan
         visibility = map.current.getLayoutProperty(
           'miprec-boundary',
@@ -610,6 +632,9 @@ export default function App() {
         visibility = map.current.getLayoutProperty('micd_lines', 'visibility');
         if (visibility === 'visible') {
           map.current.setLayoutProperty('micd_lines', 'visibility', 'none');
+        }
+        if (visibility === 'visible') {
+          hide();
         }
 
         // virginia
@@ -627,6 +652,9 @@ export default function App() {
         visibility = map.current.getLayoutProperty('vacd_lines', 'visibility');
         if (visibility === 'visible') {
           map.current.setLayoutProperty('vacd_lines', 'visibility', 'none');
+        }
+        if (visibility === 'visible') {
+          hide();
         }
 
         setActiveState('');
