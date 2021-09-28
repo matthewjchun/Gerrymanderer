@@ -29,6 +29,9 @@ export default function App() {
   const [lng, setLng] = useState(-100.445882);
   const [lat, setLat] = useState(37.7837304);
   const [zoom, setZoom] = useState(3.5);
+  var showDistrict = true;
+  var showCounty = true;
+  var showPrecinct = true;
   var arizona = useRef(null);
 
   //const [activeState, setActiveState] = useState('');
@@ -191,6 +194,9 @@ export default function App() {
           id: 'azcd_lines',
           type: 'line',
           source: 'azcd',
+          layout: {
+            'visibility': 'visible',
+          },
           paint: {
             'line-color': '#45322f',
           },
@@ -220,6 +226,9 @@ export default function App() {
           id: 'micd_lines',
           type: 'line',
           source: 'micd',
+          layout: {
+            'visibility': 'visible',
+          },
           paint: {
             'line-color': '#45322f',
 
@@ -241,7 +250,6 @@ export default function App() {
           source: 'vaprecincts',
           paint: {
             'line-color': '#ebd8d3',
-
           },
           filter: ['==', '$type', 'Polygon'],
         });
@@ -249,9 +257,11 @@ export default function App() {
           id: 'vacd_lines',
           type: 'line',
           source: 'vacd',
+          layout: {
+            'visibility': 'visible',
+          },
           paint: {
             'line-color': '#45322f',
-
           },
           filter: ['==', '$type', 'Polygon'],
         });
@@ -269,10 +279,76 @@ export default function App() {
   });
   // const { isOpen, onOpen, onClose } = useDisclosure();    // figure out where to better put this later
 
+  
+      
+  useEffect(() => {
+    if (!map.current) return; // wait for map to initialize
+    var district = document.getElementById("districtLegend");
+    district.onclick = function(e) {  
+      if (showDistrict) {
+        if (map.current.getLayer("azcd_lines") != "undefined") {
+          map.current.setLayoutProperty("azcd_lines", "visibility", "none");
+        }
+      }
+      if (!showDistrict) {
+        if (map.current.getLayer("azcd_lines") != "undefined") {
+          map.current.setLayoutProperty("azcd_lines", "visibility", "visible");
+        }
+      }
+    }
+    // else if (map.current.getLayer("azcd_lines") != "undefined") {
+    //   map.current.setLayoutProperty("azcd_lines", "visibility", "none");
+    // }
+    // map.current.getLayer("micd_lines");
+    // map.current.getLayer("vacd_lines");
+    // if (showCounty) {
+    //   return;
+    // }
+    // if (showPrecinct) {
+    //   return;
+    // }
+  });
+
+  function toggleDistrict() {
+    if (showDistrict) {
+      showDistrict = false;
+      document.getElementById("districtColor").style.backgroundColor = "#FFFFFF";
+    } else {
+      showDistrict = true;
+      document.getElementById("districtColor").style.backgroundColor = "#45322f";
+    }
+    console.log("Show District: " + showDistrict);
+  }
+  function toggleCounty() {
+    if (showCounty) {
+      showCounty = false;
+      document.getElementById("countyColor").style.backgroundColor = "#FFFFFF";
+    } else {
+      showCounty = true;
+      document.getElementById("countyColor").style.backgroundColor = "#000000";
+    }
+    console.log("Show County: " + showCounty);
+  }
+  function togglePrecinct() {
+    if (showPrecinct) {
+      showPrecinct = false;
+      document.getElementById("precinctColor").style.backgroundColor = "#FFFFFF";
+    } else {
+      showPrecinct = true;
+      document.getElementById("precinctColor").style.backgroundColor = "#ebd8d3";
+    }
+    console.log("Show Precinct: " + showPrecinct);
+  }
   return (
     <>
       <TopBar />
       <div ref={mapContainer} className='map-container' />
+      <div className="legend">
+        <h4 style={{fontWeight: "bold"}}>Legend</h4>
+        <div id="districtLegend" onClick={toggleDistrict}><span id="districtColor" style={{backgroundColor: "#45322f"}}></span>Districts</div>
+        <div id="countyLegend" onClick={toggleCounty}><span id="countyColor" style={{backgroundColor:  "#000000"}}></span>Counties</div>
+        <div id="precinctLegend" onClick={togglePrecinct}><span id="precinctColor" style={{backgroundColor: "#ebd8d3"}}></span>Precincts</div>
+      </div>
       <Flex
         className='content'
         direction='column'
