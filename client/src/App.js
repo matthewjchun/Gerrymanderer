@@ -80,6 +80,18 @@ export default function App() {
       },
     });
     map.current.addLayer({
+      id: 'azcounty-boundary',
+      type: 'line',
+      source: 'azcounty',
+      paint: {
+        'line-color': '#FFA500',
+      },
+      filter: ['==', '$type', 'Polygon'],
+      layout: {
+        visibility: 'visible',
+      },
+    });
+    map.current.addLayer({
       id: 'azcd_lines',
       type: 'line',
       source: 'azcd',
@@ -190,6 +202,18 @@ export default function App() {
       source: 'miprecincts',
       paint: {
         'line-color': '#e6d1b5',
+      },
+      filter: ['==', '$type', 'Polygon'],
+      layout: {
+        visibility: 'visible',
+      },
+    });
+    map.current.addLayer({
+      id: 'micounty-boundary',
+      type: 'line',
+      source: 'micounty',
+      paint: {
+        'line-color': '#FFA500',
       },
       filter: ['==', '$type', 'Polygon'],
       layout: {
@@ -354,6 +378,18 @@ export default function App() {
       id: 'vaprec-boundary',
       type: 'line',
       source: 'vaprecincts',
+      paint: {
+        'line-color': '#e6d1b5',
+      },
+      filter: ['==', '$type', 'Polygon'],
+      layout: {
+        visibility: 'visible',
+      },
+    });
+    map.current.addLayer({
+      id: 'vacounty-boundary',
+      type: 'line',
+      source: 'vacounty',
       paint: {
         'line-color': '#e6d1b5',
       },
@@ -565,6 +601,18 @@ export default function App() {
         type: 'geojson',
         data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/va_2019.json',
       });
+      map.current.addSource('azcounty', {
+        type: 'geojson',
+        data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/AZ_Counties.json',
+      });
+      map.current.addSource('micounty', {
+        type: 'geojson',
+        data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/MI_Counties.json',
+      });
+      map.current.addSource('vacounty', {
+        type: 'geojson',
+        data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/VA_Counties.json',
+      });
       map.current.addSource('azcd', {
         type: 'geojson',
         data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/az_cd.json',
@@ -756,7 +804,28 @@ export default function App() {
       }
     }
     county.onclick = function (e) {
-      console.log("will be implemented");
+      if (showCounty) {
+        if (map.current.getLayer("azcounty-boundary") !== "undefined") {
+          map.current.setLayoutProperty("azcounty-boundary", "visibility", "none");
+        }
+        if (map.current.getLayer("micounty-boundary") !== "undefined") {
+          map.current.setLayoutProperty("micounty-boundary", "visibility", "none");
+        }
+        if (map.current.getLayer("vacounty-boundary") !== "undefined") {
+          map.current.setLayoutProperty("vacounty-boundary", "visibility", "none");
+        }
+      }
+      if (!showCounty) {
+        if (map.current.getLayer("azcounty-boundary") !== "undefined") {
+          map.current.setLayoutProperty("azcounty-boundary", "visibility", "visible");
+        }
+        if (map.current.getLayer("micounty-boundary") !== "undefined") {
+          map.current.setLayoutProperty("micounty-boundary", "visibility", "visible");
+        }
+        if (map.current.getLayer("vacounty-boundary") !== "undefined") {
+          map.current.setLayoutProperty("vacounty-boundary", "visibility", "visible");
+        }
+      }
     }
     precinct.onclick = function (e) {
       if (showPrecinct) {
@@ -799,7 +868,7 @@ export default function App() {
       document.getElementById("countyColor").style.backgroundColor = "#FFFFFF";
     } else {
       showCounty = true;
-      document.getElementById("countyColor").style.backgroundColor = "#000000";
+      document.getElementById("countyColor").style.backgroundColor = "#FFA500";
     }
   }
   function togglePrecinct() {
