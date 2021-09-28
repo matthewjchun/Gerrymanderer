@@ -124,11 +124,10 @@ export default function StateDrawer(props){
                                 />;
                             </TabPanel>
                             <TabPanel>
+                                <Text> DISTRICT 1 </Text>
                                 <Table variant="striped" colorScheme="teal">
-                                    <TableCaption>Districtings</TableCaption>
                                     <Thead>
                                         <Tr>
-                                        <Th>District #</Th>
                                         <Th>Population</Th>
                                         <Th isNumeric>Democratic</Th>
                                         <Th isNumeric>Republican</Th>
@@ -136,25 +135,211 @@ export default function StateDrawer(props){
                                     </Thead>
                                     <Tbody>
                                         <Tr>
-                                        <Td>1</Td>
-                                        <Td>a lot</Td>
-                                        <Td isNumeric>25.4</Td>
-                                        <Td isNumeric>25.4</Td>
+                                        <Td>724,868</Td>
+                                        <Td isNumeric>50.1</Td>
+                                        <Td isNumeric>48.4</Td>
                                         </Tr>
                                         <Tr>
-                                        <Td>2</Td>
-                                        <Td>a lot</Td>
-                                        <Td isNumeric>30.48</Td>
-                                        <Td isNumeric>25.4</Td>
-                                        </Tr>
-                                        <Tr>
-                                        <Td>3</Td>
-                                        <Td>a lot</Td>
-                                        <Td isNumeric>0.91444</Td>
-                                        <Td isNumeric>25.4</Td>
+                                        <Td></Td>
+                                        <Td isNumeric><StatArrow type="increase" /></Td>
+                                        <Td isNumeric><StatArrow type="decrease" /></Td>
                                         </Tr>
                                     </Tbody>
                                 </Table>
+                                <Divider />
+
+                                <Text> DISTRICT 2 </Text>
+                                <Table variant="striped" colorScheme="teal">
+                                    <Thead>
+                                        <Tr>
+                                        <Th>Population</Th>
+                                        <Th isNumeric>Democratic</Th>
+                                        <Th isNumeric>Republican</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        <Tr>
+                                        <Td>724,868</Td>
+                                        <Td isNumeric>54.5</Td>
+                                        <Td isNumeric>43.9</Td>
+                                        </Tr>
+                                        <Tr>
+                                        <Td></Td>
+                                        <Td isNumeric><StatArrow type="increase" /></Td>
+                                        <Td isNumeric><StatArrow type="decrease" /></Td>
+                                        </Tr>
+                                    </Tbody>
+                                </Table>
+                                <Divider />
+
+                                <Text> DISTRICT 3 </Text>
+                                <Table variant="striped" colorScheme="teal">
+                                    <Thead>
+                                        <Tr>
+                                        <Th>Population</Th>
+                                        <Th isNumeric>Democratic</Th>
+                                        <Th isNumeric>Republican</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        <Tr>
+                                        <Td> 724,868</Td>
+                                        <Td isNumeric>54.5</Td>
+                                        <Td isNumeric>43.9</Td>
+                                        </Tr>
+                                        <Tr>
+                                        <Td></Td>
+                                        <Td isNumeric><StatArrow type="increase" /></Td>
+                                        <Td isNumeric><StatArrow type="decrease" /></Td>
+                                        </Tr>
+                                    </Tbody>
+                                </Table>
+                                <Divider />
+
+                                <Text> DISTRICT 4 </Text>
+                                <Table variant="striped" colorScheme="teal">
+                                    <Thead>
+                                        <Tr>
+                                        <Th>Population</Th>
+                                        <Th isNumeric>Democratic</Th>
+                                        <Th isNumeric>Republican</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        <Tr>
+                                        <Td> 724,868</Td>
+                                        <Td isNumeric>54.5</Td>
+                                        <Td isNumeric>43.9</Td>
+                                        </Tr>
+                                        <Tr>
+                                        <Td></Td>
+                                        <Td isNumeric><StatArrow type="increase" /></Td>
+                                        <Td isNumeric><StatArrow type="decrease" /></Td>
+                                        </Tr>
+                                    </Tbody>
+                                </Table>
+                                <Divider />
+
+                                <Text> DISTRICT 5 </Text>
+                                <Table variant="striped" colorScheme="teal">
+                                    <Thead>
+                                        <Tr>
+                                        <Th>Population</Th>
+                                        <Th isNumeric>Democratic</Th>
+                                        <Th isNumeric>Republican</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        <Tr>
+                                        <Td> 724,868</Td>
+                                        <Td isNumeric>54.5</Td>
+                                        <Td isNumeric>43.9</Td>
+                                        </Tr>
+                                        <Tr>
+                                        <Td></Td>
+                                        <Td isNumeric><StatArrow type="increase" /></Td>
+                                        <Td isNumeric><StatArrow type="decrease" /></Td>
+                                        </Tr>
+                                    </Tbody>
+                                </Table>
+                                <Divider />
+
+                                <Text> DISTRICT 6 </Text>
+                                <Table variant="striped" colorScheme="teal">
+                                    <Thead>
+                                        <Tr>
+                                        <Th>Population</Th>
+                                        <Th isNumeric>Democratic</Th>
+                                        <Th isNumeric>Republican</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        <Tr>
+                                        <Td> 724,868</Td>
+                                        <Td isNumeric>54.5</Td>
+                                        <Td isNumeric>43.9</Td>
+                                        </Tr>
+                                        <Tr>
+                                        <Td></Td>
+                                        <Td isNumeric><StatArrow type="increase" /></Td>
+                                        <Td isNumeric><StatArrow type="decrease" /></Td>
+                                        </Tr>
+                                    </Tbody>
+                                </Table>
+                                <Divider />
+
+                                <Text> DISTRICT 7 </Text>
+                                <Table variant="striped" colorScheme="teal">
+                                    <Thead>
+                                        <Tr>
+                                        <Th>Population</Th>
+                                        <Th isNumeric>Democratic</Th>
+                                        <Th isNumeric>Republican</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        <Tr>
+                                        <Td> 724,868</Td>
+                                        <Td isNumeric>54.5</Td>
+                                        <Td isNumeric>43.9</Td>
+                                        </Tr>
+                                        <Tr>
+                                        <Td></Td>
+                                        <Td isNumeric><StatArrow type="increase" /></Td>
+                                        <Td isNumeric><StatArrow type="decrease" /></Td>
+                                        </Tr>
+                                    </Tbody>
+                                </Table>
+                                <Divider />
+
+                                <Text> DISTRICT 8 </Text>
+                                <Table variant="striped" colorScheme="teal">
+                                    <Thead>
+                                        <Tr>
+                                        <Th>Population</Th>
+                                        <Th isNumeric>Democratic</Th>
+                                        <Th isNumeric>Republican</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        <Tr>
+                                        <Td> 724,868</Td>
+                                        <Td isNumeric>54.5</Td>
+                                        <Td isNumeric>43.9</Td>
+                                        </Tr>
+                                        <Tr>
+                                        <Td></Td>
+                                        <Td isNumeric><StatArrow type="increase" /></Td>
+                                        <Td isNumeric><StatArrow type="decrease" /></Td>
+                                        </Tr>
+                                    </Tbody>
+                                </Table>
+                                <Divider />
+
+                                <Text> DISTRICT 9 </Text>
+                                <Table variant="striped" colorScheme="teal">
+                                    <Thead>
+                                        <Tr>
+                                        <Th>Population</Th>
+                                        <Th isNumeric>Democratic</Th>
+                                        <Th isNumeric>Republican</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        <Tr>
+                                        <Td> 724,868</Td>
+                                        <Td isNumeric>54.5</Td>
+                                        <Td isNumeric>43.9</Td>
+                                        </Tr>
+                                        <Tr>
+                                        <Td></Td>
+                                        <Td isNumeric><StatArrow type="increase" /></Td>
+                                        <Td isNumeric><StatArrow type="decrease" /></Td>
+                                        </Tr>
+                                    </Tbody>
+                                </Table>
+                                <Divider />
+                                
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
