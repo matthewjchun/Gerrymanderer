@@ -122,6 +122,48 @@ export default function StateDrawer(props){
                                         { title: 'Hispanic', value: 1121876, color: '#6A2135' },
                                     ]}
                                 />
+                                <Table variant="simple">
+                                    <TableCaption>Demographics</TableCaption>
+                                    <Thead>
+                                        <Tr>
+                                        <Th>Race</Th>
+                                        <Th>Population</Th>
+                                        <Th>Color</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        <Tr>
+                                        <Td>White</Td>
+                                        <Td>2,849,063</Td>
+                                        <Td bg='#E38627'></Td>
+                                        </Tr>
+                                        <Tr>
+                                        <Td>Hispanic</Td>
+                                        <Td>1,121,876</Td>
+                                        <Td bg='#6A2135'></Td>
+                                        </Tr>
+                                        <Tr>
+                                        <Td>Black or African</Td>
+                                        <Td>178,788</Td>
+                                        <Td bg='#C13C37'></Td>
+                                        </Tr>
+                                        <Tr>
+                                        <Td>American Indian</Td>
+                                        <Td>171,607</Td>
+                                        <Td bg='#F6FF33'></Td>
+                                        </Tr>
+                                        <Tr>
+                                        <Td>Asian</Td>
+                                        <Td>147,661</Td>
+                                        <Td bg='#71DE6A'></Td>
+                                        </Tr>
+                                        <Tr>
+                                        <Td>Native Hawaiian</Td>
+                                        <Td>8,560</Td>
+                                        <Td bg='#6AD2DE'></Td>
+                                        </Tr>
+                                    </Tbody>
+                                </Table>
                             </TabPanel>
                             <TabPanel>
                                 <Text> DISTRICT 1 </Text>
@@ -345,11 +387,8 @@ export default function StateDrawer(props){
                     </Tabs>
         
                 </DrawerBody>
-                <DrawerFooter>
-                    <Button onClick={onClose}>
-                        Close
-                    </Button>
-                </DrawerFooter>
+                {/* <DrawerFooter>
+                </DrawerFooter> */}
             </DrawerContent>
         </Drawer>   
 
