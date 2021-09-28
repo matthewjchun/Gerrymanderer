@@ -23,18 +23,23 @@ import {
     Td,
     TableCaption,
 } from "@chakra-ui/react";
-// import { useDisclosure } from '@chakra-ui/react';
+import { useContext } from 'react';
+import { StateContext } from '../contexts/State';
 
 
 export default function StateDrawer(props){
     const { isOpen, onOpen, onClose } = props;
+
+    const [ activeState ] = useContext(StateContext);
 
     return(
         <Drawer isOpen={isOpen} onClose={onClose} size="sm" placement="right" variant="permanent">
             <DrawerContent>
                 <DrawerCloseButton />
                 <DrawerHeader>
-                    <Text>Arizona</Text>
+                    <Text flex='1' fontWeight='bold' fontSize='1.5em' m='auto' align='center'>
+                        {activeState}
+                    </Text>
                 </DrawerHeader>
                 <DrawerBody>
                     
@@ -48,6 +53,8 @@ export default function StateDrawer(props){
 
                         <TabPanels>
                             <TabPanel>
+                                <Text>Population: 7,151,502</Text>
+                                <Text>Congressional Voting Results</Text>
                                 <Table variant="simple">
                                     <TableCaption>Rando Numbers</TableCaption>
                                     <Thead>
