@@ -213,7 +213,7 @@ export default function App() {
       type: 'line',
       source: 'micounty',
       paint: {
-        'line-color': '#FFA500',
+        'line-color': '#940f00',
       },
       filter: ['==', '$type', 'Polygon'],
       layout: {
@@ -877,7 +877,7 @@ export default function App() {
       document.getElementById("countyColor").style.backgroundColor = "#FFFFFF";
     } else {
       showCounty = true;
-      document.getElementById("countyColor").style.backgroundColor = "#FFA500";
+      document.getElementById("countyColor").style.backgroundColor = "#940f00";
     }
   }
   function togglePrecinct() {
