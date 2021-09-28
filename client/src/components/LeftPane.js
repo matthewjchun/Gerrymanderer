@@ -53,7 +53,7 @@ export default function LeftPane(props) {
 
   return (
     <Drawer isOpen={isOpen} onClose={onClose} placement={'left'}>
-      <DrawerOverlay />
+      {/* <DrawerOverlay /> */}
       <DrawerContent>
         <DrawerCloseButton />
         <DrawerHeader>

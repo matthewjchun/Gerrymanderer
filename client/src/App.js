@@ -235,7 +235,7 @@ export default function App() {
           map.current.setLayoutProperty('vacd_lines', 'visibility', 'none');
         }
 
-        setActiveState(null);
+        setActiveState("");
       });
 
       map.current.on('click', 'arizona', (e) => {
@@ -543,7 +543,7 @@ export default function App() {
         justify='center'
       >
         <div ref={mapContainer} className='mapContainer' />
-        <StateDrawer isOpen={isOpen} onClose={onClose}></StateDrawer>
+        <StateDrawer isOpen={isOpen} onClose={onClose} ></StateDrawer>
       </Flex>
     </>
   );
