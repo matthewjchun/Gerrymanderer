@@ -58,12 +58,13 @@ const bestMeasure = (data) => {
     let maxProp = 'popEquality';
     let max = districting.popEquality;
     for (let measure in districting) {
+      if (measure == 'number') continue;
       if (districting[measure] > max) {
         maxProp = measure;
         max = districting.measure;
       }
     }
-    best.push([districting.number, maxProp]);
+    best.push([districting.number, maxProp, districting]);
   }
   return best;
 };
@@ -789,6 +790,7 @@ export default function LeftPane(props) {
 
   return (
     <Drawer
+      size='lg'
       isOpen={isOpen}
       onClose={onClose}
       placement={'left'}
@@ -960,12 +962,13 @@ export default function LeftPane(props) {
                     return (
                       <HStack spacing='3'>
                         {best.map((numMeasure) => {
-                          const [number, measure] = numMeasure;
+                          const [number, measure, allMeasures] = numMeasure;
                           return (
                             <Redistricting
                               number={number}
                               thumbnail={az}
-                              features={measureMap[measure]}
+                              bestMeasure={measureMap[measure]}
+                              measures={allMeasures}
                             />
                           );
                         })}
@@ -981,12 +984,13 @@ export default function LeftPane(props) {
                     return (
                       <HStack spacing='3'>
                         {best.map((numMeasure) => {
-                          const [number, measure] = numMeasure;
+                          const [number, measure, allMeasures] = numMeasure;
                           return (
                             <Redistricting
                               number={number}
                               thumbnail={mi}
-                              features={measureMap[measure]}
+                              bestMeasure={measureMap[measure]}
+                              measures={allMeasures}
                             />
                           );
                         })}
@@ -1002,12 +1006,13 @@ export default function LeftPane(props) {
                     return (
                       <HStack spacing='3'>
                         {best.map((numMeasure) => {
-                          const [number, measure] = numMeasure;
+                          const [number, measure, allMeasures] = numMeasure;
                           return (
                             <Redistricting
                               number={number}
                               thumbnail={va}
-                              features={measureMap[measure]}
+                              bestMeasure={measureMap[measure]}
+                              measures={allMeasures}
                             />
                           );
                         })}
