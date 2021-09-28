@@ -611,7 +611,12 @@ export default function LeftPane(props) {
     'Set the minimum percentage threshold for the deviation from the enacted districting for the improved redistricting. [0, 100]';
 
   return (
-    <Drawer isOpen={isOpen} onClose={onClose} placement={'left'} variant="permanent">
+    <Drawer
+      isOpen={isOpen}
+      onClose={onClose}
+      placement={'left'}
+      variant='permanent'
+    >
       {/* <DrawerOverlay /> */}
       <DrawerContent>
         <DrawerCloseButton />
