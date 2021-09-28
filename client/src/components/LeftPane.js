@@ -779,6 +779,10 @@ export default function LeftPane(props) {
   const handleMajorityMinorityInput = (val) => setMajorityMinority(val);
   const handleEnactedDeviationInput = (val) => setEnactedDeviation(val);
 
+  const handleRedistrictingClick = (e) => {
+    console.log(e.target.number);
+  };
+
   const popEqualityTooltip =
     'Set the minimum percentage threshold population equality for the improved redistricting. [0, 100]';
   const compactnessTooltip =
@@ -969,6 +973,7 @@ export default function LeftPane(props) {
                               thumbnail={az}
                               bestMeasure={measureMap[measure]}
                               measures={allMeasures}
+                              onClick={handleRedistrictingClick}
                             />
                           );
                         })}

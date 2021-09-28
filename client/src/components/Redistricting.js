@@ -14,6 +14,14 @@ export default function Redistricting(props) {
   const { number, thumbnail, bestMeasure, measures } = props;
   const { popEquality, compactness, majorityMinority, enactedDeviation } =
     measures;
+
+  const handleMouseEnter = (e) => {
+    e.target.style.boxShadow = '0px 5px 8px #888888';
+  };
+
+  const handleMouseLeave = (e) => {
+    e.target.style.boxShadow = 'none';
+  };
   return (
     <Popover isLazy trigger='hover'>
       <PopoverTrigger>
@@ -23,6 +31,7 @@ export default function Redistricting(props) {
           borderWidth='1px'
           borderRadius='lg'
           overflow='hidden'
+          cursor='pointer'
         >
           <Image maxW='100%' src={thumbnail} />
           <Box
