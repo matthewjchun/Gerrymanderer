@@ -41,7 +41,31 @@ import mi from '../img/mi.jpg';
 import va from '../img/va.jpg';
 import { BoxZoomHandler } from 'mapbox-gl';
 
-const azData = [
+const azData = [ [ 
+  {
+  popEquality: '53',
+  compactness: '46',
+  majorityMinority: '99',
+  enactedDeviation: '55',
+  },
+  {
+    popEquality: '77',
+    compactness: '50',
+    majorityMinority: '43',
+    enactedDeviation: '10',
+  },
+  {
+    popEquality: '59',
+    compactness: '28',
+    majorityMinority: '59',
+    enactedDeviation: '83',
+  }],
+  [{
+    popEquality: '72',
+    compactness: '54',
+    majorityMinority: '42',
+    enactedDeviation: '60',
+  },
   {
     popEquality: '53',
     compactness: '46',
@@ -53,8 +77,8 @@ const azData = [
     compactness: '50',
     majorityMinority: '43',
     enactedDeviation: '10',
-  },
-  {
+  }],
+  [{
     popEquality: '59',
     compactness: '28',
     majorityMinority: '59',
@@ -71,8 +95,8 @@ const azData = [
     compactness: '52',
     majorityMinority: '58',
     enactedDeviation: '17',
-  },
-  {
+  }],
+  [{
     popEquality: '48',
     compactness: '27',
     majorityMinority: '73',
@@ -89,8 +113,8 @@ const azData = [
     compactness: '28',
     majorityMinority: '57',
     enactedDeviation: '94',
-  },
-  {
+  }],
+  [{
     popEquality: '72',
     compactness: '45',
     majorityMinority: '48',
@@ -107,8 +131,8 @@ const azData = [
     compactness: '87',
     majorityMinority: '53',
     enactedDeviation: '63',
-  },
-  {
+  }],
+  [{
     popEquality: '47',
     compactness: '94',
     majorityMinority: '23',
@@ -125,8 +149,8 @@ const azData = [
     compactness: '23',
     majorityMinority: '54',
     enactedDeviation: '23',
-  },
-  {
+  }],
+  [{
     popEquality: '84',
     compactness: '36',
     majorityMinority: '60',
@@ -143,8 +167,8 @@ const azData = [
     compactness: '53',
     majorityMinority: '50',
     enactedDeviation: '37',
-  },
-  {
+  }],
+  [{
     popEquality: '48',
     compactness: '26',
     majorityMinority: '59',
@@ -161,8 +185,8 @@ const azData = [
     compactness: '84',
     majorityMinority: '27',
     enactedDeviation: '95',
-  },
-  {
+  }],
+  [{
     popEquality: '36',
     compactness: '73',
     majorityMinority: '65',
@@ -179,8 +203,8 @@ const azData = [
     compactness: '87',
     majorityMinority: '53',
     enactedDeviation: '23',
-  },
-  {
+  }],
+  [{
     popEquality: '95',
     compactness: '57',
     majorityMinority: '25',
@@ -197,8 +221,8 @@ const azData = [
     compactness: '36',
     majorityMinority: '45',
     enactedDeviation: '87',
-  },
-  {
+  }],
+  [{
     popEquality: '76',
     compactness: '34',
     majorityMinority: '65',
@@ -215,16 +239,34 @@ const azData = [
     compactness: '75',
     majorityMinority: '45',
     enactedDeviation: '62',
-  },
-  {
-    popEquality: '45',
-    compactness: '71',
-    majorityMinority: '65',
-    enactedDeviation: '13',
-  }
+  }]
 ];
 
-const vaData = [
+const vaData = [ [ 
+  {
+  popEquality: '53',
+  compactness: '46',
+  majorityMinority: '99',
+  enactedDeviation: '55',
+  },
+  {
+    popEquality: '77',
+    compactness: '50',
+    majorityMinority: '43',
+    enactedDeviation: '10',
+  },
+  {
+    popEquality: '59',
+    compactness: '28',
+    majorityMinority: '59',
+    enactedDeviation: '83',
+  }],
+  [{
+    popEquality: '72',
+    compactness: '54',
+    majorityMinority: '42',
+    enactedDeviation: '60',
+  },
   {
     popEquality: '53',
     compactness: '46',
@@ -236,8 +278,8 @@ const vaData = [
     compactness: '50',
     majorityMinority: '43',
     enactedDeviation: '10',
-  },
-  {
+  }],
+  [{
     popEquality: '59',
     compactness: '28',
     majorityMinority: '59',
@@ -254,8 +296,8 @@ const vaData = [
     compactness: '52',
     majorityMinority: '58',
     enactedDeviation: '17',
-  },
-  {
+  }],
+  [{
     popEquality: '48',
     compactness: '27',
     majorityMinority: '73',
@@ -272,8 +314,8 @@ const vaData = [
     compactness: '28',
     majorityMinority: '57',
     enactedDeviation: '94',
-  },
-  {
+  }],
+  [{
     popEquality: '72',
     compactness: '45',
     majorityMinority: '48',
@@ -290,8 +332,8 @@ const vaData = [
     compactness: '87',
     majorityMinority: '53',
     enactedDeviation: '63',
-  },
-  {
+  }],
+  [{
     popEquality: '47',
     compactness: '94',
     majorityMinority: '23',
@@ -308,8 +350,8 @@ const vaData = [
     compactness: '23',
     majorityMinority: '54',
     enactedDeviation: '23',
-  },
-  {
+  }],
+  [{
     popEquality: '84',
     compactness: '36',
     majorityMinority: '60',
@@ -326,8 +368,8 @@ const vaData = [
     compactness: '53',
     majorityMinority: '50',
     enactedDeviation: '37',
-  },
-  {
+  }],
+  [{
     popEquality: '48',
     compactness: '26',
     majorityMinority: '59',
@@ -344,8 +386,8 @@ const vaData = [
     compactness: '84',
     majorityMinority: '27',
     enactedDeviation: '95',
-  },
-  {
+  }],
+  [{
     popEquality: '36',
     compactness: '73',
     majorityMinority: '65',
@@ -362,8 +404,8 @@ const vaData = [
     compactness: '87',
     majorityMinority: '53',
     enactedDeviation: '23',
-  },
-  {
+  }],
+  [{
     popEquality: '95',
     compactness: '57',
     majorityMinority: '25',
@@ -380,8 +422,8 @@ const vaData = [
     compactness: '36',
     majorityMinority: '45',
     enactedDeviation: '87',
-  },
-  {
+  }],
+  [{
     popEquality: '76',
     compactness: '34',
     majorityMinority: '65',
@@ -398,15 +440,33 @@ const vaData = [
     compactness: '75',
     majorityMinority: '45',
     enactedDeviation: '62',
-  },
-  {
-    popEquality: '45',
-    compactness: '71',
-    majorityMinority: '65',
-    enactedDeviation: '13',
-  }
+  }]
 ];
-const miData = [
+const miData = [ [ 
+  {
+  popEquality: '53',
+  compactness: '46',
+  majorityMinority: '99',
+  enactedDeviation: '55',
+  },
+  {
+    popEquality: '77',
+    compactness: '50',
+    majorityMinority: '43',
+    enactedDeviation: '10',
+  },
+  {
+    popEquality: '59',
+    compactness: '28',
+    majorityMinority: '59',
+    enactedDeviation: '83',
+  }],
+  [{
+    popEquality: '72',
+    compactness: '54',
+    majorityMinority: '42',
+    enactedDeviation: '60',
+  },
   {
     popEquality: '53',
     compactness: '46',
@@ -418,8 +478,8 @@ const miData = [
     compactness: '50',
     majorityMinority: '43',
     enactedDeviation: '10',
-  },
-  {
+  }],
+  [{
     popEquality: '59',
     compactness: '28',
     majorityMinority: '59',
@@ -436,8 +496,8 @@ const miData = [
     compactness: '52',
     majorityMinority: '58',
     enactedDeviation: '17',
-  },
-  {
+  }],
+  [{
     popEquality: '48',
     compactness: '27',
     majorityMinority: '73',
@@ -454,8 +514,8 @@ const miData = [
     compactness: '28',
     majorityMinority: '57',
     enactedDeviation: '94',
-  },
-  {
+  }],
+  [{
     popEquality: '72',
     compactness: '45',
     majorityMinority: '48',
@@ -472,8 +532,8 @@ const miData = [
     compactness: '87',
     majorityMinority: '53',
     enactedDeviation: '63',
-  },
-  {
+  }],
+  [{
     popEquality: '47',
     compactness: '94',
     majorityMinority: '23',
@@ -490,8 +550,8 @@ const miData = [
     compactness: '23',
     majorityMinority: '54',
     enactedDeviation: '23',
-  },
-  {
+  }],
+  [{
     popEquality: '84',
     compactness: '36',
     majorityMinority: '60',
@@ -508,8 +568,8 @@ const miData = [
     compactness: '53',
     majorityMinority: '50',
     enactedDeviation: '37',
-  },
-  {
+  }],
+  [{
     popEquality: '48',
     compactness: '26',
     majorityMinority: '59',
@@ -526,8 +586,8 @@ const miData = [
     compactness: '84',
     majorityMinority: '27',
     enactedDeviation: '95',
-  },
-  {
+  }],
+  [{
     popEquality: '36',
     compactness: '73',
     majorityMinority: '65',
@@ -544,8 +604,8 @@ const miData = [
     compactness: '87',
     majorityMinority: '53',
     enactedDeviation: '23',
-  },
-  {
+  }],
+  [{
     popEquality: '95',
     compactness: '57',
     majorityMinority: '25',
@@ -562,8 +622,8 @@ const miData = [
     compactness: '36',
     majorityMinority: '45',
     enactedDeviation: '87',
-  },
-  {
+  }],
+  [{
     popEquality: '76',
     compactness: '34',
     majorityMinority: '65',
@@ -580,13 +640,7 @@ const miData = [
     compactness: '75',
     majorityMinority: '45',
     enactedDeviation: '62',
-  },
-  {
-    popEquality: '45',
-    compactness: '71',
-    majorityMinority: '65',
-    enactedDeviation: '13',
-  }
+  }]
 ];
 
 export default function LeftPane(props) {
