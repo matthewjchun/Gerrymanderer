@@ -34,27 +34,29 @@ export default function App() {
   let hoveredStateId = null;
   const bounds = [
     [-116.895133, 32.868129], // Southwest coordinates
-    [-68.230605, 47.251530] // Northeast coordinates
-    ];
+    [-68.230605, 47.25153], // Northeast coordinates
+  ];
 
   //const [activeState, setActiveState] = useState('');
   const [activeState, setActiveState] = useContext(StateContext);
 
   const hide = () => {
-    let markers = document.getElementsByClassName("mapboxgl-marker mapboxgl-marker-anchor-center");
+    let markers = document.getElementsByClassName(
+      'mapboxgl-marker mapboxgl-marker-anchor-center'
+    );
     for (let i = 0; i < markers.length; i++) {
-        markers[i].style.visibility = "hidden";
+      markers[i].style.visibility = 'hidden';
     }
-    console.log("hiding");
+    console.log('hiding');
     console.log(markers);
-  }
+  };
 
   const show = () => {
-    let markers = document.getElementsByClassName("marker");
+    let markers = document.getElementsByClassName('marker');
     for (let i = 0; i < markers.length; i++) {
-        markers[i].style.visibility = "visible";
+      markers[i].style.visibility = 'visible';
     }
-  }
+  };
   const zoomArizona = (map) => {
     map.current.flyTo({
       center: [-112.0693, 34.2537],
@@ -438,6 +440,14 @@ export default function App() {
       .addTo(map.current);
   };
 
+  const zoomOut = (map) => {
+    map.current.flyTo({
+      center: [-100.445882, 37.7837304],
+      essential: true,
+      zoom: 3.5,
+    });
+  };
+
   useEffect(() => {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
@@ -591,11 +601,7 @@ export default function App() {
 
       // ZOOM TO STATE
       map.current.on('click', 'states', (e) => {
-        map.current.flyTo({
-          center: [-100.445882, 37.7837304],
-          essential: true,
-          zoom: 3.5,
-        });
+        zoomOut(map);
         onClose();
         // arizona
         let visibility = map.current.getLayoutProperty(
@@ -616,7 +622,7 @@ export default function App() {
         if (visibility === 'visible') {
           hide();
         }
-        
+
         // michigan
         visibility = map.current.getLayoutProperty(
           'miprec-boundary',
@@ -657,7 +663,7 @@ export default function App() {
           hide();
         }
 
-        setActiveState('');
+        setActiveState('Celtics');
       });
 
       map.current.on('click', 'arizona', (e) => {
@@ -745,6 +751,8 @@ export default function App() {
       zoomMichigan(map);
     } else if (activeState == 'Virginia') {
       zoomVirginia(map);
+    } else if (activeState == 'Celtics') {
+      if (lng != -100.445882 && lat != 37.7837304) zoomOut(map);
     }
   }, [activeState]);
 

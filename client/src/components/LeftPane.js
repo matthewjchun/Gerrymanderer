@@ -795,7 +795,7 @@ export default function LeftPane(props) {
       variant='permanent'
     >
       {/* <DrawerOverlay /> */}
-      <DrawerContent>
+      <DrawerContent overflow='scroll'>
         <DrawerCloseButton />
         <DrawerHeader>
           <Text>User Settings</Text>
@@ -956,10 +956,11 @@ export default function LeftPane(props) {
               {activeState == 'Arizona' ? (
                 <VStack spacing='3'>
                   {azData.map((set) => {
-                    const [number, best] = bestMeasure(set);
+                    const best = bestMeasure(set);
                     return (
                       <HStack spacing='3'>
-                        {best.map((measure) => {
+                        {best.map((numMeasure) => {
+                          const [number, measure] = numMeasure;
                           return (
                             <Redistricting
                               number={number}
@@ -976,10 +977,11 @@ export default function LeftPane(props) {
               {activeState == 'Michigan' ? (
                 <VStack spacing='3'>
                   {miData.map((set) => {
-                    const [number, best] = bestMeasure(set);
+                    const best = bestMeasure(set);
                     return (
                       <HStack spacing='3'>
-                        {best.map((measure) => {
+                        {best.map((numMeasure) => {
+                          const [number, measure] = numMeasure;
                           return (
                             <Redistricting
                               number={number}
@@ -996,10 +998,11 @@ export default function LeftPane(props) {
               {activeState == 'Virginia' ? (
                 <VStack spacing='3'>
                   {vaData.map((set) => {
-                    const [number, best] = bestMeasure(set);
+                    const best = bestMeasure(set);
                     return (
                       <HStack spacing='3'>
-                        {best.map((measure) => {
+                        {best.map((numMeasure) => {
+                          const [number, measure] = numMeasure;
                           return (
                             <Redistricting
                               number={number}
