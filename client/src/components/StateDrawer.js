@@ -7,10 +7,19 @@ import {
     DrawerCloseButton,
 } from "@chakra-ui/react"
 import {
+    Stat,
+    StatLabel,
+    StatNumber,
+    StatHelpText,
+    StatArrow,
+    StatGroup,
+  } from "@chakra-ui/react"
+import {
     Text,
     Button,
     Flex,
     Spacer,
+    Divider,
 } from '@chakra-ui/react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import {
@@ -25,6 +34,7 @@ import {
 } from "@chakra-ui/react";
 import { useContext } from 'react';
 import { StateContext } from '../contexts/State';
+import { PieChart } from 'react-minimal-pie-chart';
 
 
 export default function StateDrawer(props){
@@ -54,9 +64,12 @@ export default function StateDrawer(props){
                         <TabPanels>
                             <TabPanel>
                                 <Text>Population: 7,151,502</Text>
-                                <Text>Congressional Voting Results</Text>
+                                <Divider />
+                                <Text>Precincts: 1,495</Text>
+                                <Divider />
+                                <Text>2020 Congressional Voting Results</Text>
                                 <Table variant="simple">
-                                    <TableCaption>Rando Numbers</TableCaption>
+                                    <TableCaption>Congressional Voting Results</TableCaption>
                                     <Thead>
                                         <Tr>
                                         <Th>Party</Th>
@@ -67,16 +80,36 @@ export default function StateDrawer(props){
                                     <Tbody>
                                         <Tr>
                                         <Td>Democratic Party</Td>
-                                        <Td>3</Td>
-                                        <Td isNumeric>a lot</Td>
+                                        <Td>5</Td>
+                                        <Td isNumeric>1,629,318</Td>
                                         </Tr>
                                         <Tr>
                                         <Td>Republican Party</Td>
-                                        <Td>2</Td>
-                                        <Td isNumeric>slightly less</Td>
+                                        <Td>4</Td>
+                                        <Td isNumeric>1,638,516</Td>
                                         </Tr>
                                     </Tbody>
                                 </Table>
+                                <StatGroup>
+                                    <Stat>
+                                        <StatLabel>Democratic</StatLabel>
+                                        <StatNumber>1,629,318</StatNumber>
+                                        <StatHelpText>
+                                        <StatArrow type="decrease" />
+                                        49.85%
+                                        </StatHelpText>
+                                    </Stat>
+
+                                    <Stat>
+                                        <StatLabel>Republican</StatLabel>
+                                        <StatNumber>1,638,516
+                                    </StatNumber>
+                                        <StatHelpText>
+                                        <StatArrow type="increase" />
+                                        50.13%
+                                        </StatHelpText>
+                                    </Stat>
+                                </StatGroup>
                             </TabPanel>
                             <TabPanel>
                                 <Table variant="striped" colorScheme="teal">
