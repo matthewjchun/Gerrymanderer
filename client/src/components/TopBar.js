@@ -12,7 +12,7 @@ export default function TopBar(props) {
 
   return (
     <HStack w='100%' p='5' align='center' justify='center'>
-      {activeState != '' ? (
+      {activeState != 'Celtics' ? (
         <Box flex='1' mr='auto'>
           <Button onClick={onOpen}>
             <Text>User Settings</Text>
