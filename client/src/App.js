@@ -534,6 +534,9 @@ export default function App() {
     if (visibility === 'visible') {
       hide();
     }
+    if (map.current.getLayer("azcounty-boundary") !== "undefined") {
+      map.current.setLayoutProperty("azcounty-boundary", "visibility", "none");
+    }
 
     // michigan
     visibility = map.current.getLayoutProperty('miprec-boundary', 'visibility');
@@ -547,6 +550,9 @@ export default function App() {
     if (visibility === 'visible') {
       hide();
     }
+    if (map.current.getLayer("micounty-boundary") !== "undefined") {
+      map.current.setLayoutProperty("micounty-boundary", "visibility", "none");
+    }
 
     // virginia
     visibility = map.current.getLayoutProperty('vaprec-boundary', 'visibility');
@@ -559,6 +565,9 @@ export default function App() {
     }
     if (visibility === 'visible') {
       hide();
+    }
+    if (map.current.getLayer("vacounty-boundary") !== "undefined") {
+      map.current.setLayoutProperty("vacounty-boundary", "visibility", "none");
     }
   };
 
