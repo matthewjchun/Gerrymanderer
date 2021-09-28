@@ -123,7 +123,6 @@ export default function StateDrawer(props){
                                 labelPosition={112}
                             />
                             <Table variant="simple">
-                                <TableCaption>Demographics</TableCaption>
                                 <Thead>
                                     <Tr>
                                     <Th>Race</Th>
