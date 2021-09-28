@@ -34,18 +34,29 @@ export default function App() {
   let hoveredStateId = null;
   const bounds = [
     [-116.895133, 32.868129], // Southwest coordinates
-    [-68.230605, 47.251530] // Northeast coordinates
-    ];
+    [-68.230605, 47.25153], // Northeast coordinates
+  ];
 
   //const [activeState, setActiveState] = useState('');
   const [activeState, setActiveState] = useContext(StateContext);
 
   const hide = () => {
-    let markers = document.getElementsByClassName("mapboxgl-marker mapboxgl-marker-anchor-center");
+    let markers = document.getElementsByClassName(
+      'mapboxgl-marker mapboxgl-marker-anchor-center'
+    );
     for (let i = 0; i < markers.length; i++) {
-        markers[i].style.visibility = "hidden";
+      markers[i].style.visibility = 'hidden';
     }
-  }
+    console.log('hiding');
+    console.log(markers);
+  };
+
+  const show = () => {
+    let markers = document.getElementsByClassName('marker');
+    for (let i = 0; i < markers.length; i++) {
+      markers[i].style.visibility = 'visible';
+    }
+  };
   const zoomArizona = (map) => {
     map.current.flyTo({
       center: [-112.0693, 34.2537],
@@ -150,6 +161,17 @@ export default function App() {
         )
       )
       .addTo(map.current);
+    let visibility = map.current.getLayoutProperty(
+      'azprec-boundary',
+      'visibility'
+    );
+    if (visibility === 'none') {
+      map.current.setLayoutProperty('azprec-boundary', 'visibility', 'visible');
+    }
+    visibility = map.current.getLayoutProperty('azcd_lines', 'visibility');
+    if (visibility === 'none') {
+      map.current.setLayoutProperty('azcd_lines', 'visibility', 'visible');
+    }
   };
 
   const zoomMichigan = (map) => {
@@ -304,6 +326,18 @@ export default function App() {
         )
       )
       .addTo(map.current);
+
+    let visibility = map.current.getLayoutProperty(
+      'miprec-boundary',
+      'visibility'
+    );
+    if (visibility === 'none') {
+      map.current.setLayoutProperty('miprec-boundary', 'visibility', 'visible');
+    }
+    visibility = map.current.getLayoutProperty('micd_lines', 'visibility');
+    if (visibility === 'none') {
+      map.current.setLayoutProperty('micd_lines', 'visibility', 'visible');
+    }
   };
 
   const zoomVirginia = (map) => {
@@ -427,6 +461,66 @@ export default function App() {
         )
       )
       .addTo(map.current);
+    let visibility = map.current.getLayoutProperty(
+      'vaprec-boundary',
+      'visibility'
+    );
+    if (visibility === 'none') {
+      map.current.setLayoutProperty('vaprec-boundary', 'visibility', 'visible');
+    }
+    visibility = map.current.getLayoutProperty('vacd_lines', 'visibility');
+    if (visibility === 'none') {
+      map.current.setLayoutProperty('vacd_lines', 'visibility', 'visible');
+    }
+  };
+
+  const zoomOut = (map) => {
+    map.current.flyTo({
+      center: [-100.445882, 37.7837304],
+      essential: true,
+      zoom: 4,
+    });
+    // arizona
+    let visibility = map.current.getLayoutProperty(
+      'azprec-boundary',
+      'visibility'
+    );
+    if (visibility === 'visible') {
+      map.current.setLayoutProperty('azprec-boundary', 'visibility', 'none');
+    }
+    visibility = map.current.getLayoutProperty('azcd_lines', 'visibility');
+    if (visibility === 'visible') {
+      map.current.setLayoutProperty('azcd_lines', 'visibility', 'none');
+    }
+    if (visibility === 'visible') {
+      hide();
+    }
+
+    // michigan
+    visibility = map.current.getLayoutProperty('miprec-boundary', 'visibility');
+    if (visibility === 'visible') {
+      map.current.setLayoutProperty('miprec-boundary', 'visibility', 'none');
+    }
+    visibility = map.current.getLayoutProperty('micd_lines', 'visibility');
+    if (visibility === 'visible') {
+      map.current.setLayoutProperty('micd_lines', 'visibility', 'none');
+    }
+    if (visibility === 'visible') {
+      hide();
+    }
+
+    // virginia
+    visibility = map.current.getLayoutProperty('vaprec-boundary', 'visibility');
+    if (visibility === 'visible') {
+      map.current.setLayoutProperty('vaprec-boundary', 'visibility', 'none');
+    }
+    visibility = map.current.getLayoutProperty('vacd_lines', 'visibility');
+    if (visibility === 'visible') {
+      map.current.setLayoutProperty('vacd_lines', 'visibility', 'none');
+    }
+    if (visibility === 'visible') {
+      hide();
+    }
   };
 
   useEffect(() => {
@@ -582,136 +676,21 @@ export default function App() {
 
       // ZOOM TO STATE
       map.current.on('click', 'states', (e) => {
-        map.current.flyTo({
-          center: [-100.445882, 37.7837304],
-          essential: true,
-          zoom: 4,
-        });
+        zoomOut(map);
         onClose();
-        // arizona
-        let visibility = map.current.getLayoutProperty(
-          'azprec-boundary',
-          'visibility'
-        );
-        if (visibility === 'visible') {
-          map.current.setLayoutProperty(
-            'azprec-boundary',
-            'visibility',
-            'none'
-          );
-        }
-        visibility = map.current.getLayoutProperty('azcd_lines', 'visibility');
-        if (visibility === 'visible') {
-          map.current.setLayoutProperty('azcd_lines', 'visibility', 'none');
-        }
-        if (visibility === 'visible') {
-          hide();
-        }
-        
-        // michigan
-        visibility = map.current.getLayoutProperty(
-          'miprec-boundary',
-          'visibility'
-        );
-        if (visibility === 'visible') {
-          map.current.setLayoutProperty(
-            'miprec-boundary',
-            'visibility',
-            'none'
-          );
-        }
-        visibility = map.current.getLayoutProperty('micd_lines', 'visibility');
-        if (visibility === 'visible') {
-          map.current.setLayoutProperty('micd_lines', 'visibility', 'none');
-        }
-        if (visibility === 'visible') {
-          hide();
-        }
-
-        // virginia
-        visibility = map.current.getLayoutProperty(
-          'vaprec-boundary',
-          'visibility'
-        );
-        if (visibility === 'visible') {
-          map.current.setLayoutProperty(
-            'vaprec-boundary',
-            'visibility',
-            'none'
-          );
-        }
-        visibility = map.current.getLayoutProperty('vacd_lines', 'visibility');
-        if (visibility === 'visible') {
-          map.current.setLayoutProperty('vacd_lines', 'visibility', 'none');
-        }
-        if (visibility === 'visible') {
-          hide();
-        }
-
-        setActiveState('');
+        setActiveState('Celtics');
       });
 
       map.current.on('click', 'arizona', (e) => {
         zoomArizona(map);
-
-        let visibility = map.current.getLayoutProperty(
-          'azprec-boundary',
-          'visibility'
-        );
-        if (visibility === 'none') {
-          map.current.setLayoutProperty(
-            'azprec-boundary',
-            'visibility',
-            'visible'
-          );
-        }
-        visibility = map.current.getLayoutProperty('azcd_lines', 'visibility');
-        if (visibility === 'none') {
-          map.current.setLayoutProperty('azcd_lines', 'visibility', 'visible');
-        }
-
         setActiveState('Arizona');
       });
       map.current.on('click', 'michigan', (e) => {
         zoomMichigan(map);
-
-        let visibility = map.current.getLayoutProperty(
-          'miprec-boundary',
-          'visibility'
-        );
-        if (visibility === 'none') {
-          map.current.setLayoutProperty(
-            'miprec-boundary',
-            'visibility',
-            'visible'
-          );
-        }
-        visibility = map.current.getLayoutProperty('micd_lines', 'visibility');
-        if (visibility === 'none') {
-          map.current.setLayoutProperty('micd_lines', 'visibility', 'visible');
-        }
-
         setActiveState('Michigan');
       });
       map.current.on('click', 'virginia', (e) => {
         zoomVirginia(map);
-
-        let visibility = map.current.getLayoutProperty(
-          'vaprec-boundary',
-          'visibility'
-        );
-        if (visibility === 'none') {
-          map.current.setLayoutProperty(
-            'vaprec-boundary',
-            'visibility',
-            'visible'
-          );
-        }
-        visibility = map.current.getLayoutProperty('vacd_lines', 'visibility');
-        if (visibility === 'none') {
-          map.current.setLayoutProperty('vacd_lines', 'visibility', 'visible');
-        }
-
         setActiveState('Virginia');
       });
     });
@@ -736,6 +715,11 @@ export default function App() {
       zoomMichigan(map);
     } else if (activeState == 'Virginia') {
       zoomVirginia(map);
+    } else if (activeState == 'Celtics') {
+      if (lng != -100.445882 && lat != 37.7837304) {
+        zoomOut(map);
+        hide();
+      }
     }
   }, [activeState]);
 

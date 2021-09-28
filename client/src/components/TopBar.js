@@ -34,8 +34,8 @@ export default function TopBar(props) {
           setActiveState(e.target.value);
         }}
       >
-        {activeState != '' ? (
-          <option value='Home'>Celtics</option>
+        {activeState != 'Celtics' ? (
+          <option value='Celtics'>Celtics</option>
         ) : null}
         {activeState != 'Arizona' ? (
           <option value='Arizona'>Arizona</option>
