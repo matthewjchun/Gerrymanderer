@@ -3,11 +3,10 @@
 
 ## Technologies
 Frontend:
-* react
-* javascript
-* html
-* css
-* Mapbox
+* React
+* Mapbox API
+* ChakraUI
+* Minimal Pie Chart
 
 Backend:
 
