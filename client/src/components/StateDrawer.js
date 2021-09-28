@@ -111,7 +111,7 @@ export default function StateDrawer(props){
                                     </Stat>
                                 </StatGroup>
                                 <Divider />
-                                <Text>Demographics</Text>
+                                <p id="chartTitle">Demographics</p>
                                 <PieChart
                                     data={[
                                         { title: 'White', value: 2849063, color: '#E38627' },
@@ -121,11 +121,11 @@ export default function StateDrawer(props){
                                         { title: 'Native Hawaiian', value: 8560, color: '#6AD2DE' },
                                         { title: 'Hispanic', value: 1121876, color: '#6A2135' },
                                     ]}
-                                />;
+                                />
                             </TabPanel>
                             <TabPanel>
                                 <Text> DISTRICT 1 </Text>
-                                <Table variant="striped" colorScheme="teal">
+                                <Table variant="striped" colorScheme="gray">
                                     <Thead>
                                         <Tr>
                                         <Th>Population</Th>
@@ -149,7 +149,7 @@ export default function StateDrawer(props){
                                 <Divider />
 
                                 <Text> DISTRICT 2 </Text>
-                                <Table variant="striped" colorScheme="teal">
+                                <Table variant="striped" colorScheme="gray">
                                     <Thead>
                                         <Tr>
                                         <Th>Population</Th>
@@ -173,7 +173,7 @@ export default function StateDrawer(props){
                                 <Divider />
 
                                 <Text> DISTRICT 3 </Text>
-                                <Table variant="striped" colorScheme="teal">
+                                <Table variant="striped" colorScheme="gray">
                                     <Thead>
                                         <Tr>
                                         <Th>Population</Th>
@@ -197,7 +197,7 @@ export default function StateDrawer(props){
                                 <Divider />
 
                                 <Text> DISTRICT 4 </Text>
-                                <Table variant="striped" colorScheme="teal">
+                                <Table variant="striped" colorScheme="gray">
                                     <Thead>
                                         <Tr>
                                         <Th>Population</Th>
@@ -221,7 +221,7 @@ export default function StateDrawer(props){
                                 <Divider />
 
                                 <Text> DISTRICT 5 </Text>
-                                <Table variant="striped" colorScheme="teal">
+                                <Table variant="striped" colorScheme="gray">
                                     <Thead>
                                         <Tr>
                                         <Th>Population</Th>
@@ -245,7 +245,7 @@ export default function StateDrawer(props){
                                 <Divider />
 
                                 <Text> DISTRICT 6 </Text>
-                                <Table variant="striped" colorScheme="teal">
+                                <Table variant="striped" colorScheme="gray">
                                     <Thead>
                                         <Tr>
                                         <Th>Population</Th>
@@ -269,7 +269,7 @@ export default function StateDrawer(props){
                                 <Divider />
 
                                 <Text> DISTRICT 7 </Text>
-                                <Table variant="striped" colorScheme="teal">
+                                <Table variant="striped" colorScheme="gray">
                                     <Thead>
                                         <Tr>
                                         <Th>Population</Th>
@@ -293,7 +293,7 @@ export default function StateDrawer(props){
                                 <Divider />
 
                                 <Text> DISTRICT 8 </Text>
-                                <Table variant="striped" colorScheme="teal">
+                                <Table variant="striped" colorScheme="gray">
                                     <Thead>
                                         <Tr>
                                         <Th>Population</Th>
@@ -317,7 +317,7 @@ export default function StateDrawer(props){
                                 <Divider />
 
                                 <Text> DISTRICT 9 </Text>
-                                <Table variant="striped" colorScheme="teal">
+                                <Table variant="striped" colorScheme="gray">
                                     <Thead>
                                         <Tr>
                                         <Th>Population</Th>
