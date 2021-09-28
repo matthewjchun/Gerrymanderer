@@ -84,7 +84,7 @@ export default function App() {
       type: 'line',
       source: 'azcounty',
       paint: {
-        'line-color': '#FFA500',
+        'line-color': '#940f00',
       },
       filter: ['==', '$type', 'Polygon'],
       layout: {
@@ -887,7 +887,7 @@ export default function App() {
       <div className="legend">
         <h4 style={{fontWeight: "bold"}}>Legend</h4>
         <div id="districtLegend" onClick={toggleDistrict}><span id="districtColor" style={{backgroundColor: "#45322f"}}></span>Districts</div>
-        <div id="countyLegend" onClick={toggleCounty}><span id="countyColor" style={{backgroundColor:  "#000000"}}></span>Counties</div>
+        <div id="countyLegend" onClick={toggleCounty}><span id="countyColor" style={{backgroundColor:  "#940f00"}}></span>Counties</div>
         <div id="precinctLegend" onClick={togglePrecinct}><span id="precinctColor" style={{backgroundColor: "#ebd8d3"}}></span>Precincts</div>
       </div>
       <Flex className='content' direction='column' justify='center'>
