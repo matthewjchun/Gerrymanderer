@@ -815,10 +815,79 @@ export default function LeftPane(props) {
         </DrawerHeader>
         <Tabs isFitted variant='enclosed'>
           <TabList mb='1em'>
-            <Tab>Constraints on Measures</Tab>
             <Tab>SeaWulf Redistrictings</Tab>
+            <Tab>Constraints on Measures</Tab>
           </TabList>
           <TabPanels>
+            <TabPanel>
+              {activeState == 'Arizona' ? (
+                <VStack spacing='3'>
+                  {azData.map((set) => {
+                    const best = bestMeasure(set);
+                    return (
+                      <HStack spacing='3'>
+                        {best.map((numMeasure) => {
+                          const [number, measure, allMeasures] = numMeasure;
+                          return (
+                            <Redistricting
+                              number={number}
+                              thumbnail={az}
+                              bestMeasure={measureMap[measure]}
+                              measures={allMeasures}
+                              onClick={handleRedistrictingClick}
+                            />
+                          );
+                        })}
+                      </HStack>
+                    );
+                  })}
+                </VStack>
+              ) : null}
+              {activeState == 'Michigan' ? (
+                <VStack spacing='3'>
+                  {miData.map((set) => {
+                    const best = bestMeasure(set);
+                    return (
+                      <HStack spacing='3'>
+                        {best.map((numMeasure) => {
+                          const [number, measure, allMeasures] = numMeasure;
+                          return (
+                            <Redistricting
+                              number={number}
+                              thumbnail={mi}
+                              bestMeasure={measureMap[measure]}
+                              measures={allMeasures}
+                            />
+                          );
+                        })}
+                      </HStack>
+                    );
+                  })}
+                </VStack>
+              ) : null}
+              {activeState == 'Virginia' ? (
+                <VStack spacing='3'>
+                  {vaData.map((set) => {
+                    const best = bestMeasure(set);
+                    return (
+                      <HStack spacing='3'>
+                        {best.map((numMeasure) => {
+                          const [number, measure, allMeasures] = numMeasure;
+                          return (
+                            <Redistricting
+                              number={number}
+                              thumbnail={va}
+                              bestMeasure={measureMap[measure]}
+                              measures={allMeasures}
+                            />
+                          );
+                        })}
+                      </HStack>
+                    );
+                  })}
+                </VStack>
+              ) : null}
+            </TabPanel>
             <TabPanel>
               <DrawerBody>
                 <VStack align='left' spacing='5'>
@@ -964,75 +1033,6 @@ export default function LeftPane(props) {
                   </HStack>
                 </VStack>
               </DrawerBody>
-            </TabPanel>
-            <TabPanel>
-              {activeState == 'Arizona' ? (
-                <VStack spacing='3'>
-                  {azData.map((set) => {
-                    const best = bestMeasure(set);
-                    return (
-                      <HStack spacing='3'>
-                        {best.map((numMeasure) => {
-                          const [number, measure, allMeasures] = numMeasure;
-                          return (
-                            <Redistricting
-                              number={number}
-                              thumbnail={az}
-                              bestMeasure={measureMap[measure]}
-                              measures={allMeasures}
-                              onClick={handleRedistrictingClick}
-                            />
-                          );
-                        })}
-                      </HStack>
-                    );
-                  })}
-                </VStack>
-              ) : null}
-              {activeState == 'Michigan' ? (
-                <VStack spacing='3'>
-                  {miData.map((set) => {
-                    const best = bestMeasure(set);
-                    return (
-                      <HStack spacing='3'>
-                        {best.map((numMeasure) => {
-                          const [number, measure, allMeasures] = numMeasure;
-                          return (
-                            <Redistricting
-                              number={number}
-                              thumbnail={mi}
-                              bestMeasure={measureMap[measure]}
-                              measures={allMeasures}
-                            />
-                          );
-                        })}
-                      </HStack>
-                    );
-                  })}
-                </VStack>
-              ) : null}
-              {activeState == 'Virginia' ? (
-                <VStack spacing='3'>
-                  {vaData.map((set) => {
-                    const best = bestMeasure(set);
-                    return (
-                      <HStack spacing='3'>
-                        {best.map((numMeasure) => {
-                          const [number, measure, allMeasures] = numMeasure;
-                          return (
-                            <Redistricting
-                              number={number}
-                              thumbnail={va}
-                              bestMeasure={measureMap[measure]}
-                              measures={allMeasures}
-                            />
-                          );
-                        })}
-                      </HStack>
-                    );
-                  })}
-                </VStack>
-              ) : null}
             </TabPanel>
           </TabPanels>
         </Tabs>
