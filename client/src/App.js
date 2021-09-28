@@ -25,6 +25,85 @@ export default function App() {
   //const [activeState, setActiveState] = useState('');
   const [activeState, setActiveState] = useContext(StateContext);
 
+  const zoomArizona = (map) => {
+    map.current.flyTo({
+      center: [-112.0693, 34.2537],
+      essential: true,
+      zoom: 6.2,
+    });
+    map.current.addLayer({
+      id: 'azprec-boundary',
+      type: 'line',
+      source: 'azprecincts',
+      paint: {
+        'line-color': '#917a7a',
+      },
+      filter: ['==', '$type', 'Polygon'],
+    });
+    map.current.addLayer({
+      id: 'azcd_lines',
+      type: 'line',
+      source: 'azcd',
+      paint: {
+        'line-color': '#3aadd6',
+      },
+      filter: ['==', '$type', 'Polygon'],
+    });
+  };
+
+  const zoomMichigan = (map) => {
+    map.current.flyTo({
+      center: [-84.3271772, 44.2330917],
+      essential: true,
+      zoom: 6.2,
+    });
+    map.current.addLayer({
+      id: 'miprec-boundary',
+      type: 'line',
+      source: 'miprecincts',
+      paint: {
+        'line-color': '#917a7a',
+      },
+      filter: ['==', '$type', 'Polygon'],
+    });
+    map.current.addLayer({
+      id: 'micd_lines',
+      type: 'line',
+      source: 'micd',
+      paint: {
+        'line-color': '#3aadd6',
+      },
+      filter: ['==', '$type', 'Polygon'],
+    });
+  };
+
+  const zoomVirginia = (map) => {
+    map.current.flyTo({
+      center: [-77.4525481898, 37.672247311],
+      essential: true,
+      zoom: 7,
+    });
+
+    map.current.addLayer({
+      id: 'vaprec-boundary',
+      type: 'line',
+      source: 'vaprecincts',
+      paint: {
+        'line-color': '#917a7a',
+      },
+      filter: ['==', '$type', 'Polygon'],
+    });
+    map.current.addLayer({
+      id: 'vacd_lines',
+      type: 'line',
+      source: 'vacd',
+      paint: {
+        'line-color': '#3aadd6',
+      },
+      filter: ['==', '$type', 'Polygon'],
+    });
+  };
+
   useEffect(() => {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
@@ -239,50 +318,7 @@ export default function App() {
       });
 
       map.current.on('click', 'arizona', (e) => {
-        map.current.flyTo({
-          center: [-112.0693, 34.2537],
-          essential: true,
-          zoom: 7,
-        });
-        map.current.addLayer({
-          id: 'azprec-boundary',
-          type: 'line',
-          source: 'azprecincts',
-          paint: {
-            'line-color': '#0042b0',
-          },
-          filter: ['==', '$type', 'Polygon'],
-          layout: {
-            visibility: 'visible',
-          },
-        });
-        map.current.addLayer({
-          id: 'azcd_lines',
-          type: 'line',
-          source: 'azcd',
-          paint: {
-            'line-color': '#FFFFFF',
-          },
-          filter: ['==', '$type', 'Polygon'],
-        });
-        map.current.addLayer({
-          id: 'azcd_fill',
-          type: 'fill',
-          source: 'azcd',
-          paint: {
-            'fill-color': '#fae5cf',
-            'fill-opacity': [
-              'case',
-              ['boolean', ['feature-state', 'hover'], false],
-              1,
-              0.5,
-            ],
-          },
-          filter: ['==', '$type', 'Polygon'],
-          layout: {
-            visibility: 'visible',
-          },
-        });
+        zoomArizona(map);
 
         let visibility = map.current.getLayoutProperty(
           'azprec-boundary',
@@ -341,35 +377,7 @@ export default function App() {
         setActiveState('Arizona');
       });
       map.current.on('click', 'michigan', (e) => {
-        map.current.flyTo({
-          center: [-84.3271772, 44.2330917],
-          essential: true,
-          zoom: 6.2,
-        });
-        map.current.addLayer({
-          id: 'miprec-boundary',
-          type: 'line',
-          source: 'miprecincts',
-          paint: {
-            'line-color': '#ebd8d3',
-          },
-          filter: ['==', '$type', 'Polygon'],
-          layout: {
-            visibility: 'visible',
-          },
-        });
-        map.current.addLayer({
-          id: 'micd_lines',
-          type: 'line',
-          source: 'micd',
-          paint: {
-            'line-color': '#45322f',
-          },
-          filter: ['==', '$type', 'Polygon'],
-          layout: {
-            visibility: 'visible',
-          },
-        });
+        zoomMichigan(map);
 
         let visibility = map.current.getLayoutProperty(
           'miprec-boundary',
@@ -390,35 +398,7 @@ export default function App() {
         setActiveState('Michigan');
       });
       map.current.on('click', 'virginia', (e) => {
-        map.current.flyTo({
-          center: [-77.4525481898, 37.672247311],
-          essential: true,
-          zoom: 7,
-        });
-        map.current.addLayer({
-          id: 'vaprec-boundary',
-          type: 'line',
-          source: 'vaprecincts',
-          paint: {
-            'line-color': '#ebd8d3',
-          },
-          filter: ['==', '$type', 'Polygon'],
-          layout: {
-            visibility: 'visible',
-          },
-        });
-        map.current.addLayer({
-          id: 'vacd_lines',
-          type: 'line',
-          source: 'vacd',
-          paint: {
-            'line-color': '#45322f',
-          },
-          filter: ['==', '$type', 'Polygon'],
-          layout: {
-            visibility: 'visible',
-          },
-        });
+        zoomVirginia(map);
 
         let visibility = map.current.getLayoutProperty(
           'vaprec-boundary',
@@ -458,78 +438,11 @@ export default function App() {
   useEffect(() => {
     if (!map.current) return;
     if (activeState == 'Arizona') {
-      map.current.flyTo({
-        center: [-112.0693, 34.2537],
-        essential: true,
-        zoom: 6.2,
-      });
-      map.current.addLayer({
-        id: 'azprec-boundary',
-        type: 'line',
-        source: 'azprecincts',
-        paint: {
-          'line-color': '#917a7a',
-        },
-        filter: ['==', '$type', 'Polygon'],
-      });
-      map.current.addLayer({
-        id: 'azcd_lines',
-        type: 'line',
-        source: 'azcd',
-        paint: {
-          'line-color': '#3aadd6',
-        },
-        filter: ['==', '$type', 'Polygon'],
-      });
+      zoomArizona(map);
     } else if (activeState == 'Michigan') {
-      map.current.flyTo({
-        center: [-84.3271772, 44.2330917],
-        essential: true,
-        zoom: 6.2,
-      });
-      map.current.addLayer({
-        id: 'miprec-boundary',
-        type: 'line',
-        source: 'miprecincts',
-        paint: {
-          'line-color': '#917a7a',
-        },
-        filter: ['==', '$type', 'Polygon'],
-      });
-      map.current.addLayer({
-        id: 'micd_lines',
-        type: 'line',
-        source: 'micd',
-        paint: {
-          'line-color': '#3aadd6',
-        },
-        filter: ['==', '$type', 'Polygon'],
-      });
+      zoomMichigan(map);
     } else if (activeState == 'Virginia') {
-      map.current.flyTo({
-        center: [-77.4525481898, 37.672247311],
-        essential: true,
-        zoom: 7,
-      });
-
-      map.current.addLayer({
-        id: 'vaprec-boundary',
-        type: 'line',
-        source: 'vaprecincts',
-        paint: {
-          'line-color': '#917a7a',
-        },
-        filter: ['==', '$type', 'Polygon'],
-      });
-      map.current.addLayer({
-        id: 'vacd_lines',
-        type: 'line',
-        source: 'vacd',
-        paint: {
-          'line-color': '#3aadd6',
-        },
-        filter: ['==', '$type', 'Polygon'],
-      });
+      zoomVirginia(map);
     }
   }, [activeState]);
 
