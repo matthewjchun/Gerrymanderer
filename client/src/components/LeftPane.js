@@ -56,12 +56,19 @@ const bestMeasure = (data) => {
   for (let i = 0; i < data.length; i++) {
     let districting = data[i];
     let maxProp = 'popEquality';
-    let max = districting.popEquality;
+    let max = parseInt(districting.popEquality);
     for (let measure in districting) {
-      if (measure == 'number') continue;
-      if (districting[measure] > max) {
-        maxProp = measure;
-        max = districting.measure;
+      if (measure === 'number') continue;
+      if (measure === 'popEquality' || measure === 'compactness') {
+        if (parseInt(districting[measure]) > max) {
+          maxProp = measure;
+          max = parseInt(districting.measure);
+        }
+      } else {
+        if (100 - parseInt(districting[measure]) > max) {
+          maxProp = measure;
+          max = parseInt(districting.measure);
+        }
       }
     }
     best.push([districting.number, maxProp, districting]);
@@ -788,9 +795,9 @@ export default function LeftPane(props) {
   const compactnessTooltip =
     'Set the minimum percentage threshold compactness for the improved redistricting. [0, 100]';
   const majorityMinorityToolTip =
-    'Set the minimum percentage threshold for the minority population per congressional district in the improved redistricting. [0, 100]';
+    'Set the maximum percentage threshold for the minority population per congressional district in the improved redistricting. [0, 100]';
   const enactedDeviationToolTip =
-    'Set the minimum percentage threshold for the deviation from the enacted districting for the improved redistricting. [0, 100]';
+    'Set the maximum percentage threshold for the deviation from the enacted districting for the improved redistricting. [0, 100]';
 
   return (
     <Drawer
