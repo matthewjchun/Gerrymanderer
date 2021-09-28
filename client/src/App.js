@@ -194,7 +194,7 @@ export default function App() {
           essential: true,
           zoom: 3.5,
         });
-
+        onClose();
         // arizona
         let visibility = map.current.getLayoutProperty(
           'azprec-boundary',
