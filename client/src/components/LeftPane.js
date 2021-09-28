@@ -17,6 +17,7 @@ import {
   VStack,
   Grid,
   GridItem,
+  Tooltip,
 } from '@chakra-ui/react';
 import {
   Slider,
@@ -31,6 +32,7 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
 } from '@chakra-ui/react';
+import { QuestionIcon } from '@chakra-ui/icons';
 
 import themes from '../themes';
 import Redistricting from './Redistricting';
@@ -132,6 +134,15 @@ export default function LeftPane(props) {
   const handleMajorityMinorityInput = (val) => setMajorityMinority(val);
   const handleEnactedDeviationInput = (val) => setEnactedDeviation(val);
 
+  const popEqualityTooltip =
+    'Set the minimum percentage threshold population equality for the improved redistricting. [0, 100]';
+  const compactnessTooltip =
+    'Set the minimum percentage threshold compactness for the improved redistricting. [0, 100]';
+  const majorityMinorityToolTip =
+    'Set the minimum percentage threshold for the minority population per congressional district in the improved redistricting. [0, 100]';
+  const enactedDeviationToolTip =
+    'Set the minimum percentage threshold for the deviation from the enacted districting for the improved redistricting. [0, 100]';
+
   return (
     <Drawer isOpen={isOpen} onClose={onClose} placement={'left'}>
       <DrawerOverlay />
@@ -149,7 +160,16 @@ export default function LeftPane(props) {
             <TabPanel>
               <DrawerBody>
                 <VStack align='left' spacing='5'>
-                  <Text>Population Equality</Text>
+                  <HStack spacing='5'>
+                    <Text>Population Equality</Text>
+                    <Tooltip
+                      label={popEqualityTooltip}
+                      fontSize='md'
+                      placement='right'
+                    >
+                      <QuestionIcon />
+                    </Tooltip>
+                  </HStack>
                   <HStack spacing='5'>
                     <Slider
                       aria-label='population-equality'
@@ -175,7 +195,16 @@ export default function LeftPane(props) {
                       </NumberInputStepper>
                     </NumberInput>
                   </HStack>
-                  <Text>Compactness</Text>
+                  <HStack>
+                    <Text>Compactness</Text>
+                    <Tooltip
+                      label={compactnessTooltip}
+                      fontSize='md'
+                      placement='right'
+                    >
+                      <QuestionIcon />
+                    </Tooltip>
+                  </HStack>
                   <HStack spacing='5'>
                     <Slider
                       aria-label='compactness'
@@ -201,7 +230,16 @@ export default function LeftPane(props) {
                       </NumberInputStepper>
                     </NumberInput>
                   </HStack>
-                  <Text>Majority-Minority Districts</Text>
+                  <HStack>
+                    <Text>Majority-Minority Districts</Text>
+                    <Tooltip
+                      label={majorityMinorityToolTip}
+                      fontSize='md'
+                      placement='right'
+                    >
+                      <QuestionIcon />
+                    </Tooltip>
+                  </HStack>
                   <HStack>
                     <Slider
                       aria-label='majority-minority-districts'
@@ -227,7 +265,16 @@ export default function LeftPane(props) {
                       </NumberInputStepper>
                     </NumberInput>
                   </HStack>
-                  <Text>Deviation from Enacted Districting</Text>
+                  <HStack>
+                    <Text>Deviation from Enacted Districting</Text>
+                    <Tooltip
+                      label={enactedDeviationToolTip}
+                      fontSize='md'
+                      placement='right'
+                    >
+                      <QuestionIcon />
+                    </Tooltip>
+                  </HStack>
                   <HStack>
                     <Slider
                       aria-label='deviation-from-enacted-districting'
