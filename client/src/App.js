@@ -30,7 +30,7 @@ export default function App() {
   const map = useRef(null);
   const [lng, setLng] = useState(-100.445882);
   const [lat, setLat] = useState(37.7837304);
-  const [zoom, setZoom] = useState(4.3);
+  const [zoom, setZoom] = useState(4);
   let hoveredStateId = null;
   const bounds = [
     [-116.895133, 32.868129], // Southwest coordinates
@@ -594,7 +594,7 @@ export default function App() {
         map.current.flyTo({
           center: [-100.445882, 37.7837304],
           essential: true,
-          zoom: 4.3,
+          zoom: 4,
         });
         onClose();
         // arizona
