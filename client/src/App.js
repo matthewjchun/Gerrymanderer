@@ -45,15 +45,6 @@ export default function App() {
     for (let i = 0; i < markers.length; i++) {
         markers[i].style.visibility = "hidden";
     }
-    console.log("hiding");
-    console.log(markers);
-  }
-
-  const show = () => {
-    let markers = document.getElementsByClassName("marker");
-    for (let i = 0; i < markers.length; i++) {
-        markers[i].style.visibility = "visible";
-    }
   }
   const zoomArizona = (map) => {
     map.current.flyTo({
