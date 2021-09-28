@@ -8,6 +8,17 @@ import './App.css';
 import TopBar from './components/TopBar';
 
 import StateDrawer from './components/StateDrawer';
+import { Container } from '@chakra-ui/react';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+} from '@chakra-ui/react';
 // import { useDisclosure } from '@chakra-ui/react';
 
 mapboxgl.accessToken =
@@ -335,44 +346,6 @@ export default function App() {
         if (visibility === 'none') {
           map.current.setLayoutProperty('azcd_lines', 'visibility', 'visible');
         }
-        /*new mapboxgl.Popup().setLngLat(e.lngLat)
-        .setHTML(e.features[0].properties.name)
-        .addTo(map.current);*/
-
-        // TODO: POOPUP
-        map.current.on('click', 'arizona', (e) => {
-          // Copy coordinates array.
-          const coordinates = e.features[0].geometry.coordinates.slice();
-          const description =
-            '<strong>District 1</strong><p><b>Population:</b> 724,868<br><b>Gender:</b> 50.3% Female, 49.7% Male<br><b>Race:</b> 64.1% White, 23.2% Am. Indian, 2.4% Black, 1.7% Asian<br><b>Ethnicity:</b> 20.4% Hispanic<br><b>Unemployment:</b> 14.2%<br><b>Median household income:</b> $43,377<br><b>High school graduation rate:</b> 85.3%<br><b>College graduation rate:</b> 23.5%';
-
-          // Ensure that if the map is zoomed out such that multiple
-          // copies of the feature are visible, the popup appears
-          // over the copy being pointed to.
-          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-          }
-          console.log(coordinates);
-          new mapboxgl.Popup()
-            .setLngLat([-112.0693, 34.2537])
-            .setHTML(description)
-            .addTo(map.current);
-        });
-        map.current.on('mousemove', 'azcd_fill', (e) => {
-          if (e.features.length > 0) {
-            if (hoveredStateId !== null) {
-              map.current.setFeatureState(
-                { source: 'azcd', id: hoveredStateId },
-                { hover: false }
-              );
-            }
-            hoveredStateId = e.features[0].GEOID20;
-            map.current.setFeatureState(
-              { source: 'azcd', id: hoveredStateId },
-              { hover: true }
-            );
-          }
-        });
 
         setActiveState('Arizona');
       });
@@ -457,7 +430,7 @@ export default function App() {
         justify='center'
       >
         <div ref={mapContainer} className='mapContainer' />
-        {/* <StateDrawer isOpen={true}></StateDrawer> */}
+        {/* <StateDrawer isOpen={true} ></StateDrawer> */}
       </Flex>
     </>
   );
