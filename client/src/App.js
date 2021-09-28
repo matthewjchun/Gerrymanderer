@@ -187,6 +187,10 @@ export default function App() {
     if (visibility === 'none') {
       map.current.setLayoutProperty('azcd_lines', 'visibility', 'visible');
     }
+    visibility = map.current.getLayoutProperty('azcounty-boundary', 'visibility');
+    if (visibility === 'none') {
+      map.current.setLayoutProperty("azcounty-boundary", "visibility", "visible");
+    };
   };
 
   const zoomMichigan = (map) => {
@@ -365,6 +369,10 @@ export default function App() {
     if (visibility === 'none') {
       map.current.setLayoutProperty('micd_lines', 'visibility', 'visible');
     }
+    visibility = map.current.getLayoutProperty('micounty-boundary', 'visibility');
+    if (visibility === 'none') {
+      map.current.setLayoutProperty("micounty-boundary", "visibility", "visible");
+    };
   };
 
   const zoomVirginia = (map) => {
@@ -511,6 +519,10 @@ export default function App() {
     if (visibility === 'none') {
       map.current.setLayoutProperty('vacd_lines', 'visibility', 'visible');
     }
+    visibility = map.current.getLayoutProperty('vacounty-boundary', 'visibility');
+    if (visibility === 'none') {
+      map.current.setLayoutProperty("vacounty-boundary", "visibility", "visible");
+    };
   };
 
   const zoomOut = (map) => {
