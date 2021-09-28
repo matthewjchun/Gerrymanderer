@@ -23,7 +23,7 @@ export default function TopBar(props) {
       ) : (
         <Box flex='1' mr='auto' />
       )}
-      <Text flex='1' fontWeight='bold' fontSize='1.5em' m='auto' align='center'>
+      <Text flex='2' fontWeight='bold' fontSize='1.5em' m='auto' align='center'>
         {activeState}
       </Text>
       <Select
