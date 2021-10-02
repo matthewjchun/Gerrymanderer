@@ -413,7 +413,7 @@ export default function App() {
       type: 'line',
       source: 'vacounty',
       paint: {
-        'line-color': '#e6d1b5',
+        'line-color': '#940f00',
       },
       filter: ['==', '$type', 'Polygon'],
       layout: {
