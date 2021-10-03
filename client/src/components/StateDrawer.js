@@ -27,34 +27,55 @@ import {
   TableCaption,
 } from '@chakra-ui/react';
 import { useContext } from 'react';
-import { StateContext } from '../contexts/State';
+import { DataContext, StateContext } from '../contexts/State';
 import { PieChart } from 'react-minimal-pie-chart';
 
-export default function StateDrawer(props){
-    const { isOpen, onOpen, onClose } = props;
+export default function StateDrawer(props) {
+  const { isOpen, onOpen, onClose } = props;
 
-    const [ activeState ] = useContext(StateContext);
+  const [activeState] = useContext(StateContext);
+  const [geoJSONdata, setGeoJSONdata] = useContext(DataContext);
 
-    const data = [
-        { title: 'White', value: 2849063, color: '#E38627' },
-        { title: 'Black or African', value: 178788, color: '#C13C37' },
-        { title: 'American Indian', value: 171607, color: '#FC4040' },
-        { title: 'Asian', value: 147661, color: '#71DE6A' },
-        { title: 'Hispanic', value: 1121876, color: '#6A2135' },
-    ]
+  const data = [
+    { title: 'White', value: 2849063, color: '#E38627' },
+    { title: 'Black or African', value: 178788, color: '#C13C37' },
+    { title: 'American Indian', value: 171607, color: '#FC4040' },
+    { title: 'Asian', value: 147661, color: '#71DE6A' },
+    { title: 'Hispanic', value: 1121876, color: '#6A2135' },
+  ];
 
-    return(
-        <Drawer isOpen={isOpen} onClose={onClose} size="sm" placement="right" variant="permanent">
-            <DrawerContent>
-                <DrawerCloseButton />
-                <DrawerHeader>
-                    <Text flex='1' fontWeight='bold' fontSize='1.5em' m='auto' align='center'>
-                        {activeState}
-                    </Text>
-                </DrawerHeader>
-                <DrawerBody>
-                    
-                <Tabs>
+  return (
+    <Drawer
+      isOpen={isOpen}
+      onClose={onClose}
+      size='sm'
+      placement='right'
+      variant='permanent'
+    >
+      <DrawerContent>
+        <DrawerCloseButton />
+        <DrawerHeader>
+          <Text
+            flex='1'
+            fontWeight='bold'
+            fontSize='1.5em'
+            m='auto'
+            align='center'
+          >
+            {activeState}
+          </Text>
+        </DrawerHeader>
+        <DrawerBody>
+          <Table>
+            {geoJSONdata.map((state) => {
+              return (
+                <Tr>
+                  <Td>{state.name}</Td>
+                </Tr>
+              );
+            })}
+          </Table>
+          {/*<Tabs>
                     <TabList>
                         <Flex align='center' justify='space-evenly'>
                             <Tab>State Statistics</Tab>
@@ -406,11 +427,11 @@ export default function StateDrawer(props){
                                     
                             </TabPanel>
                         </TabPanels>
-                    </Tabs>
-                    </DrawerBody>
-                    {/* <DrawerFooter>
+                    </Tabs>*/}
+        </DrawerBody>
+        {/* <DrawerFooter>
                     </DrawerFooter> */}
-                </DrawerContent>
-                </Drawer> 
+      </DrawerContent>
+    </Drawer>
   );
 }
