@@ -6,7 +6,7 @@ export const DataContext = createContext();
 
 export const StateProvider = ({ children }) => {
   const [activeState, setActiveState] = useState('Celtics');
-  const [geoJSONdata, setGeoJSONdata] = useState([]);
+  const [geoJSONdata, setGeoJSONdata] = useState({});
 
   return (
     <StateContext.Provider value={[activeState, setActiveState]}>

@@ -793,7 +793,9 @@ export default function LeftPane(props) {
   };
 
   const handleGenerate = async (e) => {
-    const response = await fetch('/states');
+    const response = await fetch(
+      `/districtings?state=${activeState}`.toLowerCase()
+    );
     const body = await response.json();
     console.log(body);
     setGeoJSONdata(body);
