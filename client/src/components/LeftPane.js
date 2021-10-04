@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { StateContext } from '../contexts/State';
+import { DataContext, StateContext } from '../contexts/State';
 import {
   Drawer,
   DrawerBody,
@@ -779,7 +779,9 @@ export default function LeftPane(props) {
   const [compactness, setCompactness] = useState(0);
   const [majorityMinority, setMajorityMinority] = useState(0);
   const [enactedDeviation, setEnactedDeviation] = useState(0);
+
   const [activeState, setActiveState] = useContext(StateContext);
+  const [geoJSONdata, setGeoJSONdata] = useContext(DataContext);
 
   const handlePopEqualityInput = (val) => setPopEquality(val);
   const handleCompactnessInput = (val) => setCompactness(val);
@@ -788,6 +790,15 @@ export default function LeftPane(props) {
 
   const handleRedistrictingClick = (e) => {
     console.log(e.target.number);
+  };
+
+  const handleGenerate = async (e) => {
+    const response = await fetch(
+      `/districtings?state=${activeState}`.toLowerCase()
+    );
+    const body = await response.json();
+    console.log(body);
+    setGeoJSONdata(body);
   };
 
   const redistrictingTabTooltip =
@@ -1065,7 +1076,7 @@ export default function LeftPane(props) {
         </Tabs>
         <DrawerFooter>
           <VStack spacing='3' align='right'>
-            <Button>
+            <Button onClick={handleGenerate}>
               <Text>Generate</Text>
             </Button>
             <Text fontSize='sm'>Last updated: 10 seconds ago</Text>
