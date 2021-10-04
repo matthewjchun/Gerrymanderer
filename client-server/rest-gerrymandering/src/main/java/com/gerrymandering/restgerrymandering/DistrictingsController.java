@@ -1,9 +1,13 @@
 package com.gerrymandering.restgerrymandering;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileReader;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -47,13 +51,32 @@ public class DistrictingsController {
     }*/
 
     @GetMapping
-    public Districting getDistricting(@RequestParam String state) {
-        if (state.equalsIgnoreCase("Arizona"))
-            return repository.findById(1L).orElseThrow(RuntimeException::new);
-        else if (state.equalsIgnoreCase("Michigan"))
-            return repository.findById(2L).orElseThrow(RuntimeException::new);
-        else if (state.equalsIgnoreCase("Virginia"))
-            return repository.findById(3L).orElseThrow(RuntimeException::new);
+    public JSONObject getDistricting(@RequestParam String state) {
+        JSONParser parser = new JSONParser();
+        if (state.equalsIgnoreCase("Arizona")) {
+            try (FileReader reader = new FileReader("src/main/resources/data/AZ_Congressional_Districts_2020.json")){
+                return (JSONObject) parser.parse(reader);
+            }
+            catch (Exception e) {
+                System.out.println("Error.");
+            }
+        }
+        else if (state.equalsIgnoreCase("Michigan")) {
+            try (FileReader reader = new FileReader("src/main/resources/data/MI_Congressional_Districts_2020.json")){
+                return (JSONObject) parser.parse(reader);
+            }
+            catch (Exception e) {
+                System.out.println("Error.");
+            }
+        }
+        if (state.equalsIgnoreCase("Virginia")) {
+            try (FileReader reader = new FileReader("src/main/resources/data/VA_Congressional_Districts_2020.json")){
+                return (JSONObject) parser.parse(reader);
+            }
+            catch (Exception e) {
+                System.out.println("Error.");
+            }
+        }
         return null;
     }
 

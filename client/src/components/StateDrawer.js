@@ -436,7 +436,7 @@ export default function StateDrawer(props) {
                   </Thead>
                   <Tbody>
                     <Tr>
-                      <Td>{geoJSONdata.state}</Td>
+                      <Td>{geoJSONdata.features}</Td>
                     </Tr>
                   </Tbody>
                 </Table>

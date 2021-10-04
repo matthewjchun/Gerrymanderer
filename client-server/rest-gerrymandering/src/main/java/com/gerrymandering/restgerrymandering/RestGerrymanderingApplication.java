@@ -15,17 +15,17 @@ import java.io.InputStreamReader;
 import java.util.LinkedHashMap;
 
 @SpringBootApplication
-public class RestGerrymanderingApplication implements CommandLineRunner {
+public class RestGerrymanderingApplication /*implements CommandLineRunner*/ {
     // autowire relationships between collaborating beans
     // injects the DistrictingRepository bean into the RestGerrymanderingApplication bean
-    @Autowired
-    private DistrictingRepository repository;
+    /*@Autowired
+    private DistrictingRepository repository;*/
 
     public static void main(String[] args) {
         SpringApplication.run(RestGerrymanderingApplication.class, args);
     }
 
-    private String readFromInputStream(InputStream is) throws IOException {
+    /*private String readFromInputStream(InputStream is) throws IOException {
         StringBuilder sb = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
             String line;
@@ -58,6 +58,6 @@ public class RestGerrymanderingApplication implements CommandLineRunner {
         }
         catch (Exception e) {
             System.out.println("Error.");
-        }*/
-    }
+        }
+    }*/
 }
