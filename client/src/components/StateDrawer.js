@@ -44,6 +44,16 @@ export default function StateDrawer(props) {
     { title: 'Hispanic', value: 1121876, color: '#6A2135' },
   ];
 
+  const processGeoJSONData = () => {
+    if (!geoJSONdata) return null;
+    let features = geoJSONdata.features;
+    let processed = { state: activeState };
+    processed.numDistricts = Object.keys(features).length;
+    return processed;
+  };
+
+  let processedData = processGeoJSONData();
+
   return (
     <Drawer
       isOpen={isOpen}
@@ -432,12 +442,16 @@ export default function StateDrawer(props) {
                   <Thead>
                     <Tr>
                       <Th>State Name</Th>
+                      <Th>Number of Districts</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
-                    <Tr>
-                      <Td>{geoJSONdata.features}</Td>
-                    </Tr>
+                    {processedData ? (
+                      <Tr>
+                        <Td>{processedData.state}</Td>
+                        <Td>{processedData.numDistricts}</Td>
+                      </Tr>
+                    ) : null}
                   </Tbody>
                 </Table>
               </TabPanel>
