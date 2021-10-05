@@ -41,7 +41,7 @@ public class RestGerrymanderingApplication /*implements CommandLineRunner*/ {
         this.repository.save(new Districting("Arizona"));
         this.repository.save(new Districting("Michigan"));
         this.repository.save(new Districting("Virginia"));
-        /*InputStream is = this.getClass().getClassLoader().getResourceAsStream("data/AZ_Congressional_Districts_2020.json");
+        /*InputStream is = this.getClass().getClassLoader().getResourceAsStream("data/ARIZONA_Congressional_Districts_2020.json");
         try {
             String jsonString = readFromInputStream(is);
             JSONParser parser = new JSONParser();

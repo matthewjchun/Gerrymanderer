@@ -9,17 +9,6 @@ import TopBar from './components/TopBar';
 
 import StateDrawer from './components/StateDrawer';
 import { useDisclosure } from '@chakra-ui/react';
-import { Spacer } from '@chakra-ui/react';
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-} from '@chakra-ui/react';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiY2VsdGljczQxNiIsImEiOiJja3R2MGM5dTQxajY4Mm5sNWV5YnNhNHg0In0.t9oiLZZUeZi0QpqUIik13w';

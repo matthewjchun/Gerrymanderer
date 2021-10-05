@@ -29,10 +29,19 @@ return type of the GET method to the response body*/
 // Defines endpoint that receives requests at /states
 
     //@CrossOrigin("http://localhost:3000")
+// In Spring, HTTP requests are handled by a controller
+/* The class-level annotation maps a specific request path or pattern onto a controller. You can then
+apply additional method-level annotations to make mappings more specific to handler methods.*/
 @RestController
 @RequestMapping("/districtings")
 public class DistrictingsController {
 
+    /*
+    @Repository is a Spring annotation that indicates that the decorated class is a repository. A repository is a
+     mechanism for encapsulating storage, retrieval, and search behavior which emulates a collection of objects.
+     It is a specialization of the @Component annotation allowing for implementation classes to be autodetected
+     through classpath scanning.
+     */
     @Autowired
     private final DistrictingRepository repository;
 
@@ -50,32 +59,28 @@ public class DistrictingsController {
         return repository.findById(id).orElseThrow(RuntimeException::new);
     }*/
 
-    @GetMapping
-    public JSONObject getDistricting(@RequestParam String state) {
+    @GetMapping("/geojson")
+    public JSONObject getGeoJSONData(@RequestParam String state) {
         JSONParser parser = new JSONParser();
-        if (state.equalsIgnoreCase("Arizona")) {
-            try (FileReader reader = new FileReader("src/main/resources/data/AZ_Congressional_Districts_2020.json")){
-                return (JSONObject) parser.parse(reader);
-            }
-            catch (Exception e) {
-                System.out.println("Error.");
-            }
+        try (FileReader reader = new FileReader("src/main/resources/data/" + state.toUpperCase()
+                + "_Congressional_Districts_2020.json")) {
+            return (JSONObject) parser.parse(reader);
         }
-        else if (state.equalsIgnoreCase("Michigan")) {
-            try (FileReader reader = new FileReader("src/main/resources/data/MI_Congressional_Districts_2020.json")){
-                return (JSONObject) parser.parse(reader);
-            }
-            catch (Exception e) {
-                System.out.println("Error.");
-            }
+        catch (Exception e) {
+            System.out.println("Error.");
         }
-        else if (state.equalsIgnoreCase("Virginia")) {
-            try (FileReader reader = new FileReader("src/main/resources/data/VA_Congressional_Districts_2020.json")){
-                return (JSONObject) parser.parse(reader);
-            }
-            catch (Exception e) {
-                System.out.println("Error.");
-            }
+        return null;
+    }
+
+    @GetMapping("/stats")
+    public JSONObject getStats(@RequestParam String state) {
+        JSONParser parser = new JSONParser();
+        try (FileReader reader = new FileReader("src/main/resources/data/" + state.toUpperCase()
+                + "_Congressional_Districts_2020.json")) {
+            return (JSONObject) parser.parse(reader);
+        }
+        catch (Exception e) {
+            System.out.println("Error.");
         }
         return null;
     }
