@@ -781,7 +781,7 @@ export default function LeftPane(props) {
   const [enactedDeviation, setEnactedDeviation] = useState(0);
 
   const [activeState, setActiveState] = useContext(StateContext);
-  const [geoJSONdata, setGeoJSONdata] = useContext(DataContext);
+  const [geoJSONdata, setGeoJSONdata] = useState();
 
   const handlePopEqualityInput = (val) => setPopEquality(val);
   const handleCompactnessInput = (val) => setCompactness(val);
