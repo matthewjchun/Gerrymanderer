@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useContext } from 'react';
-import { StateContext } from './contexts/State/index';
+import { DataContext, StateContext } from './contexts/State/index';
 
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { Flex } from '@chakra-ui/react';
@@ -9,6 +9,17 @@ import TopBar from './components/TopBar';
 
 import StateDrawer from './components/StateDrawer';
 import { useDisclosure } from '@chakra-ui/react';
+import { Spacer } from '@chakra-ui/react';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+} from '@chakra-ui/react';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiY2VsdGljczQxNiIsImEiOiJja3R2MGM5dTQxajY4Mm5sNWV5YnNhNHg0In0.t9oiLZZUeZi0QpqUIik13w';
@@ -29,8 +40,8 @@ export default function App() {
     [-68.230605, 47.25153], // Northeast coordinates
   ];
 
-  //const [activeState, setActiveState] = useState('');
   const [activeState, setActiveState] = useContext(StateContext);
+  const [geoJSONdata, setGeoJSONdata] = useState(null);
 
   const hide = () => {
     let markers = document.getElementsByClassName(
@@ -39,8 +50,6 @@ export default function App() {
     for (let i = 0; i < markers.length; i++) {
       markers[i].style.visibility = 'hidden';
     }
-    console.log('hiding');
-    console.log(markers);
   };
 
   const show = () => {
@@ -49,13 +58,32 @@ export default function App() {
       markers[i].style.visibility = 'visible';
     }
   };
-  const zoomArizona = (map) => {
+
+  const handleFetch = async (map) => {
+    const response = await fetch(
+      `/districtings/geojson/?state=${activeState.toLowerCase()}`
+    );
+    const body = await response.json();
+    return body;
+  };
+
+  const zoomArizona = async(map) => {
     map.current.flyTo({
       center: [-112.0693, 34.2537],
       essential: true,
       zoom: 6.2,
     });
     onOpen();
+
+    const azcdData = await handleFetch();
+
+    if(!(map.current.getSource('azcd'))){
+      map.current.addSource('azcd', {
+        type: 'geojson',
+        data: azcdData,
+      });
+    }
+
     map.current.addLayer({
       id: 'azprec-boundary',
       type: 'line',
@@ -92,6 +120,7 @@ export default function App() {
         visibility: 'visible',
       },
     });
+
     // AZ CONGRESSIONAL DISTRICTS
     const azd1 = new mapboxgl.Marker({ color: '#cfaf5b' })
       .setLngLat([-110.7258455, 34.9691324])
@@ -169,6 +198,7 @@ export default function App() {
       'azprec-boundary',
       'visibility'
     );
+
     if (visibility === 'none') {
       map.current.setLayoutProperty('azprec-boundary', 'visibility', 'visible');
     }
@@ -187,15 +217,27 @@ export default function App() {
         'visible'
       );
     }
+
   };
 
-  const zoomMichigan = (map) => {
+  const zoomMichigan = async(map) => {
+    setActiveState('Michigan');
     map.current.flyTo({
       center: [-84.3271772, 44.2330917],
       essential: true,
       zoom: 6.2,
     });
     onOpen();
+
+    const micdData = await handleFetch();
+
+    if(!(map.current.getSource('micd'))){
+      map.current.addSource('micd', {
+        type: 'geojson',
+        data: micdData,
+      });
+    }
+
     map.current.addLayer({
       id: 'miprec-boundary',
       type: 'line',
@@ -378,13 +420,24 @@ export default function App() {
     }
   };
 
-  const zoomVirginia = (map) => {
+  const zoomVirginia = async(map) => {
+    setActiveState('Virginia');
     map.current.flyTo({
       center: [-77.4525481898, 37.672247311],
       essential: true,
       zoom: 7,
     });
     onOpen();
+
+    const vacdData = await handleFetch();
+
+    if(!(map.current.getSource('vacd'))){
+      map.current.addSource('vacd', {
+        type: 'geojson',
+        data: vacdData,
+      });
+    }
+
     map.current.addLayer({
       id: 'vaprec-boundary',
       type: 'line',
@@ -601,13 +654,14 @@ export default function App() {
       center: [lng, lat],
       zoom: zoom,
     });
-  });
+  }, []);
 
   // color states
   useEffect(() => {
     if (!map.current) return;
     map.current.on('load', () => {
       // ADD STATES
+      console.log("GeoJSON in add sources: ", geoJSONdata);
       map.current.addSource('arizona', {
         type: 'geojson',
         data: 'https://raw.githubusercontent.com/glynnbird/usstatesgeojson/master/arizona.geojson',
@@ -644,18 +698,6 @@ export default function App() {
         type: 'geojson',
         data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/VA_Counties.json',
       });
-      map.current.addSource('azcd', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/az_cd.json',
-      });
-      map.current.addSource('micd', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/mi_cd.json',
-      });
-      map.current.addSource('vacd', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/va_cd.json',
-      });
       map.current.addSource('states', {
         type: 'geojson',
         data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/state-outlines.json',
@@ -676,50 +718,50 @@ export default function App() {
       map.current.addLayer({
         id: 'arizona',
         type: 'fill',
-        source: 'arizona', // reference the data source
+        source: 'arizona', 
         layout: {},
         paint: {
-          'fill-color': '#523e3c', // green color fill
+          'fill-color': '#523e3c', 
           'fill-opacity': 0.5,
         },
       });
       map.current.addLayer({
         id: 'michigan',
         type: 'fill',
-        source: 'michigan', // reference the data source
+        source: 'michigan',
         layout: {},
         paint: {
-          'fill-color': '#523e3c', // green color fill
+          'fill-color': '#523e3c', 
           'fill-opacity': 0.5,
         },
       });
       map.current.addLayer({
         id: 'virginia',
         type: 'fill',
-        source: 'virginia', // reference the data source
+        source: 'virginia', 
         layout: {},
         paint: {
-          'fill-color': '#523e3c', // green color fill
+          'fill-color': '#523e3c', 
           'fill-opacity': 0.5,
         },
       });
       map.current.addLayer({
         id: 'michigan',
         type: 'fill',
-        source: 'michigan', // reference the data source
+        source: 'michigan', 
         layout: {},
         paint: {
-          'fill-color': '#abd67a', // green color fill
+          'fill-color': '#abd67a', 
           'fill-opacity': 0.5,
         },
       });
       map.current.addLayer({
         id: 'virginia',
         type: 'fill',
-        source: 'virginia', // reference the data source
+        source: 'virginia',
         layout: {},
         paint: {
-          'fill-color': '#abd67b', // green color fill
+          'fill-color': '#abd67b',
           'fill-opacity': 0.5,
         },
       });
@@ -764,19 +806,16 @@ export default function App() {
       });
 
       map.current.on('click', 'arizona', (e) => {
-        zoomArizona(map);
         setActiveState('Arizona');
       });
       map.current.on('click', 'michigan', (e) => {
-        zoomMichigan(map);
         setActiveState('Michigan');
       });
       map.current.on('click', 'virginia', (e) => {
-        zoomVirginia(map);
         setActiveState('Virginia');
       });
     });
-  });
+  }, []);
 
   useEffect(() => {
     if (!map.current) return; // wait for map to initialize
@@ -793,6 +832,7 @@ export default function App() {
     if (!map.current) return;
     if (activeState == 'Arizona') {
       zoomArizona(map);
+      setActiveState('Arizona');
     } else if (activeState == 'Michigan') {
       zoomMichigan(map);
     } else if (activeState == 'Virginia') {
