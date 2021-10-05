@@ -69,7 +69,7 @@ public class DistrictingsController {
                 System.out.println("Error.");
             }
         }
-        if (state.equalsIgnoreCase("Virginia")) {
+        else if (state.equalsIgnoreCase("Virginia")) {
             try (FileReader reader = new FileReader("src/main/resources/data/VA_Congressional_Districts_2020.json")){
                 return (JSONObject) parser.parse(reader);
             }
