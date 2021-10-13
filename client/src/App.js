@@ -1,5 +1,5 @@
 import React from 'react';
-import mapboxgl from '!mapbox-gl';
+import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import './App.css';
 import Map from './components/Map';
 import TopBar from './components/TopBar';
