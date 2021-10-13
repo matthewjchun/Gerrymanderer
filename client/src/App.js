@@ -3,23 +3,10 @@ import { DataContext, StateContext } from './contexts/State/index';
 
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { Flex } from '@chakra-ui/react';
-
 import './App.css';
 import TopBar from './components/TopBar';
-
 import StateDrawer from './components/StateDrawer';
 import { useDisclosure } from '@chakra-ui/react';
-import { Spacer } from '@chakra-ui/react';
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-} from '@chakra-ui/react';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiY2VsdGljczQxNiIsImEiOiJja3R2MGM5dTQxajY4Mm5sNWV5YnNhNHg0In0.t9oiLZZUeZi0QpqUIik13w';
@@ -41,7 +28,7 @@ export default function App() {
   ];
 
   const [activeState, setActiveState] = useContext(StateContext);
-  const [geoJSONdata, setGeoJSONdata] = useState(null);
+  // const [geoJSONdata] = useState(null);
 
   const hide = () => {
     let markers = document.getElementsByClassName(
@@ -67,7 +54,7 @@ export default function App() {
     return body;
   };
 
-  const zoomArizona = async(map) => {
+  const zoomArizona = async (map) => {
     map.current.flyTo({
       center: [-112.0693, 34.2537],
       essential: true,
@@ -661,7 +648,6 @@ export default function App() {
     if (!map.current) return;
     map.current.on('load', () => {
       // ADD STATES
-      console.log("GeoJSON in add sources: ", geoJSONdata);
       map.current.addSource('arizona', {
         type: 'geojson',
         data: 'https://raw.githubusercontent.com/glynnbird/usstatesgeojson/master/arizona.geojson',
