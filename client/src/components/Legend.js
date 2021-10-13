@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
 
 export default function Legend(props){
-
     var showDistrict = true;
     var showCounty = true;
     var showPrecinct = true;
-
     const map = props;
     
     useEffect(() => {
