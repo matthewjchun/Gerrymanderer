@@ -73,6 +73,36 @@ export default function App() {
     });
   }
 
+  // const visibToggle = async (abbrev) => {
+  //   let visibility = map.current.getLayoutProperty(
+  //     abbrev + 'prec-boundary',
+  //     'visibility'
+  //   );
+  //   if (visibility === 'none') {
+  //     map.current.setLayoutProperty(abbrev + 'prec-boundary', 'visibility', 'visible');
+  //   }
+
+  //   visibility = map.current.getLayoutProperty(
+  //     abbrev + 'cd_lines',
+  //     'visibility'
+  //   );
+  //   if (visibility === 'none') {
+  //     map.current.setLayoutProperty(abbrev + 'cd_lines', 'visibility', 'visible');
+  //   }
+
+  //   visibility = map.current.getLayoutProperty(
+  //     abbrev + 'county-boundary',
+  //     'visibility'
+  //   );
+  //   if (visibility === 'none') {
+  //     map.current.setLayoutProperty(
+  //       'azcounty-boundary',
+  //       'visibility',
+  //       'visible'
+  //     );
+  //   }
+  // }
+
   const zoomIn = async (map, state) => {
     if(state == "Arizona"){
       map.current.flyTo({
@@ -84,44 +114,10 @@ export default function App() {
   
       const azcdData = await handleFetch();
   
-      checkSrc('azcd', azcdData)
-  
-      map.current.addLayer({
-        id: 'azprec-boundary',
-        type: 'line',
-        source: 'azprecincts',
-        paint: {
-          'line-color': '#e6d1b5',
-        },
-        filter: ['==', '$type', 'Polygon'],
-        layout: {
-          visibility: 'visible',
-        },
-      });
-      map.current.addLayer({
-        id: 'azcounty-boundary',
-        type: 'line',
-        source: 'azcounty',
-        paint: {
-          'line-color': '#940f00',
-        },
-        filter: ['==', '$type', 'Polygon'],
-        layout: {
-          visibility: 'visible',
-        },
-      });
-      map.current.addLayer({
-        id: 'azcd_lines',
-        type: 'line',
-        source: 'azcd',
-        paint: {
-          'line-color': '#000000',
-        },
-        filter: ['==', '$type', 'Polygon'],
-        layout: {
-          visibility: 'visible',
-        },
-      });
+      checkSrc('azcd', azcdData);
+      addLayer('azprec-boundary', 'azprecincts', '#e6d1b5');
+      addLayer('azcounty-boundary', 'azcounty', '#940f00');
+      addLayer('azcd_lines', 'azcd', '#000000')
   
       // AZ CONGRESSIONAL DISTRICTS
       const azd1 = new mapboxgl.Marker({ color: '#cfaf5b' })
@@ -196,18 +192,24 @@ export default function App() {
           )
         )
         .addTo(map.current);
+      
+      // visibToggle('az');
       let visibility = map.current.getLayoutProperty(
         'azprec-boundary',
         'visibility'
       );
-  
       if (visibility === 'none') {
         map.current.setLayoutProperty('azprec-boundary', 'visibility', 'visible');
       }
-      visibility = map.current.getLayoutProperty('azcd_lines', 'visibility');
+  
+      visibility = map.current.getLayoutProperty(
+        'azcd_lines',
+        'visibility'
+      );
       if (visibility === 'none') {
         map.current.setLayoutProperty('azcd_lines', 'visibility', 'visible');
       }
+  
       visibility = map.current.getLayoutProperty(
         'azcounty-boundary',
         'visibility'
@@ -232,44 +234,11 @@ export default function App() {
       const micdData = await handleFetch();
 
       checkSrc('micd', micdData)
+      addLayer('miprec-boundary', 'miprecincts', '#e6d1b5');
+      addLayer('micounty-boundary', 'micounty', '#940f00');
+      addLayer('micd_lines', 'micd', '#000000')
 
-      map.current.addLayer({
-        id: 'miprec-boundary',
-        type: 'line',
-        source: 'miprecincts',
-        paint: {
-          'line-color': '#e6d1b5',
-        },
-        filter: ['==', '$type', 'Polygon'],
-        layout: {
-          visibility: 'visible',
-        },
-      });
-      map.current.addLayer({
-        id: 'micounty-boundary',
-        type: 'line',
-        source: 'micounty',
-        paint: {
-          'line-color': '#940f00',
-        },
-        filter: ['==', '$type', 'Polygon'],
-        layout: {
-          visibility: 'visible',
-        },
-      });
-      map.current.addLayer({
-        id: 'micd_lines',
-        type: 'line',
-        source: 'micd',
-        paint: {
-          'line-color': '#45322f',
-        },
-        filter: ['==', '$type', 'Polygon'],
-        layout: {
-          visibility: 'visible',
-        },
-      });
-      // MI CONGRESSIONAL DISTRICTS
+///////////////// MI CONGRESSIONAL DISTRICTS MARKERS //////////////////
       const mid1 = new mapboxgl.Marker({ color: '#cfaf5b' })
         .setLngLat([-86.4367294, 46.1633289])
         .setPopup(
@@ -426,43 +395,9 @@ export default function App() {
       const vacdData = await handleFetch();
   
       checkSrc('vacd', vacdData)
-  
-      map.current.addLayer({
-        id: 'vaprec-boundary',
-        type: 'line',
-        source: 'vaprecincts',
-        paint: {
-          'line-color': '#e6d1b5',
-        },
-        filter: ['==', '$type', 'Polygon'],
-        layout: {
-          visibility: 'visible',
-        },
-      });
-      map.current.addLayer({
-        id: 'vacounty-boundary',
-        type: 'line',
-        source: 'vacounty',
-        paint: {
-          'line-color': '#940f00',
-        },
-        filter: ['==', '$type', 'Polygon'],
-        layout: {
-          visibility: 'visible',
-        },
-      });
-      map.current.addLayer({
-        id: 'vacd_lines',
-        type: 'line',
-        source: 'vacd',
-        paint: {
-          'line-color': '#45322f',
-        },
-        filter: ['==', '$type', 'Polygon'],
-        layout: {
-          visibility: 'visible',
-        },
-      });
+      addLayer('vaprec-boundary', 'vaprecincts', '#e6d1b5');
+      addLayer('vacounty-boundary', 'vacounty', '#940f00');
+      addLayer('vacd_lines', 'vacd', '#000000')
   
       // VA CONGRESSIONAL DISTRICTS
       const va1 = new mapboxgl.Marker({ color: '#cfaf5b' })
