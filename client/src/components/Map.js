@@ -4,7 +4,7 @@ import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-load
 import { Flex } from '@chakra-ui/react';
 import '../App.css';
 import StateDrawer from './StateDrawer';
-import Legend from '../components/Legend';
+import Legend from './Legend';
 import { useDisclosure } from '@chakra-ui/react';
 
 mapboxgl.accessToken =

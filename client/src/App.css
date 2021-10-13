@@ -29,6 +29,7 @@ body,
   padding-bottom:5px;
 }
 
+/* ------ LEGEND STYLING ------ */
 .legend {
   background-color: #fff;
   border-radius: 3px;
@@ -43,6 +44,7 @@ body,
    
 .legend h4 {
   margin: 0 0 10px;
+  font-weight: bold;
 }
    
 .legend div span {
