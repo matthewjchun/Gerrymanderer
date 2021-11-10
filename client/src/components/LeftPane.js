@@ -47,7 +47,6 @@ const measureMap = {
   popEquality: 'Population Equality',
   compactness: 'Compactness',
   majorityMinority: 'Majority-Minority',
-  enactedDeviation: 'Deviation from Enacted Districting',
 };
 
 // returns an array of best measures for each redistricting in a given state
@@ -83,44 +82,40 @@ const azData = [
       popEquality: '77',
       compactness: '50',
       majorityMinority: '43',
-      enactedDeviation: '10',
     },
     {
       number: 2,
       popEquality: '59',
       compactness: '28',
       majorityMinority: '59',
-      enactedDeviation: '83',
     },
+  ],
+  [
     {
       number: 3,
       popEquality: '53',
       compactness: '46',
       majorityMinority: '99',
-      enactedDeviation: '55',
     },
-  ],
-  [
     {
       number: 4,
       popEquality: '72',
       compactness: '54',
       majorityMinority: '42',
-      enactedDeviation: '60',
     },
+  ],
+  [
     {
       number: 5,
       popEquality: '53',
       compactness: '46',
       majorityMinority: '99',
-      enactedDeviation: '55',
     },
     {
       number: 6,
       popEquality: '77',
       compactness: '50',
       majorityMinority: '43',
-      enactedDeviation: '10',
     },
   ],
   [
@@ -129,44 +124,40 @@ const azData = [
       popEquality: '59',
       compactness: '28',
       majorityMinority: '59',
-      enactedDeviation: '83',
     },
     {
       number: 8,
       popEquality: '72',
       compactness: '54',
       majorityMinority: '42',
-      enactedDeviation: '60',
     },
+  ],
+  [
     {
       number: 9,
       popEquality: '92',
       compactness: '52',
       majorityMinority: '58',
-      enactedDeviation: '17',
     },
-  ],
-  [
     {
       number: 10,
       popEquality: '48',
       compactness: '27',
       majorityMinority: '73',
-      enactedDeviation: '14',
     },
+  ],
+  [
     {
       number: 11,
       popEquality: '49',
       compactness: '68',
       majorityMinority: '27',
-      enactedDeviation: '17',
     },
     {
       number: 12,
       popEquality: '40',
       compactness: '28',
       majorityMinority: '57',
-      enactedDeviation: '94',
     },
   ],
   [
@@ -175,44 +166,40 @@ const azData = [
       popEquality: '72',
       compactness: '45',
       majorityMinority: '48',
-      enactedDeviation: '52',
     },
     {
       number: 14,
       popEquality: '95',
       compactness: '27',
       majorityMinority: '65',
-      enactedDeviation: '84',
     },
+  ],
+  [
     {
       number: 15,
       popEquality: '69',
       compactness: '87',
       majorityMinority: '53',
-      enactedDeviation: '63',
     },
-  ],
-  [
     {
       number: 16,
       popEquality: '47',
       compactness: '94',
       majorityMinority: '23',
-      enactedDeviation: '48',
     },
+  ],
+  [
     {
       number: 17,
       popEquality: '37',
       compactness: '38',
       majorityMinority: '82',
-      enactedDeviation: '34',
     },
     {
       number: 18,
       popEquality: '65',
       compactness: '23',
       majorityMinority: '54',
-      enactedDeviation: '23',
     },
   ],
   [
@@ -221,44 +208,40 @@ const azData = [
       popEquality: '84',
       compactness: '36',
       majorityMinority: '60',
-      enactedDeviation: '48',
     },
     {
       number: 20,
       popEquality: '73',
       compactness: '34',
       majorityMinority: '45',
-      enactedDeviation: '28',
     },
+  ],
+  [
     {
       number: 21,
       popEquality: '90',
       compactness: '53',
       majorityMinority: '50',
-      enactedDeviation: '37',
     },
-  ],
-  [
     {
       number: 22,
       popEquality: '48',
       compactness: '26',
       majorityMinority: '59',
-      enactedDeviation: '48',
     },
+  ],
+  [
     {
       number: 23,
       popEquality: '27',
       compactness: '49',
       majorityMinority: '49',
-      enactedDeviation: '26',
     },
     {
       number: 24,
       popEquality: '93',
       compactness: '84',
       majorityMinority: '27',
-      enactedDeviation: '95',
     },
   ],
   [
@@ -267,44 +250,40 @@ const azData = [
       popEquality: '36',
       compactness: '73',
       majorityMinority: '65',
-      enactedDeviation: '42',
     },
     {
       number: 26,
       popEquality: '33',
       compactness: '76',
       majorityMinority: '47',
-      enactedDeviation: '93',
     },
+  ],
+  [
     {
       number: 27,
       popEquality: '48',
       compactness: '87',
       majorityMinority: '53',
-      enactedDeviation: '23',
     },
-  ],
-  [
     {
       number: 28,
       popEquality: '95',
       compactness: '57',
       majorityMinority: '25',
-      enactedDeviation: '37',
     },
+  ],
+  [
     {
       number: 29,
       popEquality: '59',
       compactness: '48',
       majorityMinority: '93',
-      enactedDeviation: '65',
     },
     {
       number: 30,
       popEquality: '15',
       compactness: '36',
       majorityMinority: '45',
-      enactedDeviation: '87',
     },
   ],
 ];
@@ -778,7 +757,7 @@ export default function LeftPane(props) {
   const [popEquality, setPopEquality] = useState(0);
   const [compactness, setCompactness] = useState(0);
   const [majorityMinority, setMajorityMinority] = useState(0);
-  const [enactedDeviation, setEnactedDeviation] = useState(0);
+  // const [enactedDeviation, setEnactedDeviation] = useState(0);
 
   const [activeState, setActiveState] = useContext(StateContext);
   const [geoJSONdata, setGeoJSONdata] = useState();
@@ -786,7 +765,7 @@ export default function LeftPane(props) {
   const handlePopEqualityInput = (val) => setPopEquality(val);
   const handleCompactnessInput = (val) => setCompactness(val);
   const handleMajorityMinorityInput = (val) => setMajorityMinority(val);
-  const handleEnactedDeviationInput = (val) => setEnactedDeviation(val);
+  // const handleEnactedDeviationInput = (val) => setEnactedDeviation(val);
 
   const handleRedistrictingClick = (e) => {
     console.log(e.target.number);
@@ -805,6 +784,8 @@ export default function LeftPane(props) {
     'Select one of the following 30 redistrictings to improve on.';
   const constraintsTabTooltip =
     'Optionally modify thresholds for the following measures for the improved redistricting.';
+  const BoxAndWhiskerTabTooltip =
+    'Construct a box and whisker plot where the measures of your selected districtings are overlayed on top of the 10,000 districtings measures.';
 
   const popEqualityTooltip =
     'Set the minimum percentage threshold population equality for the improved redistricting. [0, 100]';
@@ -812,12 +793,10 @@ export default function LeftPane(props) {
     'Set the minimum percentage threshold compactness for the improved redistricting. [0, 100]';
   const majorityMinorityToolTip =
     'Set the maximum percentage threshold for the minority population per congressional district in the improved redistricting. [0, 100]';
-  const enactedDeviationToolTip =
-    'Set the maximum percentage threshold for the deviation from the enacted districting for the improved redistricting. [0, 100]';
 
   return (
     <Drawer
-      size='lg'
+      size='md'
       isOpen={isOpen}
       onClose={onClose}
       placement={'left'}
@@ -855,15 +834,27 @@ export default function LeftPane(props) {
                 </Tooltip>
               </HStack>
             </Tab>
+            <Tab>
+              <HStack spacing='5'>
+                <Text>Box And Whisker</Text>
+                <Tooltip
+                  label={BoxAndWhiskerTabTooltip}
+                  fontSize='md'
+                  placement='right'
+                >
+                  <QuestionIcon />
+                </Tooltip>
+              </HStack>
+            </Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
               {activeState == 'Arizona' ? (
-                <VStack spacing='3'>
+                <VStack spacing='2'>
                   {azData.map((set) => {
                     const best = bestMeasure(set);
                     return (
-                      <HStack spacing='3'>
+                      <HStack spacing='2'>
                         {best.map((numMeasure) => {
                           const [number, measure, allMeasures] = numMeasure;
                           return (
@@ -1026,41 +1017,6 @@ export default function LeftPane(props) {
                       min={0}
                       max={100}
                       onChange={handleMajorityMinorityInput}
-                    >
-                      <NumberInputField />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput>
-                  </HStack>
-                  <HStack>
-                    <Text>Deviation from Enacted Districting</Text>
-                    <Tooltip
-                      label={enactedDeviationToolTip}
-                      fontSize='md'
-                      placement='right'
-                    >
-                      <QuestionIcon />
-                    </Tooltip>
-                  </HStack>
-                  <HStack>
-                    <Slider
-                      aria-label='deviation-from-enacted-districting'
-                      defaultValue={enactedDeviation}
-                      onChange={handleEnactedDeviationInput}
-                      focusThumbOnChange={false}
-                    >
-                      <SliderTrack>
-                        <SliderFilledTrack />
-                      </SliderTrack>
-                      <SliderThumb bg={themes.colors.blue[500]} />
-                    </Slider>
-                    <NumberInput
-                      value={enactedDeviation}
-                      min={0}
-                      max={100}
-                      onChange={handleEnactedDeviationInput}
                     >
                       <NumberInputField />
                       <NumberInputStepper>

@@ -58,7 +58,6 @@ export default function Redistricting(props) {
             <Text>Population Equality: {popEquality}</Text>
             <Text>Compactness: {compactness}</Text>
             <Text>Majority-Minority: {majorityMinority}</Text>
-            <Text>Deviation from Enacted Districting: {enactedDeviation}</Text>
           </VStack>
         </PopoverBody>
       </PopoverContent>

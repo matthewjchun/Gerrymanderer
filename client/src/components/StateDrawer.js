@@ -26,15 +26,23 @@ import {
   Td,
   TableCaption,
 } from '@chakra-ui/react';
-import { useContext } from 'react';
+import { Radio, RadioGroup, Stack } from "@chakra-ui/react";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Box,
+} from "@chakra-ui/react";
+import { useContext, useState } from 'react';
 import { DataContext, StateContext } from '../contexts/State';
 import { PieChart } from 'react-minimal-pie-chart';
 
 export default function StateDrawer(props) {
   const { isOpen, onOpen, onClose } = props;
-
   const [activeState] = useContext(StateContext);
-  //const [geoJSONdata, setGeoJSONdata] = useContext(DataContext);
+  const [value, setValue] = useState("1")
 
   const data = [
     { title: 'White', value: 2849063, color: '#E38627' },
@@ -86,6 +94,37 @@ export default function StateDrawer(props) {
             </TabList>
             <TabPanels>
               <TabPanel>
+                <Accordion allowToggle>
+                  <AccordionItem>
+                    <h2>
+                      <AccordionButton>
+                        <Box flex="1" textAlign="left">
+                          Population Measure
+                        </Box>
+                        <AccordionIcon />
+                      </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                      <RadioGroup onChange={setValue} value={value} defaultValue="1">
+                        <Stack>
+                          <Radio size="md" value="1" colorScheme="blue" defaultChecked>
+                            Total Population
+                          </Radio>
+                          <Radio size="md" value="2" colorScheme="blue">
+                            Voting Age Population
+                          </Radio>
+                          <Radio size="md" value="3" colorScheme="blue">
+                            Citizen Voting Age Population
+                          </Radio>
+                        </Stack>
+                      </RadioGroup>
+                    </AccordionPanel>
+                  </AccordionItem>  
+                </Accordion>
+                <br />
+                <Text fontSize="3xl">Statistics</Text>
+                <br />
+                <Divider />
                 <Text>Population: 7,151,502</Text>
                 <Divider />
                 <Text>Precincts: 1,495</Text>
