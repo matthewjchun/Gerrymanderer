@@ -33,6 +33,7 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
 } from '@chakra-ui/react';
+import { Checkbox, CheckboxGroup } from "@chakra-ui/react"
 import { QuestionIcon } from '@chakra-ui/icons';
 
 import themes from '../themes';
@@ -757,7 +758,6 @@ export default function LeftPane(props) {
   const [popEquality, setPopEquality] = useState(0);
   const [compactness, setCompactness] = useState(0);
   const [majorityMinority, setMajorityMinority] = useState(0);
-  // const [enactedDeviation, setEnactedDeviation] = useState(0);
 
   const [activeState, setActiveState] = useContext(StateContext);
   const [geoJSONdata, setGeoJSONdata] = useState();
@@ -765,7 +765,6 @@ export default function LeftPane(props) {
   const handlePopEqualityInput = (val) => setPopEquality(val);
   const handleCompactnessInput = (val) => setCompactness(val);
   const handleMajorityMinorityInput = (val) => setMajorityMinority(val);
-  // const handleEnactedDeviationInput = (val) => setEnactedDeviation(val);
 
   const handleRedistrictingClick = (e) => {
     console.log(e.target.number);
@@ -1027,6 +1026,34 @@ export default function LeftPane(props) {
                   </HStack>
                 </VStack>
               </DrawerBody>
+            </TabPanel>
+            <TabPanel>
+              {activeState == 'Arizona' ? (
+                <VStack spacing='2'>
+                  {azData.map((set) => {
+                    const best = bestMeasure(set);
+                    return (
+                      <HStack spacing='2'>
+                        {best.map((numMeasure) => {
+                          const [number, measure, allMeasures] = numMeasure;
+                          return (
+                            <>
+                              <Redistricting
+                                number={number}
+                                thumbnail={az}
+                                bestMeasure={measureMap[measure]}
+                                measures={allMeasures}
+                                onClick={handleRedistrictingClick}
+                              />
+                              <Checkbox> {number} </Checkbox>
+                            </>
+                          );
+                        })}
+                      </HStack>
+                    );
+                  })}
+                </VStack>
+              ) : null}
             </TabPanel>
           </TabPanels>
         </Tabs>

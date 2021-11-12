@@ -12,7 +12,7 @@ import {
 
 export default function Redistricting(props) {
   const { number, thumbnail, bestMeasure, measures } = props;
-  const { popEquality, compactness, majorityMinority, enactedDeviation } =
+  const { popEquality, compactness, majorityMinority } =
     measures;
 
   const handleMouseEnter = (e) => {
