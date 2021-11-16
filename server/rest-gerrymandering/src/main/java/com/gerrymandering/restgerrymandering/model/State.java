@@ -7,6 +7,11 @@ import java.util.List;
 @Table(name = "State")
 public class State {
 
+    public State(){
+        name = "Arizona";
+
+    }
+
     @Id
     @Column(name = "name")
     private String name;
@@ -18,7 +23,7 @@ public class State {
     @OneToMany(mappedBy = "districting")
     private List<Districting> districtings;
 
-    private double centerLog;
+    private double centerLon;
 
     private double centerLat;
 
@@ -37,4 +42,7 @@ public class State {
             return districtings.get(62);
         return null;
     }
+
+
+
 }

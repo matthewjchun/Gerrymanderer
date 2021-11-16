@@ -19,7 +19,7 @@ public class District {
 
     private List<Precinct> precincts;
 
-    private List<CensusBlocks> censusBlocks;
+//    private List<CensusBlock> censusBlocks;
 
     private String path;
 
@@ -43,9 +43,9 @@ public class District {
 
     public void setPrecincts(List<Precinct> precincts) { this.precincts = precincts; }
 
-    public List<CensusBlock> getCensusBlocks() { return censusBlocks; }
-
-    public void setCensusBlocks(List<CensusBlock>) { this.censusBlocks = censusBlocks; }
+//    public List<CensusBlock> getCensusBlocks() { return censusBlocks; }
+//
+//    public void setCensusBlocks(List<CensusBlock>) { this.censusBlocks = censusBlocks; }
 
     public String getPath() { return path; }
 
