@@ -19,7 +19,7 @@ public class State {
     @OneToMany(mappedBy = "districting")
     private List<Districting> districtings;
 
-    private double centerLog;
+    private double centerLon;
 
     private double centerLat;
 
