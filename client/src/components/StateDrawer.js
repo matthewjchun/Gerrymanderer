@@ -42,7 +42,8 @@ import { PieChart } from 'react-minimal-pie-chart';
 export default function StateDrawer(props) {
   const { isOpen, onOpen, onClose } = props;
   const [activeState] = useContext(StateContext);
-  const [value, setValue] = useState("0")
+  const [value, setValue] = useState("0");
+  const [populationType, setPopulationType] = useState();
 
   const data = [
     { title: 'White', value: 2849063, color: '#E38627' },
@@ -62,8 +63,6 @@ export default function StateDrawer(props) {
 
   let processedData = processGeoJSONData(); */
 
-  let population = 100;
-
   const populationFetch = async (value) => {
     const response = await fetch('/populationType', {
       method: "POST",
@@ -75,17 +74,18 @@ export default function StateDrawer(props) {
   }
 
   useEffect(() => {
-    // let body = populationFetch;
-    // population = body;
+    let body = populationFetch;
+    populationType = body;
 
-    console.log("hey whaddup");
-    if(value == 1){
-      console.log("hey")
-      population = 20000;
-    }
-    else{
-      population = 123124;
-    }
+    // console.log("hey whaddup");
+    // if(value == 1){
+    //   console.log("20000")
+    //   population = 20000;
+    // }
+    // else{
+    //   console.log("20000")
+    //   population = 123124;
+    // }
   }, [value]);
 
 
@@ -152,7 +152,7 @@ export default function StateDrawer(props) {
                 <Text fontSize="3xl">Statistics</Text>
                 <br />
                 <Divider />
-                <Text> Population: {population} </Text>
+                <Text> Population: {populationType} </Text>
                 <Divider />
                 <Text>Precincts: 1,495</Text>
                 <Divider />
