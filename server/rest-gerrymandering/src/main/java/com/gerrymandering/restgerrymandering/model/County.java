@@ -13,7 +13,7 @@ public class County {
 
     private String boundariesPath;
 
-    private Population population;
+    //private Population population;
 
     private String path;
 
@@ -21,9 +21,9 @@ public class County {
 
     public void setBoundariesPath(String newBoundariesPath) { this.boundariesPath = newBoundariesPath; }
 
-    public Population getPopulation() { return this.population; }
+    //public Population getPopulation() { return this.population; }
 
-    public void setPopulation(Population newPop) { this.population = newPop; }
+    //public void setPopulation(Population newPop) { this.population = newPop; }
 
     public String getPath() { return this.path; }
 

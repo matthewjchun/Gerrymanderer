@@ -17,8 +17,9 @@ public class Districting {
 
 //    private List<Districts> districts;
 
-    @JoinColumn(name = "District")
-    private Measures measures;
+
+    @JoinColumn(name = "DistrictingId")
+    //private Measures measures;
 
     private double populationEqualityThreshold;
 
@@ -28,7 +29,7 @@ public class Districting {
 
     private int splitPrecincts;
 
-    private List<DistrictSummary> districtSummaries;
+    //private List<DistrictSummary> districtSummaries;
 
     private String districtPath;
 

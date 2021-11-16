@@ -10,7 +10,7 @@ public class DistrictSummary {
     @GeneratedValue
     private Long id;
 
-    private Population population;
+    //private Population population;
 
     private double republican;
 
@@ -22,9 +22,9 @@ public class DistrictSummary {
 
     public void setId(Long id) { this.id = id; }
 
-    public Population getPopulation() { return population; }
+    /*public Population getPopulation() { return population; }
 
-    public void setPopulation(Population population) { this.population = population; }
+    public void setPopulation(Population population) { this.population = population; }*/
 
     public double getRepublican() { return republican; }
 
