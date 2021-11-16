@@ -1,5 +1,7 @@
 package com.gerrymandering.restgerrymandering.model;
 
+import com.gerrymandering.restgerrymandering.constants.Constants;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -13,7 +15,6 @@ public class State {
     }
 
     @Id
-    @Column(name = "name")
     private String name;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -34,13 +35,8 @@ public class State {
 
     // will need to add constants for some of these temp "magic numbers" for indexing
     public Districting getEnactedDistricting() {
-        if (name.equalsIgnoreCase("az"))
-            return districtings.get(0);
-        if (name.equalsIgnoreCase("mi"))
-            return districtings.get(31);
-        if (name.equalsIgnoreCase("va"))
-            return districtings.get(62);
-        return null;
+        return districtings.get(Constants.getEnactedDistrictingIndex() +
+                Constants.getDistrictingOffsets().get(name.toLowerCase()));
     }
 
 

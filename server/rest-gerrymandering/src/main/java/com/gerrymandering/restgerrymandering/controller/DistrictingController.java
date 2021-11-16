@@ -1,5 +1,6 @@
 package com.gerrymandering.restgerrymandering.controller;
 
+import com.gerrymandering.restgerrymandering.constants.Constants;
 import com.gerrymandering.restgerrymandering.model.Districting;
 import com.gerrymandering.restgerrymandering.model.State;
 import com.gerrymandering.restgerrymandering.services.StateServiceImpl;
@@ -21,7 +22,10 @@ import static org.springframework.http.ResponseEntity.ok;
 //@RequestMapping("/districtings")
 public class DistrictingController {
 
+
     private State currentState;
+    private Constants.PopulationType populationType;
+
     private StateServiceImpl ss;
 
     @Autowired
