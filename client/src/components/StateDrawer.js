@@ -35,14 +35,14 @@ import {
   AccordionIcon,
   Box,
 } from "@chakra-ui/react";
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { DataContext, StateContext } from '../contexts/State';
 import { PieChart } from 'react-minimal-pie-chart';
 
 export default function StateDrawer(props) {
   const { isOpen, onOpen, onClose } = props;
   const [activeState] = useContext(StateContext);
-  const [value, setValue] = useState("1")
+  const [value, setValue] = useState("0")
 
   const data = [
     { title: 'White', value: 2849063, color: '#E38627' },
@@ -61,6 +61,33 @@ export default function StateDrawer(props) {
   };
 
   let processedData = processGeoJSONData(); */
+
+  let population = 100;
+
+  const populationFetch = async (value) => {
+    const response = await fetch('/populationType', {
+      method: "POST",
+      body: JSON.stringify({populationType: value}),
+      headers: {"Content-type": "application/json; charset=UTF-8"}
+    });
+    const body = await response.json();
+    return body;
+  }
+
+  useEffect(() => {
+    // let body = populationFetch;
+    // population = body;
+
+    console.log("hey whaddup");
+    if(value == 1){
+      console.log("hey")
+      population = 20000;
+    }
+    else{
+      population = 123124;
+    }
+  }, [value]);
+
 
   return (
     <Drawer
@@ -105,15 +132,15 @@ export default function StateDrawer(props) {
                       </AccordionButton>
                     </h2>
                     <AccordionPanel pb={4}>
-                      <RadioGroup onChange={setValue} value={value} defaultValue="1">
+                      <RadioGroup onChange={setValue} value={value} defaultValue="0">
                         <Stack>
-                          <Radio size="md" value="1" colorScheme="blue" defaultChecked>
+                          <Radio size="md" value="0" colorScheme="blue" defaultChecked>
                             Total Population
                           </Radio>
-                          <Radio size="md" value="2" colorScheme="blue">
+                          <Radio size="md" value="1" colorScheme="blue">
                             Voting Age Population
                           </Radio>
-                          <Radio size="md" value="3" colorScheme="blue">
+                          <Radio size="md" value="2" colorScheme="blue">
                             Citizen Voting Age Population
                           </Radio>
                         </Stack>
@@ -125,7 +152,7 @@ export default function StateDrawer(props) {
                 <Text fontSize="3xl">Statistics</Text>
                 <br />
                 <Divider />
-                <Text>Population: 7,151,502</Text>
+                <Text> Population: {population} </Text>
                 <Divider />
                 <Text>Precincts: 1,495</Text>
                 <Divider />
