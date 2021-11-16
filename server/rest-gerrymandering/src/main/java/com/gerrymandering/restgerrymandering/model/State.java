@@ -18,14 +18,14 @@ public class State {
     @OneToMany(mappedBy = "districting")
     private List<Districting> districtings;
 
-    @Column
-    private double centerX;
+    private double centerLog;
 
-    @Column
-    private double centerY;
+    private double centerLat;
 
     @Transient
     private int selectedDistrictingId;
+
+    private List<DistrictingSummary> districtingSummaries;
 
     // will need to add constants for some of these temp "magic numbers" for indexing
     public Districting getEnactedDistricting() {

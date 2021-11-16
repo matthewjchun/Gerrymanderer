@@ -21,9 +21,16 @@ public class Districting {
 
     private String countyPath;
 
-    public String getDistrictPath() {
-        return districtPath;
-    }
+
+    public Long getId() { return id; }
+
+    public void setId(Long id) { this.id = id; }
+
+    public State getState() { return state; }
+
+    public void setState(State state) { this.state = state; }
+
+    public String getDistrictPath() { return districtPath; }
 
     public void setDistrictPath(String districtPath) {
         this.districtPath = districtPath;
