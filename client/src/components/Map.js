@@ -46,7 +46,7 @@ const Map = () => {
   /////////////////////// SERVER INTERACTIONS //////////////////////////////
   const handleFetch = async (map) => {
     const response = await fetch(
-      `/districtings/geojson/?state=${activeState.toLowerCase()}`
+      `/stateFull/?state=${activeState.toLowerCase()}`
     );
     const body = await response.json();
     console.log(typeof body);

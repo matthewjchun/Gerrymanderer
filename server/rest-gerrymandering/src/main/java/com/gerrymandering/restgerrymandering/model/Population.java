@@ -21,7 +21,7 @@ public class Population {
 
     private Constants.Demographic demographic;
 
-    private int[] population;
+    //private int[] population;
 
     private String election;
 }

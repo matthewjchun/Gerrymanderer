@@ -7,12 +7,17 @@ import java.util.List;
 @Table(name = "Measures")
 public class Measures {
 
-
+    @Id
+    private long districtingId;
 
     private double populationEquality;
 
+<<<<<<< HEAD
     @OneToMany
     private List<Double> polsbyPopper;
+=======
+    //private List<Double> polsbyPopper;
+>>>>>>> main
 
     private int majorityMinorityCount;
 
@@ -24,13 +29,13 @@ public class Measures {
         this.populationEquality = populationEquality;
     }
 
-    public List<Double> getPolsbyPopper() {
+    /*public List<Double> getPolsbyPopper() {
         return polsbyPopper;
     }
 
     public void setPolsbyPopper(List<Double> polsbyPopper) {
         this.polsbyPopper = polsbyPopper;
-    }
+    }*/
 
     public int getMajorityMinorityCount() {
         return majorityMinorityCount;

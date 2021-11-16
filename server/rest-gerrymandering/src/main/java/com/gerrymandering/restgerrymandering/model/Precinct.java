@@ -12,10 +12,14 @@ public class Precinct {
     @GeneratedValue
     private Long id;
 
-    private Population population;
+    /*private Population population;
 
+<<<<<<< HEAD
     @OneToMany
     private List<Precinct> neighbors;
+=======
+    private List<Precinct> neighbors;*/
+>>>>>>> main
 
     private String path;
 
@@ -23,13 +27,13 @@ public class Precinct {
 
     public void setId(Long id) { this.id = id; }
 
-    public Population getPopulation() { return population; }
+    /*public Population getPopulation() { return population; }
 
     public void setPopulation(Population population) { this.population = population; }
 
     public List<Precinct> getNeighbors() { return neighbors; }
 
-    public void setNeighbors(List<Precinct> neighbors) { this.neighbors = neighbors; }
+    public void setNeighbors(List<Precinct> neighbors) { this.neighbors = neighbors; }*/
 
     public String getPath() { return path; }
 

@@ -15,8 +15,12 @@ public class DistrictingSummary {
 
     private double populationEquality;
 
+<<<<<<< HEAD
     @OneToMany
     private List<Double> polsbyPopper;
+=======
+    //private List<Double> polsbyPopper;
+>>>>>>> main
 
     private int majorityMinorityCount;
 
@@ -35,9 +39,9 @@ public class DistrictingSummary {
         this.populationEquality = populationEquality;
     }
 
-    public List<Double> getPolsbyPopper() { return polsbyPopper; }
+    /*public List<Double> getPolsbyPopper() { return polsbyPopper; }
 
-    public void setPolsbyPopper(List<Double> polsbyPopper) { this.polsbyPopper = polsbyPopper; }
+    public void setPolsbyPopper(List<Double> polsbyPopper) { this.polsbyPopper = polsbyPopper; }*/
 
     public int getMajorityMinorityCount() { return majorityMinorityCount; }
 

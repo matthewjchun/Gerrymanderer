@@ -4,21 +4,20 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "District")
+@Table(name = "Districts")
 public class District {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    private Population population;
+    //private Population population;
 
     private double polsbyPopper;
 
     private boolean majorityMinority;
 
-    @OneToMany
-    private List<Precinct> precincts;
+    //private List<Precinct> precincts;
 
 //    private List<CensusBlock> censusBlocks;
 
@@ -28,9 +27,9 @@ public class District {
 
     public void setId(Long id) { this.id = id; }
 
-    public Population getPopulation() { return population; }
+    //public Population getPopulation() { return population; }
 
-    public void setPopulation(Population population) { this.population = population; }
+    //public void setPopulation(Population population) { this.population = population; }
 
     public double getPolsbyPopper() { return polsbyPopper; }
 
@@ -40,9 +39,9 @@ public class District {
 
     public void setMajorityMinority(boolean majorityMinority) { this.majorityMinority = majorityMinority; }
 
-    public List<Precinct> getPrecincts() { return precincts; }
+    //public List<Precinct> getPrecincts() { return precincts; }
 
-    public void setPrecincts(List<Precinct> precincts) { this.precincts = precincts; }
+    //public void setPrecincts(List<Precinct> precincts) { this.precincts = precincts; }
 
 //    public List<CensusBlock> getCensusBlocks() { return censusBlocks; }
 //

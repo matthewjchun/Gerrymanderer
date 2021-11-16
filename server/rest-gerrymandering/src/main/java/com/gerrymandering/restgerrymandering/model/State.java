@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "State")
+@Table(name = "States")
 public class State {
 
     public State(){
@@ -18,21 +18,22 @@ public class State {
     private String name;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "population_id", referencedColumnName = "id")
+    @JoinColumn(name = "id", referencedColumnName = "id")
     private Population population;
 
-    @OneToMany(mappedBy = "districting")
+    @OneToMany(mappedBy = "state")
     private List<Districting> districtings;
 
+    @Column(name = "CenterLon")
     private double centerLon;
 
+    @Column(name = "CenterLat")
     private double centerLat;
 
     @Transient
     private int selectedDistrictingId;
 
-    @OneToMany
-    private List<DistrictingSummary> districtingSummaries;
+    //private List<DistrictingSummary> districtingSummaries;
 
     // will need to add constants for some of these temp "magic numbers" for indexing
     public Districting getEnactedDistricting() {
