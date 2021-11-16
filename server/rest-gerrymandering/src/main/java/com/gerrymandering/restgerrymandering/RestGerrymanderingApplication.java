@@ -1,18 +1,7 @@
 package com.gerrymandering.restgerrymandering;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.LinkedHashMap;
 
 @SpringBootApplication
 public class RestGerrymanderingApplication /*implements CommandLineRunner*/ {
@@ -41,7 +30,7 @@ public class RestGerrymanderingApplication /*implements CommandLineRunner*/ {
         this.repository.save(new Districting("Arizona"));
         this.repository.save(new Districting("Michigan"));
         this.repository.save(new Districting("Virginia"));
-        /*InputStream is = this.getClass().getClassLoader().getResourceAsStream("data/ARIZONA_Congressional_Districts_2020.json");
+        /*InputStream is = this.getClass().getClassLoader().getResourceAsStream("data/az_Congressional_Districts_2020.json");
         try {
             String jsonString = readFromInputStream(is);
             JSONParser parser = new JSONParser();

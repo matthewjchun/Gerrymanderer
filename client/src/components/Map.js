@@ -22,19 +22,18 @@ const Map = () => {
     [-116.895133, 32.868129], // Southwest coordinates
     [-68.230605, 47.25153], // Northeast coordinates
   ];
-  const dummyMsg = '<strong>District 1</strong><p><br><b>Total Population:</b> 724,868<br><b>Democratic:</b> 50.1%<br><b>Republican:</b> 48.4%<br><br><b>Race:</b> 64.1% White, 23.2% Am. Indian, 2.4% Black, 1.7% Asian<br><b>Ethnicity:</b> 20.4% Hispanic<br><br><b>Unemployment:</b> 14.2%<br><b>Median household income:</b> $43,377';
+  const dummyMsg =
+    '<strong>District 1</strong><p><br><b>Total Population:</b> 724,868<br><b>Democratic:</b> 50.1%<br><b>Republican:</b> 48.4%<br><br><b>Race:</b> 64.1% White, 23.2% Am. Indian, 2.4% Black, 1.7% Asian<br><b>Ethnicity:</b> 20.4% Hispanic<br><br><b>Unemployment:</b> 14.2%<br><b>Median household income:</b> $43,377';
   const [activeState, setActiveState] = useContext(StateContext);
   const { isOpen, onOpen, onClose } = useDisclosure(); // open close state drawer
 
-/////////////////////// MARKER METHODS //////////////////////////////
-  const createMarker = async(longitude, latitude, msg) => {
+  /////////////////////// MARKER METHODS //////////////////////////////
+  const createMarker = async (longitude, latitude, msg) => {
     return new mapboxgl.Marker({ color: '#cfaf5b' })
       .setLngLat([longitude, latitude])
-      .setPopup(
-        new mapboxgl.Popup().setHTML(msg)
-      )
+      .setPopup(new mapboxgl.Popup().setHTML(msg))
       .addTo(map.current);
-  }
+  };
   const hide = () => {
     let markers = document.getElementsByClassName(
       'mapboxgl-marker mapboxgl-marker-anchor-center'
@@ -44,24 +43,25 @@ const Map = () => {
     }
   };
 
-/////////////////////// SERVER INTERACTIONS //////////////////////////////
+  /////////////////////// SERVER INTERACTIONS //////////////////////////////
   const handleFetch = async (map) => {
     const response = await fetch(
       `/districtings/geojson/?state=${activeState.toLowerCase()}`
     );
     const body = await response.json();
+    console.log(typeof body);
+    console.log(body);
     return body;
   };
 
-
   const checkSrc = async (name, data) => {
-    if(!(map.current.getSource(name))){
+    if (!map.current.getSource(name)) {
       map.current.addSource(name, {
         type: 'geojson',
         data: data,
       });
     }
-  }
+  };
 
   /////////////////////// VISIBILITY //////////////////////////////
   const addLayer = async (id, src, paint) => {
@@ -77,26 +77,34 @@ const Map = () => {
         visibility: 'visible',
       },
     });
-  }
+  };
 
   const visibToggle = async (abbrev, toggle) => {
-    if(toggle == 'y'){
+    if (toggle == 'y') {
       let visibility = map.current.getLayoutProperty(
         abbrev + 'prec-boundary',
         'visibility'
       );
       if (visibility === 'none') {
-        map.current.setLayoutProperty(abbrev + 'prec-boundary', 'visibility', 'visible');
+        map.current.setLayoutProperty(
+          abbrev + 'prec-boundary',
+          'visibility',
+          'visible'
+        );
       }
-  
+
       visibility = map.current.getLayoutProperty(
         abbrev + 'cd_lines',
         'visibility'
       );
       if (visibility === 'none') {
-        map.current.setLayoutProperty(abbrev + 'cd_lines', 'visibility', 'visible');
+        map.current.setLayoutProperty(
+          abbrev + 'cd_lines',
+          'visibility',
+          'visible'
+        );
       }
-  
+
       visibility = map.current.getLayoutProperty(
         abbrev + 'county-boundary',
         'visibility'
@@ -108,45 +116,59 @@ const Map = () => {
           'visible'
         );
       }
-    }
-    else{
+    } else {
       let visibility = map.current.getLayoutProperty(
         abbrev + 'prec-boundary',
         'visibility'
       );
       if (visibility === 'visible') {
-        map.current.setLayoutProperty(abbrev + 'prec-boundary', 'visibility', 'none');
+        map.current.setLayoutProperty(
+          abbrev + 'prec-boundary',
+          'visibility',
+          'none'
+        );
       }
-      visibility = map.current.getLayoutProperty(abbrev + 'cd_lines', 'visibility');
+      visibility = map.current.getLayoutProperty(
+        abbrev + 'cd_lines',
+        'visibility'
+      );
       if (visibility === 'visible') {
-        map.current.setLayoutProperty(abbrev + 'cd_lines', 'visibility', 'none');
+        map.current.setLayoutProperty(
+          abbrev + 'cd_lines',
+          'visibility',
+          'none'
+        );
       }
       if (visibility === 'visible') {
         hide();
       }
       if (map.current.getLayer(abbrev + 'county-boundary') !== 'undefined') {
-        map.current.setLayoutProperty(abbrev + 'county-boundary', 'visibility', 'none');
+        map.current.setLayoutProperty(
+          abbrev + 'county-boundary',
+          'visibility',
+          'none'
+        );
       }
     }
-  }
+  };
 
-/////////////////////// ZOOM INTO STATES //////////////////////////////
+  /////////////////////// ZOOM INTO STATES //////////////////////////////
   const zoomIn = async (map, state) => {
-    if(state == "Arizona"){
+    if (state == 'Arizona') {
       map.current.flyTo({
         center: [-112.0693, 34.2537],
         essential: true,
         zoom: 6.2,
       });
       onOpen();
-  
+
       const azcdData = await handleFetch();
-  
+
       checkSrc('azcd', azcdData);
       addLayer('azprec-boundary', 'azprecincts', '#e6d1b5');
       addLayer('azcounty-boundary', 'azcounty', '#940f00');
-      addLayer('azcd_lines', 'azcd', '#000000')
-  
+      addLayer('azcd_lines', 'azcd', '#000000');
+
       // AZ CONGRESSIONAL DISTRICT MARKERS
       const azd1 = createMarker(-110.7258455, 34.9691324, dummyMsg);
       const azd2 = createMarker(-109.9566824, 31.9274371, dummyMsg);
@@ -154,14 +176,12 @@ const Map = () => {
       const azd4 = createMarker(-113.2180629, 34.5988732, dummyMsg);
       const azd5 = createMarker(-111.7146593, 33.3377517, dummyMsg);
       const azd6 = createMarker(-111.890334, 33.6672906, dummyMsg);
-      const azd7 = createMarker(-112.1190594, 33.4286611, dummyMsg); 
+      const azd7 = createMarker(-112.1190594, 33.4286611, dummyMsg);
       const azd8 = createMarker(-112.3000605, 33.6925203, dummyMsg);
       const azd9 = createMarker(-111.9492214, 33.4062567, dummyMsg);
-      
-      visibToggle('az', 'y');
-    }
 
-    else if(state == "Michigan"){
+      visibToggle('az', 'y');
+    } else if (state == 'Michigan') {
       map.current.flyTo({
         center: [-84.3271772, 44.2330917],
         essential: true,
@@ -171,16 +191,16 @@ const Map = () => {
 
       const micdData = await handleFetch();
 
-      checkSrc('micd', micdData)
+      checkSrc('micd', micdData);
       addLayer('miprec-boundary', 'miprecincts', '#e6d1b5');
       addLayer('micounty-boundary', 'micounty', '#940f00');
       addLayer('micd_lines', 'micd', '#000000');
-      
+
       // MI CONGRESSIONAL DISTRICTS MARKERS
       const mid1 = createMarker(-86.4367294, 46.1633289, dummyMsg);
       const mid2 = createMarker(-86.3219007, 43.3968946, dummyMsg);
       const mid3 = createMarker(-85.2426928, 42.7156275, dummyMsg);
-      const mid4 = createMarker(-85.2426928, 42.7156275, dummyMsg); 
+      const mid4 = createMarker(-85.2426928, 42.7156275, dummyMsg);
       const mid5 = createMarker(-83.4755262, 43.9135745, dummyMsg);
       const mid6 = createMarker(-86.1570905, 42.1675303, dummyMsg);
       const mid7 = createMarker(-84.3029212, 42.0958618, dummyMsg);
@@ -194,8 +214,7 @@ const Map = () => {
       const mid15 = createMarker(-86.3928685, 42.6363171, dummyMsg);
 
       visibToggle('mi', 'y');
-    }
-    else{
+    } else {
       setActiveState('Virginia');
       map.current.flyTo({
         center: [-77.4525481898, 37.672247311],
@@ -203,14 +222,14 @@ const Map = () => {
         zoom: 7,
       });
       onOpen();
-  
+
       const vacdData = await handleFetch();
-  
-      checkSrc('vacd', vacdData)
+
+      checkSrc('vacd', vacdData);
       addLayer('vaprec-boundary', 'vaprecincts', '#e6d1b5');
       addLayer('vacounty-boundary', 'vacounty', '#940f00');
-      addLayer('vacd_lines', 'vacd', '#000000')
-  
+      addLayer('vacd_lines', 'vacd', '#000000');
+
       // VA CONGRESSIONAL DISTRICTS MARKERS
       const va1 = createMarker(-76.9800976, 37.8807201, dummyMsg);
       const va2 = createMarker(-75.9436791, 37.3936967, dummyMsg);
@@ -223,7 +242,7 @@ const Map = () => {
       const va9 = createMarker(-81.322201, 37.0008631, dummyMsg);
       const va10 = createMarker(-77.8358695, 39.076162, dummyMsg);
       const va11 = createMarker(-77.294837, 38.78906, dummyMsg);
-      
+
       visibToggle('va', 'y');
     }
   };
@@ -244,21 +263,21 @@ const Map = () => {
     visibToggle('va', 'n');
   };
 
-/////////////////////// VISUALIZE MAP METHODS //////////////////////////////
-  const addPolygon = async(id,data) => {
+  /////////////////////// VISUALIZE MAP METHODS //////////////////////////////
+  const addPolygon = async (id, data) => {
     map.current.addLayer({
       id: id,
       type: 'fill',
-      source: data, 
+      source: data,
       layout: {},
       paint: {
-        'fill-color': '#523e3c', 
+        'fill-color': '#523e3c',
         'fill-opacity': 0.5,
       },
     });
   };
 
-  const addOutline = async(id,data) => {
+  const addOutline = async (id, data) => {
     map.current.addLayer({
       id: id,
       type: 'line',
@@ -271,7 +290,7 @@ const Map = () => {
     });
   };
 
-/////////////////////// INITIALIZE MAP //////////////////////////////
+  /////////////////////// INITIALIZE MAP //////////////////////////////
   useEffect(() => {
     if (map.current) return;
     map.current = new mapboxgl.Map({
@@ -376,13 +395,12 @@ const Map = () => {
     });
   });
 
-/////////////////////// ACTIVE STATE CHANGES //////////////////////////////
+  /////////////////////// ACTIVE STATE CHANGES //////////////////////////////
   useEffect(() => {
     if (!map.current) return;
     if (activeState != 'Celtics') {
       zoomIn(map, activeState);
-    } 
-    else if (activeState == 'Celtics') {
+    } else if (activeState == 'Celtics') {
       if (lng != -100.445882 && lat != 37.7837304) {
         zoomOut(map);
         hide();
@@ -392,7 +410,7 @@ const Map = () => {
 
   return (
     <>
-      <Legend current={map.current}/>
+      <Legend current={map.current} />
       <Flex className='content' direction='column' justify='center'>
         <div ref={mapContainer} className='mapContainer' />
         <StateDrawer isOpen={isOpen} onClose={onClose} active={activeState} />
