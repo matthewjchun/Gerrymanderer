@@ -15,6 +15,21 @@ public class Districting {
     @JoinColumn(name = "StateName")
     private State state;
 
+//    private List<Districts> districts;
+
+    @JoinColumn(name = "District")
+    private Measures measures;
+
+    private double populationEqualityThreshold;
+
+    private double polsbyPopperThreshold;
+
+    private int majorityMinorityThreshold;
+
+    private int splitPrecincts;
+
+    private List<DistrictSummary> districtSummaries;
+
     private String districtPath;
 
     private String precinctPath;
@@ -29,6 +44,8 @@ public class Districting {
     public State getState() { return state; }
 
     public void setState(State state) { this.state = state; }
+
+
 
     public String getDistrictPath() { return districtPath; }
 

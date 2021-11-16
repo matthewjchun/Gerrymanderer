@@ -11,7 +11,6 @@ public class DistrictingSummary {
     @GeneratedValue
     private Long id;
 
-
     private String stateName;
 
     private double populationEquality;

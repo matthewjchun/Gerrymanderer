@@ -7,6 +7,8 @@ import java.util.List;
 @Table(name = "Measures")
 public class Measures {
 
+
+
     private double populationEquality;
 
     private List<Double> polsbyPopper;
