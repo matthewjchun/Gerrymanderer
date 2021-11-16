@@ -75,7 +75,7 @@ public class DistrictingController {
     }
 
     @PostMapping("/populationType")
-    public void setPopulationType(@RequestBody String type) {
-        populationType = Constants.PopulationType.valueOf(type.toUpperCase());
+    public void setPopulationType(@RequestBody JsonObject populationTypeJson) {
+        populationType = Constants.PopulationType.valueOf(populationTypeJson.get("populationType").getAsString().toUpperCase());
     }
 }
