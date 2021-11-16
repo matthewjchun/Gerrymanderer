@@ -9,6 +9,11 @@ import java.util.List;
 @Table(name = "State")
 public class State {
 
+    public State(){
+        name = "Arizona";
+
+    }
+
     @Id
     private String name;
 
@@ -26,7 +31,14 @@ public class State {
     @Transient
     private int selectedDistrictingId;
 
+    private List<DistrictingSummary> districtingSummaries;
+
+    // will need to add constants for some of these temp "magic numbers" for indexing
     public Districting getEnactedDistricting() {
-        return districtings.get(Constants.getEnactedDistrictingIndex() + Constants.getDistrictingOffsets().get(name.toLowerCase()));
+        return districtings.get(Constants.getEnactedDistrictingIndex() +
+                Constants.getDistrictingOffsets().get(name.toLowerCase()));
     }
+
+
+
 }
