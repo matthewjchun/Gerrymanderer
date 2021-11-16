@@ -14,12 +14,7 @@ public class Precinct {
 
     /*private Population population;
 
-<<<<<<< HEAD
-    @OneToMany
-    private List<Precinct> neighbors;
-=======
     private List<Precinct> neighbors;*/
->>>>>>> main
 
     private String path;
 
