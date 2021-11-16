@@ -15,6 +15,7 @@ public class DistrictingSummary {
 
     private double populationEquality;
 
+    @OneToMany
     private List<Double> polsbyPopper;
 
     private int majorityMinorityCount;

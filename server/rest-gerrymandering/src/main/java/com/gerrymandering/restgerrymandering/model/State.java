@@ -31,6 +31,7 @@ public class State {
     @Transient
     private int selectedDistrictingId;
 
+    @OneToMany
     private List<DistrictingSummary> districtingSummaries;
 
     // will need to add constants for some of these temp "magic numbers" for indexing

@@ -14,6 +14,7 @@ public class Precinct {
 
     private Population population;
 
+    @OneToMany
     private List<Precinct> neighbors;
 
     private String path;

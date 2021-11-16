@@ -11,6 +11,7 @@ public class Measures {
 
     private double populationEquality;
 
+    @OneToMany
     private List<Double> polsbyPopper;
 
     private int majorityMinorityCount;

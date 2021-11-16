@@ -15,7 +15,8 @@ public class Districting {
     @JoinColumn(name = "StateName")
     private State state;
 
-//    private List<Districts> districts;
+    @OneToMany
+    private List<District> districts;
 
     @JoinColumn(name = "District")
     private Measures measures;
@@ -28,6 +29,7 @@ public class Districting {
 
     private int splitPrecincts;
 
+    @OneToMany
     private List<DistrictSummary> districtSummaries;
 
     private String districtPath;

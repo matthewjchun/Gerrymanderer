@@ -17,6 +17,7 @@ public class District {
 
     private boolean majorityMinority;
 
+    @OneToMany
     private List<Precinct> precincts;
 
 //    private List<CensusBlock> censusBlocks;
