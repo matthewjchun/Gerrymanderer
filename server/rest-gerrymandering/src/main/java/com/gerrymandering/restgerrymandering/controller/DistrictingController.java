@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,7 +74,8 @@ public class DistrictingController {
         return ResponseEntity.ok(stateFull);
     }
 
-    /*@PostMapping("/populationType")
-    public ResponseEntity*/
-
+    @PostMapping("/populationType")
+    public void setPopulationType(@RequestBody String type) {
+        populationType = Constants.PopulationType.valueOf(type.toUpperCase());
+    }
 }
