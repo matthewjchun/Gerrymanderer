@@ -1,7 +1,6 @@
 package com.gerrymandering.restgerrymandering.model;
 
 import javax.persistence.*;
-import Constants;
 
 @Entity
 public class Population {
@@ -33,7 +32,7 @@ public class Population {
         REPUBLICAN,
     };
 
-    private int[] population;
+    //private int[] population;
 
     private String election;
 }
