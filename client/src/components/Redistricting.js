@@ -12,7 +12,7 @@ import {
 
 export default function Redistricting(props) {
   const { number, thumbnail, bestMeasure, measures } = props;
-  const { popEquality, compactness, majorityMinority, enactedDeviation } =
+  const { popEquality, compactness, majorityMinority } =
     measures;
 
   const handleMouseEnter = (e) => {
@@ -58,7 +58,6 @@ export default function Redistricting(props) {
             <Text>Population Equality: {popEquality}</Text>
             <Text>Compactness: {compactness}</Text>
             <Text>Majority-Minority: {majorityMinority}</Text>
-            <Text>Deviation from Enacted Districting: {enactedDeviation}</Text>
           </VStack>
         </PopoverBody>
       </PopoverContent>
