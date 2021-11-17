@@ -19,7 +19,7 @@ public class District {
 
     //private List<Precinct> precincts;
 
-//    private List<CensusBlock> censusBlocks;
+    //private List<CensusBlock> censusBlocks;
 
     private String path;
 

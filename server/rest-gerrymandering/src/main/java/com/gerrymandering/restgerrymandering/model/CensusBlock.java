@@ -17,7 +17,7 @@ public class CensusBlock {
 
     private String boundariesPath;
 
-    @OneToMany
+//    @OneToMany
     private List<CensusBlock> neighbors;
 
     private Boolean isBorderCensusBlock;

@@ -43,7 +43,7 @@ export default function StateDrawer(props) {
   const { isOpen, onOpen, onClose } = props;
   const [activeState] = useContext(StateContext);
   const [value, setValue] = useState("0");
-  const [populationType, setPopulationType] = useState();
+  // const [populationType, setPopulationType] = useState();
 
   const data = [
     { title: 'White', value: 2849063, color: '#E38627' },
@@ -63,6 +63,8 @@ export default function StateDrawer(props) {
 
   let processedData = processGeoJSONData(); */
 
+  let populationType = 10000;
+
   const populationFetch = async (value) => {
     const response = await fetch('/populationType', {
       method: "POST",
@@ -74,18 +76,18 @@ export default function StateDrawer(props) {
   }
 
   useEffect(() => {
-    let body = populationFetch;
-    populationType = body;
+    // let body = populationFetch;
+    // populationType = body;
 
-    // console.log("hey whaddup");
-    // if(value == 1){
-    //   console.log("20000")
-    //   population = 20000;
-    // }
-    // else{
-    //   console.log("20000")
-    //   population = 123124;
-    // }
+    console.log("hey whaddup");
+    if(value == 1){
+      console.log("20000")
+      populationType = 20000;
+    }
+    else{
+      console.log("30000")
+      populationType = 123124;
+    }
   }, [value]);
 
 
