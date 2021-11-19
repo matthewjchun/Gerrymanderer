@@ -12,7 +12,7 @@ public class Measures {
 
     private double populationEquality;
 
-    //private List<Double> polsbyPopper;
+    private double avgPolsbyPopper;
 
     private int majorityMinorityCount;
 
@@ -24,13 +24,13 @@ public class Measures {
         this.populationEquality = populationEquality;
     }
 
-    /*public List<Double> getPolsbyPopper() {
-        return polsbyPopper;
+    public double getAvgPolsbyPopper() {
+        return avgPolsbyPopper;
     }
 
-    public void setPolsbyPopper(List<Double> polsbyPopper) {
-        this.polsbyPopper = polsbyPopper;
-    }*/
+    public void setAvgPolsbyPopper(double polsbyPopper) {
+        this.avgPolsbyPopper = polsbyPopper;
+    }
 
     public int getMajorityMinorityCount() {
         return majorityMinorityCount;

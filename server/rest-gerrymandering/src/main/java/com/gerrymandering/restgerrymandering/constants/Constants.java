@@ -24,6 +24,16 @@ public class Constants {
         CVAP
     }
 
+    public enum Demographic {
+        AFRICAN,
+        ASIAN,
+        HISPANIC,
+        WHITE,
+        NATIVE,
+        DEMOCRATIC,
+        REPUBLICAN,
+    };
+
     private static final int enactedDistrictingIndex = 0;
 
     public static Map<String, Integer> getStateMapper() {
