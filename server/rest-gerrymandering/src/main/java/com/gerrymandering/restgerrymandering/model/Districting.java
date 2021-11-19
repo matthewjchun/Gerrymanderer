@@ -18,7 +18,6 @@ public class Districting {
     @OneToMany
     private List<District> districts;
 
-
     @JoinColumn(name = "DistrictingId")
     //private Measures measures;
 
