@@ -7,11 +7,6 @@ import javax.persistence.*;
 @Entity
 public class Population {
 
-//    public Population(){
-//        populationType;
-//
-//    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -21,7 +16,23 @@ public class Population {
 
     private Constants.Demographic demographic;
 
-    //private int[] population;
+    private int[] population;
 
     private String election;
+
+    // getters n setters
+
+
+
+    //
+
+    public int getPopulationValue() {
+        int sum = 0;
+        for(int val : population){
+            sum += val;
+        }
+        return sum;
+    }
+
+
 }

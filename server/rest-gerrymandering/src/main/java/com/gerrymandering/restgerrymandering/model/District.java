@@ -11,7 +11,7 @@ public class District {
     @GeneratedValue
     private Long id;
 
-    //private Population population;
+    private Population population;
 
     private double polsbyPopper;
 
@@ -27,9 +27,9 @@ public class District {
 
     public void setId(Long id) { this.id = id; }
 
-    //public Population getPopulation() { return population; }
+    public Population getPopulation() { return population; }
 
-    //public void setPopulation(Population population) { this.population = population; }
+    public void setPopulation(Population population) { this.population = population; }
 
     public double getPolsbyPopper() { return polsbyPopper; }
 
