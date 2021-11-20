@@ -1,6 +1,7 @@
 package com.gerrymandering.restgerrymandering.model;
 
 import javax.persistence.*;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -9,27 +10,17 @@ public class Districting {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "StateName")
-    private State state;
+    @OneToMany
+    @JoinColumn(name = "districtingId", referencedColumnName = "id")
+    private List<District> districts;
 
-//    private List<Districts> districts;
+    private double populationEquality;
 
+    private double avgPolsbyPopper;
 
-    @JoinColumn(name = "DistrictingId")
-    //private Measures measures;
-
-    private double populationEqualityThreshold;
-
-    private double polsbyPopperThreshold;
-
-    private int majorityMinorityThreshold;
-
-    private int splitPrecincts;
-
-    //private List<DistrictSummary> districtSummaries;
+    private int majorityMinorityCount;
 
     private String districtPath;
 
@@ -37,36 +28,22 @@ public class Districting {
 
     private String countyPath;
 
+    @Transient
+    private double populationEqualityThreshold;
 
-    public Long getId() { return id; }
+    @Transient
+    private double polsbyPopperThreshold;
 
-    public void setId(Long id) { this.id = id; }
+    @Transient
+    private int majorityMinorityThreshold;
 
-    public State getState() { return state; }
+    @Transient
+    private int splitPrecincts;
 
-    public void setState(State state) { this.state = state; }
+    @Transient
+    private List<DistrictingSummary> districtingSummaries;
 
-
-
-    public String getDistrictPath() { return districtPath; }
-
-    public void setDistrictPath(String districtPath) {
-        this.districtPath = districtPath;
-    }
-
-    public String getPrecinctPath() {
-        return precinctPath;
-    }
-
-    public void setPrecinctPath(String precinctPath) {
-        this.precinctPath = precinctPath;
-    }
-
-    public String getCountyPath() {
-        return countyPath;
-    }
-
-    public void setCountyPath(String countyPath) {
-        this.countyPath = countyPath;
+    public void sortDistricts() {
+        //Collections.sort(districts);
     }
 }

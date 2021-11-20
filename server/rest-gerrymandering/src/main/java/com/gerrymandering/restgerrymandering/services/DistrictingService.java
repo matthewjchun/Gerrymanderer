@@ -4,5 +4,5 @@ import com.gerrymandering.restgerrymandering.model.Districting;
 
 public interface DistrictingService {
 
-    public Districting getDistrictingById(int id);
+    public Districting getDistrictingById(long id);
 }

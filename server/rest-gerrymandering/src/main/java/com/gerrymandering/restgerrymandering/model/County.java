@@ -2,30 +2,27 @@ package com.gerrymandering.restgerrymandering.model;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "County")
+@Table(name = "Counties")
 public class County {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    private String boundariesPath;
-
-    //private Population population;
-
     private String path;
 
-    public String getBoundariesPath() { return this.boundariesPath; }
+    @OneToMany
+    @JoinColumn(name = "countyId", referencedColumnName = "id")
+    private List<Population> populations;
 
-    public void setBoundariesPath(String newBoundariesPath) { this.boundariesPath = newBoundariesPath; }
+    @OneToMany
+    @JoinColumn(name = "countyId", referencedColumnName = "id")
+    private List<Election> elections;
 
-    //public Population getPopulation() { return this.population; }
-
-    //public void setPopulation(Population newPop) { this.population = newPop; }
-
-    public String getPath() { return this.path; }
-
-    public void setPath(String newPath) { this.path = newPath; }
+    @OneToMany
+    @JoinColumn(name = "countyId", referencedColumnName = "id")
+    private Set<Precinct> precincts;
 }

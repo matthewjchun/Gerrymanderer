@@ -1,38 +1,33 @@
 package com.gerrymandering.restgerrymandering.model;
 
+import com.gerrymandering.restgerrymandering.constants.Constants;
+
 import javax.persistence.*;
 
 @Entity
 public class Population {
 
-    public Population(){
-
-
-
-    }
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long id;
+    @GeneratedValue
+    private long id;
 
-    private enum type {
-        TOTAL,
-        VAP,
-        CVAP,
-    };
+    private int total;
 
-    private enum demographic {
-        AFRICAN,
-        ASIAN,
-        HISPANIC,
-        WHITE,
-        NATIVE,
-        DEMOCRATIC,
-        REPUBLICAN,
-    };
+    private int africanAmerican;
 
-    //private int[] population;
+    private int white;
 
-    private String election;
+    private int asian;
+
+    private int hispanic;
+
+    private int nativeAmerican;
+
+    private int pacificIslander;
+
+    @Enumerated(EnumType.ORDINAL)
+    private Constants.PopulationType populationType;
+
+    @Enumerated(EnumType.STRING)
+    private Constants.Election election;
 }
