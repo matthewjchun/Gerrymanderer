@@ -25,11 +25,11 @@ public class Constants {
     }
 
     public enum Demographic {
-        AFRICANAFRICAN,
+        AFRICAN,
         ASIAN,
         HISPANIC,
         WHITE,
-        NATIVEAMERICAN,
+        NATIVE,
         DEMOCRATIC,
         REPUBLICAN
     }

@@ -13,7 +13,7 @@ public class Population {
 
     private int total;
 
-    private int africanAmerican;
+    private int african;
 
     private int white;
 
@@ -21,13 +21,11 @@ public class Population {
 
     private int hispanic;
 
+    @Column(name = "native")
     private int nativeAmerican;
 
     private int pacificIslander;
 
     @Enumerated(EnumType.ORDINAL)
     private Constants.PopulationType populationType;
-
-    @Enumerated(EnumType.STRING)
-    private Constants.Election election;
 }
