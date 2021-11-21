@@ -21,6 +21,21 @@ public class Population {
     private String election;
 
     // getters n setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int[] getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(int[] population) {
+        this.population = population;
+    }
 
 
 

@@ -54,11 +54,11 @@ public class CensusBlock {
         this.neighbors = neighbors;
     }
 
-    public Boolean getBorderCensusBlock() {
+    public Boolean isBorderCensusBlock() {
         return isBorderCensusBlock;
     }
 
-    public void setBorderCensusBlock(Boolean borderCensusBlock) {
+    public void setIsBorderCensusBlock(Boolean borderCensusBlock) {
         isBorderCensusBlock = borderCensusBlock;
     }
 
@@ -69,4 +69,13 @@ public class CensusBlock {
     public void setPath(String path) {
         this.path = path;
     }
+
+    public CensusBlock clone() {
+        return null;
+    }
+
+    public List<CensusBlock> getNeighborCBInDiffDistrict() {
+        return null;
+    }
+
 }
