@@ -13,11 +13,6 @@ public class DistrictingServiceImpl implements DistrictingService{
     @PersistenceContext
     private EntityManager em;
 
-    @Autowired
-    public DistrictingServiceImpl(EntityManager em) {
-        this.em = em;
-    }
-
     @Override
     public Districting getDistrictingById(long id) {
         return em.find(Districting.class, id);
