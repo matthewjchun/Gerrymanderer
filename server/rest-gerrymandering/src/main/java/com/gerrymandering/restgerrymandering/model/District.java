@@ -52,8 +52,27 @@ public class District {
 
     public void setPath(String path) { this.path = path;}
 
+    public District(Long id, Population population, double polsbyPopper, boolean majorityMinority, List<Precinct> precincts,
+                    List<CensusBlock> censusBlocks, String path){
+        this.id = id;
+        this.population = population;
+        this.polsbyPopper = polsbyPopper;
+        this.majorityMinority = majorityMinority;
+        this.precincts = precincts;
+        this.censusBlocks = censusBlocks;
+        this.path = path;
+    }
+
     public District clone() {
-        return null;
+        Long id = this.getId();
+        Population pop = this.getPopulation();
+        double polsby = this.getPolsbyPopper();
+        boolean majMin = this.getMajorityMinority();
+        List<Precinct> precs = this.getPrecincts();
+        List<CensusBlock> blocks = this.getCensusBlocks();
+        String path = this.getPath();
+
+        return new District(id, pop, polsby, majMin, precs, blocks, path);
     }
 
     public CensusBlock getRandomBorderCB(){
@@ -88,18 +107,20 @@ public class District {
     }
 
     public void calculatePopulation() {
+        // STUB
         this.getPopulation().getPopulationValue();
     }
 
     public void calculatePolsbyPopper() {
-
+        // STUB
     }
 
     public void calculateMajorityMinorty() {
-
+        // STUB
     }
 
     public int countSplitPrecincts() {
+        // STUB
         return 0;
     }
 

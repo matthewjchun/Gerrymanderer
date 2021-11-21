@@ -1,6 +1,7 @@
 package com.gerrymandering.restgerrymandering.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -75,7 +76,15 @@ public class CensusBlock {
     }
 
     public List<CensusBlock> getNeighborCBInDiffDistrict() {
-        return null;
+        // check through list of neighbors, check if diff district
+        District original = this.getDistrict();
+        List<CensusBlock> neighborCBInDiffDistrict = new ArrayList<CensusBlock>();
+        for (CensusBlock neigh : neighbors){
+            if (neigh.getDistrict() != original){
+                neighborCBInDiffDistrict.add(neigh);
+            }
+        }
+        return neighborCBInDiffDistrict;
     }
 
 }
