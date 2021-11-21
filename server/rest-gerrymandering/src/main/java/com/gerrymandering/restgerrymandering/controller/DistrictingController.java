@@ -59,8 +59,7 @@ public class DistrictingController {
     public ResponseEntity<JsonObject> getStateOutlines() {
         try (FileReader reader = new FileReader("/src/main/resources/data/states/state-outlines.json")) {
             return ResponseEntity.ok(JsonParser.parseReader(reader).getAsJsonObject());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Error");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -81,12 +80,11 @@ public class DistrictingController {
         String countyPath = enactedDistricting.getCountyPath();
         String[] paths = {districtPath, precinctPath, countyPath};
 
-        for (String path: paths) {
+        for (String path : paths) {
             try (FileReader reader = new FileReader(path)) {
                 JsonObject geoJson = JsonParser.parseReader(reader).getAsJsonObject();
                 stateFull.add(path, geoJson);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Error");
             }
         }

@@ -23,6 +23,10 @@ public class Districting {
     private String precinctPath;
 
     private String countyPath;
+  
+    @OneToMany
+    @JoinColumn(name = "districtingId", referencedColumnName = "id")
+    private List<District> districts;
 
     @OneToMany
     @JoinColumn(name = "districtingId", referencedColumnName = "id")
