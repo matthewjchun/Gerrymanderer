@@ -12,10 +12,6 @@ public class Districting {
     @GeneratedValue
     private long id;
 
-    @OneToMany
-    @JoinColumn(name = "districtingId", referencedColumnName = "id")
-    private List<District> districts;
-
     private double populationEquality;
 
     private double avgPolsbyPopper;
@@ -27,6 +23,10 @@ public class Districting {
     private String precinctPath;
 
     private String countyPath;
+  
+    @OneToMany
+    @JoinColumn(name = "districtingId", referencedColumnName = "id")
+    private List<District> districts;
 
     @Transient
     private double populationEqualityThreshold;

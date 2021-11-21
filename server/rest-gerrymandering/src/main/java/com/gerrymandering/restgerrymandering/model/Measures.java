@@ -20,3 +20,4 @@ public class Measures {
 
     private int majorityMinorityCount;
 }*/
+
