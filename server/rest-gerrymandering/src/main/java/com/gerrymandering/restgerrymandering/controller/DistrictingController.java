@@ -10,15 +10,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.FileReader;
-
-import static org.springframework.http.ResponseEntity.ok;
 
 //@CrossOrigin("http://localhost:3000")
 @RestController
@@ -42,12 +39,22 @@ public class DistrictingController {
 
     @GetMapping("/stateOutlines")
     public ResponseEntity<JsonObject> getStateOutlines() {
+        JsonObject outlines = new JsonObject();
         try (FileReader reader = new FileReader(Constants.getResourcePath() + "states/state-outlines.json")) {
-            return ResponseEntity.ok(JsonParser.parseReader(reader).getAsJsonObject());
+            outlines.add("stateOutlines", JsonParser.parseReader(reader).getAsJsonObject());
         } catch (Exception e) {
             System.out.println("Error");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        for (String state: Constants.getStates()) {
+            try (FileReader reader = new FileReader(Constants.getResourcePath() + "states/" + state + ".json")) {
+                outlines.add(state, JsonParser.parseReader(reader).getAsJsonObject());
+            } catch (Exception e) {
+                System.out.println("Error");
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+        return ResponseEntity.ok(outlines);
     }
 
     @GetMapping("/stateFull")
