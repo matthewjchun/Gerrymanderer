@@ -3,15 +3,11 @@ package com.gerrymandering.restgerrymandering.model;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
-@Table(name = "DistrictingSummary")
 public class DistrictingSummary {
 
-    @Id
-    @GeneratedValue
     private Long id;
 
-    private String stateName;
+    private State state;
 
     private double populationEquality;
 
@@ -24,9 +20,13 @@ public class DistrictingSummary {
 
     public void setId(Long id) { this.id = id; }
 
-    public String getStateName() { return stateName; }
+    public State getState() {
+        return state;
+    }
 
-    public void setStateName(String stateName) { this.stateName = stateName; }
+    public void setState(State state) {
+        this.state = state;
+    }
 
     public double getPopulationEquality() { return populationEquality; }
 

@@ -2,13 +2,9 @@ package com.gerrymandering.restgerrymandering.model;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "DistrictSummary")
 public class DistrictSummary {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+    private long districtId;
 
     //private Population population;
 
@@ -18,9 +14,9 @@ public class DistrictSummary {
 
     private String election;
 
-    public Long getId() { return id; }
+    public long getId() { return districtId; }
 
-    public void setId(Long id) { this.id = id; }
+    public void setId(long districtId) { this.districtId = districtId; }
 
     /*public Population getPopulation() { return population; }
 

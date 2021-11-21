@@ -3,7 +3,7 @@ package com.gerrymandering.restgerrymandering.controller;
 import com.gerrymandering.restgerrymandering.constants.Constants;
 import com.gerrymandering.restgerrymandering.model.Districting;
 import com.gerrymandering.restgerrymandering.model.State;
-import com.gerrymandering.restgerrymandering.services.StateServiceImpl;
+import com.gerrymandering.restgerrymandering.services.*;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -14,25 +14,46 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.FileReader;
 
 import static org.springframework.http.ResponseEntity.ok;
 
 //@CrossOrigin("http://localhost:3000")
 @RestController
-//@RequestMapping("/districtings")
+@RequestMapping("/")
 public class DistrictingController {
 
 
     private State currentState;
     private Constants.PopulationType populationType;
 
-    private StateServiceImpl ss;
+    private StateService ss;
+    private DistrictingService dgs;
+    private DistrictService ds;
+    private PrecinctService ps;
+
+    /*private StateServiceImpl ss;
+    private DistrictingServiceImpl dgs;
+    private DistrictServiceImpl ds;
+    private PrecinctServiceImpl ps;*/
 
     @Autowired
-    public DistrictingController(StateServiceImpl ss) {
+    public DistrictingController(StateService ss, DistrictingService dgs, DistrictService ds, PrecinctService ps) {
         this.ss = ss;
+        this.dgs = dgs;
+        this.ds = ds;
+        this.ps = ps;
     }
+
+    /*@Autowired
+    public DistrictingController(StateServiceImpl ss, DistrictingServiceImpl dgs, DistrictServiceImpl ds, PrecinctServiceImpl ps) {
+        this.ss = ss;
+        this.dgs = dgs;
+        this.ds = ds;
+        this.ps = ps;
+    }*/
 
     @GetMapping("/stateOutlines")
     public ResponseEntity<JsonObject> getStateOutlines() {
@@ -45,12 +66,15 @@ public class DistrictingController {
     }
 
     @GetMapping("/stateFull")
-    public ResponseEntity<JsonObject> getStateFull(@RequestParam String name) {
-        State state = ss.getStateByName(name);
-        currentState = state;
+    public ResponseEntity<JsonObject> getStateFull(@RequestParam String state, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+
+        State stateObj = ss.getStateByName(state);
+        //currentState = stateObj;
+        session.setAttribute("currentState", stateObj);
 
         JsonObject stateFull = new JsonObject();
-        Districting enactedDistricting = state.getEnactedDistricting();
+        Districting enactedDistricting = stateObj.getEnactedDistricting();
         String districtPath = enactedDistricting.getDistrictPath();
         String precinctPath = enactedDistricting.getPrecinctPath();
         String countyPath = enactedDistricting.getCountyPath();

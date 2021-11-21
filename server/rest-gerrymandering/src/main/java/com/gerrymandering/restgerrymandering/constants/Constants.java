@@ -30,9 +30,12 @@ public class Constants {
         HISPANIC,
         WHITE,
         NATIVE,
-        DEMOCRATIC,
-        REPUBLICAN,
-    };
+    }
+
+    public enum ElectionName {
+        SEN18,
+        AG18,
+    }
 
     private static final int enactedDistrictingIndex = 0;
 

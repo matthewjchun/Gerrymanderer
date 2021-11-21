@@ -7,21 +7,25 @@ import javax.persistence.*;
 @Entity
 public class Population {
 
-//    public Population(){
-//        populationType;
-//
-//    }
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long id;
+    @GeneratedValue
+    private long id;
 
+    private int total;
+
+    private int african;
+
+    private int white;
+
+    private int asian;
+
+    private int hispanic;
+
+    @Column(name = "native")
+    private int nativeAmerican;
+
+    private int pacificIslander;
+
+    @Enumerated(EnumType.ORDINAL)
     private Constants.PopulationType populationType;
-
-    private Constants.Demographic demographic;
-
-    //private int[] population;
-
-    private String election;
 }
