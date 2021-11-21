@@ -17,6 +17,8 @@ public class Constants {
         districtingOffsets.put("mi", 31);
         districtingOffsets.put("va", 62);
     }
+    private static final int enactedDistrictingIndex = 0;
+    private static final String resourcePath = "src/main/resources/data/";
 
     public enum PopulationType {
         TOTAL,
@@ -37,8 +39,6 @@ public class Constants {
         AG18,
     }
 
-    private static final int enactedDistrictingIndex = 0;
-
     public static Map<String, Integer> getStateMapper() {
         return stateMapper;
     }
@@ -49,5 +49,9 @@ public class Constants {
 
     public static int getEnactedDistrictingIndex() {
         return enactedDistrictingIndex;
+    }
+
+    public static String getResourcePath() {
+        return resourcePath;
     }
 }

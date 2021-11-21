@@ -1,5 +1,5 @@
 package com.gerrymandering.restgerrymandering.algorithm;
-
+/*
 import com.gerrymandering.restgerrymandering.model.Districting;
 import com.gerrymandering.restgerrymandering.model.Measures;
 
@@ -138,3 +138,4 @@ public class Algorithm {
         //STUB
     }
 }
+*/
