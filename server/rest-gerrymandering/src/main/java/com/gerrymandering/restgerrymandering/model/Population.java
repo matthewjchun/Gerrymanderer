@@ -5,6 +5,7 @@ import com.gerrymandering.restgerrymandering.constants.Constants;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "Populations")
 public class Population {
 
     @Id

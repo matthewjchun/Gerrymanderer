@@ -13,8 +13,10 @@ public class State {
     @Id
     private String name;
 
+    @Column(name = "centerLon")
     private double centerLon;
 
+    @Column(name = "centerLat")
     private double centerLat;
 
     @OneToMany
@@ -43,9 +45,89 @@ public class State {
     @Transient
     private List<DistrictingSummary> districtingSummaries;
 
-
     public Districting getEnactedDistricting() {
         return districtings.get(Constants.getEnactedDistrictingIndex() +
                 Constants.getDistrictingOffsets().get(name.toLowerCase()));
+    }
+
+    // GETTERS AND SETTERS
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getCenterLon() {
+        return centerLon;
+    }
+
+    public void setCenterLon(double centerLon) {
+        this.centerLon = centerLon;
+    }
+
+    public double getCenterLat() {
+        return centerLat;
+    }
+
+    public void setCenterLat(double centerLat) {
+        this.centerLat = centerLat;
+    }
+
+    public List<Population> getPopulations() {
+        return populations;
+    }
+
+    public void setPopulations(List<Population> populations) {
+        this.populations = populations;
+    }
+
+    public List<Election> getElections() {
+        return elections;
+    }
+
+    public void setElections(List<Election> elections) {
+        this.elections = elections;
+    }
+
+    public List<Districting> getDistrictings() {
+        return districtings;
+    }
+
+    public void setDistrictings(List<Districting> districtings) {
+        this.districtings = districtings;
+    }
+
+    public Set<County> getCounties() {
+        return counties;
+    }
+
+    public void setCounties(Set<County> counties) {
+        this.counties = counties;
+    }
+
+    public List<BoxAndWhisker> getBoxAndWhiskerData() {
+        return boxAndWhiskerData;
+    }
+
+    public void setBoxAndWhiskerData(List<BoxAndWhisker> boxAndWhiskerData) {
+        this.boxAndWhiskerData = boxAndWhiskerData;
+    }
+
+    public int getSelectedDistrictingId() {
+        return selectedDistrictingId;
+    }
+
+    public void setSelectedDistrictingId(int selectedDistrictingId) {
+        this.selectedDistrictingId = selectedDistrictingId;
+    }
+
+    public List<DistrictingSummary> getDistrictingSummaries() {
+        return districtingSummaries;
+    }
+
+    public void setDistrictingSummaries(List<DistrictingSummary> districtingSummaries) {
+        this.districtingSummaries = districtingSummaries;
     }
 }

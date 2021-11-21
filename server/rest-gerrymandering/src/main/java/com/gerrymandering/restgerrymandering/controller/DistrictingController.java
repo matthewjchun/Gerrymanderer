@@ -25,19 +25,12 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping("/")
 public class DistrictingController {
 
-
     private State currentState;
     private Constants.PopulationType populationType;
-
     private StateService ss;
     private DistrictingService dgs;
     private DistrictService ds;
     private PrecinctService ps;
-
-    /*private StateServiceImpl ss;
-    private DistrictingServiceImpl dgs;
-    private DistrictServiceImpl ds;
-    private PrecinctServiceImpl ps;*/
 
     @Autowired
     public DistrictingController(StateService ss, DistrictingService dgs, DistrictService ds, PrecinctService ps) {
@@ -47,17 +40,9 @@ public class DistrictingController {
         this.ps = ps;
     }
 
-    /*@Autowired
-    public DistrictingController(StateServiceImpl ss, DistrictingServiceImpl dgs, DistrictServiceImpl ds, PrecinctServiceImpl ps) {
-        this.ss = ss;
-        this.dgs = dgs;
-        this.ds = ds;
-        this.ps = ps;
-    }*/
-
     @GetMapping("/stateOutlines")
     public ResponseEntity<JsonObject> getStateOutlines() {
-        try (FileReader reader = new FileReader("/src/main/resources/data/states/state-outlines.json")) {
+        try (FileReader reader = new FileReader(Constants.getResourcePath() + "states/state-outlines.json")) {
             return ResponseEntity.ok(JsonParser.parseReader(reader).getAsJsonObject());
         } catch (Exception e) {
             System.out.println("Error");
@@ -72,6 +57,7 @@ public class DistrictingController {
         State stateObj = ss.getStateByName(state);
         //currentState = stateObj;
         session.setAttribute("currentState", stateObj);
+        System.out.println("State Name: " + stateObj.getName());
 
         JsonObject stateFull = new JsonObject();
         Districting enactedDistricting = stateObj.getEnactedDistricting();
@@ -79,7 +65,6 @@ public class DistrictingController {
         String precinctPath = enactedDistricting.getPrecinctPath();
         String countyPath = enactedDistricting.getCountyPath();
         String[] paths = {districtPath, precinctPath, countyPath};
-
         for (String path : paths) {
             try (FileReader reader = new FileReader(path)) {
                 JsonObject geoJson = JsonParser.parseReader(reader).getAsJsonObject();
@@ -88,7 +73,6 @@ public class DistrictingController {
                 System.out.println("Error");
             }
         }
-
         Gson gson = new Gson();
         String summaryStr = gson.toJson(state);
         JsonObject summary = JsonParser.parseString(summaryStr).getAsJsonObject();
@@ -97,9 +81,11 @@ public class DistrictingController {
     }
 
     @PostMapping("/populationType")
-    public ResponseEntity<String> setPopulationType(@RequestBody JsonObject populationTypeJson) {
+    public ResponseEntity<String> setPopulationType(@RequestBody JsonObject populationTypeJson, HttpServletRequest request) {
+        HttpSession session = request.getSession();
         String populationTypeNum = populationTypeJson.get("populationType").getAsString().toUpperCase();
         populationType = Constants.PopulationType.valueOf(populationTypeNum);
+        session.setAttribute("populationType", populationType);
         return ResponseEntity.ok("populationTypeNum");
     }
 }
