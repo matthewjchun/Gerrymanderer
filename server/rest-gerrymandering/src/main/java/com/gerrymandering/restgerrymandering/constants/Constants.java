@@ -4,14 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Constants {
-    private static final Map<String, Integer> stateMapper;
+    private static final String[] states;
     private static final Map<String, Integer> districtingOffsets;
     static {
-        stateMapper = new HashMap<>();
-        stateMapper.put("az", 0);
-        stateMapper.put("mi", 1);
-        stateMapper.put("va", 2);
-
+        states = new String[] {"az", "mi", "va"};
         districtingOffsets = new HashMap<>();
         districtingOffsets.put("az", 0);
         districtingOffsets.put("mi", 31);
@@ -39,8 +35,8 @@ public class Constants {
         AG18,
     }
 
-    public static Map<String, Integer> getStateMapper() {
-        return stateMapper;
+    public static String[] getStates() {
+        return states;
     }
 
     public static Map<String, Integer> getDistrictingOffsets() {
