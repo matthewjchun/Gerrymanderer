@@ -49,8 +49,6 @@ const Map = () => {
       `/stateFull/?state=${activeState.toLowerCase()}`
     );
     const body = await response.json();
-    console.log(typeof body);
-    console.log(body);
     return body;
   };
 
@@ -62,6 +60,20 @@ const Map = () => {
       });
     }
   };
+
+  const outlinesFetch = async (map) => {
+    const response = await fetch('/stateOutlines');
+    const body = await response.json();
+    return body;
+  }
+
+  const addStateLines = async (map) => {
+    const stateData = await outlinesFetch();
+
+    checkSrc('states', stateData);
+    addPolygon('states', 'states', '#f8f8ff');
+  }
+
 
   /////////////////////// VISIBILITY //////////////////////////////
   const addLayer = async (id, src, paint) => {
@@ -264,14 +276,14 @@ const Map = () => {
   };
 
   /////////////////////// VISUALIZE MAP METHODS //////////////////////////////
-  const addPolygon = async (id, data) => {
+  const addPolygon = async (id, data, color) => {
     map.current.addLayer({
       id: id,
       type: 'fill',
       source: data,
       layout: {},
       paint: {
-        'fill-color': '#523e3c',
+        'fill-color': color, //'#523e3c'
         'fill-opacity': 0.5,
       },
     });
@@ -341,26 +353,17 @@ const Map = () => {
         type: 'geojson',
         data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/VA_Counties.json',
       });
-      map.current.addSource('states', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/state-outlines.json',
-      });
-
-      map.current.addLayer({
-        id: 'states',
-        type: 'fill',
-        source: 'states',
-        layout: {},
-        paint: {
-          'fill-color': '#f8f8ff',
-          'fill-opacity': 0.5,
-        },
-      });
+      
+      // const stateData = outlinesFetch();
+      // checkSrc('states', stateData);
+      // addLayer('states', 'states', '#f8f8ff');
 
       // VISUALIZE STATES AS POLYGONS
       addPolygon('arizona', 'arizona');
       addPolygon('michigan', 'michigan');
       addPolygon('virginia', 'virginia');
+
+      addStateLines();
 
       // ADD OUTLINES TO STATES
       addOutline('outline_az', 'arizona');
