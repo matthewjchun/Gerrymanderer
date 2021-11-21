@@ -30,8 +30,6 @@ public class Constants {
         HISPANIC,
         WHITE,
         NATIVE,
-        DEMOCRATIC,
-        REPUBLICAN
     }
 
     public enum ElectionName {
