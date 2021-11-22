@@ -25,10 +25,10 @@ public class CensusBlock {
     @JoinColumn(name = "censusBlockId", referencedColumnName = "id")
     private List<Election> elections;
 
+    @ManyToMany
     @JoinTable(name = "NeighboringCBs", joinColumns = {
             @JoinColumn(name = "primaryCBId", referencedColumnName = "id")}, inverseJoinColumns = {
             @JoinColumn(name = "neighborCBId", referencedColumnName = "id")})
-    @ManyToMany
     private Set<Precinct> neighbors;
 
     @ManyToOne

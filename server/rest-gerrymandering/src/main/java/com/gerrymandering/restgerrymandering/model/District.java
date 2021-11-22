@@ -12,8 +12,6 @@ public class District {
     @GeneratedValue
     private Long id;
 
-    private double populationEquality;
-
     private double polsbyPopper;
 
     private boolean majorityMinority;
