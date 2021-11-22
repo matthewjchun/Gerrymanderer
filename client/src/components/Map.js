@@ -337,18 +337,6 @@ const Map = () => {
   useEffect(() => {
     if (!map.current) return;
     map.current.on('load', () => {
-      // map.current.addSource('arizona', {
-      //   type: 'geojson',
-      //   data: 'https://raw.githubusercontent.com/glynnbird/usstatesgeojson/master/arizona.geojson',
-      // });
-      // map.current.addSource('michigan', {
-      //   type: 'geojson',
-      //   data: 'https://raw.githubusercontent.com/glynnbird/usstatesgeojson/master/michigan.geojson',
-      // });
-      // map.current.addSource('virginia', {
-      //   type: 'geojson',
-      //   data: 'https://raw.githubusercontent.com/glynnbird/usstatesgeojson/master/virginia.geojson',
-      // });
       map.current.addSource('azprecincts', {
         type: 'geojson',
         data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/az_2020.json',
@@ -375,12 +363,6 @@ const Map = () => {
       });
       
       addStateLines();
-
-
-
-
-
-
 
       // ZOOM TO STATE
       map.current.on('click', 'states', (e) => {
