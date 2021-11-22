@@ -8,18 +8,19 @@ import java.util.Set;
 @Entity
 @Table(name = "CensusBlocks")
 
-public class CensusBlock {
+public class CensusBlock implements Cloneable{
 
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
 
-    private Boolean isBorderCB;
+    private boolean borderCB;
 
     private String path;
 
     @OneToMany
     @JoinColumn(name = "censusBlockId", referencedColumnName = "id")
+    @OrderBy("populationType")
     private List<Population> populations;
 
     @OneToMany
@@ -40,8 +41,28 @@ public class CensusBlock {
     @JoinColumn(name = "precinctId", referencedColumnName = "id")
     private Precinct precinct;
 
-    public CensusBlock clone() {
-        return null;
+    public CensusBlock() {}
+
+    public CensusBlock(long id, Boolean borderCB, String path, List<Population> populations, List<Election> elections,
+                       Set<CensusBlock> neighbors, District district, Precinct precinct) {
+        this.id = id;
+        this.borderCB = borderCB;
+        this.path = path;
+        this.populations = populations;
+        this.elections = elections;
+        this.neighbors = neighbors;
+        this.district = district;
+        this.precinct = precinct;
+    }
+
+    @Override
+    public Object clone() {
+        try {
+            return super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            return new CensusBlock(id, borderCB, path, populations, elections, neighbors, district, precinct);
+        }
     }
 
     public List<CensusBlock> getNeighborCBInDiffDistrict() {
@@ -56,37 +77,22 @@ public class CensusBlock {
         return neighborCBInDiffDistrict;
     }
 
-    public District getDistrict() {
-        return district;
+    // GETTERS AND SETTERS
+    public long getId() {
+        return id;
     }
 
-    public void setPrecinct(Precinct precinct) {
-        this.precinct = precinct;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    // public String getBoundariesPath() {
-    //     return boundariesPath;
-    // }
+    public boolean isBorderCB() {
+        return borderCB;
+    }
 
-    // public void setBoundariesPath(String boundariesPath) {
-    //     this.boundariesPath = boundariesPath;
-    // }
-
-    // public List<CensusBlock> getNeighbors() {
-    //     return neighbors;
-    // }
-
-    // public void setNeighbors(List<CensusBlock> neighbors) {
-    //     this.neighbors = neighbors;
-    // }
-
-     public Boolean isBorderCB() {
-         return isBorderCB;
-     }
-
-    // public void setIsBorderCensusBlock(Boolean borderCensusBlock) {
-    //     isBorderCensusBlock = borderCensusBlock;
-    // }
+    public void setBorderCB(boolean borderCB) {
+        this.borderCB = borderCB;
+    }
 
     public String getPath() {
         return path;
@@ -96,4 +102,43 @@ public class CensusBlock {
         this.path = path;
     }
 
+    public List<Population> getPopulations() {
+        return populations;
+    }
+
+    public void setPopulations(List<Population> populations) {
+        this.populations = populations;
+    }
+
+    public List<Election> getElections() {
+        return elections;
+    }
+
+    public void setElections(List<Election> elections) {
+        this.elections = elections;
+    }
+
+    public Set<CensusBlock> getNeighbors() {
+        return neighbors;
+    }
+
+    public void setNeighbors(Set<CensusBlock> neighbors) {
+        this.neighbors = neighbors;
+    }
+
+    public District getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(District district) {
+        this.district = district;
+    }
+
+    public Precinct getPrecinct() {
+        return precinct;
+    }
+
+    public void setPrecinct(Precinct precinct) {
+        this.precinct = precinct;
+    }
 }

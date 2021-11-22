@@ -1,9 +1,11 @@
 package com.gerrymandering.restgerrymandering.controller;
 
+import com.gerrymandering.restgerrymandering.algorithm.Algorithm;
 import com.gerrymandering.restgerrymandering.constants.Constants;
 import com.gerrymandering.restgerrymandering.model.Districting;
 import com.gerrymandering.restgerrymandering.model.State;
 import com.gerrymandering.restgerrymandering.services.*;
+import com.gerrymandering.restgerrymandering.algorithm2.*;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -22,7 +24,7 @@ import java.io.FileReader;
 @RequestMapping("/")
 public class DistrictingController {
 
-    private State currentState;
+    //private State currentState;
     private Constants.PopulationType populationType;
     private StateService ss;
     private DistrictingService dgs;
@@ -63,12 +65,9 @@ public class DistrictingController {
 
         State stateObj = ss.getStateByName(state);
         //currentState = stateObj;
-        session.setAttribute("currentState", stateObj.getName());
-        //System.out.println("State Name: " + stateObj.getName());
+        session.setAttribute("currentState", stateObj);
 
-        return ResponseEntity.ok(null);
-
-        /*JsonObject stateFull = new JsonObject();
+        JsonObject stateFull = new JsonObject();
         Districting enactedDistricting = stateObj.getEnactedDistricting();
         String districtPath = enactedDistricting.getDistrictPath();
         String precinctPath = enactedDistricting.getPrecinctPath();
@@ -86,7 +85,7 @@ public class DistrictingController {
         String summaryStr = gson.toJson(state);
         JsonObject summary = JsonParser.parseString(summaryStr).getAsJsonObject();
         stateFull.add("summary", summary);
-        return ResponseEntity.ok(stateFull);*/
+        return ResponseEntity.ok(stateFull);
     }
 
     @PostMapping("/populationType")
@@ -96,5 +95,21 @@ public class DistrictingController {
         populationType = Constants.PopulationType.valueOf(populationTypeNum);
         session.setAttribute("populationType", populationType);
         return ResponseEntity.ok("populationTypeNum");
+    }
+
+    @GetMapping("/algorithm")
+    public ResponseEntity<JsonObject> startAlgorithm(@RequestParam(name = "id") long districtingId,
+                                                     @RequestParam double popEqThresh,
+                                                     @RequestParam double polsbyPopperThresh,
+                                                     @RequestParam int majorityMinorityThresh,
+                                                     HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        State currentState = (State) session.getAttribute("currentState");
+        Districting selectedDistricting = currentState.getSeaWulfDistricting(districtingId);
+        Districting cloneDistricting = (Districting) selectedDistricting.clone();
+        Algorithm algorithm = (Algorithm) session.getAttribute("algorithm");
+        if (algorithm == null) {
+            algorithm = new Algorithm()
+        }
     }
 }

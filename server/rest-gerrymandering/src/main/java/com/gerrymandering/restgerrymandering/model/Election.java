@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Elections")
-public class Election {
+public class Election implements Cloneable {
 
     @Id
     @GeneratedValue
@@ -18,4 +18,22 @@ public class Election {
     private int democrat;
 
     private int republican;
+
+    public Election() {}
+
+    public Election(long id, Constants.ElectionName name, int democrat, int republican) {
+        this.id = id;
+        this.name = name;
+        this.democrat = democrat;
+        this.republican = republican;
+    }
+    @Override
+    public Object clone() {
+        try {
+            return super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            return new Election(id, name, democrat, republican);
+        }
+    }
 }

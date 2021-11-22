@@ -1,6 +1,5 @@
 package com.gerrymandering.restgerrymandering.algorithm;
 
-/*import com.gerrymandering.restgerrymandering.model.Measures;
 import com.gerrymandering.restgerrymandering.model.Precinct;
 
 import java.util.List;
@@ -120,4 +119,3 @@ public class AlgorithmSummary {
         this.setMajorityMinority(majMin);
     }
 }
-*/

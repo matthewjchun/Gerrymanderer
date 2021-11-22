@@ -1,13 +1,16 @@
 package com.gerrymandering.restgerrymandering.model;
 
+import com.gerrymandering.restgerrymandering.constants.Constants;
+
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "Districts")
-public class District {
+public class District implements Cloneable{
 
     @Id
     @GeneratedValue
@@ -21,6 +24,7 @@ public class District {
 
     @OneToMany
     @JoinColumn(name = "districtId", referencedColumnName = "id")
+    @OrderBy("populationType")
     private List<Population> populations;
 
     @OneToMany
@@ -33,43 +37,55 @@ public class District {
     @OneToMany(mappedBy = "district")
     private Set<CensusBlock> censusBlocks;
 
+    public District() {}
 
+    public District(long id, double polsbyPopper, boolean majorityMinority, String path, List<Population> populations,
+                    List<Election> elections, Set<Precinct> precincts, Set<CensusBlock> censusBlocks) {
+        this.id = id;
+        this.polsbyPopper = polsbyPopper;
+        this.majorityMinority = majorityMinority;
+        this.path = path;
+        this.populations = populations;
+        this.elections = elections;
+        this.precincts = precincts;
+        this.censusBlocks = censusBlocks;
+    }
 
-    public Long getId() { return id; }
+    @Override
+    public Object clone() {
+        District district = null;
+        try {
+            district = (District) super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            district = new District(id, polsbyPopper, majorityMinority, path, populations, elections, precincts,
+                    censusBlocks);
+        }
+        List<Population> populationsClone = new ArrayList<>();
+        for (Population population: populations) {
+            populationsClone.add((Population) population.clone());
+        }
+        district.setPopulations(populationsClone);
+        List<Election> electionsClone = new ArrayList<>();
+        for (Election election: elections) {
+            electionsClone.add((Election) election.clone());
+        }
+        district.setElections(electionsClone);
+        Set<Precinct> precinctsClone = new HashSet<>();
+        for (Precinct precinct: precincts) {
+            precinctsClone.add((Precinct) precinct.clone());
+        }
+        district.setPrecincts(precinctsClone);
+        Set<CensusBlock> censusBlocksClone = new HashSet<>();
+        for (CensusBlock censusBlock: censusBlocks) {
+            censusBlocksClone.add((CensusBlock) censusBlock.clone());
+        }
+        district.setCensusBlocks(censusBlocksClone);
+        return district;
+    }
 
-    public void setId(Long id) { this.id = id; }
-
-    public Population getPopulation() { return population; }
-
-    public void setPopulation(Population population) { this.population = population; }
-
-    public double getPolsbyPopper() { return polsbyPopper; }
-
-    public void setPolsbyPopper(double polsbyPopper) { this.polsbyPopper = polsbyPopper; }
-
-    public boolean getMajorityMinority() { return majorityMinority; }
-
-    // public District(Long id, Population population, double polsbyPopper, boolean majorityMinority, Set<Precinct> precincts,
-    //                 List<CensusBlock> censusBlocks, String path){
-    //     this.id = id;
-    //     this.populations = population;
-    //     this.polsbyPopper = polsbyPopper;
-    //     this.majorityMinority = majorityMinority;
-    //     this.precincts = precincts;
-    //     this.censusBlocks = censusBlocks;
-    //     this.path = path;
-    // }
-
-    public District clone() {
-        // Long id = this.getId();
-        // Population pop = this.getPopulation();
-        // double polsby = this.getPolsbyPopper();
-        // boolean majMin = this.getMajorityMinority();
-        // List<Precinct> precs = this.getPrecincts();
-        // List<CensusBlock> blocks = this.getCensusBlocks();
-        // String path = this.getPath();
-
-        return null;
+    public Population getPopulationByType(Constants.PopulationType type) {
+        return populations.get(type.ordinal());
     }
 
     public CensusBlock getRandomBorderCB(){
@@ -122,7 +138,7 @@ public class District {
 
     public int calculatePopDifference(District smallestDistrict){
         // will be called on the largest district in a districting
-        Population smallestDistrictPop = smallestDistrict.getPopulation();
+        Population smallestDistrictPop = smallestDistrict.getPopulationByType();
 
         int smallestPopulation = smallestDistrictPop.getPopulationValue();
         int largestPopulation = this.getPopulation().getPopulationValue();
@@ -130,5 +146,70 @@ public class District {
         int popDifference = largestPopulation - smallestPopulation;
 
         return popDifference;
+    }
+
+    // GETTERS AND SETTERS
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public double getPolsbyPopper() {
+        return polsbyPopper;
+    }
+
+    public void setPolsbyPopper(double polsbyPopper) {
+        this.polsbyPopper = polsbyPopper;
+    }
+
+    public boolean isMajorityMinority() {
+        return majorityMinority;
+    }
+
+    public void setMajorityMinority(boolean majorityMinority) {
+        this.majorityMinority = majorityMinority;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public List<Population> getPopulations() {
+        return populations;
+    }
+
+    public void setPopulations(List<Population> populations) {
+        this.populations = populations;
+    }
+
+    public List<Election> getElections() {
+        return elections;
+    }
+
+    public void setElections(List<Election> elections) {
+        this.elections = elections;
+    }
+
+    public Set<Precinct> getPrecincts() {
+        return precincts;
+    }
+
+    public void setPrecincts(Set<Precinct> precincts) {
+        this.precincts = precincts;
+    }
+
+    public Set<CensusBlock> getCensusBlocks() {
+        return censusBlocks;
+    }
+
+    public void setCensusBlocks(Set<CensusBlock> censusBlocks) {
+        this.censusBlocks = censusBlocks;
     }
 }

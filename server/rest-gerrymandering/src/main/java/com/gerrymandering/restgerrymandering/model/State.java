@@ -21,6 +21,7 @@ public class State {
 
     @OneToMany
     @JoinColumn(name = "stateName", referencedColumnName = "name")
+    @OrderBy("populationType")
     private List<Population> populations;
 
     @OneToMany
@@ -48,6 +49,10 @@ public class State {
     public Districting getEnactedDistricting() {
         return districtings.get(Constants.getEnactedDistrictingIndex() +
                 Constants.getDistrictingOffsets().get(name.toLowerCase()));
+    }
+
+    public Districting getSeaWulfDistricting(long districtingId) {
+        return districtings.get(districtingId)
     }
 
     // GETTERS AND SETTERS
