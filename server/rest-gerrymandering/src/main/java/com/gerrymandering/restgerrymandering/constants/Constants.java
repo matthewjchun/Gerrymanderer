@@ -4,19 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Constants {
-    private static final Map<String, Integer> stateMapper;
+    private static final String[] states;
     private static final Map<String, Integer> districtingOffsets;
     static {
-        stateMapper = new HashMap<>();
-        stateMapper.put("az", 0);
-        stateMapper.put("mi", 1);
-        stateMapper.put("va", 2);
-
+        states = new String[] {"az", "mi", "va"};
         districtingOffsets = new HashMap<>();
         districtingOffsets.put("az", 0);
         districtingOffsets.put("mi", 31);
         districtingOffsets.put("va", 62);
     }
+    private static final int enactedDistrictingIndex = 0;
+    private static final String resourcePath = "src/main/resources/data/";
 
     public enum PopulationType {
         TOTAL,
@@ -30,14 +28,15 @@ public class Constants {
         HISPANIC,
         WHITE,
         NATIVE,
-        DEMOCRATIC,
-        REPUBLICAN,
-    };
+    }
 
-    private static final int enactedDistrictingIndex = 0;
+    public enum ElectionName {
+        SEN18,
+        AG18,
+    }
 
-    public static Map<String, Integer> getStateMapper() {
-        return stateMapper;
+    public static String[] getStates() {
+        return states;
     }
 
     public static Map<String, Integer> getDistrictingOffsets() {
@@ -46,5 +45,9 @@ public class Constants {
 
     public static int getEnactedDistrictingIndex() {
         return enactedDistrictingIndex;
+    }
+
+    public static String getResourcePath() {
+        return resourcePath;
     }
 }

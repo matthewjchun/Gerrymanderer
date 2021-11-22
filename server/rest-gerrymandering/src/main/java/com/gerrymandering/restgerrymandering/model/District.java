@@ -3,6 +3,7 @@ package com.gerrymandering.restgerrymandering.model;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "Districts")
@@ -10,19 +11,29 @@ public class District {
 
     @Id
     @GeneratedValue
-    private Long id;
-
-    private Population population;
+    private long id;
 
     private double polsbyPopper;
 
     private boolean majorityMinority;
 
-    private List<Precinct> precincts;
-
-    private List<CensusBlock> censusBlocks;
-
     private String path;
+
+    @OneToMany
+    @JoinColumn(name = "districtId", referencedColumnName = "id")
+    private List<Population> populations;
+
+    @OneToMany
+    @JoinColumn(name = "districtId", referencedColumnName = "id")
+    private List<Election> elections;
+
+    @OneToMany(mappedBy = "district")
+    private Set<Precinct> precincts;
+    
+    @OneToMany(mappedBy = "district")
+    private Set<CensusBlock> censusBlocks;
+
+
 
     public Long getId() { return id; }
 
@@ -38,47 +49,33 @@ public class District {
 
     public boolean getMajorityMinority() { return majorityMinority; }
 
-    public void setMajorityMinority(boolean majorityMinority) { this.majorityMinority = majorityMinority; }
-
-    public List<Precinct> getPrecincts() { return precincts; }
-
-    public void setPrecincts(List<Precinct> precincts) { this.precincts = precincts; }
-
-    public List<CensusBlock> getCensusBlocks() { return censusBlocks; }
-
-    public void setCensusBlocks(List<CensusBlock> censusBlocks) { this.censusBlocks = censusBlocks; }
-
-    public String getPath() { return path; }
-
-    public void setPath(String path) { this.path = path;}
-
-    public District(Long id, Population population, double polsbyPopper, boolean majorityMinority, List<Precinct> precincts,
-                    List<CensusBlock> censusBlocks, String path){
-        this.id = id;
-        this.population = population;
-        this.polsbyPopper = polsbyPopper;
-        this.majorityMinority = majorityMinority;
-        this.precincts = precincts;
-        this.censusBlocks = censusBlocks;
-        this.path = path;
-    }
+    // public District(Long id, Population population, double polsbyPopper, boolean majorityMinority, Set<Precinct> precincts,
+    //                 List<CensusBlock> censusBlocks, String path){
+    //     this.id = id;
+    //     this.populations = population;
+    //     this.polsbyPopper = polsbyPopper;
+    //     this.majorityMinority = majorityMinority;
+    //     this.precincts = precincts;
+    //     this.censusBlocks = censusBlocks;
+    //     this.path = path;
+    // }
 
     public District clone() {
-        Long id = this.getId();
-        Population pop = this.getPopulation();
-        double polsby = this.getPolsbyPopper();
-        boolean majMin = this.getMajorityMinority();
-        List<Precinct> precs = this.getPrecincts();
-        List<CensusBlock> blocks = this.getCensusBlocks();
-        String path = this.getPath();
+        // Long id = this.getId();
+        // Population pop = this.getPopulation();
+        // double polsby = this.getPolsbyPopper();
+        // boolean majMin = this.getMajorityMinority();
+        // List<Precinct> precs = this.getPrecincts();
+        // List<CensusBlock> blocks = this.getCensusBlocks();
+        // String path = this.getPath();
 
-        return new District(id, pop, polsby, majMin, precs, blocks, path);
+        return null;
     }
 
     public CensusBlock getRandomBorderCB(){
         List<CensusBlock> borderBlocks = new ArrayList<CensusBlock>();
         for (CensusBlock block : censusBlocks){
-            if (block.isBorderCensusBlock()){
+            if (block.isBorderCB()){
                 borderBlocks.add(block);
             }
         }
@@ -108,7 +105,6 @@ public class District {
 
     public void calculatePopulation() {
         // STUB
-        this.getPopulation().getPopulationValue();
     }
 
     public void calculatePolsbyPopper() {

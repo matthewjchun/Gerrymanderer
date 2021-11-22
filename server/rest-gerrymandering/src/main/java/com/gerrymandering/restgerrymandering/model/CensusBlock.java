@@ -3,73 +3,42 @@ package com.gerrymandering.restgerrymandering.model;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "CensusBlock")
+@Table(name = "CensusBlocks")
+
 public class CensusBlock {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    private District district;
-
-    private Precinct precinct;
-
-    private String boundariesPath;
-
-//    @OneToMany
-    private List<CensusBlock> neighbors;
-
-    private Boolean isBorderCensusBlock;
+    private Boolean isBorderCB;
 
     private String path;
 
-    public Long getId() { return id; }
+    @OneToMany
+    @JoinColumn(name = "censusBlockId", referencedColumnName = "id")
+    private List<Population> populations;
 
-    public void setId(Long id) { this.id = id; }
+    @OneToMany
+    @JoinColumn(name = "censusBlockId", referencedColumnName = "id")
+    private List<Election> elections;
 
-    public District getDistrict() { return district; }
+    @ManyToMany
+    @JoinTable(name = "NeighboringCBs", joinColumns = {
+            @JoinColumn(name = "primaryCBId", referencedColumnName = "id")}, inverseJoinColumns = {
+            @JoinColumn(name = "neighborCBId", referencedColumnName = "id")})
+    private Set<CensusBlock> neighbors;
 
-    public void setDistrict(District district) { this.district = district; }
+    @ManyToOne
+    @JoinColumn(name = "districtId", referencedColumnName = "id")
+    private District district;
 
-    public Precinct getPrecinct() { return precinct; }
-
-    public void setPrecinct(Precinct precinct) {
-        this.precinct = precinct;
-    }
-
-    public String getBoundariesPath() {
-        return boundariesPath;
-    }
-
-    public void setBoundariesPath(String boundariesPath) {
-        this.boundariesPath = boundariesPath;
-    }
-
-    public List<CensusBlock> getNeighbors() {
-        return neighbors;
-    }
-
-    public void setNeighbors(List<CensusBlock> neighbors) {
-        this.neighbors = neighbors;
-    }
-
-    public Boolean isBorderCensusBlock() {
-        return isBorderCensusBlock;
-    }
-
-    public void setIsBorderCensusBlock(Boolean borderCensusBlock) {
-        isBorderCensusBlock = borderCensusBlock;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
+    @ManyToOne
+    @JoinColumn(name = "precinctId", referencedColumnName = "id")
+    private Precinct precinct;
 
     public CensusBlock clone() {
         return null;
@@ -85,6 +54,46 @@ public class CensusBlock {
             }
         }
         return neighborCBInDiffDistrict;
+    }
+
+    public District getDistrict() {
+        return district;
+    }
+
+    public void setPrecinct(Precinct precinct) {
+        this.precinct = precinct;
+    }
+
+    // public String getBoundariesPath() {
+    //     return boundariesPath;
+    // }
+
+    // public void setBoundariesPath(String boundariesPath) {
+    //     this.boundariesPath = boundariesPath;
+    // }
+
+    // public List<CensusBlock> getNeighbors() {
+    //     return neighbors;
+    // }
+
+    // public void setNeighbors(List<CensusBlock> neighbors) {
+    //     this.neighbors = neighbors;
+    // }
+
+     public Boolean isBorderCB() {
+         return isBorderCB;
+     }
+
+    // public void setIsBorderCensusBlock(Boolean borderCensusBlock) {
+    //     isBorderCensusBlock = borderCensusBlock;
+    // }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
 }

@@ -2,35 +2,33 @@ package com.gerrymandering.restgerrymandering.model;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "Precinct")
+@Table(name = "Precincts")
 public class Precinct {
-
 
     @Id
     @GeneratedValue
     private Long id;
 
-    /*private Population population;
-
-    private List<Precinct> neighbors;*/
-
     private String path;
 
-    public Long getId() { return id; }
+    @OneToMany
+    @JoinColumn(name = "precinctId", referencedColumnName = "id")
+    private List<Population> populations;
 
-    public void setId(Long id) { this.id = id; }
+    @OneToMany
+    @JoinColumn(name = "precinctId", referencedColumnName = "id")
+    private List<Election> elections;
 
-    /*public Population getPopulation() { return population; }
+    @ManyToOne
+    @JoinColumn(name = "districtId", referencedColumnName = "id")
+    private District district;
 
-    public void setPopulation(Population population) { this.population = population; }
-
-    public List<Precinct> getNeighbors() { return neighbors; }
-
-    public void setNeighbors(List<Precinct> neighbors) { this.neighbors = neighbors; }*/
-
-    public String getPath() { return path; }
-
-    public void setPath(String path) { this.path = path; }
+    @ManyToMany
+    @JoinTable(name = "NeighboringPrecincts", joinColumns = {
+            @JoinColumn(name = "primaryPrecinctId", referencedColumnName = "id")}, inverseJoinColumns = {
+            @JoinColumn(name = "neighborPrecinctId", referencedColumnName = "id")})
+    private Set<Precinct> neighbors;
 }

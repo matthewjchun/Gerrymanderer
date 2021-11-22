@@ -13,11 +13,6 @@ public class StateServiceImpl implements StateService{
     @PersistenceContext
     private EntityManager em;
 
-    @Autowired
-    public StateServiceImpl(EntityManager em) {
-        this.em = em;
-    }
-
     @Override
     public State getStateByName(String name) {
         return em.find(State.class, name);
