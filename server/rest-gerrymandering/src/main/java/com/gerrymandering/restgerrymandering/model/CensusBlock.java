@@ -29,7 +29,7 @@ public class CensusBlock {
     @JoinTable(name = "NeighboringCBs", joinColumns = {
             @JoinColumn(name = "primaryCBId", referencedColumnName = "id")}, inverseJoinColumns = {
             @JoinColumn(name = "neighborCBId", referencedColumnName = "id")})
-    private Set<Precinct> neighbors;
+    private Set<CensusBlock> neighbors;
 
     @ManyToOne
     @JoinColumn(name = "districtId", referencedColumnName = "id")

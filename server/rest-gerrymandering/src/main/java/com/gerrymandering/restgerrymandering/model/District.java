@@ -10,7 +10,7 @@ public class District {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
 
     private double polsbyPopper;
 
