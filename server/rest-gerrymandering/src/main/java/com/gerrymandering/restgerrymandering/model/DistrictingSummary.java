@@ -5,43 +5,53 @@ import java.util.List;
 
 public class DistrictingSummary {
 
-    private Long id;
+    private long id;
 
-    private State state;
+    private String stateName;
 
     private double populationEquality;
 
-    //private List<Double> polsbyPopper;
+    private double avgPolsbyPopper;
 
     private int majorityMinorityCount;
 
-
-    public Long getId() { return id; }
-
-    public void setId(Long id) { this.id = id; }
-
-    public State getState() {
-        return state;
+    public long getId() {
+        return id;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public double getPopulationEquality() { return populationEquality; }
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public double getPopulationEquality() {
+        return populationEquality;
+    }
 
     public void setPopulationEquality(double populationEquality) {
         this.populationEquality = populationEquality;
     }
 
-    /*public List<Double> getPolsbyPopper() { return polsbyPopper; }
+    public double getAvgPolsbyPopper() {
+        return avgPolsbyPopper;
+    }
 
-    public void setPolsbyPopper(List<Double> polsbyPopper) { this.polsbyPopper = polsbyPopper; }*/
+    public void setAvgPolsbyPopper(double avgPolsbyPopper) {
+        this.avgPolsbyPopper = avgPolsbyPopper;
+    }
 
-    public int getMajorityMinorityCount() { return majorityMinorityCount; }
+    public int getMajorityMinorityCount() {
+        return majorityMinorityCount;
+    }
 
     public void setMajorityMinorityCount(int majorityMinorityCount) {
         this.majorityMinorityCount = majorityMinorityCount;
     }
-
 }

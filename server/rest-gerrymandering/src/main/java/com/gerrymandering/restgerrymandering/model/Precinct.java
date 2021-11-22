@@ -26,9 +26,9 @@ public class Precinct {
     @JoinColumn(name = "districtId", referencedColumnName = "id")
     private District district;
 
+    @ManyToMany
     @JoinTable(name = "NeighboringPrecincts", joinColumns = {
             @JoinColumn(name = "primaryPrecinctId", referencedColumnName = "id")}, inverseJoinColumns = {
             @JoinColumn(name = "neighborPrecinctId", referencedColumnName = "id")})
-    @ManyToMany
     private Set<Precinct> neighbors;
 }

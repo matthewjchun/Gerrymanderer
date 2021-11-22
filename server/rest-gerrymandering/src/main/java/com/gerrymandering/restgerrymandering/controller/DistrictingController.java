@@ -63,10 +63,12 @@ public class DistrictingController {
 
         State stateObj = ss.getStateByName(state);
         //currentState = stateObj;
-        session.setAttribute("currentState", stateObj);
-        System.out.println("State Name: " + stateObj.getName());
+        session.setAttribute("currentState", stateObj.getName());
+        //System.out.println("State Name: " + stateObj.getName());
 
-        JsonObject stateFull = new JsonObject();
+        return ResponseEntity.ok(null);
+
+        /*JsonObject stateFull = new JsonObject();
         Districting enactedDistricting = stateObj.getEnactedDistricting();
         String districtPath = enactedDistricting.getDistrictPath();
         String precinctPath = enactedDistricting.getPrecinctPath();
@@ -84,7 +86,7 @@ public class DistrictingController {
         String summaryStr = gson.toJson(state);
         JsonObject summary = JsonParser.parseString(summaryStr).getAsJsonObject();
         stateFull.add("summary", summary);
-        return ResponseEntity.ok(stateFull);
+        return ResponseEntity.ok(stateFull);*/
     }
 
     @PostMapping("/populationType")
