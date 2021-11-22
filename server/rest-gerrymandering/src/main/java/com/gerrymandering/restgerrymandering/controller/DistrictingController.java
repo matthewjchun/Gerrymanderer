@@ -114,8 +114,8 @@ public class DistrictingController {
                     Constants.getMaxIterations() * Constants.getEstimatedTimePerIteration(), true,
                     currentState.getName(), selectedDistricting.getPopulationEquality(),
                     selectedDistricting.getAvgPolsbyPopper(), selectedDistricting.getMajorityMinorityCount(),
-                    new ArrayList<>());
-            algorithm = new Algorithm(new AlgorithmSummary())
+                    new ArrayList<>(), null);
+            algorithm = new Algorithm(algoSummary)
         }
     }
 }

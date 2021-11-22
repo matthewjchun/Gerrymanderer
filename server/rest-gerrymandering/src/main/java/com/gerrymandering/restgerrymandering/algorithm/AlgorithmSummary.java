@@ -11,7 +11,7 @@ public class AlgorithmSummary {
 
     private int maxIterations;
 
-    private long estimatedTime;
+    private int estimatedTime;
 
     private boolean running;
 
@@ -27,17 +27,25 @@ public class AlgorithmSummary {
 
     private Geometry districtingBoundary;
 
+    public AlgorithmSummary(int numberIterations, int maxIterations, int estimatedTime, boolean running,
+                            String stateName, double populationEquality, double avgPolsbyPopper,
+                            int majorityMinorityCount, List<Precinct> splitPrecincts, Geometry districtingBoundary) {
+        this.numberIterations = numberIterations;
+        this.maxIterations = maxIterations;
+        this.estimatedTime = estimatedTime;
+        this.running = running;
+        this.stateName = stateName;
+        this.populationEquality = populationEquality;
+        this.avgPolsbyPopper = avgPolsbyPopper;
+        this.majorityMinorityCount = majorityMinorityCount;
+        this.splitPrecincts = splitPrecincts;
+        this.districtingBoundary = districtingBoundary;
+    }
 
-
-    public void setAllMeasures(Measures measures){
-        // population eq: double, polsbyPopper: double, majority minority: int
-        double popEq = measures.getPopulationEquality();
-        double polsby = measures.getAvgPolsbyPopper();
-        int majMin = measures.getMajorityMinorityCount();
-
-        this.setPopulationEquality(popEq);
-        this.setAvgPolsbyPopper(polsby);
-        this.setMajorityMinority(majMin);
+    public void setAllMeasures(double populationEquality, double avgPolsbyPopper, int majorityMinorityCount) {
+        setPopulationEquality(populationEquality);
+        setAvgPolsbyPopper(avgPolsbyPopper);
+        setMajorityMinorityCount(majorityMinorityCount);
     }
 
     // GETTERS AND SETTERS
@@ -57,11 +65,11 @@ public class AlgorithmSummary {
         this.maxIterations = maxIterations;
     }
 
-    public long getEstimatedTime() {
+    public int getEstimatedTime() {
         return estimatedTime;
     }
 
-    public void setEstimatedTime(long estimatedTime) {
+    public void setEstimatedTime(int estimatedTime) {
         this.estimatedTime = estimatedTime;
     }
 
