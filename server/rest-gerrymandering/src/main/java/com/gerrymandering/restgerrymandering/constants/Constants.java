@@ -15,6 +15,8 @@ public class Constants {
     }
     private static final int enactedDistrictingIndex = 0;
     private static final String resourcePath = "src/main/resources/data/";
+    private static final int maxIterations = 50;
+    private static final int estimatedTimePerIteration = 10;
 
     public enum PopulationType {
         TOTAL,
@@ -49,5 +51,13 @@ public class Constants {
 
     public static String getResourcePath() {
         return resourcePath;
+    }
+
+    public static int getMaxIterations() {
+        return maxIterations;
+    }
+
+    public static int getEstimatedTimePerIteration() {
+        return estimatedTimePerIteration;
     }
 }

@@ -136,9 +136,9 @@ public class District implements Cloneable{
         return 0;
     }
 
-    public int calculatePopDifference(District smallestDistrict){
+    public int calculatePopDifference(District smallestDistrict, Constants.PopulationType type){
         // will be called on the largest district in a districting
-        Population smallestDistrictPop = smallestDistrict.getPopulationByType();
+        Population smallestDistrictPop = smallestDistrict.getPopulationByType(type);
 
         int smallestPopulation = smallestDistrictPop.getPopulationValue();
         int largestPopulation = this.getPopulation().getPopulationValue();
