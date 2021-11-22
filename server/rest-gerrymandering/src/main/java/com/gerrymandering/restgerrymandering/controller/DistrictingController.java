@@ -92,10 +92,11 @@ public class DistrictingController {
     @PostMapping("/populationType")
     public ResponseEntity<String> setPopulationType(@RequestBody JsonObject populationTypeJson, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        String populationTypeNum = populationTypeJson.get("populationType").getAsString().toUpperCase();
-        populationType = Constants.PopulationType.valueOf(populationTypeNum);
+        System.out.println("hi");
+        String populationTypeStr = populationTypeJson.get("populationType").getAsString().toUpperCase();
+        Constants.PopulationType populationType = Constants.PopulationType.valueOf(populationTypeStr);
         session.setAttribute("populationType", populationType);
-        return ResponseEntity.ok("populationTypeNum");
+        return ResponseEntity.ok("" + populationType);
     }
 
     @GetMapping("/algorithm")

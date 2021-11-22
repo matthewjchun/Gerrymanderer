@@ -9,7 +9,7 @@ import { useDisclosure } from '@chakra-ui/react';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiY2VsdGljczQxNiIsImEiOiJja3R2MGM5dTQxajY4Mm5sNWV5YnNhNHg0In0.t9oiLZZUeZi0QpqUIik13w';
-
+  
 const Map = () => {
   const mapContainer = useRef(null);
   const [controlledSwiper, setControlledSwiper] = useState(null);
@@ -26,6 +26,13 @@ const Map = () => {
     '<strong>District 1</strong><p><br><b>Total Population:</b> 724,868<br><b>Democratic:</b> 50.1%<br><b>Republican:</b> 48.4%<br><br><b>Race:</b> 64.1% White, 23.2% Am. Indian, 2.4% Black, 1.7% Asian<br><b>Ethnicity:</b> 20.4% Hispanic<br><br><b>Unemployment:</b> 14.2%<br><b>Median household income:</b> $43,377';
   const [activeState, setActiveState] = useContext(StateContext);
   const { isOpen, onOpen, onClose } = useDisclosure(); // open close state drawer
+
+  const stateMap = {
+    'Arizona': 'az',
+    'Michigan': 'mi',
+    'Virginia': 'va',
+  };
+
 
   /////////////////////// MARKER METHODS //////////////////////////////
   const createMarker = async (longitude, latitude, msg) => {
@@ -49,8 +56,6 @@ const Map = () => {
       `/stateFull/?state=${activeState.toLowerCase()}`
     );
     const body = await response.json();
-    console.log(typeof body);
-    console.log(body);
     return body;
   };
 
@@ -62,6 +67,33 @@ const Map = () => {
       });
     }
   };
+
+  const outlinesFetch = async (map) => {
+    const response = await fetch('/stateOutlines');
+    const body = await response.json();
+    return body;
+  }
+
+  const addStateLines = async (map) => {
+    const stateData = await outlinesFetch();
+
+    checkSrc('states', stateData['stateOutlines']);
+    addPolygon('states', 'states', '#f8f8ff');
+
+
+    checkSrc('arizona', stateData['az']);
+    checkSrc('michigan', stateData['mi']);
+    checkSrc('virginia', stateData['va']);
+    // VISUALIZE STATES AS POLYGONS
+    addPolygon('arizona', 'arizona', '#523e3c');
+    addPolygon('michigan', 'michigan', '#523e3c');
+    addPolygon('virginia', 'virginia', '#523e3c');
+    // ADD OUTLINES TO STATES
+    addOutline('outline_az', 'arizona');
+    addOutline('outline_mi', 'michigan');
+    addOutline('outline_va', 'virginia');
+  }
+
 
   /////////////////////// VISIBILITY //////////////////////////////
   const addLayer = async (id, src, paint) => {
@@ -264,14 +296,14 @@ const Map = () => {
   };
 
   /////////////////////// VISUALIZE MAP METHODS //////////////////////////////
-  const addPolygon = async (id, data) => {
+  const addPolygon = async (id, data, color) => {
     map.current.addLayer({
       id: id,
       type: 'fill',
       source: data,
       layout: {},
       paint: {
-        'fill-color': '#523e3c',
+        'fill-color': color, //'#523e3c'
         'fill-opacity': 0.5,
       },
     });
@@ -305,18 +337,6 @@ const Map = () => {
   useEffect(() => {
     if (!map.current) return;
     map.current.on('load', () => {
-      map.current.addSource('arizona', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/glynnbird/usstatesgeojson/master/arizona.geojson',
-      });
-      map.current.addSource('michigan', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/glynnbird/usstatesgeojson/master/michigan.geojson',
-      });
-      map.current.addSource('virginia', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/glynnbird/usstatesgeojson/master/virginia.geojson',
-      });
       map.current.addSource('azprecincts', {
         type: 'geojson',
         data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/az_2020.json',
@@ -341,31 +361,8 @@ const Map = () => {
         type: 'geojson',
         data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/VA_Counties.json',
       });
-      map.current.addSource('states', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/state-outlines.json',
-      });
-
-      map.current.addLayer({
-        id: 'states',
-        type: 'fill',
-        source: 'states',
-        layout: {},
-        paint: {
-          'fill-color': '#f8f8ff',
-          'fill-opacity': 0.5,
-        },
-      });
-
-      // VISUALIZE STATES AS POLYGONS
-      addPolygon('arizona', 'arizona');
-      addPolygon('michigan', 'michigan');
-      addPolygon('virginia', 'virginia');
-
-      // ADD OUTLINES TO STATES
-      addOutline('outline_az', 'arizona');
-      addOutline('outline_mi', 'michigan');
-      addOutline('outline_va', 'virginia');
+      
+      addStateLines();
 
       // ZOOM TO STATE
       map.current.on('click', 'states', (e) => {
