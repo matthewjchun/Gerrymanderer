@@ -1,11 +1,11 @@
 package com.gerrymandering.restgerrymandering.controller;
 
 import com.gerrymandering.restgerrymandering.algorithm.Algorithm;
+import com.gerrymandering.restgerrymandering.algorithm.AlgorithmSummary;
 import com.gerrymandering.restgerrymandering.constants.Constants;
 import com.gerrymandering.restgerrymandering.model.Districting;
 import com.gerrymandering.restgerrymandering.model.State;
 import com.gerrymandering.restgerrymandering.services.*;
-import com.gerrymandering.restgerrymandering.algorithm2.*;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.FileReader;
+import java.util.ArrayList;
 
 //@CrossOrigin("http://localhost:3000")
 @RestController
@@ -109,7 +110,12 @@ public class DistrictingController {
         Districting cloneDistricting = (Districting) selectedDistricting.clone();
         Algorithm algorithm = (Algorithm) session.getAttribute("algorithm");
         if (algorithm == null) {
-            algorithm = new Algorithm()
+            AlgorithmSummary algoSummary = new AlgorithmSummary(0, Constants.getMaxIterations(),
+                    Constants.getMaxIterations() * Constants.getEstimatedTimePerIteration(), true,
+                    currentState.getName(), selectedDistricting.getPopulationEquality(),
+                    selectedDistricting.getAvgPolsbyPopper(), selectedDistricting.getMajorityMinorityCount(),
+                    new ArrayList<>());
+            algorithm = new Algorithm(new AlgorithmSummary())
         }
     }
 }

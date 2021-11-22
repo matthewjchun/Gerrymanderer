@@ -1,6 +1,7 @@
 package com.gerrymandering.restgerrymandering.algorithm;
 
 import com.gerrymandering.restgerrymandering.model.Precinct;
+import org.opengis.geometry.Geometry;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class AlgorithmSummary {
 
     private long estimatedTime;
 
-    private boolean isRunning;
+    private boolean running;
 
     private String stateName;
 
@@ -20,15 +21,27 @@ public class AlgorithmSummary {
 
     private double avgPolsbyPopper;
 
-    private int majorityMinority;
+    private int majorityMinorityCount;
 
     private List<Precinct> splitPrecincts;
 
-//    private Geometry districtingBoundary;
+    private Geometry districtingBoundary;
 
-// setters & getters
 
-    public int getNumberIterations(){
+
+    public void setAllMeasures(Measures measures){
+        // population eq: double, polsbyPopper: double, majority minority: int
+        double popEq = measures.getPopulationEquality();
+        double polsby = measures.getAvgPolsbyPopper();
+        int majMin = measures.getMajorityMinorityCount();
+
+        this.setPopulationEquality(popEq);
+        this.setAvgPolsbyPopper(polsby);
+        this.setMajorityMinority(majMin);
+    }
+
+    // GETTERS AND SETTERS
+    public int getNumberIterations() {
         return numberIterations;
     }
 
@@ -53,11 +66,11 @@ public class AlgorithmSummary {
     }
 
     public boolean isRunning() {
-        return isRunning;
+        return running;
     }
 
     public void setRunning(boolean running) {
-        isRunning = running;
+        this.running = running;
     }
 
     public String getStateName() {
@@ -80,16 +93,16 @@ public class AlgorithmSummary {
         return avgPolsbyPopper;
     }
 
-    public void setAvgPolsbyPopper(double AvgPolsbyPopper) {
+    public void setAvgPolsbyPopper(double avgPolsbyPopper) {
         this.avgPolsbyPopper = avgPolsbyPopper;
     }
 
-    public int getMajorityMinority() {
-        return majorityMinority;
+    public int getMajorityMinorityCount() {
+        return majorityMinorityCount;
     }
 
-    public void setMajorityMinority(int majorityMinority) {
-        this.majorityMinority = majorityMinority;
+    public void setMajorityMinorityCount(int majorityMinorityCount) {
+        this.majorityMinorityCount = majorityMinorityCount;
     }
 
     public List<Precinct> getSplitPrecincts() {
@@ -100,22 +113,11 @@ public class AlgorithmSummary {
         this.splitPrecincts = splitPrecincts;
     }
 
-//    public Geometry getDistrictingBoundary(){
-//        return districtingBoundary;
-//    }
-//
-//    public void setDistrictingBoundary(Geometry districtingBoundary){
-//        this.districtingBoundary = districtingBoundary;
-//    }
+    public Geometry getDistrictingBoundary() {
+        return districtingBoundary;
+    }
 
-    public void setAllMeasures(Measures measures){
-        // population eq: double, polsbyPopper: double, majority minority: int
-        double popEq = measures.getPopulationEquality();
-        double polsby = measures.getAvgPolsbyPopper();
-        int majMin = measures.getMajorityMinorityCount();
-
-        this.setPopulationEquality(popEq);
-        this.setAvgPolsbyPopper(polsby);
-        this.setMajorityMinority(majMin);
+    public void setDistrictingBoundary(Geometry districtingBoundary) {
+        this.districtingBoundary = districtingBoundary;
     }
 }
