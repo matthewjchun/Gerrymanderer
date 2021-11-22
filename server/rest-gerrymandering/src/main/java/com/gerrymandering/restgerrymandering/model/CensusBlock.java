@@ -1,6 +1,7 @@
 package com.gerrymandering.restgerrymandering.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -38,4 +39,61 @@ public class CensusBlock {
     @ManyToOne
     @JoinColumn(name = "precinctId", referencedColumnName = "id")
     private Precinct precinct;
+
+    public CensusBlock clone() {
+        return null;
+    }
+
+    public List<CensusBlock> getNeighborCBInDiffDistrict() {
+        // check through list of neighbors, check if diff district
+        District original = this.getDistrict();
+        List<CensusBlock> neighborCBInDiffDistrict = new ArrayList<CensusBlock>();
+        for (CensusBlock neigh : neighbors){
+            if (neigh.getDistrict() != original){
+                neighborCBInDiffDistrict.add(neigh);
+            }
+        }
+        return neighborCBInDiffDistrict;
+    }
+
+    public District getDistrict() {
+        return district;
+    }
+
+    public void setPrecinct(Precinct precinct) {
+        this.precinct = precinct;
+    }
+
+    // public String getBoundariesPath() {
+    //     return boundariesPath;
+    // }
+
+    // public void setBoundariesPath(String boundariesPath) {
+    //     this.boundariesPath = boundariesPath;
+    // }
+
+    // public List<CensusBlock> getNeighbors() {
+    //     return neighbors;
+    // }
+
+    // public void setNeighbors(List<CensusBlock> neighbors) {
+    //     this.neighbors = neighbors;
+    // }
+
+     public Boolean isBorderCB() {
+         return isBorderCB;
+     }
+
+    // public void setIsBorderCensusBlock(Boolean borderCensusBlock) {
+    //     isBorderCensusBlock = borderCensusBlock;
+    // }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
 }

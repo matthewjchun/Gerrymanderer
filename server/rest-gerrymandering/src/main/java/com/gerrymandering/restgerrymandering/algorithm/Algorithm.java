@@ -3,6 +3,8 @@ package com.gerrymandering.restgerrymandering.algorithm;
 import com.gerrymandering.restgerrymandering.model.Districting;
 import com.gerrymandering.restgerrymandering.model.Measures;
 
+import java.util.List;
+
 public class Algorithm {
 
     private AlgorithmSummary algoSummary;
