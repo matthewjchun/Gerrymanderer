@@ -43,7 +43,6 @@ export default function StateDrawer(props) {
   const { isOpen, onOpen, onClose } = props;
   const [activeState] = useContext(StateContext);
   const [value, setValue] = useState("0");
-  // const [populationType, setPopulationType] = useState();
 
   const data = [
     { title: 'White', value: 2849063, color: '#E38627' },
@@ -63,7 +62,9 @@ export default function StateDrawer(props) {
 
   let processedData = processGeoJSONData(); */
 
-  let populationType = 10000;
+  let TotalPopulation = 1000000;
+  let VAP = 200000;
+  let CVAP = 30000000;
 
   const populationFetch = async (value) => {
     const response = await fetch('/populationType', {
@@ -75,11 +76,20 @@ export default function StateDrawer(props) {
     return body;
   }
 
-  useEffect(() => {
-    // let body = populationFetch;
-    // populationType = body;
+  // useEffect(() => {
+  //   // let body = populationFetch;
+  //   // populationType = body;
+  //   if(value == 1){
+  //     console.log("20000")
+  //     populationType = 20000;
+  //   }
+  //   else{
+  //     console.log("30000")
+  //     populationType = 123124;
+  //   }
+  // }, [value]);
 
-    console.log("hey whaddup");
+  /*setValue(() => {
     if(value == 1){
       console.log("20000")
       populationType = 20000;
@@ -87,9 +97,9 @@ export default function StateDrawer(props) {
     else{
       console.log("30000")
       populationType = 123124;
+      console.log(populationType);
     }
-  }, [value]);
-
+  }, []);*/
 
   return (
     <Drawer
@@ -154,7 +164,11 @@ export default function StateDrawer(props) {
                 <Text fontSize="3xl">Statistics</Text>
                 <br />
                 <Divider />
-                <Text> Population: {populationType} </Text>
+                {value == "0" ?
+                <Text> Population: {TotalPopulation} </Text>: 
+                value =="1" ? <Text> Population: {VAP} </Text>: 
+                value == "2" ? <Text> Population: {CVAP} </Text>: 
+                null}
                 <Divider />
                 <Text>Precincts: 1,495</Text>
                 <Divider />
