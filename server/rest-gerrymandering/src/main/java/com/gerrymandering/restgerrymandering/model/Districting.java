@@ -1,12 +1,13 @@
 package com.gerrymandering.restgerrymandering.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Entity
 @Table(name = "Districtings")
-public class Districting {
+public class Districting implements Cloneable{
 
     @Id
     @GeneratedValue
@@ -40,111 +41,53 @@ public class Districting {
     @Transient
     private int splitPrecincts;
 
-    @Transient
-    private List<DistrictingSummary> districtingSummaries;
+    public Districting() {};
+
+    public Districting(long id, double populationEquality, double avgPolsbyPopper, int majorityMinorityCount,
+                       String districtPath, String precinctPath, String countyPath, List<District> districts,
+                       double populationEqualityThreshold, double polsbyPopperThreshold, int majorityMinorityThreshold,
+                       int splitPrecincts) {
+        this.id = id;
+        this.populationEquality = populationEquality;
+        this.avgPolsbyPopper = avgPolsbyPopper;
+        this.majorityMinorityCount = majorityMinorityCount;
+        this.districtPath = districtPath;
+        this.precinctPath = precinctPath;
+        this.countyPath = countyPath;
+        this.districts = districts;
+        this.populationEqualityThreshold = populationEqualityThreshold;
+        this.polsbyPopperThreshold = polsbyPopperThreshold;
+        this.majorityMinorityThreshold = majorityMinorityThreshold;
+        this.splitPrecincts = splitPrecincts;
+    }
+
+    @Override
+    public Object clone() {
+        Districting districting = null;
+        try {
+            districting = (Districting) super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            districting = new Districting(id, populationEquality, avgPolsbyPopper, majorityMinorityCount,
+                    districtPath, precinctPath, countyPath, districts, populationEqualityThreshold,
+                    polsbyPopperThreshold, majorityMinorityThreshold, splitPrecincts);
+        }
+        List<District> districtsClone = new ArrayList<>();
+        for (District district: districts) {
+            districtsClone.add((District) district.clone());
+        }
+        districting.setDistricts(districtsClone);
+        return districting;
+    }
 
     public void sortDistricts() {
         //Collections.sort(districts);
     }
 
-    // GETTERS AND SETTERS
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public double getPopulationEquality() {
-        return populationEquality;
-    }
-
-    public void setPopulationEquality(double populationEquality) {
-        this.populationEquality = populationEquality;
-    }
-
-    public double getAvgPolsbyPopper() {
-        return avgPolsbyPopper;
-    }
-
-    public void setAvgPolsbyPopper(double avgPolsbyPopper) {
-        this.avgPolsbyPopper = avgPolsbyPopper;
-    }
-
-    public int getMajorityMinorityCount() {
-        return majorityMinorityCount;
-    }
-
-    public void setMajorityMinorityCount(int majorityMinorityCount) {
-        this.majorityMinorityCount = majorityMinorityCount;
-    }
-
-    public String getDistrictPath() {
-        return districtPath;
-    }
-
-    public void setDistrictPath(String districtPath) {
-        this.districtPath = districtPath;
-    }
-
-    public String getPrecinctPath() {
-        return precinctPath;
-    }
-
-    public void setPrecinctPath(String precinctPath) {
-        this.precinctPath = precinctPath;
-    }
-
-    public String getCountyPath() {
-        return countyPath;
-    }
-
-    public void setCountyPath(String countyPath) {
-        this.countyPath = countyPath;
-    }
-
     // other stuff
 
-    // public Districting(Long id, State state, List<District> districts, Measures measures, double populationEqualityThreshold,
-    //                    double polsbyPopperThreshold, int majorityMinorityThreshold, int splitPrecincts,
-    //                    List<DistrictSummary> districtSummaries, String districtPath, String precinctPath,
-    //                    String countyPath){
-
-    //     this.id = id;
-    //     this.state = state;
-    //     this.districts = districts;
-    //     this.measures = measures;
-    //     this.populationEqualityThreshold = populationEqualityThreshold;
-    //     this.polsbyPopperThreshold = polsbyPopperThreshold;
-    //     this.majorityMinorityThreshold = majorityMinorityThreshold;
-    //     this.splitPrecincts = splitPrecincts;
-    //     this.districtSummaries = districtSummaries;
-    //     this.districtPath = districtPath;
-    //     this.precinctPath = precinctPath;
-    //     this.countyPath = countyPath;
-    // }
-
-    public Districting clone(){
-        // Long id = this.getId();
-        // State state = this.getState();
-        // List<District> districts = this.getDistricts();
-        // Measures measures = this.getMeasures();
-        // double popEqThresh = this.getPopulationEqualityThreshold();
-        // double polsbyThresh = this.getPolsbyPopperThreshold();
-        // int majMinThresh = this.getMajorityMinorityThreshold();
-        // int split = this.getSplitPrecincts();
-        // List<DistrictSummary> districtSum = this.getDistrictSummaries();
-        // String dPath = this.getDistrictPath();
-        // String pPath = this.getPrecinctPath();
-        // String cPath = this.getCountyPath();
-
-        return null;
-    }
-
     public boolean moveCBFromLargestToSmallestDistrict(){
-        Districting selectedDistricting = this.clone();
+        Districting selectedDistricting = (Districting) this.clone();
         District sourceDistrict = selectedDistricting.getLargestDistrict();
 
         CensusBlock selectedCB = sourceDistrict.getRandomBorderCB();
@@ -238,10 +181,62 @@ public class Districting {
         return false;
     }
 
-    // public List<Double> getBoxAndWhiskerPoints(Demographic basis) {}
+    // GETTERS AND SETTERS
+    public long getId() {
+        return id;
+    }
 
+    public void setId(long id) {
+        this.id = id;
+    }
 
+    public double getPopulationEquality() {
+        return populationEquality;
+    }
 
+    public void setPopulationEquality(double populationEquality) {
+        this.populationEquality = populationEquality;
+    }
+
+    public double getAvgPolsbyPopper() {
+        return avgPolsbyPopper;
+    }
+
+    public void setAvgPolsbyPopper(double avgPolsbyPopper) {
+        this.avgPolsbyPopper = avgPolsbyPopper;
+    }
+
+    public int getMajorityMinorityCount() {
+        return majorityMinorityCount;
+    }
+
+    public void setMajorityMinorityCount(int majorityMinorityCount) {
+        this.majorityMinorityCount = majorityMinorityCount;
+    }
+
+    public String getDistrictPath() {
+        return districtPath;
+    }
+
+    public void setDistrictPath(String districtPath) {
+        this.districtPath = districtPath;
+    }
+
+    public String getPrecinctPath() {
+        return precinctPath;
+    }
+
+    public void setPrecinctPath(String precinctPath) {
+        this.precinctPath = precinctPath;
+    }
+
+    public String getCountyPath() {
+        return countyPath;
+    }
+
+    public void setCountyPath(String countyPath) {
+        this.countyPath = countyPath;
+    }
 
     public List<District> getDistricts() {
         return districts;
@@ -281,13 +276,5 @@ public class Districting {
 
     public void setSplitPrecincts(int splitPrecincts) {
         this.splitPrecincts = splitPrecincts;
-    }
-
-    public List<DistrictingSummary> getDistrictingSummaries() {
-        return districtingSummaries;
-    }
-
-    public void setDistrictingSummaries(List<DistrictingSummary> districtingSummaries) {
-        this.districtingSummaries = districtingSummaries;
     }
 }

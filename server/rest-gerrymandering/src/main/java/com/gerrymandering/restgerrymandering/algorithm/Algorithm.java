@@ -1,7 +1,6 @@
 package com.gerrymandering.restgerrymandering.algorithm;
-/*
+
 import com.gerrymandering.restgerrymandering.model.Districting;
-import com.gerrymandering.restgerrymandering.model.Measures;
 
 import java.util.List;
 
@@ -11,7 +10,11 @@ public class Algorithm {
 
     private Districting currentDistricting;
 
-    private Measures currentDistrictingMeasures;
+    private double currentPopEq;
+
+    private double currentAvgPolsbyPopper;
+
+    private int currentMajorityMinorityCount;
 
     private boolean isRunning;
 
@@ -29,7 +32,9 @@ public class Algorithm {
 
     private boolean terminationFlag;
 
-    // getters n setters
+    public Algorithm()
+
+    // GETTERS AND SETTERS
 
     public AlgorithmSummary getAlgoSummary(){
         return algoSummary;
@@ -140,4 +145,3 @@ public class Algorithm {
         //STUB
     }
 }
-*/
