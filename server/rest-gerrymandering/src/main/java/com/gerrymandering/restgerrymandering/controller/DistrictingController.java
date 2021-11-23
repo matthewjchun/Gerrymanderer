@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.concurrent.Callable;
 
 //@CrossOrigin("http://localhost:3000")
 @RestController
@@ -92,7 +94,6 @@ public class DistrictingController {
     @PostMapping("/populationType")
     public ResponseEntity<String> setPopulationType(@RequestBody JsonObject populationTypeJson, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        System.out.println("hi");
         String populationTypeStr = populationTypeJson.get("populationType").getAsString().toUpperCase();
         Constants.PopulationType populationType = Constants.PopulationType.valueOf(populationTypeStr);
         session.setAttribute("populationType", populationType);
@@ -101,22 +102,41 @@ public class DistrictingController {
 
     @GetMapping("/algorithm")
     public ResponseEntity<JsonObject> startAlgorithm(@RequestParam(name = "id") long districtingId,
-                                                     @RequestParam double popEqThresh,
+                                                     @RequestParam(name = "popEqThresh") double popEqualityThresh,
                                                      @RequestParam double polsbyPopperThresh,
                                                      @RequestParam int majorityMinorityThresh,
                                                      HttpServletRequest request) {
         HttpSession session = request.getSession();
         State currentState = (State) session.getAttribute("currentState");
+        Constants.PopulationType populationType = (Constants.PopulationType) session.getAttribute("populationType");
         Districting selectedDistricting = currentState.getSeaWulfDistricting(districtingId);
-        Districting cloneDistricting = (Districting) selectedDistricting.clone();
+
         Algorithm algorithm = (Algorithm) session.getAttribute("algorithm");
         if (algorithm == null) {
             AlgorithmSummary algoSummary = new AlgorithmSummary(0, Constants.getMaxIterations(),
                     Constants.getMaxIterations() * Constants.getEstimatedTimePerIteration(), true,
                     currentState.getName(), selectedDistricting.getPopulationEquality(),
                     selectedDistricting.getAvgPolsbyPopper(), selectedDistricting.getMajorityMinorityCount(),
-                    new ArrayList<>());
-            algorithm = new Algorithm(new AlgorithmSummary())
+                    new ArrayList<>(), null);
+            algorithm = new Algorithm(algoSummary, populationType, selectedDistricting, 0, 0,
+                    popEqualityThresh, polsbyPopperThresh, majorityMinorityThresh, false);
         }
+        else {
+            AlgorithmSummary algoSummary = algorithm.getAlgoSummary();
+            algoSummary.setRunning(true);
+            algorithm.setTerminationFlag(false);
+        }
+        Districting cloneDistricting = (Districting) selectedDistricting.clone();
+        algorithm.start(selectedDistricting, popEqualityThresh, polsbyPopperThresh, majorityMinorityThresh);
+
+        session.setAttribute("algorithm", algorithm);
+        return null;
+    }
+
+    @GetMapping("/algorithmSummary")
+    public ResponseEntity<AlgorithmSummary> getAlgorithmSummary(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Algorithm algorithm = (Algorithm) session.getAttribute("algorithm");
+        return ResponseEntity.ok(algorithm.getAlgoSummary());
     }
 }
