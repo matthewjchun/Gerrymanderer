@@ -1,25 +1,17 @@
 package com.gerrymandering.restgerrymandering.algorithm;
-/*
-import com.gerrymandering.restgerrymandering.model.Districting;
-import com.gerrymandering.restgerrymandering.model.Measures;
 
-import java.util.List;
+import com.gerrymandering.restgerrymandering.constants.Constants;
+import com.gerrymandering.restgerrymandering.model.Districting;
 
 public class Algorithm {
 
     private AlgorithmSummary algoSummary;
 
+    private Constants.PopulationType populationType;
+
     private Districting currentDistricting;
 
-    private Measures currentDistrictingMeasures;
-
-    private boolean isRunning;
-
-    private int moveAttempts;
-
-    private int numberIterations;
-
-    private int maxIterations;
+    private int failedAttempts;
 
     private double popEqualityThresh;
 
@@ -29,14 +21,77 @@ public class Algorithm {
 
     private boolean terminationFlag;
 
-    // getters n setters
+    public Algorithm(AlgorithmSummary algoSummary, Constants.PopulationType populationType,
+                     Districting currentDistricting, int failedAttempts, double popEqualityThresh,
+                     double polsbyPopperThresh, int majorityMinorityThresh, boolean terminationFlag) {
+        this.algoSummary = algoSummary;
+        this.populationType = populationType;
+        this.currentDistricting = currentDistricting;
+        this.failedAttempts = failedAttempts;
+        this.popEqualityThresh = popEqualityThresh;
+        this.polsbyPopperThresh = polsbyPopperThresh;
+        this.majorityMinorityThresh = majorityMinorityThresh;
+        this.terminationFlag = terminationFlag;
+    }
 
-    public AlgorithmSummary getAlgoSummary(){
+    public void setThresholds(double popEqualityThresh, double polsbyPopperThresh, int majorityMinorityThresh){
+        this.popEqualityThresh = popEqualityThresh;
+        this.polsbyPopperThresh = polsbyPopperThresh;
+        this.majorityMinorityThresh = majorityMinorityThresh;
+    }
+
+    public void start(double popEqualityThresh, double polsbyPopperThresh, int majorityMinorityThresh) {
+        while (algoSummary.getNumberIterations() < Constants.getMaxIterations() &&
+                failedAttempts < Constants.getMaxFailedAttempts() && algoSummary.isRunning()) {
+            Districting selectedDistricting = (Districting) currentDistricting.clone();
+            boolean failure = false;
+            boolean moveSuccess = selectedDistricting.moveCBFromLargestToSmallestDistrict(selectedDistricting, populationType);
+            if (!moveSuccess) {
+                failure = true;
+            }
+            else {
+                selectedDistricting.calculatePopulationEquality();
+                if (!selectedDistricting.isImproved(currentDistricting, populationType)) {
+                    failure = true;
+                }
+                else {
+                    selectedDistricting.calculateAvgPolsbyPopper();
+                    selectedDistricting.calculateMajorityMinorityCount();
+                    if (!selectedDistricting.validateThresholds(popEqualityThresh, polsbyPopperThresh, majorityMinorityThresh, populationType)) {
+                        failure = true;
+                    }
+                    else {
+                        algoSummary.setDistrictingBoundary(selectedDistricting.calculateDistrictingBoundary());
+                        setCurrentDistricting(selectedDistricting);
+                        algoSummary.updateMeasures(currentDistricting);
+                    }
+                }
+            }
+            if (failure)
+                setFailedAttempts(failedAttempts + 1);
+            algoSummary.setNumberIterations(algoSummary.getNumberIterations() + 1);
+        }
+    }
+
+    public void pause(int time){
+        //STUB
+    }
+
+    // GETTERS AND SETTERS
+    public AlgorithmSummary getAlgoSummary() {
         return algoSummary;
     }
 
     public void setAlgoSummary(AlgorithmSummary algoSummary) {
         this.algoSummary = algoSummary;
+    }
+
+    public Constants.PopulationType getPopulationType() {
+        return populationType;
+    }
+
+    public void setPopulationType(Constants.PopulationType populationType) {
+        this.populationType = populationType;
     }
 
     public Districting getCurrentDistricting() {
@@ -47,49 +102,12 @@ public class Algorithm {
         this.currentDistricting = currentDistricting;
     }
 
-    public void setCurrentDistricting(Districting districting, Measures measures){
-        this.setCurrentDistricting(districting);
-        this.setCurrentDistrictingMeasures(measures);
+    public int getFailedAttempts() {
+        return failedAttempts;
     }
 
-    public Measures getCurrentDistrictingMeasures() {
-        return currentDistrictingMeasures;
-    }
-
-    public void setCurrentDistrictingMeasures(Measures currentDistrictingMeasures) {
-        this.currentDistrictingMeasures = currentDistrictingMeasures;
-    }
-
-    public boolean isRunning() {
-        return isRunning;
-    }
-
-    public void setRunning(boolean running) {
-        isRunning = running;
-    }
-
-    public int getMoveAttempts() {
-        return moveAttempts;
-    }
-
-    public void setMoveAttempts(int moveAttempts) {
-        this.moveAttempts = moveAttempts;
-    }
-
-    public int getNumberIterations() {
-        return numberIterations;
-    }
-
-    public void setNumberIterations(int numberIterations) {
-        this.numberIterations = numberIterations;
-    }
-
-    public int getMaxIterations() {
-        return maxIterations;
-    }
-
-    public void setMaxIterations(int maxIterations) {
-        this.maxIterations = maxIterations;
+    public void setFailedAttempts(int failedAttempts) {
+        this.failedAttempts = failedAttempts;
     }
 
     public double getPopEqualityThresh() {
@@ -123,21 +141,4 @@ public class Algorithm {
     public void setTerminationFlag(boolean terminationFlag) {
         this.terminationFlag = terminationFlag;
     }
-
-    public void setThresholds(double popEqualityThresh, double polsbyPopperThresh, int majorityMinorityThresh){
-        this.popEqualityThresh = popEqualityThresh;
-        this.polsbyPopperThresh = polsbyPopperThresh;
-        this.majorityMinorityThresh = majorityMinorityThresh;
-    }
-
-    public AlgorithmSummary start(Districting selectedDistricting, double popEqualityThresh, double polsbyPopperThresh,
-                                  int majorityMinorityThresh){
-        //STUB
-        return algoSummary;
-    }
-
-    public void pause(int time){
-        //STUB
-    }
 }
-*/

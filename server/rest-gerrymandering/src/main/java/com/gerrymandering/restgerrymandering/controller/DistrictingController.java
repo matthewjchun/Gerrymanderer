@@ -1,5 +1,7 @@
 package com.gerrymandering.restgerrymandering.controller;
 
+import com.gerrymandering.restgerrymandering.algorithm.Algorithm;
+import com.gerrymandering.restgerrymandering.algorithm.AlgorithmSummary;
 import com.gerrymandering.restgerrymandering.constants.Constants;
 import com.gerrymandering.restgerrymandering.model.Districting;
 import com.gerrymandering.restgerrymandering.model.State;
@@ -16,14 +18,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.FileReader;
+import java.util.ArrayList;
 
 //@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/")
 public class DistrictingController {
 
-    private State currentState;
-    private Constants.PopulationType populationType;
     private StateService ss;
     private DistrictingService dgs;
     private DistrictService ds;
@@ -60,15 +61,11 @@ public class DistrictingController {
     @GetMapping("/stateFull")
     public ResponseEntity<JsonObject> getStateFull(@RequestParam String state, HttpServletRequest request) {
         HttpSession session = request.getSession();
-
         State stateObj = ss.getStateByName(state);
         //currentState = stateObj;
-        session.setAttribute("currentState", stateObj.getName());
-        //System.out.println("State Name: " + stateObj.getName());
+        session.setAttribute("currentState", stateObj);
 
-        return ResponseEntity.ok(null);
-
-        /*JsonObject stateFull = new JsonObject();
+        JsonObject stateFull = new JsonObject();
         Districting enactedDistricting = stateObj.getEnactedDistricting();
         String districtPath = enactedDistricting.getDistrictPath();
         String precinctPath = enactedDistricting.getPrecinctPath();
@@ -86,16 +83,55 @@ public class DistrictingController {
         String summaryStr = gson.toJson(state);
         JsonObject summary = JsonParser.parseString(summaryStr).getAsJsonObject();
         stateFull.add("summary", summary);
-        return ResponseEntity.ok(stateFull);*/
+        return ResponseEntity.ok(stateFull);
     }
 
     @PostMapping("/populationType")
     public ResponseEntity<String> setPopulationType(@RequestBody JsonObject populationTypeJson, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        System.out.println("hi");
         String populationTypeStr = populationTypeJson.get("populationType").getAsString().toUpperCase();
         Constants.PopulationType populationType = Constants.PopulationType.valueOf(populationTypeStr);
         session.setAttribute("populationType", populationType);
         return ResponseEntity.ok("" + populationType);
+    }
+
+    @GetMapping("/algorithm")
+    public ResponseEntity<JsonObject> startAlgorithm(@RequestParam(name = "id") long districtingId,
+                                                     @RequestParam(name = "popEqThresh") double popEqualityThresh,
+                                                     @RequestParam double polsbyPopperThresh,
+                                                     @RequestParam int majorityMinorityThresh,
+                                                     HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        State currentState = (State) session.getAttribute("currentState");
+        Constants.PopulationType populationType = (Constants.PopulationType) session.getAttribute("populationType");
+        Districting selectedDistricting = currentState.getSeaWulfDistricting(districtingId);
+
+        Algorithm algorithm = (Algorithm) session.getAttribute("algorithm");
+        if (algorithm == null) {
+            AlgorithmSummary algoSummary = new AlgorithmSummary(0,
+                    Constants.getMaxIterations() * Constants.getEstimatedTimePerIteration(), true,
+                    currentState.getName(), selectedDistricting.getPopulationEqualityTotal(),
+                    selectedDistricting.getPopulationEqualityVAP(), selectedDistricting.getPopulationEqualityCVAP(),
+                    selectedDistricting.getAvgPolsbyPopper(), selectedDistricting.getMajorityMinorityCountTotal(),
+                    selectedDistricting.getMajorityMinorityCountVAP(),
+                    selectedDistricting.getMajorityMinorityCountCVAP(), new ArrayList<>(), null);
+            algorithm = new Algorithm(algoSummary, populationType, selectedDistricting, 0,
+                    popEqualityThresh, polsbyPopperThresh, majorityMinorityThresh, false);
+        }
+        else {
+            AlgorithmSummary algoSummary = algorithm.getAlgoSummary();
+            algoSummary.setRunning(true);
+            algorithm.setTerminationFlag(false);
+        }
+        algorithm.start(popEqualityThresh, polsbyPopperThresh, majorityMinorityThresh);
+        session.setAttribute("algorithm", algorithm);
+        return null;
+    }
+
+    @GetMapping("/algorithmSummary")
+    public ResponseEntity<AlgorithmSummary> getAlgorithmSummary(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Algorithm algorithm = (Algorithm) session.getAttribute("algorithm");
+        return ResponseEntity.ok(algorithm.getAlgoSummary());
     }
 }

@@ -16,6 +16,7 @@ public class County {
 
     @OneToMany
     @JoinColumn(name = "countyId", referencedColumnName = "id")
+    @OrderBy("populationType")
     private List<Population> populations;
 
     @OneToMany

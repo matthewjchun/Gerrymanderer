@@ -1,7 +1,8 @@
 package com.gerrymandering.restgerrymandering.algorithm;
 
-/*import com.gerrymandering.restgerrymandering.model.Measures;
+import com.gerrymandering.restgerrymandering.model.Districting;
 import com.gerrymandering.restgerrymandering.model.Precinct;
+import com.vividsolutions.jts.geom.Geometry;
 
 import java.util.List;
 
@@ -9,27 +10,61 @@ public class AlgorithmSummary {
 
     private int numberIterations;
 
-    private int maxIterations;
+    private int estimatedTime;
 
-    private long estimatedTime;
-
-    private boolean isRunning;
+    private boolean running;
 
     private String stateName;
 
-    private double populationEquality;
+    private double populationEqualityTotal;
+
+    private double populationEqualityVAP;
+
+    private double populationEqualityCVAP;
 
     private double avgPolsbyPopper;
 
-    private int majorityMinority;
+    private int majorityMinorityCountTotal;
+
+    private int majorityMinorityCountVAP;
+
+    private int majorityMinorityCountCVAP;
 
     private List<Precinct> splitPrecincts;
 
-//    private Geometry districtingBoundary;
+    private Geometry districtingBoundary;
 
-// setters & getters
+    public AlgorithmSummary(int numberIterations, int estimatedTime, boolean running, String stateName,
+                            double populationEqualityTotal, double populationEqualityVAP, double populationEqualityCVAP,
+                            double avgPolsbyPopper, int majorityMinorityCountTotal, int majorityMinorityCountVAP,
+                            int majorityMinorityCountCVAP, List<Precinct> splitPrecincts, Geometry districtingBoundary) {
+        this.numberIterations = numberIterations;
+        this.estimatedTime = estimatedTime;
+        this.running = running;
+        this.stateName = stateName;
+        this.populationEqualityTotal = populationEqualityTotal;
+        this.populationEqualityVAP = populationEqualityVAP;
+        this.populationEqualityCVAP = populationEqualityCVAP;
+        this.avgPolsbyPopper = avgPolsbyPopper;
+        this.majorityMinorityCountTotal = majorityMinorityCountTotal;
+        this.majorityMinorityCountVAP = majorityMinorityCountVAP;
+        this.majorityMinorityCountCVAP = majorityMinorityCountCVAP;
+        this.splitPrecincts = splitPrecincts;
+        this.districtingBoundary = districtingBoundary;
+    }
 
-    public int getNumberIterations(){
+    public void updateMeasures(Districting districting) {
+        setPopulationEqualityTotal(districting.getPopulationEqualityTotal());
+        setPopulationEqualityVAP(districting.getPopulationEqualityVAP());
+        setPopulationEqualityCVAP(districting.getPopulationEqualityCVAP());
+        setAvgPolsbyPopper(districting.getAvgPolsbyPopper());
+        setMajorityMinorityCountTotal(districting.getMajorityMinorityCountTotal());
+        setMajorityMinorityCountVAP(districting.getMajorityMinorityCountVAP());
+        setMajorityMinorityCountCVAP(districting.getMajorityMinorityCountCVAP());
+    }
+
+    // GETTERS AND SETTERS
+    public int getNumberIterations() {
         return numberIterations;
     }
 
@@ -37,28 +72,20 @@ public class AlgorithmSummary {
         this.numberIterations = numberIterations;
     }
 
-    public int getMaxIterations() {
-        return maxIterations;
-    }
-
-    public void setMaxIterations(int maxIterations) {
-        this.maxIterations = maxIterations;
-    }
-
-    public long getEstimatedTime() {
+    public int getEstimatedTime() {
         return estimatedTime;
     }
 
-    public void setEstimatedTime(long estimatedTime) {
+    public void setEstimatedTime(int estimatedTime) {
         this.estimatedTime = estimatedTime;
     }
 
     public boolean isRunning() {
-        return isRunning;
+        return running;
     }
 
     public void setRunning(boolean running) {
-        isRunning = running;
+        this.running = running;
     }
 
     public String getStateName() {
@@ -69,28 +96,60 @@ public class AlgorithmSummary {
         this.stateName = stateName;
     }
 
-    public double getPopulationEquality() {
-        return populationEquality;
+    public double getPopulationEqualityTotal() {
+        return populationEqualityTotal;
     }
 
-    public void setPopulationEquality(double populationEquality) {
-        this.populationEquality = populationEquality;
+    public void setPopulationEqualityTotal(double populationEqualityTotal) {
+        this.populationEqualityTotal = populationEqualityTotal;
+    }
+
+    public double getPopulationEqualityVAP() {
+        return populationEqualityVAP;
+    }
+
+    public void setPopulationEqualityVAP(double populationEqualityVAP) {
+        this.populationEqualityVAP = populationEqualityVAP;
+    }
+
+    public double getPopulationEqualityCVAP() {
+        return populationEqualityCVAP;
+    }
+
+    public void setPopulationEqualityCVAP(double populationEqualityCVAP) {
+        this.populationEqualityCVAP = populationEqualityCVAP;
     }
 
     public double getAvgPolsbyPopper() {
         return avgPolsbyPopper;
     }
 
-    public void setAvgPolsbyPopper(double AvgPolsbyPopper) {
+    public void setAvgPolsbyPopper(double avgPolsbyPopper) {
         this.avgPolsbyPopper = avgPolsbyPopper;
     }
 
-    public int getMajorityMinority() {
-        return majorityMinority;
+    public int getMajorityMinorityCountTotal() {
+        return majorityMinorityCountTotal;
     }
 
-    public void setMajorityMinority(int majorityMinority) {
-        this.majorityMinority = majorityMinority;
+    public void setMajorityMinorityCountTotal(int majorityMinorityCountTotal) {
+        this.majorityMinorityCountTotal = majorityMinorityCountTotal;
+    }
+
+    public int getMajorityMinorityCountVAP() {
+        return majorityMinorityCountVAP;
+    }
+
+    public void setMajorityMinorityCountVAP(int majorityMinorityCountVAP) {
+        this.majorityMinorityCountVAP = majorityMinorityCountVAP;
+    }
+
+    public int getMajorityMinorityCountCVAP() {
+        return majorityMinorityCountCVAP;
+    }
+
+    public void setMajorityMinorityCountCVAP(int majorityMinorityCountCVAP) {
+        this.majorityMinorityCountCVAP = majorityMinorityCountCVAP;
     }
 
     public List<Precinct> getSplitPrecincts() {
@@ -101,23 +160,11 @@ public class AlgorithmSummary {
         this.splitPrecincts = splitPrecincts;
     }
 
-//    public Geometry getDistrictingBoundary(){
-//        return districtingBoundary;
-//    }
-//
-//    public void setDistrictingBoundary(Geometry districtingBoundary){
-//        this.districtingBoundary = districtingBoundary;
-//    }
+    public Geometry getDistrictingBoundary() {
+        return districtingBoundary;
+    }
 
-    public void setAllMeasures(Measures measures){
-        // population eq: double, polsbyPopper: double, majority minority: int
-        double popEq = measures.getPopulationEquality();
-        double polsby = measures.getAvgPolsbyPopper();
-        int majMin = measures.getMajorityMinorityCount();
-
-        this.setPopulationEquality(popEq);
-        this.setAvgPolsbyPopper(polsby);
-        this.setMajorityMinority(majMin);
+    public void setDistrictingBoundary(Geometry districtingBoundary) {
+        this.districtingBoundary = districtingBoundary;
     }
 }
-*/

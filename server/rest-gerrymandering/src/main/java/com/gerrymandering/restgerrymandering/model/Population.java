@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Populations")
-public class Population {
+public class Population implements Cloneable {
 
     @Id
     @GeneratedValue
@@ -30,9 +30,33 @@ public class Population {
     @Enumerated(EnumType.ORDINAL)
     private Constants.PopulationType populationType;
 
+    public Population() {}
 
-    // getters n setters
+    public Population(long id, int total, int african, int white, int asian, int hispanic, int nativeAmerican,
+                      int pacificIslander, Constants.PopulationType populationType) {
+        this.id = id;
+        this.total = total;
+        this.african = african;
+        this.white = white;
+        this.asian = asian;
+        this.hispanic = hispanic;
+        this.nativeAmerican = nativeAmerican;
+        this.pacificIslander = pacificIslander;
+        this.populationType = populationType;
+    }
 
+    @Override
+    public Object clone() {
+        try {
+            return super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            return new Population(id, total, african, white, asian, hispanic, nativeAmerican, pacificIslander,
+                    populationType);
+        }
+    }
+
+    // GETTERS AND SETTERS
     public long getId() {
         return id;
     }
