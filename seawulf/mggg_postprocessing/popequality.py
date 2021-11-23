@@ -1,5 +1,4 @@
 import json
-import math
 
 with open('recombination_of_districts.json') as f:
     recomb = json.load(f)
