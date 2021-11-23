@@ -1,0 +1,1 @@
+INSERT INTO Populations (popType, total, african, white, asian, hispanic, native, pacificIslander, stateName) VALUES(0, 7151502, 317161, 3816547, 248837, 2192253, 263930, 14323, 'az'),(1, 5541976, 236894, 3218094, 199796, 1489617, 189473, 10590, 'az'),(2, 4920145, 236142, 3158145, 142303, 1139800, 222170, 8421, 'az');
