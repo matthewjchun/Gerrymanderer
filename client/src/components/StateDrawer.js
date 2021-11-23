@@ -78,12 +78,10 @@ export default function StateDrawer(props) {
     const response = await fetch('/populationType', {
       method: "POST",
       body: JSON.stringify({populationType: typeMap[value]}),
-      headers: {"Content-type": "application/json; charset=UTF-8", 'Accept': 'application/json'}
+      headers: {"Content-type": "application/json; charset=UTF-8"}
     });
-    await console.log(response)
     const body = await response.json();
     console.log(body)
-    console.log(JSON.stringify(response))
     return body;
   }
 
