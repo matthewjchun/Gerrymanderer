@@ -1,6 +1,6 @@
 import csv 
 import json
-from getData import writeToCSVFile
+from util import writeToCSVFile
 
 def csvToSQLState(inFilename, outFilename):
     data = []
@@ -13,12 +13,7 @@ def csvToSQLState(inFilename, outFilename):
             if '+' in row["INTPTLON20"]:
                 row["INTPTLON20"] = row["INTPTLON20"][1:]
             data.append({"name": row["STUSPS20"].lower(),"centerLat": row["INTPTLAT20"], "centerLon": row["INTPTLON20"], "path": "states/" + row["STUSPS20"].lower() + ".json"})
-            populationData.append({"popType": 0, "total": row["P0020001"], "hispanic": row["P0020002"], "white": row["P0020005"], 
-                                "african": row["P0020006"], "native": row["P0020007"], "asian": row["P0020008"], "pacificIslander": row["P0020009"]})
-            populationData.append({"popType": 1, "total": row["P0040001"], "hispanic": row["P0040002"], "white": row["P0040005"], 
-                                "african": row["P0040006"], "native": row["P0040007"], "asian": row["P0040008"], "pacificIslander": row["P0040009"]})
-            populationData.append({"popType": 2, "total": row["CVAP_TOT19"], "hispanic": row["CVAP_HSP19"], "white": row["CVAP_WHT19"], "african": row["CVAP_BLK19"],
-                                    "native": row["CVAP_AIA19"], "asian": row["CVAP_ASN19"], "pacificIslander": row["CVAP_NHP19"]})
+            addToPopulationList(populationData, row, 0)
     with open(outFilename + ".sql", 'w') as file:
         sqlStateInsert = "INSERT INTO States (name, centerLat, centerLon, path) VALUES "
         for row in data:
@@ -37,12 +32,7 @@ def csvToSQLCounty(inFilename, outFilename, state, id, index):
         csvReader = csv.DictReader(csvfile)
         for row in csvReader:
             data.append({"id": str(id), "county": str(row["COUNTYFP20"]), "stateName": state, "path": "counties/" + state + "_county_" + str(index) + ".json"})
-            populationData.append({"popType": 0, "total": row["P0020001"], "hispanic": row["P0020002"], "white": row["P0020005"], 
-                                "african": row["P0020006"], "native": row["P0020007"], "asian": row["P0020008"], "pacificIslander": row["P0020009"], "id": str(id)})
-            populationData.append({"popType": 1, "total": row["P0040001"], "hispanic": row["P0040002"], "white": row["P0040005"], 
-                                "african": row["P0040006"], "native": row["P0040007"], "asian": row["P0040008"], "pacificIslander": row["P0040009"], "id": str(id)})
-            populationData.append({"popType": 2, "total": row["CVAP_TOT19"], "hispanic": row["CVAP_HSP19"], "white": row["CVAP_WHT19"], "african": row["CVAP_BLK19"],
-                                    "native": row["CVAP_AIA19"], "asian": row["CVAP_ASN19"], "pacificIslander": row["CVAP_NHP19"], "id": str(id)})
+            addToPopulationList(populationData, row, id)
             index += 1
             id += 1
     with open(outFilename + ".sql", 'w') as file:
@@ -61,10 +51,13 @@ def csvToSQLCounty(inFilename, outFilename, state, id, index):
         newData.append([row["id"], row["county"]])
     writeToCSVFile(state + "_county_id.csv", header, newData)
 
-def districtingSQLInsert(outFilename, id, stateName):
-    with open(outFilename + ".sql", 'w') as file:
-        sqlDistrictingInsert = "INSERT INTO Districtings (id, stateName, districtPath, countyPath, precinctPath) VALUES (" + str(id) + ", '" + stateName + "', " + "'districts/" + stateName + "_districts.json', 'counties/" + stateName + "_counties.json', 'precincts/" + stateName + "_precincts.json');"
-        file.write(sqlDistrictingInsert)
+def csvToSQLDistricting(inFilename, outFilename):
+    with open(inFilename, 'r') as csvfile:
+        csvReader = csv.DictReader(csvfile)
+        for row in csvReader:
+            with open(outFilename + ".sql", 'w') as file:
+                sqlDistrictingInsert = "INSERT INTO Districtings (id, populationEqualityTotal, populationEqualityVAP, populationEqualityCVAP, avgPolsbyPopper, majorityMinorityCountTotal, majorityMinorityCountVAP, majorityMinorityCountCVAP, stateName, districtPath, countyPath, precinctPath) VALUES (" + str(row["id"]) + ", "+ str(row["peTotal"]) + ", "+ str(row["peVAP"]) + ", "+ str(row["peCVAP"]) + ", " + str(row["avgPolsby"]) + ", " + str(row["mmTotal"]) + ", " + str(row["mmVAP"]) + ", " + str(row["mmCVAP"]) + ", '" + row["stateName"] + "', '" + row["districtPath"] + "', '" + row["countyPath"] + "', '" + row["precinctPath"] + "');"
+                file.write(sqlDistrictingInsert)
 
 def csvToSQLDistrict(inFilename, outFilename, state, id, index, districtingId):
     data = []
@@ -72,19 +65,14 @@ def csvToSQLDistrict(inFilename, outFilename, state, id, index, districtingId):
     with open(inFilename, 'r') as csvfile:
         csvReader = csv.DictReader(csvfile)
         for row in csvReader:
-            data.append({"id": str(id), "GEOID20": row["GEOID20"] ,"districtingId": str(districtingId), "path": "districts/enacted" + state + "_district_" + str(index) + ".json"})
-            populationData.append({"popType": 0, "total": row["P0020001"], "hispanic": row["P0020002"], "white": row["P0020005"], 
-                                "african": row["P0020006"], "native": row["P0020007"], "asian": row["P0020008"], "pacificIslander": row["P0020009"], "id": id})
-            populationData.append({"popType": 1, "total": row["P0040001"], "hispanic": row["P0040002"], "white": row["P0040005"], 
-                                "african": row["P0040006"], "native": row["P0040007"], "asian": row["P0040008"], "pacificIslander": row["P0040009"], "id": id})
-            populationData.append({"popType": 2, "total": row["CVAP_TOT19"], "hispanic": row["CVAP_HSP19"], "white": row["CVAP_WHT19"], "african": row["CVAP_BLK19"],
-                                    "native": row["CVAP_AIA19"], "asian": row["CVAP_ASN19"], "pacificIslander": row["CVAP_NHP19"], "id": id})
+            data.append({"id": str(id), "GEOID20": row["GEOID20"], "polsbyPopper": row["polsbyPopper"], "mmTotal":row["mmTotal"], "mmVAP": row["mmVAP"], "mmCVAP": row["mmCVAP"], "districtingId": str(districtingId), "path": "enacted/districts/" + state + "_district_" + str(index) + ".json"})
+            addToPopulationList(populationData, row, id)
             index += 1
             id += 1
     with open(outFilename + ".sql", 'w') as file:
-        sqlStateInsert = "INSERT INTO Districts (id, polsbyPopper, majorMinority, path, districtingId) VALUES \n"
+        sqlStateInsert = "INSERT INTO Districts (id, polsbyPopper, majorityMinorityTotal, majorityMinorityVAP, majorityMinorityCVAP, path, districtingId) VALUES \n"
         for row in data:
-            sqlStateInsert +=  "(" + str(row["id"]) + ", " + '0' + ", " + '0' + ", '" + str(row["path"]) + "', " + str(row["districtingId"]) + "),\n"
+            sqlStateInsert +=  "(" + str(row["id"]) + ", " + str(row["polsbyPopper"]) + ", " + str(row["mmTotal"]) + ", " + str(row["mmVAP"]) + ", " + str(row["mmCVAP"]) + ", '" + str(row["path"]) + "', " + str(row["districtingId"]) + "),\n"
         file.write(sqlStateInsert[:-2] + ';')
     with open(outFilename + "_population.sql", 'w') as file:
         sqlPopulationInsert = "INSERT INTO Populations (popType, total, african, white, asian, hispanic, native, pacificIslander, districtId) VALUES \n"
@@ -121,12 +109,7 @@ def csvToSQLPrecinct(inFilename, outFilename, state, id, index, districtFile, co
                 if line[1] == row["COUNTYFP20"]:
                     rowDict["countyId"] = line[0]
             data.append(rowDict)
-            populationData.append({"popType": 0, "total": row["P0020001"], "hispanic": row["P0020002"], "white": row["P0020005"], 
-                                "african": row["P0020006"], "native": row["P0020007"], "asian": row["P0020008"], "pacificIslander": row["P0020009"], "id": id})
-            populationData.append({"popType": 1, "total": row["P0040001"], "hispanic": row["P0040002"], "white": row["P0040005"], 
-                                "african": row["P0040006"], "native": row["P0040007"], "asian": row["P0040008"], "pacificIslander": row["P0040009"], "id": id})
-            populationData.append({"popType": 2, "total": row["CVAP_TOT19"], "hispanic": row["CVAP_HSP19"], "white": row["CVAP_WHT19"], "african": row["CVAP_BLK19"],
-                                    "native": row["CVAP_AIA19"], "asian": row["CVAP_ASN19"], "pacificIslander": row["CVAP_NHP19"], "id": id})
+            addToPopulationList(populationData, row, id)
             index += 1
             id += 1
     with open(outFilename + ".sql", 'w') as file:
@@ -169,12 +152,7 @@ def csvToSQLCB(inFilename, outFilename, state, id, index, districtFile, precinct
                 if line[1] == row["STATEFP20"]+row["COUNTYFP20"]+row["VTD"]:
                     rowDict["precinctId"] = line[0]
             data.append(rowDict)
-            populationData.append({"popType": 0, "total": row["P0020001"], "hispanic": row["P0020002"], "white": row["P0020005"], 
-                                "african": row["P0020006"], "native": row["P0020007"], "asian": row["P0020008"], "pacificIslander": row["P0020009"], "id": id})
-            populationData.append({"popType": 1, "total": row["P0040001"], "hispanic": row["P0040002"], "white": row["P0040005"], 
-                                "african": row["P0040006"], "native": row["P0040007"], "asian": row["P0040008"], "pacificIslander": row["P0040009"], "id": id})
-            populationData.append({"popType": 2, "total": row["CVAP_TOT19"], "hispanic": row["CVAP_HSP19"], "white": row["CVAP_WHT19"], "african": row["CVAP_BLK19"],
-                                    "native": row["CVAP_AIA19"], "asian": row["CVAP_ASN19"], "pacificIslander": row["CVAP_NHP19"], "id": id})
+            addToPopulationList(populationData, row, id)
             index += 1
             id += 1
     with open(outFilename + ".sql", 'w') as file:
@@ -193,10 +171,18 @@ def csvToSQLCB(inFilename, outFilename, state, id, index, districtFile, precinct
         newData.append([row["id"], row["GEOID20"]])
     writeToCSVFile(state + "_CB_id.csv", header, newData)
 
+def addToPopulationList(popList, row, id):
+    popList.append({"popType": 0, "total": row["P0020001"], "hispanic": row["P0020002"], "white": row["P0020005"], 
+                    "african": row["P0020006"], "native": row["P0020007"], "asian": row["P0020008"], "pacificIslander": row["P0020009"], "id": id})
+    popList.append({"popType": 1, "total": row["P0040001"], "hispanic": row["P0040002"], "white": row["P0040005"], 
+                    "african": row["P0040006"], "native": row["P0040007"], "asian": row["P0040008"], "pacificIslander": row["P0040009"], "id": id})
+    popList.append({"popType": 2, "total": row["CVAP_TOT19"], "hispanic": row["CVAP_HSP19"], "white": row["CVAP_WHT19"], "african": row["CVAP_BLK19"],
+                    "native": row["CVAP_AIA19"], "asian": row["CVAP_ASN19"], "pacificIslander": row["CVAP_NHP19"], "id": id})
+ 
 if __name__=="__main__":
-    # csvToSQLState("az_state.csv", "az_state")
-    # districtingSQLInsert("az_districting", 1, "az")
-    # csvToSQLCounty("az_county.csv", "az_county", "az", 1, 0)
-    # csvToSQLDistrict("az_district.csv", "az_district", "az", 1, 0, 1)
-    # csvToSQLPrecinct("az_precinct.csv", "az_precinct", "az", 1, 0, "az_district_id.csv", "az_county_id.csv")
-    # csvToSQLCB("az_cb.csv", "az_cb", "az", 1, 0, "az_district_id.csv", "az_precinct_id.csv")
+    csvToSQLState("az_state.csv", "az_state")
+    csvToSQLDistricting("az_districting_1.csv", "az_districting_1")
+    csvToSQLCounty("az_county.csv", "az_county", "az", 1, 0)
+    csvToSQLDistrict("az_district.csv", "az_district", "az", 1, 0, 1)
+    csvToSQLPrecinct("az_precinct.csv", "az_precinct", "az", 1, 0, "az_district_id.csv", "az_county_id.csv")
+    csvToSQLCB("az_cb.csv", "az_cb", "az", 1, 0, "az_district_id.csv", "az_precinct_id.csv")

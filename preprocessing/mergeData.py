@@ -1,5 +1,5 @@
 import csv
-from getData import writeToCSVFile
+from util import writeToCSVFile, nameIsEqual
 
 def mergePrecinctByName(file1, file2, outFilename):
     f1 = open(file1)
@@ -26,23 +26,6 @@ def mergePrecinctByName(file1, file2, outFilename):
                 break
         newData.append(rowList)
     writeToCSVFile(outFilename, header, newData)
-
-def nameIsEqual(name1, name2):
-    name2 = name2.replace('.', '')
-    name2 = name2.replace('-', ' ')
-    name1 = name1.replace('-', ' ')
-    nameList = name1.split(" ")
-    if name1.casefold() == name2.casefold():
-        return True
-    elif len(nameList) >= 2:
-        if " ".join(nameList[1:]).casefold() == name2.casefold():
-            return True
-        if " ".join(nameList[:-1]).casefold() == name2.casefold():
-            return True
-        if " ".join(nameList[:-2]).casefold() == name2.casefold():
-            return True
-        if nameList[0].casefold() == name2.casefold():
-            return True
 
 def mergePrecinctByGeoID(file1, file2, outFilename):
     f1 = open(file1)
@@ -97,6 +80,5 @@ def mergeCensusBlocks(file1, file2, outFilename):
     writeToCSVFile(outFilename, header, newData)
 
 if __name__ == "__main__":
-    mergePrecinctByGeoID()
-    mergePrecinctByName()
-    mergeCensusBlocks()
+    mergePrecinctByName("az_precinct_election.csv", "az_precinct_geoid.csv", "az_precinct_election_geoid.csv")
+    mergeCensusBlocks("az_censusblock.csv", "az_cb_cvap.csv", "az_cb.csv")
