@@ -1,9 +1,15 @@
 package com.gerrymandering.restgerrymandering.model;
 
 import com.gerrymandering.restgerrymandering.constants.Constants;
+import com.vividsolutions.jts.geom.Geometry;
+import org.geotools.geojson.geom.GeometryJSON;
+import org.geotools.geometry.jts.JTSFactoryFinder;
+import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.GeometryFactory;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -235,6 +241,15 @@ public class Districting implements Cloneable{
                 default:
                     break;
             }
+        }
+    }
+
+    public void calculateDistrictingBoundary() {
+        GeometryFactory factory = JTSFactoryFinder.getGeometryFactory();
+        GeometryJSON geometryJSON = new GeometryJSON();
+        Collection<Geometry> geometryCollection = new ArrayList<>();
+        for (District district: districts) {
+
         }
     }
 
