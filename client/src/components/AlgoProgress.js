@@ -9,12 +9,15 @@ import {
   Text,
   Button,
   Divider,
+  Heading,
+  Center,
+  VStack
 } from "@chakra-ui/react";
 import { useContext, useState, useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 
 export default function AlgoProgress(props) {
-    const { isOpen, onClose } = props;
+    const { isOpen, onClose, activeState } = props;
     // const { runningFlag, setRunningFlag } = useState();
     let runningFlag = true;
     // useEffect(() => {
@@ -32,18 +35,25 @@ export default function AlgoProgress(props) {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Algorithm in progress...</ModalHeader>
+          <ModalHeader>              
+            <Heading>{activeState}</Heading>  
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Divider />
-            <Text>Change in Population Equality: </Text>
-            <Text>Change in Polsby Popper: </Text>
-            <Text>Change in Majority Minority: </Text>
-            <Divider />
-            <Text>Number of iterations: </Text>
-            <Text>Algorithm time: </Text>
-            <Text>Estimated time to completion: </Text>
-            <Divider size="50px"/>
+            <VStack spacing="24px">
+              <Center>
+                <Text>Algorithm in progress...</Text>
+              </Center>
+              <Divider />
+              <Text align="left">Change in Population Equality: </Text>
+              <Text align="left">Change in Polsby Popper: </Text>
+              <Text align="left">Change in Majority Minority: </Text>
+              <Divider />
+              <Text align="left">Number of iterations: </Text>
+              <Text align="left">Algorithm time: </Text>
+              <Text align="left">Estimated time to completion: </Text>
+              <Divider/>
+            </VStack>
           </ModalBody>
 
           <ModalFooter>

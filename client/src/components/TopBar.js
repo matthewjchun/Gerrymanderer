@@ -24,8 +24,8 @@ export default function TopBar(props) {
 
           <LeftPane isOpen={isDrawerOpen} onClose={onDrawerClose} onOpen={onDrawerOpen} onModalOpen={onModalOpen} 
             onBoxOpen={onBoxOpen}></LeftPane>
-          <AlgoProgress isOpen={isModalOpen} onClose={onModalClose} onModalOpen={onModalOpen}> </AlgoProgress>
-          <BoxAndWhisker isOpen={isBoxOpen} onClose={onBoxClose} onOpen={onBoxOpen}></BoxAndWhisker>
+          <AlgoProgress isOpen={isModalOpen} onClose={onModalClose} onModalOpen={onModalOpen} activeState={activeState}> </AlgoProgress>
+          <BoxAndWhisker isOpen={isBoxOpen} onClose={onBoxClose} onOpen={onBoxOpen} activeState={activeState}></BoxAndWhisker>
         </Box>
       ) : (
         <Box flex='1' mr='auto' />

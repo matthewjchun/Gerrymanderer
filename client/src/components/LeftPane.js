@@ -1079,12 +1079,6 @@ export default function LeftPane(props) {
             </TabPanels>
           </Tabs>
           <DrawerFooter>
-            {/* <VStack spacing='3' align='right'>
-              <Button onClick={handleGenerate}>
-                <Text>Generate</Text>
-              </Button>
-              <Text fontSize='sm'>Last updated: 10 seconds ago</Text>
-            </VStack> */}
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

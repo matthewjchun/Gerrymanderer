@@ -62,9 +62,9 @@ export default function StateDrawer(props) {
 
   let processedData = processGeoJSONData(); */
 
-  let TOTAL = 1000000;
-  let VAP = 200000;
-  let CVAP = 30000000;
+  let TOTAL;
+  let VAP;
+  let CVAP;
 
   const typeMap = {
     0 : 'TOTAL',
@@ -125,7 +125,7 @@ export default function StateDrawer(props) {
               <Flex align='center' justify='space-evenly'>
                 <Tab>State Statistics</Tab>
                 <Tab>Districts</Tab>
-                <Tab>Data</Tab>
+                {/* <Tab>Data</Tab> */}
               </Flex>
             </TabList>
             <TabPanels>
@@ -516,7 +516,7 @@ export default function StateDrawer(props) {
                 </Table>
                 <Divider />
               </TabPanel>
-              <TabPanel>
+              {/* <TabPanel>
                 <Table>
                   <Thead>
                     <Tr>
@@ -524,16 +524,16 @@ export default function StateDrawer(props) {
                       <Th>Number of Districts</Th>
                     </Tr>
                   </Thead>
-{/*                   <Tbody>
+                   <Tbody>
                     {processedData ? (
                       <Tr>
                         <Td>{processedData.state}</Td>
                         <Td>{processedData.numDistricts}</Td>
                       </Tr>
                     ) : null}
-                  </Tbody> */}
+                  </Tbody> 
                 </Table>
-              </TabPanel>
+              </TabPanel> */}
             </TabPanels>
           </Tabs>
         </DrawerBody>
