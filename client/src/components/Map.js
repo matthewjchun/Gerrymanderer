@@ -16,6 +16,7 @@ const Map = () => {
   const map = useRef(null);
   const [lng, setLng] = useState(-100.445882);
   const [lat, setLat] = useState(37.7837304);
+  const [stateData, setStateData] = useState();
   const [zoom, setZoom] = useState(4);
   let hoveredStateId = null;
   const bounds = [
@@ -31,7 +32,7 @@ const Map = () => {
     Arizona: 'az',
     Michigan: 'mi',
     Virginia: 'va',
-  };
+  }; 
 
   /////////////////////// MARKER METHODS //////////////////////////////
   const createMarker = async (longitude, latitude, msg) => {
@@ -55,6 +56,7 @@ const Map = () => {
       `/stateFull/?state=${stateMap[activeState].toLowerCase()}`
     );
     const body = await response.json();
+    await setStateData(body);
     console.log(body)
     return body;
   };
@@ -190,16 +192,17 @@ const Map = () => {
         essential: true,
         zoom: 6.2,
       });
-      onOpen();
 
-      const azData = await handleStateFetch();
+      const stateData = await handleStateFetch();
 
-      checkSrc('azcd', azData["districts"]);
-      checkSrc('azprecincts', azData["precincts"]);
-      checkSrc('azcounty', azData["counties"]);
+      checkSrc('azcd', stateData["districts"]);
+      checkSrc('azprecincts', stateData["precincts"]);
+      checkSrc('azcounty', stateData["counties"]);
       addLayer('azprec-boundary', 'azprecincts', '#e6d1b5');
       addLayer('azcounty-boundary', 'azcounty', '#940f00');
       addLayer('azcd_lines', 'azcd', '#000000');
+
+      onOpen();
 
       // AZ CONGRESSIONAL DISTRICT MARKERS
       const azd1 = createMarker(-110.7258455, 34.9691324, dummyMsg);
@@ -385,7 +388,10 @@ const Map = () => {
       <Legend current={map.current} />
       <Flex className='content' direction='column' justify='center'>
         <div ref={mapContainer} className='mapContainer' />
-        <StateDrawer isOpen={isOpen} onClose={onClose} active={activeState} />
+        {stateData != null ?
+        <StateDrawer isOpen={isOpen} onClose={onClose} active={activeState} stateSummary={stateData["summary"]}/>:
+        null
+        }
       </Flex>
     </>
   );

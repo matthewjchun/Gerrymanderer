@@ -38,9 +38,10 @@ import {
 import { useContext, useState, useEffect } from 'react';
 import { DataContext, StateContext } from '../contexts/State';
 import { PieChart } from 'react-minimal-pie-chart';
+import Districts from './Districts';
 
 export default function StateDrawer(props) {
-  const { isOpen, onOpen, onClose } = props;
+  const { isOpen, onOpen, onClose, stateSummary } = props;
   const [activeState] = useContext(StateContext);
   const [value, setValue] = useState("0");
 
@@ -62,9 +63,11 @@ export default function StateDrawer(props) {
 
   let processedData = processGeoJSONData(); */
 
-  let TOTAL;
-  let VAP;
-  let CVAP;
+  let TOTAL = stateSummary["populations"][0]["total"];
+  let VAP = stateSummary["populations"][1]["total"];
+  let CVAP = stateSummary["populations"][2]["total"];
+
+  let districts = stateSummary["districtingSummaries"][0]["districtSummaries"];
 
   const typeMap = {
     0 : 'TOTAL',
@@ -81,23 +84,10 @@ export default function StateDrawer(props) {
       headers: {"Content-type": "application/json; charset=UTF-8"}
     });
     const body = await response.json();
-    console.log(body)
+    console.log(stateSummary)
+    console.log(districts)
     return body;
   }
-
-  // useEffect(() => {
-  //   // console.log(typeMap[value])
-  //   let body = populationFetch;
-  //   if(value == 0){
-  //     TOTAL = body;
-  //   }
-  //   if(value == 1){
-  //     VAP = body;
-  //   }
-  //   else{
-  //     CVAP = body;
-  //   }
-  // }, [value]);
 
   return (
     <Drawer
@@ -126,7 +116,6 @@ export default function StateDrawer(props) {
               <Flex align='center' justify='space-evenly'>
                 <Tab>State Statistics</Tab>
                 <Tab>Districts</Tab>
-                {/* <Tab>Data</Tab> */}
               </Flex>
             </TabList>
             <TabPanels>
@@ -168,11 +157,11 @@ export default function StateDrawer(props) {
                 value == "2" ? <Text> Population: {CVAP} </Text>: 
                 null}
                 <Divider />
-                <Text>Precincts: 1,495</Text>
+                {/* <Text>Precincts: 1,495</Text> */}
                 <Divider />
-                <Text>2020 Congressional Voting Results</Text>
+                <Text>2018 Attorney General Elections</Text>
                 <Table variant='simple'>
-                  <TableCaption>Congressional Voting Results</TableCaption>
+                  <TableCaption>Results</TableCaption>
                   <Thead>
                     <Tr>
                       <Th>Party</Th>
@@ -184,7 +173,7 @@ export default function StateDrawer(props) {
                     <Tr>
                       <Td>Democratic Party</Td>
                       <Td>5</Td>
-                      <Td isNumeric>1,629,318</Td>
+                      <Td isNumeric></Td>
                     </Tr>
                     <Tr>
                       <Td>Republican Party</Td>
@@ -265,276 +254,13 @@ export default function StateDrawer(props) {
                 </Table>
               </TabPanel>
               <TabPanel>
-                <Text> DISTRICT 1 </Text>
-                <Table variant='striped' colorScheme='gray'>
-                  <Thead>
-                    <Tr>
-                      <Th>Population</Th>
-                      <Th isNumeric>Democratic</Th>
-                      <Th isNumeric>Republican</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    <Tr>
-                      <Td>724,868</Td>
-                      <Td isNumeric>50.1</Td>
-                      <Td isNumeric>48.4</Td>
-                    </Tr>
-                    <Tr>
-                      <Td></Td>
-                      <Td isNumeric>
-                        <StatArrow type='increase' />
-                      </Td>
-                      <Td isNumeric>
-                        <StatArrow type='decrease' />
-                      </Td>
-                    </Tr>
-                  </Tbody>
-                </Table>
-                <Divider />
-
-                <Text> DISTRICT 2 </Text>
-                <Table variant='striped' colorScheme='gray'>
-                  <Thead>
-                    <Tr>
-                      <Th>Population</Th>
-                      <Th isNumeric>Democratic</Th>
-                      <Th isNumeric>Republican</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    <Tr>
-                      <Td>724,868</Td>
-                      <Td isNumeric>54.5</Td>
-                      <Td isNumeric>43.9</Td>
-                    </Tr>
-                    <Tr>
-                      <Td></Td>
-                      <Td isNumeric>
-                        <StatArrow type='increase' />
-                      </Td>
-                      <Td isNumeric>
-                        <StatArrow type='decrease' />
-                      </Td>
-                    </Tr>
-                  </Tbody>
-                </Table>
-                <Divider />
-
-                <Text> DISTRICT 3 </Text>
-                <Table variant='striped' colorScheme='gray'>
-                  <Thead>
-                    <Tr>
-                      <Th>Population</Th>
-                      <Th isNumeric>Democratic</Th>
-                      <Th isNumeric>Republican</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    <Tr>
-                      <Td> 724,868</Td>
-                      <Td isNumeric>54.5</Td>
-                      <Td isNumeric>43.9</Td>
-                    </Tr>
-                    <Tr>
-                      <Td></Td>
-                      <Td isNumeric>
-                        <StatArrow type='increase' />
-                      </Td>
-                      <Td isNumeric>
-                        <StatArrow type='decrease' />
-                      </Td>
-                    </Tr>
-                  </Tbody>
-                </Table>
-                <Divider />
-
-                <Text> DISTRICT 4 </Text>
-                <Table variant='striped' colorScheme='gray'>
-                  <Thead>
-                    <Tr>
-                      <Th>Population</Th>
-                      <Th isNumeric>Democratic</Th>
-                      <Th isNumeric>Republican</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    <Tr>
-                      <Td> 724,868</Td>
-                      <Td isNumeric>54.5</Td>
-                      <Td isNumeric>43.9</Td>
-                    </Tr>
-                    <Tr>
-                      <Td></Td>
-                      <Td isNumeric>
-                        <StatArrow type='increase' />
-                      </Td>
-                      <Td isNumeric>
-                        <StatArrow type='decrease' />
-                      </Td>
-                    </Tr>
-                  </Tbody>
-                </Table>
-                <Divider />
-
-                <Text> DISTRICT 5 </Text>
-                <Table variant='striped' colorScheme='gray'>
-                  <Thead>
-                    <Tr>
-                      <Th>Population</Th>
-                      <Th isNumeric>Democratic</Th>
-                      <Th isNumeric>Republican</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    <Tr>
-                      <Td> 724,868</Td>
-                      <Td isNumeric>54.5</Td>
-                      <Td isNumeric>43.9</Td>
-                    </Tr>
-                    <Tr>
-                      <Td></Td>
-                      <Td isNumeric>
-                        <StatArrow type='increase' />
-                      </Td>
-                      <Td isNumeric>
-                        <StatArrow type='decrease' />
-                      </Td>
-                    </Tr>
-                  </Tbody>
-                </Table>
-                <Divider />
-
-                <Text> DISTRICT 6 </Text>
-                <Table variant='striped' colorScheme='gray'>
-                  <Thead>
-                    <Tr>
-                      <Th>Population</Th>
-                      <Th isNumeric>Democratic</Th>
-                      <Th isNumeric>Republican</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    <Tr>
-                      <Td> 724,868</Td>
-                      <Td isNumeric>54.5</Td>
-                      <Td isNumeric>43.9</Td>
-                    </Tr>
-                    <Tr>
-                      <Td></Td>
-                      <Td isNumeric>
-                        <StatArrow type='increase' />
-                      </Td>
-                      <Td isNumeric>
-                        <StatArrow type='decrease' />
-                      </Td>
-                    </Tr>
-                  </Tbody>
-                </Table>
-                <Divider />
-
-                <Text> DISTRICT 7 </Text>
-                <Table variant='striped' colorScheme='gray'>
-                  <Thead>
-                    <Tr>
-                      <Th>Population</Th>
-                      <Th isNumeric>Democratic</Th>
-                      <Th isNumeric>Republican</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    <Tr>
-                      <Td> 724,868</Td>
-                      <Td isNumeric>54.5</Td>
-                      <Td isNumeric>43.9</Td>
-                    </Tr>
-                    <Tr>
-                      <Td></Td>
-                      <Td isNumeric>
-                        <StatArrow type='increase' />
-                      </Td>
-                      <Td isNumeric>
-                        <StatArrow type='decrease' />
-                      </Td>
-                    </Tr>
-                  </Tbody>
-                </Table>
-                <Divider />
-
-                <Text> DISTRICT 8 </Text>
-                <Table variant='striped' colorScheme='gray'>
-                  <Thead>
-                    <Tr>
-                      <Th>Population</Th>
-                      <Th isNumeric>Democratic</Th>
-                      <Th isNumeric>Republican</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    <Tr>
-                      <Td> 724,868</Td>
-                      <Td isNumeric>54.5</Td>
-                      <Td isNumeric>43.9</Td>
-                    </Tr>
-                    <Tr>
-                      <Td></Td>
-                      <Td isNumeric>
-                        <StatArrow type='increase' />
-                      </Td>
-                      <Td isNumeric>
-                        <StatArrow type='decrease' />
-                      </Td>
-                    </Tr>
-                  </Tbody>
-                </Table>
-                <Divider />
-
-                <Text> DISTRICT 9 </Text>
-                <Table variant='striped' colorScheme='gray'>
-                  <Thead>
-                    <Tr>
-                      <Th>Population</Th>
-                      <Th isNumeric>Democratic</Th>
-                      <Th isNumeric>Republican</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    <Tr>
-                      <Td> 724,868</Td>
-                      <Td isNumeric>54.5</Td>
-                      <Td isNumeric>43.9</Td>
-                    </Tr>
-                    <Tr>
-                      <Td></Td>
-                      <Td isNumeric>
-                        <StatArrow type='increase' />
-                      </Td>
-                      <Td isNumeric>
-                        <StatArrow type='decrease' />
-                      </Td>
-                    </Tr>
-                  </Tbody>
-                </Table>
-                <Divider />
+               {districts.map((district) => {
+                  return(
+                  <Districts number={district.districtId} population={district.populations} 
+                  election={district.elections}></Districts>
+                  )
+                })}
               </TabPanel>
-              {/* <TabPanel>
-                <Table>
-                  <Thead>
-                    <Tr>
-                      <Th>State Name</Th>
-                      <Th>Number of Districts</Th>
-                    </Tr>
-                  </Thead>
-                   <Tbody>
-                    {processedData ? (
-                      <Tr>
-                        <Td>{processedData.state}</Td>
-                        <Td>{processedData.numDistricts}</Td>
-                      </Tr>
-                    ) : null}
-                  </Tbody> 
-                </Table>
-              </TabPanel> */}
             </TabPanels>
           </Tabs>
         </DrawerBody>
