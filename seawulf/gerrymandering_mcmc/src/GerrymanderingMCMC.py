@@ -352,7 +352,7 @@ class GerrymanderingMCMC():
             if i == rounds-1:
                 fname = "output/recombination_of_districts"
                 self.__drawGraph(graph, fname)
-                with open(fname, 'w') as file:
+                with open(fname, 'w+') as file:
                     file.write(json.dumps(json_graph.adjacency_data(graph)))
 
         self.__record_key_stats(graph)
