@@ -62,7 +62,7 @@ public class Algorithm {
                         failure = true;
                     }
                     else {
-                        selectedDistrincing.calculateDistrictingBoundary();
+                        algoSummary.setDistrictingBoundary(selectedDistricting.calculateDistrictingBoundary());
                         setCurrentDistricting(selectedDistricting);
                         algoSummary.updateMeasures(currentDistricting);
                     }
