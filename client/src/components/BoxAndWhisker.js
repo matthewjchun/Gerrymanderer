@@ -14,7 +14,7 @@ import {
 import { useContext, useState, useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 
-import plot from '../img/boxandwhiskerdummy.png';
+import plot from '../img/dummy.jpg';
 
 export default function BoxAndWhisker(props) {
     const { isOpen, onClose } = props;

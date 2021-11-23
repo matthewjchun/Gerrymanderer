@@ -74,29 +74,30 @@ export default function StateDrawer(props) {
 
 
   const populationFetch = async (value) => {
+    setValue(value)
     const response = await fetch('/populationType', {
       method: "POST",
       body: JSON.stringify({populationType: typeMap[value]}),
       headers: {"Content-type": "application/json; charset=UTF-8"}
     });
     const body = await response.json();
-    console.log(body)
+    console.log("hi")
     return body;
   }
 
-  useEffect(() => {
-    console.log(typeMap[value])
-    let body = populationFetch;
-    if(value == 0){
-      TOTAL = body;
-    }
-    if(value == 1){
-      VAP = body;
-    }
-    else{
-      CVAP = body;
-    }
-  }, [value]);
+  // useEffect(() => {
+  //   // console.log(typeMap[value])
+  //   let body = populationFetch;
+  //   if(value == 0){
+  //     TOTAL = body;
+  //   }
+  //   if(value == 1){
+  //     VAP = body;
+  //   }
+  //   else{
+  //     CVAP = body;
+  //   }
+  // }, [value]);
 
   return (
     <Drawer
@@ -141,7 +142,7 @@ export default function StateDrawer(props) {
                       </AccordionButton>
                     </h2>
                     <AccordionPanel pb={4}>
-                      <RadioGroup onChange={setValue} value={value} defaultValue="0">
+                      <RadioGroup onChange={ populationFetch } value={value} defaultValue="0">
                         <Stack>
                           <Radio size="md" value="0" colorScheme="blue" defaultChecked>
                             Total Population
