@@ -19,8 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.concurrent.Callable;
 
 //@CrossOrigin("http://localhost:3000")
 @RestController
@@ -113,11 +111,13 @@ public class DistrictingController {
 
         Algorithm algorithm = (Algorithm) session.getAttribute("algorithm");
         if (algorithm == null) {
-            AlgorithmSummary algoSummary = new AlgorithmSummary(0, Constants.getMaxIterations(),
+            AlgorithmSummary algoSummary = new AlgorithmSummary(0,
                     Constants.getMaxIterations() * Constants.getEstimatedTimePerIteration(), true,
-                    currentState.getName(), selectedDistricting.getPopulationEquality(),
-                    selectedDistricting.getAvgPolsbyPopper(), selectedDistricting.getMajorityMinorityCount(),
-                    new ArrayList<>(), null);
+                    currentState.getName(), selectedDistricting.getPopulationEqualityTotal(),
+                    selectedDistricting.getPopulationEqualityVAP(), selectedDistricting.getPopulationEqualityCVAP(),
+                    selectedDistricting.getAvgPolsbyPopper(), selectedDistricting.getMajorityMinorityCountTotal(),
+                    selectedDistricting.getMajorityMinorityCountVAP(),
+                    selectedDistricting.getMajorityMinorityCountCVAP(), new ArrayList<>(), null);
             algorithm = new Algorithm(algoSummary, populationType, selectedDistricting, 0, 0,
                     popEqualityThresh, polsbyPopperThresh, majorityMinorityThresh, false);
         }

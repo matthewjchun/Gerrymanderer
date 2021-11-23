@@ -109,21 +109,19 @@ public class District implements Cloneable {
 
     public boolean moveCB(CensusBlock selectedCB, District destDistrict) {
         try {
+            censusBlocks.remove(selectedCB);
+            calculatePopulation();
+            calculateElection();
             destDistrict.getCensusBlocks().add(selectedCB);
-            this.getCensusBlocks().remove(censusBlock);
+            destDistrict.calculatePopulation();
+            destDistrict.calculateElection();
+            selectedCB.setDistrict(destDistrict);
         }
         catch (Exception e){
-            return  false;
+            System.out.println("moveCB ERROR!");
+            return false;
         }
         return true;
-    }
-
-    public void addCensusBlock(CensusBlock censusBlock) {
-        this.getCensusBlocks().add(censusBlock);
-    }
-
-    public void removeCensusBlock(CensusBlock censusBlock) {
-        this.getCensusBlocks().remove(censusBlock);
     }
 
     public void calculatePopulation() {
@@ -157,7 +155,18 @@ public class District implements Cloneable {
     }
 
     public void calculateElection() {
-        for ()
+        for (int i = 0; i < elections.size(); i++) {
+            Election election = elections.get(i);
+            int democraticSum = 0;
+            int republicanSum = 0;
+            for (CensusBlock cb: censusBlocks) {
+                Election cbElection = cb.getElections().get(i);
+                democraticSum += cbElection.getDemocratic();
+                republicanSum += cbElection.getRepublican();
+            }
+            election.setDemocratic(democraticSum);
+            election.setRepublican(republicanSum);
+        }
     }
 
     public void calculatePolsbyPopper() {
