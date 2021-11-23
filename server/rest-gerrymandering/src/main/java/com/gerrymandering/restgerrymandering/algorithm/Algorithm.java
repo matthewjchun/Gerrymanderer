@@ -2,7 +2,6 @@ package com.gerrymandering.restgerrymandering.algorithm;
 
 import com.gerrymandering.restgerrymandering.constants.Constants;
 import com.gerrymandering.restgerrymandering.model.Districting;
-import com.vividsolutions.jts.geom.Geometry;
 
 public class Algorithm {
 
@@ -62,7 +61,7 @@ public class Algorithm {
                         failure = true;
                     }
                     else {
-                        selectedDistrincing.calculateDistrictingBoundary();
+                        algoSummary.setDistrictingBoundary(selectedDistricting.calculateDistrictingBoundary());
                         setCurrentDistricting(selectedDistricting);
                         algoSummary.updateMeasures(currentDistricting);
                     }

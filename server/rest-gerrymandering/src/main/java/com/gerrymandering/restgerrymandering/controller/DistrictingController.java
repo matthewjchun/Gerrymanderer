@@ -25,8 +25,6 @@ import java.util.ArrayList;
 @RequestMapping("/")
 public class DistrictingController {
 
-    //private State currentState;
-    private Constants.PopulationType populationType;
     private StateService ss;
     private DistrictingService dgs;
     private DistrictService ds;

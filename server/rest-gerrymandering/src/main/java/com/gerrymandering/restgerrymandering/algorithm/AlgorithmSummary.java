@@ -2,7 +2,7 @@ package com.gerrymandering.restgerrymandering.algorithm;
 
 import com.gerrymandering.restgerrymandering.model.Districting;
 import com.gerrymandering.restgerrymandering.model.Precinct;
-import org.opengis.geometry.Geometry;
+import com.vividsolutions.jts.geom.Geometry;
 
 import java.util.List;
 

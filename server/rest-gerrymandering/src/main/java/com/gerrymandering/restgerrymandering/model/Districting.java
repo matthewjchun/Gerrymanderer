@@ -2,12 +2,11 @@ package com.gerrymandering.restgerrymandering.model;
 
 import com.gerrymandering.restgerrymandering.constants.Constants;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
 import org.geotools.geojson.geom.GeometryJSON;
-import org.geotools.geometry.jts.JTSFactoryFinder;
-import org.locationtech.jts.geom.GeometryCollection;
-import org.locationtech.jts.geom.GeometryFactory;
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -161,7 +160,7 @@ public class Districting implements Cloneable{
         return smallestDistrict;
     }
 
-
+    // Might not need this
     public District getDistrictById (long id){
         for(District dis : districts){
             if(dis.getId() == id){
@@ -244,13 +243,24 @@ public class Districting implements Cloneable{
         }
     }
 
-    public void calculateDistrictingBoundary() {
-        GeometryFactory factory = JTSFactoryFinder.getGeometryFactory();
+    public Geometry calculateDistrictingBoundary() {
+        GeometryFactory factory = new GeometryFactory();
         GeometryJSON geometryJSON = new GeometryJSON();
-        Collection<Geometry> geometryCollection = new ArrayList<>();
+        Collection<Geometry> districtCollection = new ArrayList<>();
         for (District district: districts) {
-
+            Collection<Geometry> cbCollection = new ArrayList<>();
+            for (CensusBlock cb: district.getCensusBlocks()) {
+                try {
+                    Geometry geometry = geometryJSON.read(cb.getPath());
+                    cbCollection.add(geometry);
+                    Geometry districtGeometry = factory.buildGeometry(cbCollection);
+                    districtCollection.add(districtGeometry);
+                } catch (IOException e) {
+                    System.out.println("Error reading census block file.");
+                }
+            }
         }
+        return factory.buildGeometry(districtCollection);
     }
 
     public void calculateSplitPrecincts() {
