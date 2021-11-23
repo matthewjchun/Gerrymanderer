@@ -77,7 +77,7 @@ public class DistrictingController {
         for (String path : paths) {
             try (FileReader reader = new FileReader(Constants.getResourcePath() + path)) {
                 JsonObject geoJson = JsonParser.parseReader(reader).getAsJsonObject();
-                stateFull.add(path, geoJson);
+                stateFull.add(path.split("/")[0], geoJson);
             } catch (Exception e) {
                 System.out.println("Error");
                 System.out.println(path);
