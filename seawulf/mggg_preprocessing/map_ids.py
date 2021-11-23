@@ -21,5 +21,8 @@ for i in precincts:
             counter = counter+1
     list_count = 0
 
+f.close()
+pf.close()
+
 with open('az_ids_final.json', 'w') as f:
     json.dump(precincts, f, ensure_ascii=False, indent=4)

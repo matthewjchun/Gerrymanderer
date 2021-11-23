@@ -11,7 +11,10 @@ for i in orig['features']:
     i['properties']['ORIGID'] = i['properties']['GEOID20']
     i['properties']['GEOID20'] = ids[counter]['id']
     print(i['properties']['ORIGID'])
-    counter = counter + 1 
+    counter = counter + 1
+
+f.close()
+pf.close()
 
 with open('az_precincts_ids_orig.json', 'w') as f:
     json.dump(orig, f, ensure_ascii=False, indent=4)
