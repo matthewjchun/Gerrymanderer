@@ -9,7 +9,7 @@ import { useDisclosure } from '@chakra-ui/react';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiY2VsdGljczQxNiIsImEiOiJja3R2MGM5dTQxajY4Mm5sNWV5YnNhNHg0In0.t9oiLZZUeZi0QpqUIik13w';
-  
+
 const Map = () => {
   const mapContainer = useRef(null);
   const [controlledSwiper, setControlledSwiper] = useState(null);
@@ -28,11 +28,10 @@ const Map = () => {
   const { isOpen, onOpen, onClose } = useDisclosure(); // open close state drawer
 
   const stateMap = {
-    'Arizona': 'az',
-    'Michigan': 'mi',
-    'Virginia': 'va',
+    Arizona: 'az',
+    Michigan: 'mi',
+    Virginia: 'va',
   };
-
 
   /////////////////////// MARKER METHODS //////////////////////////////
   const createMarker = async (longitude, latitude, msg) => {
@@ -51,11 +50,12 @@ const Map = () => {
   };
 
   /////////////////////// SERVER INTERACTIONS //////////////////////////////
-  const handleFetch = async (map) => {
+  const handleStateFetch = async (map) => {
     const response = await fetch(
-      `/stateFull/?state=${activeState.toLowerCase()}`
+      `/stateFull/?state=${stateMap[activeState].toLowerCase()}`
     );
     const body = await response.json();
+    console.log(body);
     return body;
   };
 
@@ -72,14 +72,13 @@ const Map = () => {
     const response = await fetch('/stateOutlines');
     const body = await response.json();
     return body;
-  }
+  };
 
   const addStateLines = async (map) => {
     const stateData = await outlinesFetch();
 
     checkSrc('states', stateData['stateOutlines']);
     addPolygon('states', 'states', '#f8f8ff');
-
 
     checkSrc('arizona', stateData['az']);
     checkSrc('michigan', stateData['mi']);
@@ -92,8 +91,7 @@ const Map = () => {
     addOutline('outline_az', 'arizona');
     addOutline('outline_mi', 'michigan');
     addOutline('outline_va', 'virginia');
-  }
-
+  };
 
   /////////////////////// VISIBILITY //////////////////////////////
   const addLayer = async (id, src, paint) => {
@@ -194,7 +192,7 @@ const Map = () => {
       });
       onOpen();
 
-      const azcdData = await handleFetch();
+      const azcdData = await handleStateFetch();
 
       checkSrc('azcd', azcdData);
       addLayer('azprec-boundary', 'azprecincts', '#e6d1b5');
@@ -221,7 +219,7 @@ const Map = () => {
       });
       onOpen();
 
-      const micdData = await handleFetch();
+      const micdData = await handleStateFetch();
 
       checkSrc('micd', micdData);
       addLayer('miprec-boundary', 'miprecincts', '#e6d1b5');
@@ -255,7 +253,7 @@ const Map = () => {
       });
       onOpen();
 
-      const vacdData = await handleFetch();
+      const vacdData = await handleStateFetch();
 
       checkSrc('vacd', vacdData);
       addLayer('vaprec-boundary', 'vaprecincts', '#e6d1b5');
@@ -361,7 +359,7 @@ const Map = () => {
         type: 'geojson',
         data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/VA_Counties.json',
       });
-      
+
       addStateLines();
 
       // ZOOM TO STATE
