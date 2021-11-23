@@ -5,10 +5,12 @@ import { HStack, Box, Text, Button, Select } from '@chakra-ui/react';
 
 import LeftPane from './LeftPane';
 import AlgoProgress from './AlgoProgress';
+import BoxAndWhisker from './BoxAndWhisker';
 
 export default function TopBar(props) {
   const { isOpen: isDrawerOpen , onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure()
   const { isOpen: isModalOpen , onOpen: onModalOpen, onClose: onModalClose } = useDisclosure()
+  const { isOpen: isBoxOpen , onOpen: onBoxOpen, onClose: onBoxClose } = useDisclosure()
 
   const [activeState, setActiveState] = useContext(StateContext);
 
@@ -20,8 +22,10 @@ export default function TopBar(props) {
             <Text>User Settings</Text>
           </Button>
 
-          <LeftPane isOpen={isDrawerOpen} onClose={onDrawerClose} onOpen={onDrawerOpen} onModalOpen={onModalOpen}></LeftPane>
-          <AlgoProgress isOpen={isModalOpen} onClose={onModalClose} onModalOpen={onModalOpen} > </AlgoProgress>
+          <LeftPane isOpen={isDrawerOpen} onClose={onDrawerClose} onOpen={onDrawerOpen} onModalOpen={onModalOpen} 
+            onBoxOpen={onBoxOpen}></LeftPane>
+          <AlgoProgress isOpen={isModalOpen} onClose={onModalClose} onModalOpen={onModalOpen}> </AlgoProgress>
+          <BoxAndWhisker isOpen={isBoxOpen} onClose={onBoxClose} onOpen={onBoxOpen}></BoxAndWhisker>
         </Box>
       ) : (
         <Box flex='1' mr='auto' />

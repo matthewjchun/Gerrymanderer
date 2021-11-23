@@ -755,7 +755,7 @@ const vaData = [
 ];
 
 export default function LeftPane(props) {
-  const { isOpen, onClose, isModalOpen, onModalOpen, onModalClose } = props;
+  const { isOpen, onClose, isModalOpen, onModalOpen, onBoxOpen } = props;
   const [popEquality, setPopEquality] = useState(0);
   const [compactness, setCompactness] = useState(0);
   const [majorityMinority, setMajorityMinority] = useState(0);
@@ -867,7 +867,6 @@ export default function LeftPane(props) {
                                 bestMeasure={measureMap[measure]}
                                 measures={allMeasures}
                                 handleRedistrictingClick={handleRedistrictingClick}
-                                // on click triggers when left pane is interacted with
                               />
                             );
                           })}
@@ -940,6 +939,8 @@ export default function LeftPane(props) {
                         value={popEquality}
                         onChange={handlePopEqualityInput}
                         focusThumbOnChange={false}
+                        min={0} 
+                        max={70}
                       >
                         <SliderTrack>
                           <SliderFilledTrack />
@@ -949,7 +950,7 @@ export default function LeftPane(props) {
                       <NumberInput
                         value={popEquality}
                         min={0}
-                        max={100}
+                        max={70}
                         onChange={handlePopEqualityInput}
                       >
                         <NumberInputField />
@@ -975,6 +976,8 @@ export default function LeftPane(props) {
                         value={compactness}
                         onChange={handleCompactnessInput}
                         focusThumbOnChange={false}
+                        min={0} 
+                        max={100}                                                                 // percentage
                       >
                         <SliderTrack>
                           <SliderFilledTrack />
@@ -1010,6 +1013,8 @@ export default function LeftPane(props) {
                         defaultValue={majorityMinority}
                         onChange={handleMajorityMinorityInput}
                         focusThumbOnChange={false}
+                        min={0} 
+                        max={9}
                       >
                         <SliderTrack>
                           <SliderFilledTrack />
@@ -1019,7 +1024,7 @@ export default function LeftPane(props) {
                       <NumberInput
                         value={majorityMinority}
                         min={0}
-                        max={100}
+                        max={9}
                         onChange={handleMajorityMinorityInput}
                       >
                         <NumberInputField />
@@ -1063,6 +1068,11 @@ export default function LeftPane(props) {
                         </HStack>
                       );
                     })}
+                    <VStack spacing='3' align='right'>
+                      <Button onClick={onBoxOpen}>
+                        <Text>Generate</Text>
+                      </Button>
+                    </VStack> 
                   </VStack>
                 ) : null}
               </TabPanel>
