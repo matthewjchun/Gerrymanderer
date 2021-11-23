@@ -47,7 +47,7 @@ public class DistrictingController {
             System.out.println("Error");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        for (String state: Constants.getStates()) {
+        for (String state : Constants.getStates()) {
             try (FileReader reader = new FileReader(Constants.getResourcePath() + "states/" + state + ".json")) {
                 outlines.add(state, JsonParser.parseReader(reader).getAsJsonObject());
             } catch (Exception e) {
@@ -62,7 +62,7 @@ public class DistrictingController {
     public ResponseEntity<JsonObject> getStateFull(@RequestParam String state, HttpServletRequest request) {
         HttpSession session = request.getSession();
         State stateObj = ss.getStateByName(state);
-        //currentState = stateObj;
+        // currentState = stateObj;
         session.setAttribute("currentState", stateObj);
 
         JsonObject stateFull = new JsonObject();
@@ -70,7 +70,7 @@ public class DistrictingController {
         String districtPath = enactedDistricting.getDistrictPath();
         String precinctPath = enactedDistricting.getPrecinctPath();
         String countyPath = enactedDistricting.getCountyPath();
-        String[] paths = {districtPath, precinctPath, countyPath};
+        String[] paths = { districtPath, precinctPath, countyPath };
         for (String path : paths) {
             try (FileReader reader = new FileReader(path)) {
                 JsonObject geoJson = JsonParser.parseReader(reader).getAsJsonObject();
@@ -87,20 +87,19 @@ public class DistrictingController {
     }
 
     @PostMapping("/populationType")
-    public ResponseEntity<String> setPopulationType(@RequestBody JsonObject populationTypeJson, HttpServletRequest request) {
+    public ResponseEntity<String> setPopulationType(@RequestBody JsonObject populationTypeJson,
+            HttpServletRequest request) {
         HttpSession session = request.getSession();
         String populationTypeStr = populationTypeJson.get("populationType").getAsString().toUpperCase();
         Constants.PopulationType populationType = Constants.PopulationType.valueOf(populationTypeStr);
         session.setAttribute("populationType", populationType);
-        return ResponseEntity.ok("hello");
+        return ResponseEntity.ok("{\"populationType\": " + 0 + "}");
     }
 
     @GetMapping("/algorithm")
     public ResponseEntity<JsonObject> startAlgorithm(@RequestParam(name = "id") long districtingId,
-                                                     @RequestParam(name = "popEqThresh") double popEqualityThresh,
-                                                     @RequestParam double polsbyPopperThresh,
-                                                     @RequestParam int majorityMinorityThresh,
-                                                     HttpServletRequest request) {
+            @RequestParam(name = "popEqThresh") double popEqualityThresh, @RequestParam double polsbyPopperThresh,
+            @RequestParam int majorityMinorityThresh, HttpServletRequest request) {
         HttpSession session = request.getSession();
         State currentState = (State) session.getAttribute("currentState");
         Constants.PopulationType populationType = (Constants.PopulationType) session.getAttribute("populationType");
@@ -115,10 +114,9 @@ public class DistrictingController {
                     selectedDistricting.getAvgPolsbyPopper(), selectedDistricting.getMajorityMinorityCountTotal(),
                     selectedDistricting.getMajorityMinorityCountVAP(),
                     selectedDistricting.getMajorityMinorityCountCVAP(), new ArrayList<>(), null);
-            algorithm = new Algorithm(algoSummary, populationType, selectedDistricting, 0,
-                    popEqualityThresh, polsbyPopperThresh, majorityMinorityThresh, false);
-        }
-        else {
+            algorithm = new Algorithm(algoSummary, populationType, selectedDistricting, 0, popEqualityThresh,
+                    polsbyPopperThresh, majorityMinorityThresh, false);
+        } else {
             AlgorithmSummary algoSummary = algorithm.getAlgoSummary();
             algoSummary.setRunning(true);
             algorithm.setTerminationFlag(false);

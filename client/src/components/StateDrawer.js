@@ -80,8 +80,9 @@ export default function StateDrawer(props) {
       body: JSON.stringify({populationType: typeMap[value]}),
       headers: {"Content-type": "application/json; charset=UTF-8"}
     });
+    console.log("here")
     const body = await response.json();
-    console.log("hi")
+    console.log( body)
     return body;
   }
 
