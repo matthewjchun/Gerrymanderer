@@ -1,4 +1,5 @@
 import json
+import math
 from helpers import check_majority_minority
 
 with open('az_demographics.json') as f:
@@ -26,9 +27,11 @@ for i in recomb['nodes']:
         precincts_districts[i['district']]['precincts'].append(i['id'])
         precincts_districts[i['district']]['tot_pop'] += i['population']
 
-# find total population of districts
+with open('districts_tot_pop.json', 'w') as f:
+    json.dump(precincts_districts, f, ensure_ascii=False, indent=4)
+
+# find total population of demographic groups and calculate majority_minority
 for i in precincts_districts:
-    # print(precincts_districts[i])
     for j in range(len(precincts_districts[i]['precincts'])):
         hispanic += int(demographics[precincts_districts[i]
                         ['precincts'][j]]['hispanic'])
@@ -51,16 +54,10 @@ for i in precincts_districts:
     elif check_majority_minority(pacific_islander, precincts_districts[i]['tot_pop']):
         majority_minority += 1
 
-    majority_minority_districts[i] = {
-        'majority_minority': majority_minority
-    }
-
     hispanic = 0
     african = 0
     native = 0
     asian = 0
     pacific_islander = 0
-    majority_minority = 0
 
-with open('majority_minority.json', 'w') as f:
-    json.dump(majority_minority_districts, f, ensure_ascii=False, indent=4)
+print(majority_minority)
