@@ -26,6 +26,7 @@ public class State {
 
     @OneToMany
     @JoinColumn(name = "stateName", referencedColumnName = "name")
+    @OrderBy("name")
     private List<Election> elections;
 
     @OneToMany
@@ -52,7 +53,7 @@ public class State {
     }
 
     public Districting getSeaWulfDistricting(long districtingId) {
-        return districtings.get(districtingId)
+        return districtings.get((int)districtingId);
     }
 
     // GETTERS AND SETTERS

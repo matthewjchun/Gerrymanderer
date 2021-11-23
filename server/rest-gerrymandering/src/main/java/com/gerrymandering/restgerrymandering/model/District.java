@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Districts")
-public class District implements Cloneable{
+public class District implements Cloneable {
 
     @Id
     @GeneratedValue
@@ -18,7 +18,11 @@ public class District implements Cloneable{
 
     private double polsbyPopper;
 
-    private boolean majorityMinority;
+    private boolean majorityMinorityTotal;
+
+    private boolean majorityMinorityVAP;
+
+    private boolean majorityMinorityCVAP;
 
     private String path;
 
@@ -29,6 +33,7 @@ public class District implements Cloneable{
 
     @OneToMany
     @JoinColumn(name = "districtId", referencedColumnName = "id")
+    @OrderBy("name")
     private List<Election> elections;
 
     @OneToMany(mappedBy = "district")
@@ -39,11 +44,14 @@ public class District implements Cloneable{
 
     public District() {}
 
-    public District(long id, double polsbyPopper, boolean majorityMinority, String path, List<Population> populations,
-                    List<Election> elections, Set<Precinct> precincts, Set<CensusBlock> censusBlocks) {
+    public District(long id, double polsbyPopper, boolean majorityMinorityTotal, boolean majorityMinorityVAP,
+                    boolean majorityMinorityCVAP, String path, List<Population> populations, List<Election> elections,
+                    Set<Precinct> precincts, Set<CensusBlock> censusBlocks) {
         this.id = id;
         this.polsbyPopper = polsbyPopper;
-        this.majorityMinority = majorityMinority;
+        this.majorityMinorityTotal = majorityMinorityTotal;
+        this.majorityMinorityVAP = majorityMinorityVAP;
+        this.majorityMinorityCVAP = majorityMinorityCVAP;
         this.path = path;
         this.populations = populations;
         this.elections = elections;
@@ -53,13 +61,13 @@ public class District implements Cloneable{
 
     @Override
     public Object clone() {
-        District district = null;
+        District district;
         try {
             district = (District) super.clone();
         }
         catch (CloneNotSupportedException e) {
-            district = new District(id, polsbyPopper, majorityMinority, path, populations, elections, precincts,
-                    censusBlocks);
+            district = new District(id, polsbyPopper, majorityMinorityTotal, majorityMinorityVAP, majorityMinorityCVAP,
+                    path, populations, elections, precincts, censusBlocks);
         }
         List<Population> populationsClone = new ArrayList<>();
         for (Population population: populations) {
@@ -89,20 +97,19 @@ public class District implements Cloneable{
     }
 
     public CensusBlock getRandomBorderCB(){
-        List<CensusBlock> borderBlocks = new ArrayList<CensusBlock>();
-        for (CensusBlock block : censusBlocks){
-            if (block.isBorderCB()){
-                borderBlocks.add(block);
-            }
+        List<CensusBlock> borderCensusBlocks = new ArrayList<>();
+        for (CensusBlock cb : censusBlocks){
+            if (cb.isBorder())
+                borderCensusBlocks.add(cb);
         }
-        int size = borderBlocks.size();
+        int size = borderCensusBlocks.size();
         int index = (int) ((Math.random() * (size)));
-        return borderBlocks.get(index);
+        return borderCensusBlocks.get(index);
     }
 
-    public boolean moveCB(CensusBlock censusBlock, District destDistrict){
-        try{
-            destDistrict.getCensusBlocks().add(censusBlock);
+    public boolean moveCB(CensusBlock selectedCB, District destDistrict) {
+        try {
+            destDistrict.getCensusBlocks().add(selectedCB);
             this.getCensusBlocks().remove(censusBlock);
         }
         catch (Exception e){
@@ -120,7 +127,37 @@ public class District implements Cloneable{
     }
 
     public void calculatePopulation() {
-        // STUB
+        for (int i = 0; i < populations.size(); i++) {
+            Population population = populations.get(i);
+            int totalSum = 0;
+            int africanSum = 0;
+            int whiteSum = 0;
+            int asianSum = 0;
+            int hispanicSum = 0;
+            int nativeAmericanSum = 0;
+            int pacificIslanderSum = 0;
+            for (CensusBlock cb: censusBlocks) {
+                Population cbPopulation = cb.getPopulations().get(i);
+                totalSum += cbPopulation.getTotal();
+                africanSum += cbPopulation.getAfrican();
+                whiteSum += cbPopulation.getWhite();
+                asianSum += cbPopulation.getAsian();
+                hispanicSum += cbPopulation.getHispanic();
+                nativeAmericanSum += cbPopulation.getNativeAmerican();
+                pacificIslanderSum += cbPopulation.getPacificIslander();
+            }
+            population.setTotal(totalSum);
+            population.setAfrican(africanSum);
+            population.setWhite(whiteSum);
+            population.setAsian(asianSum);
+            population.setHispanic(hispanicSum);
+            population.setNativeAmerican(nativeAmericanSum);
+            population.setPacificIslander(pacificIslanderSum);
+        }
+    }
+
+    public void calculateElection() {
+        for ()
     }
 
     public void calculatePolsbyPopper() {
@@ -136,16 +173,13 @@ public class District implements Cloneable{
         return 0;
     }
 
-    public int calculatePopDifference(District smallestDistrict, Constants.PopulationType type){
+    public int calculatePopulationDifference(District smallestDistrict, Constants.PopulationType type){
         // will be called on the largest district in a districting
         Population smallestDistrictPop = smallestDistrict.getPopulationByType(type);
-
-        int smallestPopulation = smallestDistrictPop.getPopulationValue();
-        int largestPopulation = this.getPopulation().getPopulationValue();
-
-        int popDifference = largestPopulation - smallestPopulation;
-
-        return popDifference;
+        Population largestDistrictPop = getPopulationByType(type);
+        int smallestPopValue = smallestDistrictPop.getTotal();
+        int largestPopValue = largestDistrictPop.getTotal();
+        return Math.abs(smallestPopValue - largestPopValue);
     }
 
     // GETTERS AND SETTERS
@@ -165,12 +199,28 @@ public class District implements Cloneable{
         this.polsbyPopper = polsbyPopper;
     }
 
-    public boolean isMajorityMinority() {
-        return majorityMinority;
+    public boolean isMajorityMinorityTotal() {
+        return majorityMinorityTotal;
     }
 
-    public void setMajorityMinority(boolean majorityMinority) {
-        this.majorityMinority = majorityMinority;
+    public void setMajorityMinorityTotal(boolean majorityMinorityTotal) {
+        this.majorityMinorityTotal = majorityMinorityTotal;
+    }
+
+    public boolean isMajorityMinorityVAP() {
+        return majorityMinorityVAP;
+    }
+
+    public void setMajorityMinorityVAP(boolean majorityMinorityVAP) {
+        this.majorityMinorityVAP = majorityMinorityVAP;
+    }
+
+    public boolean isMajorityMinorityCVAP() {
+        return majorityMinorityCVAP;
+    }
+
+    public void setMajorityMinorityCVAP(boolean majorityMinorityCVAP) {
+        this.majorityMinorityCVAP = majorityMinorityCVAP;
     }
 
     public String getPath() {

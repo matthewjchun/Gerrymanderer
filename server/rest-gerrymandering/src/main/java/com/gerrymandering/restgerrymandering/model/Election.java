@@ -36,4 +36,37 @@ public class Election implements Cloneable {
             return new Election(id, name, democrat, republican);
         }
     }
+
+    // GETTERS AND SETTERS
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Constants.ElectionName getName() {
+        return name;
+    }
+
+    public void setName(Constants.ElectionName name) {
+        this.name = name;
+    }
+
+    public int getDemocrat() {
+        return democrat;
+    }
+
+    public void setDemocrat(int democrat) {
+        this.democrat = democrat;
+    }
+
+    public int getRepublican() {
+        return republican;
+    }
+
+    public void setRepublican(int republican) {
+        this.republican = republican;
+    }
 }
