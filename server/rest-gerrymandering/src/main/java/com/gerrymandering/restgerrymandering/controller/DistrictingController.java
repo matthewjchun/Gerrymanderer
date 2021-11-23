@@ -5,6 +5,7 @@ import com.gerrymandering.restgerrymandering.algorithm.AlgorithmSummary;
 import com.gerrymandering.restgerrymandering.constants.Constants;
 import com.gerrymandering.restgerrymandering.model.Districting;
 import com.gerrymandering.restgerrymandering.model.State;
+import com.gerrymandering.restgerrymandering.model.StateSummary;
 import com.gerrymandering.restgerrymandering.services.*;
 
 import com.google.gson.Gson;
@@ -61,11 +62,13 @@ public class DistrictingController {
     @GetMapping("/stateFull")
     public ResponseEntity<JsonObject> getStateFull(@RequestParam String state, HttpServletRequest request) {
         HttpSession session = request.getSession();
+        JsonObject stateFull = new JsonObject();
+        Gson gson = new Gson();
+
         State stateObj = ss.getStateByName(state);
         //currentState = stateObj;
         session.setAttribute("currentState", stateObj);
 
-        JsonObject stateFull = new JsonObject();
         Districting enactedDistricting = stateObj.getEnactedDistricting();
         String districtPath = enactedDistricting.getDistrictPath();
         String precinctPath = enactedDistricting.getPrecinctPath();
@@ -77,10 +80,13 @@ public class DistrictingController {
                 stateFull.add(path, geoJson);
             } catch (Exception e) {
                 System.out.println("Error");
+                System.out.println(path);
             }
         }
-        Gson gson = new Gson();
-        String summaryStr = gson.toJson(stateObj);
+
+        StateSummary summaryObj = new StateSummary();
+        summaryObj.populateSummary(stateObj);
+        String summaryStr = gson.toJson(summaryObj);
         JsonObject summary = JsonParser.parseString(summaryStr).getAsJsonObject();
         stateFull.add("summary", summary);
         return ResponseEntity.ok(stateFull);
