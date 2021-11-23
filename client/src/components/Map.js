@@ -6,6 +6,7 @@ import '../App.css';
 import StateDrawer from './StateDrawer';
 import Legend from './Legend';
 import { useDisclosure } from '@chakra-ui/react';
+import * as constants from '../constants/constants';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiY2VsdGljczQxNiIsImEiOiJja3R2MGM5dTQxajY4Mm5sNWV5YnNhNHg0In0.t9oiLZZUeZi0QpqUIik13w';
@@ -27,12 +28,6 @@ const Map = () => {
   const [activeState, setActiveState] = useContext(StateContext);
   const { isOpen, onOpen, onClose } = useDisclosure(); // open close state drawer
 
-  const stateMap = {
-    Arizona: 'az',
-    Michigan: 'mi',
-    Virginia: 'va',
-  };
-
   /////////////////////// MARKER METHODS //////////////////////////////
   const createMarker = async (longitude, latitude, msg) => {
     return new mapboxgl.Marker({ color: '#cfaf5b' })
@@ -52,7 +47,7 @@ const Map = () => {
   /////////////////////// SERVER INTERACTIONS //////////////////////////////
   const handleStateFetch = async (map) => {
     const response = await fetch(
-      `/stateFull/?state=${stateMap[activeState].toLowerCase()}`
+      `/stateFull/?state=${constants.stateMap[activeState].toLowerCase()}`
     );
     const body = await response.json();
     console.log(body);

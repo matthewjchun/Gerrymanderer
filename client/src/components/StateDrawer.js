@@ -26,7 +26,7 @@ import {
   Td,
   TableCaption,
 } from '@chakra-ui/react';
-import { Radio, RadioGroup, Stack } from "@chakra-ui/react";
+import { Radio, RadioGroup, Stack } from '@chakra-ui/react';
 import {
   Accordion,
   AccordionItem,
@@ -34,7 +34,7 @@ import {
   AccordionPanel,
   AccordionIcon,
   Box,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 import { useContext, useState, useEffect } from 'react';
 import { DataContext, StateContext } from '../contexts/State';
 import { PieChart } from 'react-minimal-pie-chart';
@@ -42,7 +42,7 @@ import { PieChart } from 'react-minimal-pie-chart';
 export default function StateDrawer(props) {
   const { isOpen, onOpen, onClose } = props;
   const [activeState] = useContext(StateContext);
-  const [value, setValue] = useState("0");
+  const [value, setValue] = useState('0');
 
   const data = [
     { title: 'White', value: 2849063, color: '#E38627' },
@@ -51,7 +51,7 @@ export default function StateDrawer(props) {
     { title: 'Asian', value: 147661, color: '#71DE6A' },
     { title: 'Hispanic', value: 1121876, color: '#6A2135' },
   ];
-/* 
+  /* 
   const processGeoJSONData = () => {
     if (!geoJSONdata) return null;
     let features = geoJSONdata.features;
@@ -67,23 +67,22 @@ export default function StateDrawer(props) {
   let CVAP;
 
   const typeMap = {
-    0 : 'TOTAL',
-    1 : 'VAP',
-    2 : 'CVAP',
+    0: 'TOTAL',
+    1: 'VAP',
+    2: 'CVAP',
   };
 
-
   const populationFetch = async (value) => {
-    setValue(value)
+    setValue(value);
     const response = await fetch('/populationType', {
-      method: "POST",
-      body: JSON.stringify({populationType: typeMap[value]}),
-      headers: {"Content-type": "application/json; charset=UTF-8"}
+      method: 'POST',
+      body: JSON.stringify({ populationType: typeMap[value] }),
+      headers: { 'Content-type': 'application/json; charset=UTF-8' },
     });
     const body = await response.json();
-    console.log(body)
+    console.log(body);
     return body;
-  }
+  };
 
   // useEffect(() => {
   //   // console.log(typeMap[value])
@@ -135,38 +134,49 @@ export default function StateDrawer(props) {
                   <AccordionItem>
                     <h2>
                       <AccordionButton>
-                        <Box flex="1" textAlign="left">
+                        <Box flex='1' textAlign='left'>
                           Population Measure
                         </Box>
                         <AccordionIcon />
                       </AccordionButton>
                     </h2>
                     <AccordionPanel pb={4}>
-                      <RadioGroup onChange={ populationFetch } value={value} defaultValue="0">
+                      <RadioGroup
+                        onChange={populationFetch}
+                        value={value}
+                        defaultValue='0'
+                      >
                         <Stack>
-                          <Radio size="md" value="0" colorScheme="blue" defaultChecked>
+                          <Radio
+                            size='md'
+                            value='0'
+                            colorScheme='blue'
+                            defaultChecked
+                          >
                             Total Population
                           </Radio>
-                          <Radio size="md" value="1" colorScheme="blue">
+                          <Radio size='md' value='1' colorScheme='blue'>
                             Voting Age Population
                           </Radio>
-                          <Radio size="md" value="2" colorScheme="blue">
+                          <Radio size='md' value='2' colorScheme='blue'>
                             Citizen Voting Age Population
                           </Radio>
                         </Stack>
                       </RadioGroup>
                     </AccordionPanel>
-                  </AccordionItem>  
+                  </AccordionItem>
                 </Accordion>
                 <br />
-                <Text fontSize="3xl">Statistics</Text>
+                <Text fontSize='3xl'>Statistics</Text>
                 <br />
                 <Divider />
-                {value == "0" ?
-                <Text> Population: {TOTAL} </Text>: 
-                value =="1" ? <Text> Population: {VAP} </Text>: 
-                value == "2" ? <Text> Population: {CVAP} </Text>: 
-                null}
+                {value == '0' ? (
+                  <Text> Population: {TOTAL} </Text>
+                ) : value == '1' ? (
+                  <Text> Population: {VAP} </Text>
+                ) : value == '2' ? (
+                  <Text> Population: {CVAP} </Text>
+                ) : null}
                 <Divider />
                 <Text>Precincts: 1,495</Text>
                 <Divider />
