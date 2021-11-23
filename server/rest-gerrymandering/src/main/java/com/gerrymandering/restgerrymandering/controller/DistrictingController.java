@@ -72,7 +72,7 @@ public class DistrictingController {
         String countyPath = enactedDistricting.getCountyPath();
         String[] paths = {districtPath, precinctPath, countyPath};
         for (String path : paths) {
-            try (FileReader reader = new FileReader(path)) {
+            try (FileReader reader = new FileReader(Constants.getResourcePath() + path)) {
                 JsonObject geoJson = JsonParser.parseReader(reader).getAsJsonObject();
                 stateFull.add(path, geoJson);
             } catch (Exception e) {
@@ -80,7 +80,7 @@ public class DistrictingController {
             }
         }
         Gson gson = new Gson();
-        String summaryStr = gson.toJson(state);
+        String summaryStr = gson.toJson(stateObj);
         JsonObject summary = JsonParser.parseString(summaryStr).getAsJsonObject();
         stateFull.add("summary", summary);
         return ResponseEntity.ok(stateFull);
