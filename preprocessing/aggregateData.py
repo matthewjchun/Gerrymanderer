@@ -1,5 +1,6 @@
 import csv
 from getData import writeToCSVFile
+from decimal import Decimal
 
 def aggregatePrecinctPartyToCounty(precinctFile, countyFile, outFilename):
     f1 = open(countyFile)
