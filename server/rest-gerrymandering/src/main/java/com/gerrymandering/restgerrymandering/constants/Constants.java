@@ -15,8 +15,10 @@ public class Constants {
     }
     private static final int enactedDistrictingIndex = 0;
     private static final String resourcePath = "src/main/resources/data/";
-    private static final int maxIterations = 50;
+    private static final int maxIterations = 100;
     private static final int estimatedTimePerIteration = 10;
+    private static final int maxFailedAttempts = 50;
+    private static final double minThresholdMajorityMinority = 0.5;
 
     public enum PopulationType {
         TOTAL,
@@ -59,5 +61,13 @@ public class Constants {
 
     public static int getEstimatedTimePerIteration() {
         return estimatedTimePerIteration;
+    }
+
+    public static int getMaxFailedAttempts() {
+        return maxFailedAttempts;
+    }
+
+    public static double getMinThresholdMajorityMinority() {
+        return minThresholdMajorityMinority;
     }
 }

@@ -7,14 +7,14 @@ import java.util.Set;
 
 @Entity
 @Table(name = "CensusBlocks")
-
 public class CensusBlock implements Cloneable{
 
     @Id
     @GeneratedValue
     private long id;
 
-    private boolean borderCB;
+    @Column(name = "isBorder")
+    private boolean border;
 
     private String path;
 
@@ -25,6 +25,7 @@ public class CensusBlock implements Cloneable{
 
     @OneToMany
     @JoinColumn(name = "censusBlockId", referencedColumnName = "id")
+    @OrderBy("name")
     private List<Election> elections;
 
     @ManyToMany
@@ -43,10 +44,10 @@ public class CensusBlock implements Cloneable{
 
     public CensusBlock() {}
 
-    public CensusBlock(long id, Boolean borderCB, String path, List<Population> populations, List<Election> elections,
+    public CensusBlock(long id, boolean border, String path, List<Population> populations, List<Election> elections,
                        Set<CensusBlock> neighbors, District district, Precinct precinct) {
         this.id = id;
-        this.borderCB = borderCB;
+        this.border = border;
         this.path = path;
         this.populations = populations;
         this.elections = elections;
@@ -61,17 +62,18 @@ public class CensusBlock implements Cloneable{
             return super.clone();
         }
         catch (CloneNotSupportedException e) {
-            return new CensusBlock(id, borderCB, path, populations, elections, neighbors, district, precinct);
+            return new CensusBlock(id, border, path, populations, elections, neighbors, district, precinct);
         }
     }
 
     public List<CensusBlock> getNeighborCBInDiffDistrict() {
         // check through list of neighbors, check if diff district
         District original = this.getDistrict();
-        List<CensusBlock> neighborCBInDiffDistrict = new ArrayList<CensusBlock>();
-        for (CensusBlock neigh : neighbors){
-            if (neigh.getDistrict() != original){
-                neighborCBInDiffDistrict.add(neigh);
+        List<CensusBlock> neighborCBInDiffDistrict = new ArrayList<>();
+        for (CensusBlock neighbor : neighbors){
+            District neighborDistrict = neighbor.getDistrict();
+            if (original.getId() != neighborDistrict.getId()){
+                neighborCBInDiffDistrict.add(neighbor);
             }
         }
         return neighborCBInDiffDistrict;
@@ -86,12 +88,12 @@ public class CensusBlock implements Cloneable{
         this.id = id;
     }
 
-    public boolean isBorderCB() {
-        return borderCB;
+    public boolean isBorder() {
+        return border;
     }
 
-    public void setBorderCB(boolean borderCB) {
-        this.borderCB = borderCB;
+    public void setBorder(boolean border) {
+        this.border = border;
     }
 
     public String getPath() {

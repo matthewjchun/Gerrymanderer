@@ -22,6 +22,7 @@ public class Precinct implements Cloneable {
 
     @OneToMany
     @JoinColumn(name = "precinctId", referencedColumnName = "id")
+    @OrderBy("name")
     private List<Election> elections;
 
     @ManyToOne
@@ -34,16 +35,24 @@ public class Precinct implements Cloneable {
             @JoinColumn(name = "neighborPrecinctId", referencedColumnName = "id")})
     private Set<Precinct> neighbors;
 
+    @OneToMany(mappedBy = "precinct")
+    private List<CensusBlock> censusBlocks;
+
+    @Transient
+    private List<District> splittingDistricts;
+
     public Precinct() {}
 
-    public Precinct(Long id, String path, List<Population> populations, List<Election> elections, District district,
-                    Set<Precinct> neighbors) {
+    public Precinct(long id, String path, List<Population> populations, List<Election> elections, District district,
+                    Set<Precinct> neighbors, List<CensusBlock> censusBlocks, List<District> splittingDistricts) {
         this.id = id;
         this.path = path;
         this.populations = populations;
         this.elections = elections;
         this.district = district;
         this.neighbors = neighbors;
+        this.censusBlocks = censusBlocks;
+        this.splittingDistricts = splittingDistricts;
     }
 
     @Override
@@ -52,16 +61,16 @@ public class Precinct implements Cloneable {
             return super.clone();
         }
         catch (CloneNotSupportedException e) {
-            return new Precinct(id, path, populations, elections, district, neighbors);
+            return new Precinct(id, path, populations, elections, district, neighbors, censusBlocks, splittingDistricts);
         }
     }
 
     // GETTERS AND SETTERS
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -103,5 +112,13 @@ public class Precinct implements Cloneable {
 
     public void setNeighbors(Set<Precinct> neighbors) {
         this.neighbors = neighbors;
+    }
+
+    public List<CensusBlock> getCensusBlocks() {
+        return censusBlocks;
+    }
+
+    public void setCensusBlocks(List<CensusBlock> censusBlocks) {
+        this.censusBlocks = censusBlocks;
     }
 }

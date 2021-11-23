@@ -25,8 +25,6 @@ import java.util.ArrayList;
 @RequestMapping("/")
 public class DistrictingController {
 
-    //private State currentState;
-    private Constants.PopulationType populationType;
     private StateService ss;
     private DistrictingService dgs;
     private DistrictService ds;
@@ -63,7 +61,6 @@ public class DistrictingController {
     @GetMapping("/stateFull")
     public ResponseEntity<JsonObject> getStateFull(@RequestParam String state, HttpServletRequest request) {
         HttpSession session = request.getSession();
-
         State stateObj = ss.getStateByName(state);
         //currentState = stateObj;
         session.setAttribute("currentState", stateObj);
@@ -92,31 +89,49 @@ public class DistrictingController {
     @PostMapping("/populationType")
     public ResponseEntity<String> setPopulationType(@RequestBody JsonObject populationTypeJson, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        System.out.println("hi");
         String populationTypeStr = populationTypeJson.get("populationType").getAsString().toUpperCase();
         Constants.PopulationType populationType = Constants.PopulationType.valueOf(populationTypeStr);
         session.setAttribute("populationType", populationType);
-        return ResponseEntity.ok("" + populationType);
+        return ResponseEntity.ok("{\"populationType\": \"" + populationType + "\"}");
     }
 
     @GetMapping("/algorithm")
     public ResponseEntity<JsonObject> startAlgorithm(@RequestParam(name = "id") long districtingId,
-                                                     @RequestParam double popEqThresh,
+                                                     @RequestParam(name = "popEqThresh") double popEqualityThresh,
                                                      @RequestParam double polsbyPopperThresh,
                                                      @RequestParam int majorityMinorityThresh,
                                                      HttpServletRequest request) {
         HttpSession session = request.getSession();
         State currentState = (State) session.getAttribute("currentState");
+        Constants.PopulationType populationType = (Constants.PopulationType) session.getAttribute("populationType");
         Districting selectedDistricting = currentState.getSeaWulfDistricting(districtingId);
-        Districting cloneDistricting = (Districting) selectedDistricting.clone();
+
         Algorithm algorithm = (Algorithm) session.getAttribute("algorithm");
         if (algorithm == null) {
-            AlgorithmSummary algoSummary = new AlgorithmSummary(0, Constants.getMaxIterations(),
+            AlgorithmSummary algoSummary = new AlgorithmSummary(0,
                     Constants.getMaxIterations() * Constants.getEstimatedTimePerIteration(), true,
-                    currentState.getName(), selectedDistricting.getPopulationEquality(),
-                    selectedDistricting.getAvgPolsbyPopper(), selectedDistricting.getMajorityMinorityCount(),
-                    new ArrayList<>());
-            algorithm = new Algorithm(new AlgorithmSummary())
+                    currentState.getName(), selectedDistricting.getPopulationEqualityTotal(),
+                    selectedDistricting.getPopulationEqualityVAP(), selectedDistricting.getPopulationEqualityCVAP(),
+                    selectedDistricting.getAvgPolsbyPopper(), selectedDistricting.getMajorityMinorityCountTotal(),
+                    selectedDistricting.getMajorityMinorityCountVAP(),
+                    selectedDistricting.getMajorityMinorityCountCVAP(), new ArrayList<>(), null);
+            algorithm = new Algorithm(algoSummary, populationType, selectedDistricting, 0,
+                    popEqualityThresh, polsbyPopperThresh, majorityMinorityThresh, false);
         }
+        else {
+            AlgorithmSummary algoSummary = algorithm.getAlgoSummary();
+            algoSummary.setRunning(true);
+            algorithm.setTerminationFlag(false);
+        }
+        algorithm.start(popEqualityThresh, polsbyPopperThresh, majorityMinorityThresh);
+        session.setAttribute("algorithm", algorithm);
+        return null;
+    }
+
+    @GetMapping("/algorithmSummary")
+    public ResponseEntity<AlgorithmSummary> getAlgorithmSummary(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Algorithm algorithm = (Algorithm) session.getAttribute("algorithm");
+        return ResponseEntity.ok(algorithm.getAlgoSummary());
     }
 }
