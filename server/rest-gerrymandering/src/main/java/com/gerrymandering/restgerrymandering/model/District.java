@@ -4,7 +4,6 @@ import com.gerrymandering.restgerrymandering.constants.Constants;
 import com.vividsolutions.jts.geom.Geometry;
 import org.geotools.geojson.geom.GeometryJSON;
 
-
 import javax.persistence.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,15 +41,16 @@ public class District implements Cloneable {
 
     @OneToMany(mappedBy = "district")
     private Set<Precinct> precincts;
-    
+
     @OneToMany(mappedBy = "district")
     private Set<CensusBlock> censusBlocks;
 
-    public District() {}
+    public District() {
+    }
 
     public District(long id, double polsbyPopper, boolean majorityMinorityTotal, boolean majorityMinorityVAP,
-                    boolean majorityMinorityCVAP, String path, List<Population> populations, List<Election> elections,
-                    Set<Precinct> precincts, Set<CensusBlock> censusBlocks) {
+            boolean majorityMinorityCVAP, String path, List<Population> populations, List<Election> elections,
+            Set<Precinct> precincts, Set<CensusBlock> censusBlocks) {
         this.id = id;
         this.polsbyPopper = polsbyPopper;
         this.majorityMinorityTotal = majorityMinorityTotal;
@@ -68,28 +68,27 @@ public class District implements Cloneable {
         District district;
         try {
             district = (District) super.clone();
-        }
-        catch (CloneNotSupportedException e) {
+        } catch (CloneNotSupportedException e) {
             district = new District(id, polsbyPopper, majorityMinorityTotal, majorityMinorityVAP, majorityMinorityCVAP,
                     path, populations, elections, precincts, censusBlocks);
         }
         List<Population> populationsClone = new ArrayList<>();
-        for (Population population: populations) {
+        for (Population population : populations) {
             populationsClone.add((Population) population.clone());
         }
         district.setPopulations(populationsClone);
         List<Election> electionsClone = new ArrayList<>();
-        for (Election election: elections) {
+        for (Election election : elections) {
             electionsClone.add((Election) election.clone());
         }
         district.setElections(electionsClone);
         Set<Precinct> precinctsClone = new HashSet<>();
-        for (Precinct precinct: precincts) {
+        for (Precinct precinct : precincts) {
             precinctsClone.add((Precinct) precinct.clone());
         }
         district.setPrecincts(precinctsClone);
         Set<CensusBlock> censusBlocksClone = new HashSet<>();
-        for (CensusBlock censusBlock: censusBlocks) {
+        for (CensusBlock censusBlock : censusBlocks) {
             censusBlocksClone.add((CensusBlock) censusBlock.clone());
         }
         district.setCensusBlocks(censusBlocksClone);
@@ -100,9 +99,9 @@ public class District implements Cloneable {
         return populations.get(type.ordinal());
     }
 
-    public CensusBlock getRandomBorderCB(){
+    public CensusBlock getRandomBorderCB() {
         List<CensusBlock> borderCensusBlocks = new ArrayList<>();
-        for (CensusBlock cb : censusBlocks){
+        for (CensusBlock cb : censusBlocks) {
             if (cb.isBorder())
                 borderCensusBlocks.add(cb);
         }
@@ -120,8 +119,7 @@ public class District implements Cloneable {
             destDistrict.calculatePopulation();
             destDistrict.calculateElection();
             selectedCB.setDistrict(destDistrict);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println("moveCB ERROR!");
             return false;
         }
@@ -138,7 +136,7 @@ public class District implements Cloneable {
             int hispanicSum = 0;
             int nativeAmericanSum = 0;
             int pacificIslanderSum = 0;
-            for (CensusBlock cb: censusBlocks) {
+            for (CensusBlock cb : censusBlocks) {
                 Population cbPopulation = cb.getPopulations().get(i);
                 totalSum += cbPopulation.getTotal();
                 africanSum += cbPopulation.getAfrican();
@@ -163,7 +161,7 @@ public class District implements Cloneable {
             Election election = elections.get(i);
             int democraticSum = 0;
             int republicanSum = 0;
-            for (CensusBlock cb: censusBlocks) {
+            for (CensusBlock cb : censusBlocks) {
                 Election cbElection = cb.getElections().get(i);
                 democraticSum += cbElection.getDemocratic();
                 republicanSum += cbElection.getRepublican();
@@ -180,8 +178,7 @@ public class District implements Cloneable {
             double area = geometry.getArea();
             double perimeter = geometry.getLength();
             setPolsbyPopper((4 * Math.PI * area) / Math.pow(perimeter, 2));
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("Error reading district geoJSON.");
         }
     }
@@ -195,7 +192,7 @@ public class District implements Cloneable {
         return 0;
     }
 
-    public int calculatePopulationDifference(District smallestDistrict, Constants.PopulationType type){
+    public int calculatePopulationDifference(District smallestDistrict, Constants.PopulationType type) {
         // will be called on the largest district in a districting
         Population smallestDistrictPop = smallestDistrict.getPopulationByType(type);
         Population largestDistrictPop = getPopulationByType(type);

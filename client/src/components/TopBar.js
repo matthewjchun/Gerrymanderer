@@ -4,9 +4,13 @@ import { useDisclosure } from '@chakra-ui/react';
 import { HStack, Box, Text, Button, Select } from '@chakra-ui/react';
 
 import LeftPane from './LeftPane';
+import AlgoProgress from './AlgoProgress';
+import BoxAndWhisker from './BoxAndWhisker';
 
 export default function TopBar(props) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isDrawerOpen , onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure()
+  const { isOpen: isModalOpen , onOpen: onModalOpen, onClose: onModalClose } = useDisclosure()
+  const { isOpen: isBoxOpen , onOpen: onBoxOpen, onClose: onBoxClose } = useDisclosure()
 
   const [activeState, setActiveState] = useContext(StateContext);
 
@@ -14,11 +18,14 @@ export default function TopBar(props) {
     <HStack w='100%' p='5' align='center' justify='center'>
       {activeState != 'Celtics' ? (
         <Box flex='1' mr='auto'>
-          <Button onClick={onOpen}>
+          <Button onClick={onDrawerOpen}>
             <Text>User Settings</Text>
           </Button>
 
-          <LeftPane isOpen={isOpen} onClose={onClose}></LeftPane>
+          <LeftPane isOpen={isDrawerOpen} onClose={onDrawerClose} onOpen={onDrawerOpen} onModalOpen={onModalOpen} 
+            onBoxOpen={onBoxOpen}></LeftPane>
+          <AlgoProgress isOpen={isModalOpen} onClose={onModalClose} onModalOpen={onModalOpen} activeState={activeState}> </AlgoProgress>
+          <BoxAndWhisker isOpen={isBoxOpen} onClose={onBoxClose} onOpen={onBoxOpen} activeState={activeState}></BoxAndWhisker>
         </Box>
       ) : (
         <Box flex='1' mr='auto' />

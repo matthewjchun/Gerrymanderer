@@ -32,6 +32,7 @@ export default function Redistricting(props) {
           borderRadius='lg'
           overflow='hidden'
           cursor='pointer'
+          onClick={props.handleRedistrictingClick}
         >
           <Image maxW='100%' src={thumbnail} />
           <Box

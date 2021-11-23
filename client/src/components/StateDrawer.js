@@ -62,44 +62,42 @@ export default function StateDrawer(props) {
 
   let processedData = processGeoJSONData(); */
 
-  let TotalPopulation = 1000000;
-  let VAP = 200000;
-  let CVAP = 30000000;
+  let TOTAL;
+  let VAP;
+  let CVAP;
+
+  const typeMap = {
+    0 : 'TOTAL',
+    1 : 'VAP',
+    2 : 'CVAP',
+  };
+
 
   const populationFetch = async (value) => {
+    setValue(value)
     const response = await fetch('/populationType', {
       method: "POST",
-      body: JSON.stringify({populationType: value}),
+      body: JSON.stringify({populationType: typeMap[value]}),
       headers: {"Content-type": "application/json; charset=UTF-8"}
     });
     const body = await response.json();
+    console.log(body)
     return body;
   }
 
   // useEffect(() => {
-  //   // let body = populationFetch;
-  //   // populationType = body;
+  //   // console.log(typeMap[value])
+  //   let body = populationFetch;
+  //   if(value == 0){
+  //     TOTAL = body;
+  //   }
   //   if(value == 1){
-  //     console.log("20000")
-  //     populationType = 20000;
+  //     VAP = body;
   //   }
   //   else{
-  //     console.log("30000")
-  //     populationType = 123124;
+  //     CVAP = body;
   //   }
   // }, [value]);
-
-  /*setValue(() => {
-    if(value == 1){
-      console.log("20000")
-      populationType = 20000;
-    }
-    else{
-      console.log("30000")
-      populationType = 123124;
-      console.log(populationType);
-    }
-  }, []);*/
 
   return (
     <Drawer
@@ -128,7 +126,7 @@ export default function StateDrawer(props) {
               <Flex align='center' justify='space-evenly'>
                 <Tab>State Statistics</Tab>
                 <Tab>Districts</Tab>
-                <Tab>Data</Tab>
+                {/* <Tab>Data</Tab> */}
               </Flex>
             </TabList>
             <TabPanels>
@@ -144,7 +142,7 @@ export default function StateDrawer(props) {
                       </AccordionButton>
                     </h2>
                     <AccordionPanel pb={4}>
-                      <RadioGroup onChange={setValue} value={value} defaultValue="0">
+                      <RadioGroup onChange={ populationFetch } value={value} defaultValue="0">
                         <Stack>
                           <Radio size="md" value="0" colorScheme="blue" defaultChecked>
                             Total Population
@@ -165,7 +163,7 @@ export default function StateDrawer(props) {
                 <br />
                 <Divider />
                 {value == "0" ?
-                <Text> Population: {TotalPopulation} </Text>: 
+                <Text> Population: {TOTAL} </Text>: 
                 value =="1" ? <Text> Population: {VAP} </Text>: 
                 value == "2" ? <Text> Population: {CVAP} </Text>: 
                 null}
@@ -519,7 +517,7 @@ export default function StateDrawer(props) {
                 </Table>
                 <Divider />
               </TabPanel>
-              <TabPanel>
+              {/* <TabPanel>
                 <Table>
                   <Thead>
                     <Tr>
@@ -527,16 +525,16 @@ export default function StateDrawer(props) {
                       <Th>Number of Districts</Th>
                     </Tr>
                   </Thead>
-{/*                   <Tbody>
+                   <Tbody>
                     {processedData ? (
                       <Tr>
                         <Td>{processedData.state}</Td>
                         <Td>{processedData.numDistricts}</Td>
                       </Tr>
                     ) : null}
-                  </Tbody> */}
+                  </Tbody> 
                 </Table>
-              </TabPanel>
+              </TabPanel> */}
             </TabPanels>
           </Tabs>
         </DrawerBody>

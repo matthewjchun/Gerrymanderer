@@ -42,6 +42,7 @@ import az from '../img/az.jpg';
 import mi from '../img/mi.jpg';
 import va from '../img/va.jpg';
 import { BoxZoomHandler } from 'mapbox-gl';
+import AlgoProgress from './AlgoProgress';
 
 // maps property names to display names
 const measureMap = {
@@ -754,7 +755,7 @@ const vaData = [
 ];
 
 export default function LeftPane(props) {
-  const { isOpen, onClose } = props;
+  const { isOpen, onClose, isModalOpen, onModalOpen, onBoxOpen } = props;
   const [popEquality, setPopEquality] = useState(0);
   const [compactness, setCompactness] = useState(0);
   const [majorityMinority, setMajorityMinority] = useState(0);
@@ -767,17 +768,18 @@ export default function LeftPane(props) {
   const handleMajorityMinorityInput = (val) => setMajorityMinority(val);
 
   const handleRedistrictingClick = (e) => {
-    console.log(e.target.number);
+    // console.log(e.target.number);
+    console.log("hi");
   };
 
-  const handleGenerate = async (e) => {
-    const response = await fetch(
-      `/districtings?state=${activeState}`.toLowerCase()
-    );
-    const body = await response.json();
-    console.log(body);
-    setGeoJSONdata(body);
-  };
+  // const handleGenerate = async (e) => {
+  //   const response = await fetch(
+  //     `/districtings?state=${activeState}`.toLowerCase()
+  //   );
+  //   const body = await response.json();
+  //   console.log(body);
+  //   setGeoJSONdata(body);
+  // };
 
   const redistrictingTabTooltip =
     'Select one of the following 30 redistrictings to improve on.';
@@ -793,279 +795,293 @@ export default function LeftPane(props) {
   const majorityMinorityToolTip =
     'Set the maximum percentage threshold for the minority population per congressional district in the improved redistricting. [0, 100]';
 
+
   return (
-    <Drawer
-      size='md'
-      isOpen={isOpen}
-      onClose={onClose}
-      placement={'left'}
-      variant='permanent'
-    >
-      {/* <DrawerOverlay /> */}
-      <DrawerContent overflow='scroll'>
-        <DrawerCloseButton />
-        <DrawerHeader>
-          <Text>User Settings</Text>
-        </DrawerHeader>
-        <Tabs isFitted variant='enclosed'>
-          <TabList mb='1em'>
-            <Tab>
-              <HStack spacing='5'>
-                <Text>SeaWulf Redistrictings</Text>
-                <Tooltip
-                  label={redistrictingTabTooltip}
-                  fontSize='md'
-                  placement='right'
-                >
-                  <QuestionIcon />
-                </Tooltip>
-              </HStack>
-            </Tab>
-            <Tab>
-              <HStack spacing='5'>
-                <Text>Constraints on Measures</Text>
-                <Tooltip
-                  label={constraintsTabTooltip}
-                  fontSize='md'
-                  placement='right'
-                >
-                  <QuestionIcon />
-                </Tooltip>
-              </HStack>
-            </Tab>
-            <Tab>
-              <HStack spacing='5'>
-                <Text>Box And Whisker</Text>
-                <Tooltip
-                  label={BoxAndWhiskerTabTooltip}
-                  fontSize='md'
-                  placement='right'
-                >
-                  <QuestionIcon />
-                </Tooltip>
-              </HStack>
-            </Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel>
-              {activeState == 'Arizona' ? (
-                <VStack spacing='2'>
-                  {azData.map((set) => {
-                    const best = bestMeasure(set);
-                    return (
-                      <HStack spacing='2'>
-                        {best.map((numMeasure) => {
-                          const [number, measure, allMeasures] = numMeasure;
-                          return (
-                            <Redistricting
-                              number={number}
-                              thumbnail={az}
-                              bestMeasure={measureMap[measure]}
-                              measures={allMeasures}
-                              onClick={handleRedistrictingClick}
-                            />
-                          );
-                        })}
-                      </HStack>
-                    );
-                  })}
-                </VStack>
-              ) : null}
-              {activeState == 'Michigan' ? (
-                <VStack spacing='3'>
-                  {miData.map((set) => {
-                    const best = bestMeasure(set);
-                    return (
-                      <HStack spacing='3'>
-                        {best.map((numMeasure) => {
-                          const [number, measure, allMeasures] = numMeasure;
-                          return (
-                            <Redistricting
-                              number={number}
-                              thumbnail={mi}
-                              bestMeasure={measureMap[measure]}
-                              measures={allMeasures}
-                            />
-                          );
-                        })}
-                      </HStack>
-                    );
-                  })}
-                </VStack>
-              ) : null}
-              {activeState == 'Virginia' ? (
-                <VStack spacing='3'>
-                  {vaData.map((set) => {
-                    const best = bestMeasure(set);
-                    return (
-                      <HStack spacing='3'>
-                        {best.map((numMeasure) => {
-                          const [number, measure, allMeasures] = numMeasure;
-                          return (
-                            <Redistricting
-                              number={number}
-                              thumbnail={va}
-                              bestMeasure={measureMap[measure]}
-                              measures={allMeasures}
-                            />
-                          );
-                        })}
-                      </HStack>
-                    );
-                  })}
-                </VStack>
-              ) : null}
-            </TabPanel>
-            <TabPanel>
-              <DrawerBody>
-                <VStack align='left' spacing='5'>
-                  <HStack spacing='5'>
-                    <Text>Population Equality</Text>
-                    <Tooltip
-                      label={popEqualityTooltip}
-                      fontSize='md'
-                      placement='right'
-                    >
-                      <QuestionIcon />
-                    </Tooltip>
-                  </HStack>
-                  <HStack spacing='5'>
-                    <Slider
-                      aria-label='population-equality'
-                      value={popEquality}
-                      onChange={handlePopEqualityInput}
-                      focusThumbOnChange={false}
-                    >
-                      <SliderTrack>
-                        <SliderFilledTrack />
-                      </SliderTrack>
-                      <SliderThumb bg={themes.colors.blue[500]} />
-                    </Slider>
-                    <NumberInput
-                      value={popEquality}
-                      min={0}
-                      max={100}
-                      onChange={handlePopEqualityInput}
-                    >
-                      <NumberInputField />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput>
-                  </HStack>
-                  <HStack>
-                    <Text>Compactness</Text>
-                    <Tooltip
-                      label={compactnessTooltip}
-                      fontSize='md'
-                      placement='right'
-                    >
-                      <QuestionIcon />
-                    </Tooltip>
-                  </HStack>
-                  <HStack spacing='5'>
-                    <Slider
-                      aria-label='compactness'
-                      value={compactness}
-                      onChange={handleCompactnessInput}
-                      focusThumbOnChange={false}
-                    >
-                      <SliderTrack>
-                        <SliderFilledTrack />
-                      </SliderTrack>
-                      <SliderThumb bg={themes.colors.blue[500]} />
-                    </Slider>
-                    <NumberInput
-                      value={compactness}
-                      min={0}
-                      max={100}
-                      onChange={handleCompactnessInput}
-                    >
-                      <NumberInputField />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput>
-                  </HStack>
-                  <HStack>
-                    <Text>Majority-Minority Districts</Text>
-                    <Tooltip
-                      label={majorityMinorityToolTip}
-                      fontSize='md'
-                      placement='right'
-                    >
-                      <QuestionIcon />
-                    </Tooltip>
-                  </HStack>
-                  <HStack>
-                    <Slider
-                      aria-label='majority-minority-districts'
-                      defaultValue={majorityMinority}
-                      onChange={handleMajorityMinorityInput}
-                      focusThumbOnChange={false}
-                    >
-                      <SliderTrack>
-                        <SliderFilledTrack />
-                      </SliderTrack>
-                      <SliderThumb bg={themes.colors.blue[500]} />
-                    </Slider>
-                    <NumberInput
-                      value={majorityMinority}
-                      min={0}
-                      max={100}
-                      onChange={handleMajorityMinorityInput}
-                    >
-                      <NumberInputField />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput>
-                  </HStack>
-                </VStack>
-              </DrawerBody>
-            </TabPanel>
-            <TabPanel>
-              {activeState == 'Arizona' ? (
-                <VStack spacing='2'>
-                  {azData.map((set) => {
-                    const best = bestMeasure(set);
-                    return (
-                      <HStack spacing='2'>
-                        {best.map((numMeasure) => {
-                          const [number, measure, allMeasures] = numMeasure;
-                          return (
-                            <>
+    <>
+      <Drawer
+        size='md'
+        isOpen={isOpen}
+        onClose={onClose}
+        placement={'left'}
+        variant='permanent'
+      >
+        {/* <DrawerOverlay /> */}
+        <DrawerContent overflow='scroll'>
+          <DrawerCloseButton />
+          <DrawerHeader>
+            <Text>User Settings</Text>
+          </DrawerHeader>
+          <Tabs isFitted variant='enclosed'>
+            <TabList mb='1em'>
+              <Tab>
+                <HStack spacing='5'>
+                  <Text>SeaWulf Redistrictings</Text>
+                  <Tooltip
+                    label={redistrictingTabTooltip}
+                    fontSize='md'
+                    placement='right'
+                  >
+                    <QuestionIcon />
+                  </Tooltip>
+                </HStack>
+              </Tab>
+              <Tab>
+                <HStack spacing='5'>
+                  <Text>Constraints on Measures</Text>
+                  <Tooltip
+                    label={constraintsTabTooltip}
+                    fontSize='md'
+                    placement='right'
+                  >
+                    <QuestionIcon />
+                  </Tooltip>
+                </HStack>
+              </Tab>
+              <Tab>
+                <HStack spacing='5'>
+                  <Text>Box And Whisker</Text>
+                  <Tooltip
+                    label={BoxAndWhiskerTabTooltip}
+                    fontSize='md'
+                    placement='right'
+                  >
+                    <QuestionIcon />
+                  </Tooltip>
+                </HStack>
+              </Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                {activeState == 'Arizona' ? (
+                  <VStack spacing='2'>
+                    {azData.map((set) => {
+                      const best = bestMeasure(set);
+                      return (
+                        <HStack spacing='2'>
+                          {best.map((numMeasure) => {
+                            const [number, measure, allMeasures] = numMeasure;
+                            return (
                               <Redistricting
                                 number={number}
                                 thumbnail={az}
                                 bestMeasure={measureMap[measure]}
                                 measures={allMeasures}
-                                onClick={handleRedistrictingClick}
+                                handleRedistrictingClick={handleRedistrictingClick}
                               />
-                              <Checkbox> {number} </Checkbox>
-                            </>
-                          );
-                        })}
-                      </HStack>
-                    );
-                  })}
-                </VStack>
-              ) : null}
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-        <DrawerFooter>
-          <VStack spacing='3' align='right'>
-            <Button onClick={handleGenerate}>
-              <Text>Generate</Text>
-            </Button>
-            <Text fontSize='sm'>Last updated: 10 seconds ago</Text>
-          </VStack>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+                            );
+                          })}
+                        </HStack>
+                      );
+                    })}
+                  </VStack>
+                ) : null}
+                {activeState == 'Michigan' ? (
+                  <VStack spacing='3'>
+                    {miData.map((set) => {
+                      const best = bestMeasure(set);
+                      return (
+                        <HStack spacing='3'>
+                          {best.map((numMeasure) => {
+                            const [number, measure, allMeasures] = numMeasure;
+                            return (
+                              <Redistricting
+                                number={number}
+                                thumbnail={mi}
+                                bestMeasure={measureMap[measure]}
+                                measures={allMeasures}
+                              />
+                            );
+                          })}
+                        </HStack>
+                      );
+                    })}
+                  </VStack>
+                ) : null}
+                {activeState == 'Virginia' ? (
+                  <VStack spacing='3'>
+                    {vaData.map((set) => {
+                      const best = bestMeasure(set);
+                      return (
+                        <HStack spacing='3'>
+                          {best.map((numMeasure) => {
+                            const [number, measure, allMeasures] = numMeasure;
+                            return (
+                              <Redistricting
+                                number={number}
+                                thumbnail={va}
+                                bestMeasure={measureMap[measure]}
+                                measures={allMeasures}
+                              />
+                            );
+                          })}
+                        </HStack>
+                      );
+                    })}
+                  </VStack>
+                ) : null}
+              </TabPanel>
+              <TabPanel>
+                <DrawerBody>
+                  <VStack align='left' spacing='5'>
+                    <HStack spacing='5'>
+                      <Text>Population Equality</Text>
+                      <Tooltip
+                        label={popEqualityTooltip}
+                        fontSize='md'
+                        placement='right'
+                      >
+                        <QuestionIcon />
+                      </Tooltip>
+                    </HStack>
+                    <HStack spacing='5'>
+                      <Slider
+                        aria-label='population-equality'
+                        value={popEquality}
+                        onChange={handlePopEqualityInput}
+                        focusThumbOnChange={false}
+                        min={0} 
+                        max={70}
+                      >
+                        <SliderTrack>
+                          <SliderFilledTrack />
+                        </SliderTrack>
+                        <SliderThumb bg={themes.colors.blue[500]} />
+                      </Slider>
+                      <NumberInput
+                        value={popEquality}
+                        min={0}
+                        max={70}
+                        onChange={handlePopEqualityInput}
+                      >
+                        <NumberInputField />
+                        <NumberInputStepper>
+                          <NumberIncrementStepper />
+                          <NumberDecrementStepper />
+                        </NumberInputStepper>
+                      </NumberInput>
+                    </HStack>
+                    <HStack>
+                      <Text>Compactness</Text>
+                      <Tooltip
+                        label={compactnessTooltip}
+                        fontSize='md'
+                        placement='right'
+                      >
+                        <QuestionIcon />
+                      </Tooltip>
+                    </HStack>
+                    <HStack spacing='5'>
+                      <Slider
+                        aria-label='compactness'
+                        value={compactness}
+                        onChange={handleCompactnessInput}
+                        focusThumbOnChange={false}
+                        min={0} 
+                        max={100}                                                                 // percentage
+                      >
+                        <SliderTrack>
+                          <SliderFilledTrack />
+                        </SliderTrack>
+                        <SliderThumb bg={themes.colors.blue[500]} />
+                      </Slider>
+                      <NumberInput
+                        value={compactness}
+                        min={0}
+                        max={100}
+                        onChange={handleCompactnessInput}
+                      >
+                        <NumberInputField />
+                        <NumberInputStepper>
+                          <NumberIncrementStepper />
+                          <NumberDecrementStepper />
+                        </NumberInputStepper>
+                      </NumberInput>
+                    </HStack>
+                    <HStack>
+                      <Text>Majority-Minority Districts</Text>
+                      <Tooltip
+                        label={majorityMinorityToolTip}
+                        fontSize='md'
+                        placement='right'
+                      >
+                        <QuestionIcon />
+                      </Tooltip>
+                    </HStack>
+                    <HStack>
+                      <Slider
+                        aria-label='majority-minority-districts'
+                        defaultValue={majorityMinority}
+                        onChange={handleMajorityMinorityInput}
+                        focusThumbOnChange={false}
+                        min={0} 
+                        max={9}
+                      >
+                        <SliderTrack>
+                          <SliderFilledTrack />
+                        </SliderTrack>
+                        <SliderThumb bg={themes.colors.blue[500]} />
+                      </Slider>
+                      <NumberInput
+                        value={majorityMinority}
+                        min={0}
+                        max={9}
+                        onChange={handleMajorityMinorityInput}
+                      >
+                        <NumberInputField />
+                        <NumberInputStepper>
+                          <NumberIncrementStepper />
+                          <NumberDecrementStepper />
+                        </NumberInputStepper>
+                      </NumberInput>
+                    </HStack>
+                    <VStack spacing='3' align='right'>
+                      <Button onClick={onModalOpen}>
+                        <Text>Generate</Text>
+                      </Button>
+                      <Text fontSize='sm'>Last updated: 10 seconds ago</Text>
+                    </VStack> 
+                  </VStack>
+                </DrawerBody>
+              </TabPanel>
+              <TabPanel>
+                {activeState == 'Arizona' ? (
+                  <VStack spacing='2'>
+                    {azData.map((set) => {
+                      const best = bestMeasure(set);
+                      return (
+                        <HStack spacing='2'>
+                          {best.map((numMeasure) => {
+                            const [number, measure, allMeasures] = numMeasure;
+                            return (
+                              <>
+                                <Redistricting
+                                  number={number}
+                                  thumbnail={az}
+                                  bestMeasure={measureMap[measure]}
+                                  measures={allMeasures}
+                                  onClick={handleRedistrictingClick}
+                                />
+                                <Checkbox> {number} </Checkbox>
+                              </>
+                            );
+                          })}
+                        </HStack>
+                      );
+                    })}
+                    <VStack spacing='3' align='right'>
+                      <Button onClick={onBoxOpen}>
+                        <Text>Generate</Text>
+                      </Button>
+                    </VStack> 
+                  </VStack>
+                ) : null}
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+          <DrawerFooter>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 }

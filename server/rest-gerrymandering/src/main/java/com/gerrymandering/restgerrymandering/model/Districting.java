@@ -13,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "Districtings")
-public class Districting implements Cloneable{
+public class Districting implements Cloneable {
 
     @Id
     @GeneratedValue
@@ -55,14 +55,14 @@ public class Districting implements Cloneable{
     @Transient
     private int splitPrecincts;
 
-    public Districting() {}
+    public Districting() {
+    }
 
     public Districting(long id, double populationEqualityTotal, double populationEqualityVAP,
-                       double populationEqualityCVAP, double avgPolsbyPopper, int majorityMinorityCountTotal,
-                       int majorityMinorityCountVAP, int majorityMinorityCountCVAP, String districtPath,
-                       String precinctPath, String countyPath, List<District> districts,
-                       double populationEqualityThreshold, double polsbyPopperThreshold, int majorityMinorityThreshold,
-                       int splitPrecincts) {
+            double populationEqualityCVAP, double avgPolsbyPopper, int majorityMinorityCountTotal,
+            int majorityMinorityCountVAP, int majorityMinorityCountCVAP, String districtPath, String precinctPath,
+            String countyPath, List<District> districts, double populationEqualityThreshold,
+            double polsbyPopperThreshold, int majorityMinorityThreshold, int splitPrecincts) {
         this.id = id;
         this.populationEqualityTotal = populationEqualityTotal;
         this.populationEqualityVAP = populationEqualityVAP;
@@ -86,15 +86,14 @@ public class Districting implements Cloneable{
         Districting districting;
         try {
             districting = (Districting) super.clone();
-        }
-        catch (CloneNotSupportedException e) {
+        } catch (CloneNotSupportedException e) {
             districting = new Districting(id, populationEqualityTotal, populationEqualityVAP, populationEqualityCVAP,
                     avgPolsbyPopper, majorityMinorityCountTotal, majorityMinorityCountVAP, majorityMinorityCountCVAP,
                     districtPath, precinctPath, countyPath, districts, populationEqualityThreshold,
                     polsbyPopperThreshold, majorityMinorityThreshold, splitPrecincts);
         }
         List<District> districtsClone = new ArrayList<>();
-        for (District district: districts) {
+        for (District district : districts) {
             districtsClone.add((District) district.clone());
         }
         districting.setDistricts(districtsClone);
@@ -106,7 +105,7 @@ public class Districting implements Cloneable{
         districts.sort(new DistrictComparator(type));
     }
 
-    public boolean moveCBFromLargestToSmallestDistrict(Districting selectedDistricting, Constants.PopulationType type){
+    public boolean moveCBFromLargestToSmallestDistrict(Districting selectedDistricting, Constants.PopulationType type) {
         District sourceDistrict = selectedDistricting.getLargestDistrict(type);
         CensusBlock selectedCB = sourceDistrict.getRandomBorderCB();
         List<CensusBlock> neighborList = selectedCB.getNeighborCBInDiffDistrict();
@@ -148,7 +147,7 @@ public class Districting implements Cloneable{
         District smallestDistrict = neighbors.get(0).getDistrict();
         Population leastPopulation = neighbors.get(0).getDistrict().getPopulationByType(type);
         int leastPopulationValue = leastPopulation.getTotal();
-        for (CensusBlock neighbor: neighbors) {
+        for (CensusBlock neighbor : neighbors) {
             District neighborDistrict = neighbor.getDistrict();
             Population neighborDistrictPopulation = neighborDistrict.getPopulationByType(type);
             int neighborDistrictPopulationValue = neighborDistrictPopulation.getTotal();
@@ -161,37 +160,38 @@ public class Districting implements Cloneable{
     }
 
     // Might not need this
-    public District getDistrictById (long id){
-        for(District dis : districts){
-            if(dis.getId() == id){
+    public District getDistrictById(long id) {
+        for (District dis : districts) {
+            if (dis.getId() == id) {
                 return dis;
             }
         }
         return null;
     }
 
-
     public double getObjectiveFunctionScore() {
         return 0.0;
     }
 
     public void calculatePopulationEquality() {
-        for (Constants.PopulationType type: Constants.PopulationType.values()) {
+        for (Constants.PopulationType type : Constants.PopulationType.values()) {
             District largestDistrict = getLargestDistrict(type);
             Population largestDistrictPopulation = largestDistrict.getPopulationByType(type);
             District smallestDistrict = getSmallestDistrict(type);
             Population smallestDistrictPopulation = smallestDistrict.getPopulationByType(type);
             int totalPopulation = getTotalPopulation(type);
-            double populationEquality = (double) Math.abs(largestDistrictPopulation.getTotal() - smallestDistrictPopulation.getTotal()) / totalPopulation;
+            double populationEquality = (double) Math
+                    .abs(largestDistrictPopulation.getTotal() - smallestDistrictPopulation.getTotal())
+                    / totalPopulation;
             switch (type) {
-                case TOTAL:
-                    setPopulationEqualityTotal(populationEquality);
-                case VAP:
-                    setPopulationEqualityVAP(populationEquality);
-                case CVAP:
-                    setPopulationEqualityCVAP(populationEquality);
-                default:
-                    break;
+            case TOTAL:
+                setPopulationEqualityTotal(populationEquality);
+            case VAP:
+                setPopulationEqualityVAP(populationEquality);
+            case CVAP:
+                setPopulationEqualityCVAP(populationEquality);
+            default:
+                break;
             }
         }
     }
@@ -199,7 +199,7 @@ public class Districting implements Cloneable{
     public void calculateAvgPolsbyPopper() {
         double sum = 0;
         int numDistricts = districts.size();
-        for (District district: districts) {
+        for (District district : districts) {
             district.calculatePolsbyPopper();
             sum += district.getPolsbyPopper();
         }
@@ -207,38 +207,43 @@ public class Districting implements Cloneable{
     }
 
     public void calculateMajorityMinorityCount() {
-        for (Constants.PopulationType type: Constants.PopulationType.values()) {
+        for (Constants.PopulationType type : Constants.PopulationType.values()) {
             int majorityMinorityCount = 0;
-            for (District district: districts) {
+            for (District district : districts) {
                 Population population = district.getPopulationByType(type);
-                boolean majorityMinority = (double) population.getAfrican() / population.getTotal() > Constants.getMinThresholdMajorityMinority() ||
-                        (double) population.getAsian() / population.getTotal() > Constants.getMinThresholdMajorityMinority() ||
-                        (double) population.getHispanic() / population.getTotal() > Constants.getMinThresholdMajorityMinority() ||
-                        (double) population.getNativeAmerican() / population.getTotal() > Constants.getMinThresholdMajorityMinority() ||
-                        (double) population.getPacificIslander() / population.getTotal() > Constants.getMinThresholdMajorityMinority();
+                boolean majorityMinority = (double) population.getAfrican() / population.getTotal() > Constants
+                        .getMinThresholdMajorityMinority()
+                        || (double) population.getAsian() / population.getTotal() > Constants
+                                .getMinThresholdMajorityMinority()
+                        || (double) population.getHispanic() / population.getTotal() > Constants
+                                .getMinThresholdMajorityMinority()
+                        || (double) population.getNativeAmerican() / population.getTotal() > Constants
+                                .getMinThresholdMajorityMinority()
+                        || (double) population.getPacificIslander() / population.getTotal() > Constants
+                                .getMinThresholdMajorityMinority();
                 if (majorityMinority) {
                     majorityMinorityCount++;
                     switch (type) {
-                        case TOTAL:
-                            district.setMajorityMinorityTotal(true);
-                        case VAP:
-                            district.setMajorityMinorityVAP(true);
-                        case CVAP:
-                            district.setMajorityMinorityCVAP(true);
-                        default:
-                            break;
+                    case TOTAL:
+                        district.setMajorityMinorityTotal(true);
+                    case VAP:
+                        district.setMajorityMinorityVAP(true);
+                    case CVAP:
+                        district.setMajorityMinorityCVAP(true);
+                    default:
+                        break;
                     }
                 }
             }
             switch (type) {
-                case TOTAL:
-                    setMajorityMinorityCountTotal(majorityMinorityCount);
-                case VAP:
-                    setMajorityMinorityCountVAP(majorityMinorityCount);
-                case CVAP:
-                    setMajorityMinorityCountCVAP(majorityMinorityCount);
-                default:
-                    break;
+            case TOTAL:
+                setMajorityMinorityCountTotal(majorityMinorityCount);
+            case VAP:
+                setMajorityMinorityCountVAP(majorityMinorityCount);
+            case CVAP:
+                setMajorityMinorityCountCVAP(majorityMinorityCount);
+            default:
+                break;
             }
         }
     }
@@ -247,9 +252,9 @@ public class Districting implements Cloneable{
         GeometryFactory factory = new GeometryFactory();
         GeometryJSON geometryJSON = new GeometryJSON();
         Collection<Geometry> districtCollection = new ArrayList<>();
-        for (District district: districts) {
+        for (District district : districts) {
             Collection<Geometry> cbCollection = new ArrayList<>();
-            for (CensusBlock cb: district.getCensusBlocks()) {
+            for (CensusBlock cb : district.getCensusBlocks()) {
                 try {
                     Geometry geometry = geometryJSON.read(cb.getPath());
                     cbCollection.add(geometry);
@@ -269,35 +274,39 @@ public class Districting implements Cloneable{
 
     public int getTotalPopulation(Constants.PopulationType type) {
         int sum = 0;
-        for (District district : districts){
+        for (District district : districts) {
             sum += district.getPopulationByType(type).getTotal();
         }
         return sum;
     }
 
-    public boolean isImproved(Districting previousDistricting, Constants.PopulationType type){
+    public boolean isImproved(Districting previousDistricting, Constants.PopulationType type) {
         switch (type) {
-            case TOTAL:
-                return populationEqualityTotal > previousDistricting.getPopulationEqualityTotal();
-            case VAP:
-                return populationEqualityVAP > previousDistricting.getPopulationEqualityVAP();
-            case CVAP:
-                return populationEqualityCVAP > previousDistricting.getPopulationEqualityCVAP();
-            default:
-                return false;
+        case TOTAL:
+            return populationEqualityTotal > previousDistricting.getPopulationEqualityTotal();
+        case VAP:
+            return populationEqualityVAP > previousDistricting.getPopulationEqualityVAP();
+        case CVAP:
+            return populationEqualityCVAP > previousDistricting.getPopulationEqualityCVAP();
+        default:
+            return false;
         }
     }
 
-    public boolean validateThresholds(double popEqualityThresh, double polsbyPopperThresh, int majorityMinorityThresh, Constants.PopulationType type){
+    public boolean validateThresholds(double popEqualityThresh, double polsbyPopperThresh, int majorityMinorityThresh,
+            Constants.PopulationType type) {
         switch (type) {
-            case TOTAL:
-                return populationEqualityTotal <= popEqualityThresh && avgPolsbyPopper <= polsbyPopperThresh && majorityMinorityCountTotal <= majorityMinorityThresh;
-            case VAP:
-                return populationEqualityVAP <= popEqualityThresh && avgPolsbyPopper <= polsbyPopperThresh && majorityMinorityCountVAP <= majorityMinorityThresh;
-            case CVAP:
-                return populationEqualityCVAP <= popEqualityThresh && avgPolsbyPopper <= polsbyPopperThresh && majorityMinorityCountCVAP <= majorityMinorityThresh;
-            default:
-                return false;
+        case TOTAL:
+            return populationEqualityTotal <= popEqualityThresh && avgPolsbyPopper <= polsbyPopperThresh
+                    && majorityMinorityCountTotal <= majorityMinorityThresh;
+        case VAP:
+            return populationEqualityVAP <= popEqualityThresh && avgPolsbyPopper <= polsbyPopperThresh
+                    && majorityMinorityCountVAP <= majorityMinorityThresh;
+        case CVAP:
+            return populationEqualityCVAP <= popEqualityThresh && avgPolsbyPopper <= polsbyPopperThresh
+                    && majorityMinorityCountCVAP <= majorityMinorityThresh;
+        default:
+            return false;
         }
     }
 
