@@ -63,11 +63,11 @@ export default function StateDrawer(props) {
 
   let processedData = processGeoJSONData(); */
 
-  let TOTAL = stateSummary["populations"][0]["total"];
-  let VAP = stateSummary["populations"][1]["total"];
-  let CVAP = stateSummary["populations"][2]["total"];
+  let TOTAL = stateSummary['populations'][0]['total'];
+  let VAP = stateSummary['populations'][1]['total'];
+  let CVAP = stateSummary['populations'][2]['total'];
 
-  let districts = stateSummary["districtingSummaries"][0]["districtSummaries"];
+  let districts = stateSummary['districtingSummaries'][0]['districtSummaries'];
 
   const typeMap = {
     0: 'TOTAL',
@@ -174,40 +174,48 @@ export default function StateDrawer(props) {
                   <Thead>
                     <Tr>
                       <Th>Party</Th>
-                      <Th>Districts</Th>
+                      {/*<Th>Districts</Th>*/}
                       <Th isNumeric>Total Votes</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
                     <Tr>
                       <Td>Democratic Party</Td>
-                      <Td>5</Td>
-                      <Td isNumeric></Td>
+                      {/*<Td>5</Td>*/}
+                      <Td isNumeric>
+                        {stateSummary['elections'][0]['democratic']}
+                      </Td>
                     </Tr>
                     <Tr>
                       <Td>Republican Party</Td>
-                      <Td>4</Td>
-                      <Td isNumeric>1,638,516</Td>
+                      {/*<Td>4</Td>*/}
+                      <Td isNumeric>
+                        {stateSummary['elections'][0]['republican']}
+                      </Td>
                     </Tr>
                   </Tbody>
                 </Table>
                 <StatGroup>
                   <Stat>
                     <StatLabel>Democratic</StatLabel>
-                    <StatNumber>1,629,318</StatNumber>
-                    <StatHelpText>
+                    <StatNumber>
+                      {stateSummary['elections'][0]['democratic']}
+                    </StatNumber>
+                    {/* <StatHelpText>
                       <StatArrow type='decrease' />
                       49.85%
-                    </StatHelpText>
+                    </StatHelpText> */}
                   </Stat>
 
                   <Stat>
                     <StatLabel>Republican</StatLabel>
-                    <StatNumber>1,638,516</StatNumber>
-                    <StatHelpText>
+                    <StatNumber>
+                      {stateSummary['elections'][0]['republican']}
+                    </StatNumber>
+                    {/* <StatHelpText>
                       <StatArrow type='increase' />
                       50.13%
-                    </StatHelpText>
+                    </StatHelpText> */}
                   </Stat>
                 </StatGroup>
                 <Divider />
@@ -263,11 +271,14 @@ export default function StateDrawer(props) {
                 </Table>
               </TabPanel>
               <TabPanel>
-               {districts.map((district) => {
-                  return(
-                  <Districts number={district.districtId} population={district.populations} 
-                  election={district.elections}></Districts>
-                  )
+                {districts.map((district) => {
+                  return (
+                    <Districts
+                      number={district.districtId}
+                      population={district.populations}
+                      election={district.elections}
+                    ></Districts>
+                  );
                 })}
               </TabPanel>
             </TabPanels>
