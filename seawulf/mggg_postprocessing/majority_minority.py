@@ -1,5 +1,4 @@
 import json
-import math
 from helpers import check_majority_minority
 
 with open('az_demographics.json') as f:
