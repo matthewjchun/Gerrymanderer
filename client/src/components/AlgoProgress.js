@@ -43,7 +43,7 @@ export default function AlgoProgress(props) {
             <Text>Number of iterations: </Text>
             <Text>Algorithm time: </Text>
             <Text>Estimated time to completion: </Text>
-            <Divider />
+            <Divider size="50px"/>
           </ModalBody>
 
           <ModalFooter>
