@@ -42,7 +42,7 @@ def writeToCSVFile(filename, header, data):
 
 if __name__=="__main__":
     relative_path = "../server/rest-gerrymandering/src/main/resources/data/"
-    createGeoJson("dataSource/az_county.json", "AZ", "County", relative_path + "counties/")
-    createGeoJson("dataSource/az_district.json", "AZ", "District", relative_path + "districts/enacted/")
-    createGeoJson("dataSource/az_precinct.json", "AZ", "Precinct", relative_path + "precincts/")
-    # createGeoJson("datasource/AZ_CensusBlock.json", "AZ", "CensusBlock", relative_path + "censusblocks/")
+    # createGeoJson("dataSource/az_county.json", "AZ", "County", relative_path + "counties/")
+    # createGeoJson("dataSource/az_district.json", "AZ", "District", relative_path + "districts/enacted/")
+    # createGeoJson("dataSource/az_precinct.json", "AZ", "Precinct", relative_path + "precincts/")
+    createGeoJson("dataSource/az_censusblock.json", "AZ", "CensusBlock", relative_path + "censusblocks/")
