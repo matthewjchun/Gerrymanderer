@@ -1,6 +1,6 @@
 import csv 
 import json
-from cleanData import writeToCSVFile
+from getData import writeToCSVFile
 
 def csvToSQLState(inFilename, outFilename):
     data = []
@@ -72,7 +72,7 @@ def csvToSQLDistrict(inFilename, outFilename, state, id, index, districtingId):
     with open(inFilename, 'r') as csvfile:
         csvReader = csv.DictReader(csvfile)
         for row in csvReader:
-            data.append({"id": str(id), "GEOID20": row["GEOID20"] ,"districtingId": str(districtingId), "path": "enacted/districts/" + state + "_district_" + str(index) + ".json"})
+            data.append({"id": str(id), "GEOID20": row["GEOID20"] ,"districtingId": str(districtingId), "path": "districts/enacted" + state + "_district_" + str(index) + ".json"})
             populationData.append({"popType": 0, "total": row["P0020001"], "hispanic": row["P0020002"], "white": row["P0020005"], 
                                 "african": row["P0020006"], "native": row["P0020007"], "asian": row["P0020008"], "pacificIslander": row["P0020009"], "id": id})
             populationData.append({"popType": 1, "total": row["P0040001"], "hispanic": row["P0040002"], "white": row["P0040005"], 
