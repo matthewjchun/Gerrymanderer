@@ -1,8 +1,12 @@
 package com.gerrymandering.restgerrymandering.model;
 
 import com.gerrymandering.restgerrymandering.constants.Constants;
+import com.vividsolutions.jts.geom.Geometry;
+import org.geotools.geojson.geom.GeometryJSON;
+
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -170,7 +174,16 @@ public class District implements Cloneable {
     }
 
     public void calculatePolsbyPopper() {
-        // STUB
+        GeometryJSON geometryJSON = new GeometryJSON();
+        try {
+            Geometry geometry = geometryJSON.read(path);
+            double area = geometry.getArea();
+            double perimeter = geometry.getLength();
+            setPolsbyPopper((4 * Math.PI * area) / Math.pow(perimeter, 2));
+        }
+        catch (IOException e) {
+            System.out.println("Error reading district geoJSON.");
+        }
     }
 
     public void calculateMajorityMinorty() {

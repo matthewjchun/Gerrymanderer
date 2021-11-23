@@ -118,7 +118,7 @@ public class DistrictingController {
                     selectedDistricting.getAvgPolsbyPopper(), selectedDistricting.getMajorityMinorityCountTotal(),
                     selectedDistricting.getMajorityMinorityCountVAP(),
                     selectedDistricting.getMajorityMinorityCountCVAP(), new ArrayList<>(), null);
-            algorithm = new Algorithm(algoSummary, populationType, selectedDistricting, 0, 0,
+            algorithm = new Algorithm(algoSummary, populationType, selectedDistricting, 0,
                     popEqualityThresh, polsbyPopperThresh, majorityMinorityThresh, false);
         }
         else {
@@ -126,8 +126,7 @@ public class DistrictingController {
             algoSummary.setRunning(true);
             algorithm.setTerminationFlag(false);
         }
-        Districting cloneDistricting = (Districting) selectedDistricting.clone();
-        algorithm.start(selectedDistricting, popEqualityThresh, polsbyPopperThresh, majorityMinorityThresh);
+        algorithm.start(popEqualityThresh, polsbyPopperThresh, majorityMinorityThresh);
 
         session.setAttribute("algorithm", algorithm);
         return null;

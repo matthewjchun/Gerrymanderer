@@ -13,8 +13,6 @@ public class Algorithm {
 
     private int failedAttempts;
 
-    private int numberIterations;
-
     private double popEqualityThresh;
 
     private double polsbyPopperThresh;
@@ -24,14 +22,12 @@ public class Algorithm {
     private boolean terminationFlag;
 
     public Algorithm(AlgorithmSummary algoSummary, Constants.PopulationType populationType,
-                     Districting currentDistricting, int failedAttempts,
-                     int numberIterations, double popEqualityThresh, double polsbyPopperThresh,
-                     int majorityMinorityThresh, boolean terminationFlag) {
+                     Districting currentDistricting, int failedAttempts, double popEqualityThresh,
+                     double polsbyPopperThresh, int majorityMinorityThresh, boolean terminationFlag) {
         this.algoSummary = algoSummary;
         this.populationType = populationType;
         this.currentDistricting = currentDistricting;
         this.failedAttempts = failedAttempts;
-        this.numberIterations = numberIterations;
         this.popEqualityThresh = popEqualityThresh;
         this.polsbyPopperThresh = polsbyPopperThresh;
         this.majorityMinorityThresh = majorityMinorityThresh;
@@ -44,10 +40,35 @@ public class Algorithm {
         this.majorityMinorityThresh = majorityMinorityThresh;
     }
 
-    public AlgorithmSummary start(Districting selectedDistricting, double popEqualityThresh, double polsbyPopperThresh,
-                                  int majorityMinorityThresh){
-        while (numberIterations < Constants.getMaxIterations() && algoSummary.isRunning()) {
-            selectedDistricting.moveCBFromLargestToSmallestDistrict(selectedDistricting, populationType);
+    public AlgorithmSummary start(double popEqualityThresh, double polsbyPopperThresh, int majorityMinorityThresh) {
+        while (algoSummary.getNumberIterations() < Constants.getMaxIterations() &&
+                failedAttempts < Constants.getMaxFailedAttempts() && algoSummary.isRunning()) {
+            Districting selectedDistricting = (Districting) currentDistricting.clone();
+            boolean failure = false;
+            boolean moveSuccess = selectedDistricting.moveCBFromLargestToSmallestDistrict(selectedDistricting, populationType);
+            if (!moveSuccess) {
+                failure = true;
+            }
+            else {
+                selectedDistricting.calculatePopulationEquality();
+                if (!selectedDistricting.isImproved(currentDistricting, populationType)) {
+                    failure = true;
+                }
+                else {
+                    selectedDistricting.calculateAvgPolsbyPopper();
+                    selectedDistricting.calculateMajorityMinorityCount();
+                    if (!selectedDistricting.validateThresholds(popEqualityThresh, polsbyPopperThresh, majorityMinorityThresh, populationType)) {
+                        failure = true;
+                    }
+                    else {
+                        setCurrentDistricting(selectedDistricting);
+                    }
+                }
+            }
+            if (failure)
+                setFailedAttempts(failedAttempts + 1);
+            algoSummary.setNumberIterations(algoSummary.getNumberIterations() + 1);
+            algoSummary.updateMeasures(currentDistricting);
         }
         return algoSummary;
     }
@@ -87,14 +108,6 @@ public class Algorithm {
 
     public void setFailedAttempts(int failedAttempts) {
         this.failedAttempts = failedAttempts;
-    }
-
-    public int getNumberIterations() {
-        return numberIterations;
-    }
-
-    public void setNumberIterations(int numberIterations) {
-        this.numberIterations = numberIterations;
     }
 
     public double getPopEqualityThresh() {

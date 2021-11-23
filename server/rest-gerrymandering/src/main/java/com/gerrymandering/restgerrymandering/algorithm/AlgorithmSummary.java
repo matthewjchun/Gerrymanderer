@@ -1,5 +1,6 @@
 package com.gerrymandering.restgerrymandering.algorithm;
 
+import com.gerrymandering.restgerrymandering.model.Districting;
 import com.gerrymandering.restgerrymandering.model.Precinct;
 import org.opengis.geometry.Geometry;
 
@@ -50,6 +51,16 @@ public class AlgorithmSummary {
         this.majorityMinorityCountCVAP = majorityMinorityCountCVAP;
         this.splitPrecincts = splitPrecincts;
         this.districtingBoundary = districtingBoundary;
+    }
+
+    public void updateMeasures(Districting districting) {
+        setPopulationEqualityTotal(districting.getPopulationEqualityTotal());
+        setPopulationEqualityVAP(districting.getPopulationEqualityVAP());
+        setPopulationEqualityCVAP(districting.getPopulationEqualityCVAP());
+        setAvgPolsbyPopper(districting.getAvgPolsbyPopper());
+        setMajorityMinorityCountTotal(districting.getMajorityMinorityCountTotal());
+        setMajorityMinorityCountVAP(districting.getMajorityMinorityCountVAP());
+        setMajorityMinorityCountCVAP(districting.getMajorityMinorityCountCVAP());
     }
 
     // GETTERS AND SETTERS
