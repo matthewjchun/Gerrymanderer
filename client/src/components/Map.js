@@ -17,6 +17,7 @@ const Map = () => {
   const map = useRef(null);
   const [lng, setLng] = useState(-100.445882);
   const [lat, setLat] = useState(37.7837304);
+  const [stateData, setStateData] = useState();
   const [zoom, setZoom] = useState(4);
   let hoveredStateId = null;
   const bounds = [
@@ -50,7 +51,8 @@ const Map = () => {
       `/stateFull/?state=${constants.stateMap[activeState].toLowerCase()}`
     );
     const body = await response.json();
-    console.log(body);
+    await setStateData(body);
+    console.log(body)
     return body;
   };
 
@@ -185,14 +187,17 @@ const Map = () => {
         essential: true,
         zoom: 6.2,
       });
-      onOpen();
 
-      const azcdData = await handleStateFetch();
+      const stateData = await handleStateFetch();
 
-      checkSrc('azcd', azcdData);
+      checkSrc('azcd', stateData["districts"]);
+      checkSrc('azprecincts', stateData["precincts"]);
+      checkSrc('azcounty', stateData["counties"]);
       addLayer('azprec-boundary', 'azprecincts', '#e6d1b5');
       addLayer('azcounty-boundary', 'azcounty', '#940f00');
       addLayer('azcd_lines', 'azcd', '#000000');
+
+      onOpen();
 
       // AZ CONGRESSIONAL DISTRICT MARKERS
       const azd1 = createMarker(-110.7258455, 34.9691324, dummyMsg);
@@ -330,31 +335,6 @@ const Map = () => {
   useEffect(() => {
     if (!map.current) return;
     map.current.on('load', () => {
-      map.current.addSource('azprecincts', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/az_2020.json',
-      });
-      map.current.addSource('miprecincts', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/mi_2020.json',
-      });
-      map.current.addSource('vaprecincts', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/va_2019.json',
-      });
-      map.current.addSource('azcounty', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/AZ_Counties.json',
-      });
-      map.current.addSource('micounty', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/MI_Counties.json',
-      });
-      map.current.addSource('vacounty', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/AndyZheng430/Geojson/main/VA_Counties.json',
-      });
-
       addStateLines();
 
       // ZOOM TO STATE
@@ -403,7 +383,10 @@ const Map = () => {
       <Legend current={map.current} />
       <Flex className='content' direction='column' justify='center'>
         <div ref={mapContainer} className='mapContainer' />
-        <StateDrawer isOpen={isOpen} onClose={onClose} active={activeState} />
+        {stateData != null ?
+        <StateDrawer isOpen={isOpen} onClose={onClose} active={activeState} stateSummary={stateData["summary"]}/>:
+        null
+        }
       </Flex>
     </>
   );
