@@ -161,24 +161,24 @@ public class Districting {
     public District getLargestDistrict(){
         int largest = 0;
         District largestDis = districts.get(0);
-        for (District dis : districts){
-            if (dis.getPopulation().getPopulationValue() > largest){
-                largest = dis.getPopulation().getPopulationValue();
-                largestDis = dis;
-            }
-        }
+//        for (District dis : districts){
+//            if (dis.getPopulation().getPopulationValue() > largest){
+//                largest = dis.getPopulation().getPopulationValue();
+//                largestDis = dis;
+//            }
+//        }
         return largestDis;
     }
 
     public District getSmallestDistrict(){
         District smallestDis = this.getLargestDistrict();
-        int smallest = smallestDis.getPopulation().getPopulationValue();
-        for (District dis : districts){
-            if (dis.getPopulation().getPopulationValue() < smallest){
-                smallest = dis.getPopulation().getPopulationValue();
-                smallestDis = dis;
-            }
-        }
+//        int smallest = smallestDis.getPopulation().getPopulationValue();
+//        for (District dis : districts){
+//            if (dis.getPopulation().getPopulationValue() < smallest){
+//                smallest = dis.getPopulation().getPopulationValue();
+//                smallestDis = dis;
+//            }
+//        }
         return smallestDis;
     }
 
@@ -224,15 +224,15 @@ public class Districting {
 
     public int getTotalPopulation(){
         int sum = 0;
-        for(District dis : districts){
-            sum += dis.getPopulation().getPopulationValue();
-        }
+//        for(District dis : districts){
+//            sum += dis.getPopulation().getPopulationValue();
+//        }
         return sum;
     }
 
-    public boolean isImproved(Measures currentDistrictingMeasures){
-        return false;
-    }
+//    public boolean isImproved(Measures currentDistrictingMeasures){
+//        return false;
+//    }
 
     public boolean validateThresholds(){
         return false;

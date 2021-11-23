@@ -39,9 +39,9 @@ public class District {
 
     public void setId(Long id) { this.id = id; }
 
-    public Population getPopulation() { return population; }
-
-    public void setPopulation(Population population) { this.population = population; }
+//    public Population getPopulation() { return population; }
+//
+//    public void setPopulation(Population population) { this.population = population; }
 
     public double getPolsbyPopper() { return polsbyPopper; }
 
@@ -86,8 +86,8 @@ public class District {
 
     public boolean moveCB(CensusBlock censusBlock, District destDistrict){
         try{
-            destDistrict.getCensusBlocks().add(censusBlock);
-            this.getCensusBlocks().remove(censusBlock);
+//            destDistrict.getCensusBlocks().add(censusBlock);
+//            this.getCensusBlocks().remove(censusBlock);
         }
         catch (Exception e){
             return  false;
@@ -95,13 +95,13 @@ public class District {
         return true;
     }
 
-    public void addCensusBlock(CensusBlock censusBlock) {
-        this.getCensusBlocks().add(censusBlock);
-    }
-
-    public void removeCensusBlock(CensusBlock censusBlock) {
-        this.getCensusBlocks().remove(censusBlock);
-    }
+//    public void addCensusBlock(CensusBlock censusBlock) {
+//        this.getCensusBlocks().add(censusBlock);
+//    }
+//
+//    public void removeCensusBlock(CensusBlock censusBlock) {
+//        this.getCensusBlocks().remove(censusBlock);
+//    }
 
     public void calculatePopulation() {
         // STUB
@@ -122,13 +122,14 @@ public class District {
 
     public int calculatePopDifference(District smallestDistrict){
         // will be called on the largest district in a districting
-        Population smallestDistrictPop = smallestDistrict.getPopulation();
+//        Population smallestDistrictPop = smallestDistrict.getPopulation();
+//
+//        int smallestPopulation = smallestDistrictPop.getPopulationValue();
+//        int largestPopulation = this.getPopulation().getPopulationValue();
 
-        int smallestPopulation = smallestDistrictPop.getPopulationValue();
-        int largestPopulation = this.getPopulation().getPopulationValue();
+//        int popDifference = largestPopulation - smallestPopulation;
 
-        int popDifference = largestPopulation - smallestPopulation;
-
-        return popDifference;
+//        return popDifference;
+        return 0;
     }
 }

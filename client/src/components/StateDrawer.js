@@ -62,44 +62,41 @@ export default function StateDrawer(props) {
 
   let processedData = processGeoJSONData(); */
 
-  let TotalPopulation = 1000000;
+  let TOTAL = 1000000;
   let VAP = 200000;
   let CVAP = 30000000;
+
+  const typeMap = {
+    0 : 'TOTAL',
+    1 : 'VAP',
+    2 : 'CVAP',
+  };
+
 
   const populationFetch = async (value) => {
     const response = await fetch('/populationType', {
       method: "POST",
-      body: JSON.stringify({populationType: value}),
+      body: JSON.stringify({populationType: typeMap[value]}),
       headers: {"Content-type": "application/json; charset=UTF-8"}
     });
     const body = await response.json();
+    console.log(body)
     return body;
   }
 
-  // useEffect(() => {
-  //   // let body = populationFetch;
-  //   // populationType = body;
-  //   if(value == 1){
-  //     console.log("20000")
-  //     populationType = 20000;
-  //   }
-  //   else{
-  //     console.log("30000")
-  //     populationType = 123124;
-  //   }
-  // }, [value]);
-
-  /*setValue(() => {
+  useEffect(() => {
+    console.log(typeMap[value])
+    let body = populationFetch;
+    if(value == 0){
+      TOTAL = body;
+    }
     if(value == 1){
-      console.log("20000")
-      populationType = 20000;
+      VAP = body;
     }
     else{
-      console.log("30000")
-      populationType = 123124;
-      console.log(populationType);
+      CVAP = body;
     }
-  }, []);*/
+  }, [value]);
 
   return (
     <Drawer
@@ -165,7 +162,7 @@ export default function StateDrawer(props) {
                 <br />
                 <Divider />
                 {value == "0" ?
-                <Text> Population: {TotalPopulation} </Text>: 
+                <Text> Population: {TOTAL} </Text>: 
                 value =="1" ? <Text> Population: {VAP} </Text>: 
                 value == "2" ? <Text> Population: {CVAP} </Text>: 
                 null}
