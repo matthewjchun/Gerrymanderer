@@ -142,4 +142,8 @@ if __name__=="__main__":
     # createGeoJson("dataSource/az_county.json", "AZ", "County", relative_path + "counties/")
     # createGeoJson("dataSource/az_district.json", "AZ", "District", relative_path + "districts/enacted/")
     # createGeoJson("dataSource/az_precinct.json", "AZ", "Precinct", relative_path + "precincts/")
-    # createGeoJson("dataSource/az_censusblock.json", "AZ", "CensusBlock", relative_path + "censusblocks/")
+    # createGeoJson("dataSource/az_censusblock.json", "AZ", "CensusBlock", relative_path + "censusblocks/")\
+    # createPropertyCSV("dataSource/az_censusblock.json", "AZ", "CensusBlock")
+    # createPropertyCSV("dataSource/az_precinct.json", "AZ", "Precinct")
+    # createPropertyCSV("dataSource/az_district.json", "AZ", "District")
+    # createPropertyCSV("dataSource/az_county.json", "AZ", "County")
