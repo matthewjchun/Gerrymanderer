@@ -1,0 +1,2 @@
+id,peTotal,peVAP,peCVAP,avgPolsby,mmTotal,mmVAP,mmCVAP,stateName,districtPath,countyPath,precinctPath
+1,0.019093471553248535,0.01719837834014438,0.035878820644513525,0.1500392680436086,0,0,0,az,districts/az_districts.json,counties/az_counties.json,precincts/az_precincts.json

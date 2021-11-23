@@ -1,6 +1,9 @@
 import ijson
 import csv
 import json
+from os import listdir
+from os.path import isfile, join
+from util import writeToCSVFile, calculateAvgPolsbyPopper, calculatePolsbyPopper, getPopulationEquality
 
 def createGeoJson(inFilename, state, level, folder):
     f = open(inFilename)
@@ -33,12 +36,6 @@ def createPropertyCSV(inFilename, state, level):
         index += 1
     filename = (str(state) + "_" + str(level) + ".csv").lower()
     writeToCSVFile(filename, header, newData)
-
-def writeToCSVFile(filename, header, data):
-    with open(filename.lower(), 'w', newline='') as csvfile:
-        csvWriter = csv.writer(csvfile)
-        csvWriter.writerow(header)
-        csvWriter.writerows(data)
 
 def getGeneralElectionVTDCSV(inFilename, outFilename):
     header = ["state", "district", "county", "precinct", "party_dem", "party_rep", "year", "election"]
@@ -81,10 +78,64 @@ def getPrecinctGEOID(inFilename, outFilename):
             newData.append([row["GEOID20"], row["VTDST20"], row["NAME20"]])
     writeToCSVFile(outFilename, header, newData)
 
-def getDistricting(districtFilename, id, ):
-    return
+def createDistricting(districtGeoJsonDir, districtFile, id, state):
+    header = ["id", "peTotal", "peVAP", "peCVAP", "avgPolsby", "mmTotal", "mmVAP", "mmCVAP", "stateName",
+                "districtPath", "countyPath", "precinctPath"]
+    newData = [[str(id)] + getPopulationEquality(districtFile) + [str(calculateAvgPolsbyPopper(districtGeoJsonDir)), 
+                '0', '0', '0', state, "districts/" + state + "_districts.json", "counties/" + state + "_counties.json", 
+                "precincts/" + state + "_precincts.json"]]
+    writeToCSVFile(state + "_districting_" + str(id) + ".csv", header, newData)
 
-def calculate
+def addDistrictMeasures(inFilename, districtGeoJsonDir, outFilename):
+    files = [f for f in listdir(districtGeoJsonDir) if isfile(join(districtGeoJsonDir, f))]
+    polsbyPopperList = []
+    for file in files:
+        value = calculatePolsbyPopper(join(districtGeoJsonDir,file))
+        polsbyPopperList.append(value)
+    f = open(inFilename, 'r')
+    csvReader = csv.reader(f)
+    header = next(csvReader) + ["polsbyPopper", "mmTotal", "mmVAP", "mmCVAP"]
+    newData = []
+    index = 0
+    for row in csvReader:
+        newData.append(row + [polsbyPopperList[index], '0', '0', '0'])
+        index += 1
+    writeToCSVFile(outFilename, header, newData)
+
+def getAGElectionState(electionFile, outFilename, state):
+    with open(electionFile, 'r') as csvfile:
+        csvReader = csv.DictReader(csvfile)
+        republicanVotes = 0
+        democraticVotes = 0
+        for row in csvReader:
+            if row["election"] == "Attorney General":
+                republicanVotes += int(row["party_rep"])
+                democraticVotes += int(row["party_dem"])
+        header = ["state", "election", "democratic", "republican"]
+        newData = [[state, "ag", str(democraticVotes), str(republicanVotes)]]
+        writeToCSVFile(outFilename, header, newData)
+
+def getAGElectionDistrict(electionFile, precinctFile, districtFile, outFilename):
+    f = open(districtFile, 'r')
+    csvReader = csv.DictReader(f)
+    districtDict = {}
+    for row in csvReader:
+        districtDict[row['CD116FP']] = {"party_dem": 0, "party_rep": 0}
+    print(districtDict["01"]["party_dem"])
+    with open(precinctFile, 'r') as precinctCSV:
+        csvReader1 = csv.DictReader(precinctCSV)
+        for row1 in csvReader1:
+            with open(electionFile, 'r') as electionCSV:
+                csvReader2 = csv.DictReader(electionCSV)
+                for row2 in csvReader2:
+                    if row2["election"] == "Attorney General" and row1["GEOID20"]==row2["GEOID20"]:
+                        districtDict[row1["CD116"]]["party_dem"] += int(row2["party_dem"])
+                        districtDict[row1["CD116"]]["party_rep"] += int(row2["party_rep"])
+    header = ["CD116", "democratic", "republican"]
+    newData = []
+    for key in districtDict.keys():
+        newData.append([key, str(districtDict[key]["party_dem"]), str(districtDict[key]["party_rep"])])
+    writeToCSVFile(outFilename, header, newData)
 
 if __name__=="__main__":
     relative_path = "../server/rest-gerrymandering/src/main/resources/data/"

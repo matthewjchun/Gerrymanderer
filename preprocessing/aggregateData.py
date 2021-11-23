@@ -1,95 +1,6 @@
 import csv
-from getData import writeToCSVFile
-from decimal import Decimal
-
-def aggregatePrecinctPartyToCounty(precinctFile, countyFile, outFilename):
-    f1 = open(countyFile)
-    f2 = open(precinctFile)
-    csvReader1 = csv.reader(f1)
-    csvReader2 = csv.reader(f2)
-    header = []
-    header1 = next(csvReader1)
-    for h in header1:
-        header.append(h)
-    header.append("party_dem")
-    header.append("party_rep")
-    newData = []
-    with open(countyFile, "r") as f1:
-        csvReader1 = csv.DictReader(f1)
-        for row1 in csvReader1:
-            currentGEOID = row1["COUNTY"]
-            with open (precinctFile, "r") as f2:
-                csvReader2 = csv.DictReader(f2)
-                partyList = [0, 0]
-                for row2 in csvReader2:
-                    precinctGEOID = row2["COUNTYFP"]
-                    if precinctGEOID == currentGEOID:
-                        partyList[0] += int(row2["party_dem"])
-                        partyList[1] += int(row2["party_rep"])
-            rowList = []
-            for h in header1:
-                rowList.append(row1[h])
-            newData.append(rowList + partyList)
-    writeToCSVFile(outFilename, header, newData)
-
-def aggregatePrecinctPartyToDistrict(precinctFile, districtFile, outFilename):
-    f1 = open(districtFile)
-    f2 = open(precinctFile)
-    csvReader1 = csv.reader(f1)
-    csvReader2 = csv.reader(f2)
-    header = [] 
-    header1 = next(csvReader1)
-    for h in header1:
-        header.append(h)
-    header.append("party_dem")
-    header.append("party_rep")
-    newData = []
-    oldGEOID = 0
-    with open(districtFile, "r") as f1:
-        csvReader1 = csv.DictReader(f1)
-        for row1 in csvReader1:
-            currentGEOID = Decimal(row1["GEOID20"])
-            with open (precinctFile, "r") as f2:
-                csvReader2 = csv.DictReader(f2)
-                partyList = [0, 0]
-                for row2 in csvReader2:
-                    precinctGEOID = Decimal(row2["GEOID20"][:4])
-                    if precinctGEOID < currentGEOID and precinctGEOID >= oldGEOID:
-                        partyList[0] += int(row2["party_dem"])
-                        partyList[1] += int(row2["party_rep"])
-            oldGEOID = Decimal(row1["GEOID20"])
-            rowList = []
-            for h in header1:
-                rowList.append(row1[h])
-            newData.append(rowList + partyList)
-    writeToCSVFile(outFilename, header, newData)
-
-def aggregateCountyPartyToState(countyFile, stateFile, outFilename):
-    f1 = open(stateFile)
-    f2 = open(countyFile)
-    csvReader1 = csv.reader(f1)
-    csvReader2 = csv.reader(f2)
-    header = [] 
-    header1 = next(csvReader1)
-    for h in header1:
-        header.append(h)
-    header.append("party_dem")
-    header.append("party_rep")
-    newData = []
-    with open(stateFile, "r") as f1:
-        csvReader1 = csv.DictReader(f1)
-        for row1 in csvReader1:
-            with open (countyFile, "r") as f2:
-                csvReader2 = csv.DictReader(f2)
-                partyList = [0, 0]
-                for row2 in csvReader2:
-                    partyList[0] += int(row2["party_dem"])
-                    partyList[1] += int(row2["party_rep"])
-            rowList = []
-            for h in header1:
-                rowList.append(row1[h])
-            newData.append(rowList + partyList)
-    writeToCSVFile(outFilename, header, newData)
+import json 
+from util import writeToCSVFile
 
 def aggregateCVAPToPrecinct(CBFile, precinctFile, outFilename):
     f1 = open(CBFile)
@@ -211,4 +122,8 @@ def aggregateCVAPToState(CBFile, stateFile, outFilename):
     newData.append(row2 + cVAPData)
     writeToCSVFile(outFilename, header, newData)
 
-if __name__ == "__main__":
+if __name__=="__main__":
+    aggregateCVAPToPrecinct("./dataSource/az_cb.csv", "./dataSource/az_precinct.csv", "./dataSource/az_precinct.csv")
+    aggregateCVAPToDistrict("./dataSource/az_cb.csv", "./dataSource/az_district.csv", "./dataSource/az_district.csv")
+    aggregateCVAPToCounty("./dataSource/az_cb.csv", "./dataSource/az_county.csv", "./dataSource/az_county.csv")
+    aggregateCVAPToState("./dataSource/az_cb.csv", "./dataSource/az_state.csv", "./dataSource/az_state.csv")
