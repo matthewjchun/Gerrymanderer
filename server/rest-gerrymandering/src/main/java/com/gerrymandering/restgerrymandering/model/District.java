@@ -1,8 +1,12 @@
 package com.gerrymandering.restgerrymandering.model;
 
 import com.gerrymandering.restgerrymandering.constants.Constants;
+import com.vividsolutions.jts.geom.Geometry;
+import org.geotools.geojson.geom.GeometryJSON;
+
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -109,21 +113,19 @@ public class District implements Cloneable {
 
     public boolean moveCB(CensusBlock selectedCB, District destDistrict) {
         try {
+            censusBlocks.remove(selectedCB);
+            calculatePopulation();
+            calculateElection();
             destDistrict.getCensusBlocks().add(selectedCB);
-            this.getCensusBlocks().remove(censusBlock);
+            destDistrict.calculatePopulation();
+            destDistrict.calculateElection();
+            selectedCB.setDistrict(destDistrict);
         }
         catch (Exception e){
-            return  false;
+            System.out.println("moveCB ERROR!");
+            return false;
         }
         return true;
-    }
-
-    public void addCensusBlock(CensusBlock censusBlock) {
-        this.getCensusBlocks().add(censusBlock);
-    }
-
-    public void removeCensusBlock(CensusBlock censusBlock) {
-        this.getCensusBlocks().remove(censusBlock);
     }
 
     public void calculatePopulation() {
@@ -157,11 +159,31 @@ public class District implements Cloneable {
     }
 
     public void calculateElection() {
-        for ()
+        for (int i = 0; i < elections.size(); i++) {
+            Election election = elections.get(i);
+            int democraticSum = 0;
+            int republicanSum = 0;
+            for (CensusBlock cb: censusBlocks) {
+                Election cbElection = cb.getElections().get(i);
+                democraticSum += cbElection.getDemocratic();
+                republicanSum += cbElection.getRepublican();
+            }
+            election.setDemocratic(democraticSum);
+            election.setRepublican(republicanSum);
+        }
     }
 
     public void calculatePolsbyPopper() {
-        // STUB
+        GeometryJSON geometryJSON = new GeometryJSON();
+        try {
+            Geometry geometry = geometryJSON.read(path);
+            double area = geometry.getArea();
+            double perimeter = geometry.getLength();
+            setPolsbyPopper((4 * Math.PI * area) / Math.pow(perimeter, 2));
+        }
+        catch (IOException e) {
+            System.out.println("Error reading district geoJSON.");
+        }
     }
 
     public void calculateMajorityMinorty() {

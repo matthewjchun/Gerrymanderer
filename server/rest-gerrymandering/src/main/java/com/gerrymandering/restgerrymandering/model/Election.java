@@ -15,25 +15,26 @@ public class Election implements Cloneable {
     @Enumerated(EnumType.STRING)
     private Constants.ElectionName name;
 
-    private int democrat;
+    private int democratic;
 
     private int republican;
 
     public Election() {}
 
-    public Election(long id, Constants.ElectionName name, int democrat, int republican) {
+    public Election(long id, Constants.ElectionName name, int democratic, int republican) {
         this.id = id;
         this.name = name;
-        this.democrat = democrat;
+        this.democratic = democratic;
         this.republican = republican;
     }
+
     @Override
     public Object clone() {
         try {
             return super.clone();
         }
         catch (CloneNotSupportedException e) {
-            return new Election(id, name, democrat, republican);
+            return new Election(id, name, democratic, republican);
         }
     }
 
@@ -54,12 +55,12 @@ public class Election implements Cloneable {
         this.name = name;
     }
 
-    public int getDemocrat() {
-        return democrat;
+    public int getDemocratic() {
+        return democratic;
     }
 
-    public void setDemocrat(int democrat) {
-        this.democrat = democrat;
+    public void setDemocratic(int democratic) {
+        this.democratic = democratic;
     }
 
     public int getRepublican() {

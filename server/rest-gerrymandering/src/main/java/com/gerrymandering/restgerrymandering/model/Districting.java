@@ -171,41 +171,109 @@ public class Districting implements Cloneable{
     }
 
     public void calculatePopulationEquality() {
-
+        for (Constants.PopulationType type: Constants.PopulationType.values()) {
+            District largestDistrict = getLargestDistrict(type);
+            Population largestDistrictPopulation = largestDistrict.getPopulationByType(type);
+            District smallestDistrict = getSmallestDistrict(type);
+            Population smallestDistrictPopulation = smallestDistrict.getPopulationByType(type);
+            int totalPopulation = getTotalPopulation(type);
+            double populationEquality = (double) Math.abs(largestDistrictPopulation.getTotal() - smallestDistrictPopulation.getTotal()) / totalPopulation;
+            switch (type) {
+                case TOTAL:
+                    setPopulationEqualityTotal(populationEquality);
+                case VAP:
+                    setPopulationEqualityVAP(populationEquality);
+                case CVAP:
+                    setPopulationEqualityCVAP(populationEquality);
+                default:
+                    break;
+            }
+        }
     }
 
-    public void calculateAllPolsbyPopper() {
-
+    public void calculateAvgPolsbyPopper() {
+        double sum = 0;
+        int numDistricts = districts.size();
+        for (District district: districts) {
+            district.calculatePolsbyPopper();
+            sum += district.getPolsbyPopper();
+        }
+        setAvgPolsbyPopper(sum / numDistricts);
     }
 
-    public void calculateMajorityMinority() {
-
+    public void calculateMajorityMinorityCount() {
+        for (Constants.PopulationType type: Constants.PopulationType.values()) {
+            int majorityMinorityCount = 0;
+            for (District district: districts) {
+                Population population = district.getPopulationByType(type);
+                boolean majorityMinority = (double) population.getAfrican() / population.getTotal() > Constants.getMinThresholdMajorityMinority() ||
+                        (double) population.getAsian() / population.getTotal() > Constants.getMinThresholdMajorityMinority() ||
+                        (double) population.getHispanic() / population.getTotal() > Constants.getMinThresholdMajorityMinority() ||
+                        (double) population.getNativeAmerican() / population.getTotal() > Constants.getMinThresholdMajorityMinority() ||
+                        (double) population.getPacificIslander() / population.getTotal() > Constants.getMinThresholdMajorityMinority();
+                if (majorityMinority) {
+                    majorityMinorityCount++;
+                    switch (type) {
+                        case TOTAL:
+                            district.setMajorityMinorityTotal(true);
+                        case VAP:
+                            district.setMajorityMinorityVAP(true);
+                        case CVAP:
+                            district.setMajorityMinorityCVAP(true);
+                        default:
+                            break;
+                    }
+                }
+            }
+            switch (type) {
+                case TOTAL:
+                    setMajorityMinorityCountTotal(majorityMinorityCount);
+                case VAP:
+                    setMajorityMinorityCountVAP(majorityMinorityCount);
+                case CVAP:
+                    setMajorityMinorityCountCVAP(majorityMinorityCount);
+                default:
+                    break;
+            }
+        }
     }
 
     public void calculateSplitPrecincts() {
 
     }
 
-    public void calculateAllMeasures() {
-        this.calculatePopulationEquality();
-        this.calculateAllPolsbyPopper();
-        this.calculateMajorityMinority();
-    }
-
-    /*public int getTotalPopulation(){
+    public int getTotalPopulation(Constants.PopulationType type) {
         int sum = 0;
-        for(District dis : districts){
-            sum += dis.getPopulation().getPopulationValue();
+        for (District district : districts){
+            sum += district.getPopulationByType(type).getTotal();
         }
         return sum;
-    }*/
-
-    public boolean isImproved(){
-        return false;
     }
 
-    public boolean validateThresholds(){
-        return false;
+    public boolean isImproved(Districting previousDistricting, Constants.PopulationType type){
+        switch (type) {
+            case TOTAL:
+                return populationEqualityTotal > previousDistricting.getPopulationEqualityTotal();
+            case VAP:
+                return populationEqualityVAP > previousDistricting.getPopulationEqualityVAP();
+            case CVAP:
+                return populationEqualityCVAP > previousDistricting.getPopulationEqualityCVAP();
+            default:
+                return false;
+        }
+    }
+
+    public boolean validateThresholds(double popEqualityThresh, double polsbyPopperThresh, int majorityMinorityThresh, Constants.PopulationType type){
+        switch (type) {
+            case TOTAL:
+                return populationEqualityTotal <= popEqualityThresh && avgPolsbyPopper <= polsbyPopperThresh && majorityMinorityCountTotal <= majorityMinorityThresh;
+            case VAP:
+                return populationEqualityVAP <= popEqualityThresh && avgPolsbyPopper <= polsbyPopperThresh && majorityMinorityCountVAP <= majorityMinorityThresh;
+            case CVAP:
+                return populationEqualityCVAP <= popEqualityThresh && avgPolsbyPopper <= polsbyPopperThresh && majorityMinorityCountCVAP <= majorityMinorityThresh;
+            default:
+                return false;
+        }
     }
 
     // GETTERS AND SETTERS
