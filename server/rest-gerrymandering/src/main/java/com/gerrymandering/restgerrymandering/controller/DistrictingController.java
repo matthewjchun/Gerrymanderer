@@ -93,7 +93,7 @@ public class DistrictingController {
         String populationTypeStr = populationTypeJson.get("populationType").getAsString().toUpperCase();
         Constants.PopulationType populationType = Constants.PopulationType.valueOf(populationTypeStr);
         session.setAttribute("populationType", populationType);
-        return ResponseEntity.ok("{\"populationType\": " + 0 + "}");
+        return ResponseEntity.ok("{\"populationType\": " + populationType + "}");
     }
 
     @GetMapping("/algorithm")
