@@ -37,6 +37,7 @@ public class StateSummary {
             summary.populateSummary(districting);
             summaryList.add(summary);
         }
+        districtingSummaries = summaryList;
     }
 
     // GETTERS AND SETTERS
