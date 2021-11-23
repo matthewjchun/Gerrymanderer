@@ -1,5 +1,5 @@
 import json
-from helpers import check_majority_minority
+from util import check_majority_minority
 
 with open('az_demographics.json') as f:
     demographics = json.load(f)
