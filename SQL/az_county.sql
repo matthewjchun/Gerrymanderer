@@ -1,0 +1,16 @@
+INSERT INTO Counties (id, stateName, path) VALUES 
+(1, 'az',  'counties/az_county_0.json'),
+(2, 'az',  'counties/az_county_1.json'),
+(3, 'az',  'counties/az_county_2.json'),
+(4, 'az',  'counties/az_county_3.json'),
+(5, 'az',  'counties/az_county_4.json'),
+(6, 'az',  'counties/az_county_5.json'),
+(7, 'az',  'counties/az_county_6.json'),
+(8, 'az',  'counties/az_county_7.json'),
+(9, 'az',  'counties/az_county_8.json'),
+(10, 'az',  'counties/az_county_9.json'),
+(11, 'az',  'counties/az_county_10.json'),
+(12, 'az',  'counties/az_county_11.json'),
+(13, 'az',  'counties/az_county_12.json'),
+(14, 'az',  'counties/az_county_13.json'),
+(15, 'az',  'counties/az_county_14.json');

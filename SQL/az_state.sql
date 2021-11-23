@@ -1,0 +1,1 @@
+INSERT INTO States (name, centerLat, centerLon, path) VALUES ('az', 34.2039362, -111.6063449, 'states/az.json');
