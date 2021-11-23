@@ -2,6 +2,7 @@ package com.gerrymandering.restgerrymandering.algorithm;
 
 import com.gerrymandering.restgerrymandering.constants.Constants;
 import com.gerrymandering.restgerrymandering.model.Districting;
+import com.vividsolutions.jts.geom.Geometry;
 
 public class Algorithm {
 
@@ -40,7 +41,7 @@ public class Algorithm {
         this.majorityMinorityThresh = majorityMinorityThresh;
     }
 
-    public AlgorithmSummary start(double popEqualityThresh, double polsbyPopperThresh, int majorityMinorityThresh) {
+    public void start(double popEqualityThresh, double polsbyPopperThresh, int majorityMinorityThresh) {
         while (algoSummary.getNumberIterations() < Constants.getMaxIterations() &&
                 failedAttempts < Constants.getMaxFailedAttempts() && algoSummary.isRunning()) {
             Districting selectedDistricting = (Districting) currentDistricting.clone();
@@ -61,16 +62,16 @@ public class Algorithm {
                         failure = true;
                     }
                     else {
+                        selectedDistrincing.calculateDistrictingBoundary();
                         setCurrentDistricting(selectedDistricting);
+                        algoSummary.updateMeasures(currentDistricting);
                     }
                 }
             }
             if (failure)
                 setFailedAttempts(failedAttempts + 1);
             algoSummary.setNumberIterations(algoSummary.getNumberIterations() + 1);
-            algoSummary.updateMeasures(currentDistricting);
         }
-        return algoSummary;
     }
 
     public void pause(int time){

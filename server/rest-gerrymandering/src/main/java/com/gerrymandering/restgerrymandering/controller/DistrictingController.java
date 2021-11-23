@@ -63,7 +63,6 @@ public class DistrictingController {
     @GetMapping("/stateFull")
     public ResponseEntity<JsonObject> getStateFull(@RequestParam String state, HttpServletRequest request) {
         HttpSession session = request.getSession();
-
         State stateObj = ss.getStateByName(state);
         //currentState = stateObj;
         session.setAttribute("currentState", stateObj);
@@ -127,7 +126,6 @@ public class DistrictingController {
             algorithm.setTerminationFlag(false);
         }
         algorithm.start(popEqualityThresh, polsbyPopperThresh, majorityMinorityThresh);
-
         session.setAttribute("algorithm", algorithm);
         return null;
     }
