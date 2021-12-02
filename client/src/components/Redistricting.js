@@ -22,6 +22,7 @@ export default function Redistricting(props) {
   const handleMouseLeave = (e) => {
     e.target.style.boxShadow = 'none';
   };
+  
   return (
     <Popover isLazy trigger='hover'>
       <PopoverTrigger>

@@ -159,11 +159,11 @@ export default function StateDrawer(props) {
                 <br />
                 <Divider />
                 {value == '0' ? (
-                  <Text> Population: {TOTAL} </Text>
+                  <Text> Population: {TOTAL.toLocaleString()} </Text>
                 ) : value == '1' ? (
-                  <Text> Population: {VAP} </Text>
+                  <Text> Population: {VAP.toLocaleString()} </Text>
                 ) : value == '2' ? (
-                  <Text> Population: {CVAP} </Text>
+                  <Text> Population: {CVAP.toLocaleString()} </Text>
                 ) : null}
                 <Divider />
                 {/* <Text>Precincts: 1,495</Text> */}
@@ -266,7 +266,7 @@ export default function StateDrawer(props) {
                {districts.map((district) => {
                   return(
                   <Districts number={district.districtId} population={district.populations} 
-                  election={district.elections}></Districts>
+                  election={district.elections} popType={value}></Districts>
                   )
                 })}
               </TabPanel>

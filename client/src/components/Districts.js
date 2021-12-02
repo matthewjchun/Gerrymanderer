@@ -18,8 +18,12 @@ StatArrow,
 StatGroup,
 } from '@chakra-ui/react';
 
-export default function Districs(props) {
-  const { number, population, election } = props;
+export default function Districts(props) {
+  const { number, population, election, popType } = props;
+
+  let TOTAL = population[0]["total"].toLocaleString();
+  let VAP = population[1]["total"].toLocaleString();
+  let CVAP = population[2]["total"].toLocaleString();
 
   return (
       <>
@@ -33,11 +37,16 @@ export default function Districs(props) {
             </Tr>
             </Thead>
             <Tbody>
-            <Tr>
-                <Td>{population[0]["total"]}</Td>
-                <Td isNumeric>{election[0]["democratic"]}</Td>
-                <Td isNumeric>{election[0]["republican"]}</Td>
-            </Tr>
+            {popType == 0 ? 
+              <Td>{TOTAL}</Td>:
+             popType == 1 ? 
+              <Td>{VAP}</Td>:    
+             popType == 2 ?
+              <Td>{CVAP} </Td>:
+             null
+            }
+                <Td isNumeric>{election[0]["democratic"].toLocaleString()}</Td>
+                <Td isNumeric>{election[0]["republican"].toLocaleString()}</Td>
             <Tr>
                 <Td></Td>
                 <Td isNumeric>

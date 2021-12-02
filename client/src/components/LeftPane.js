@@ -772,6 +772,10 @@ export default function LeftPane(props) {
     console.log("hi");
   };
 
+  const handleAlgorithmStart = () => {
+    onModalOpen();
+  }
+
   // const handleGenerate = async (e) => {
   //   const response = await fetch(
   //     `/districtings?state=${activeState}`.toLowerCase()
@@ -827,7 +831,7 @@ export default function LeftPane(props) {
               </Tab>
               <Tab>
                 <HStack spacing='5'>
-                  <Text>Constraints on Measures</Text>
+                  <Text>Algorithm Measures</Text>
                   <Tooltip
                     label={constraintsTabTooltip}
                     fontSize='md'

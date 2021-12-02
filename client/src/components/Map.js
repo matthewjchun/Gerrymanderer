@@ -56,6 +56,13 @@ const Map = () => {
     return body;
   };
 
+  const outlinesFetch = async (map) => {
+    const response = await fetch('/stateOutlines');
+    const body = await response.json();
+    return body;
+  };
+
+  /////////////////////// VISIBILITY //////////////////////////////
   const checkSrc = async (name, data) => {
     if (!map.current.getSource(name)) {
       map.current.addSource(name, {
@@ -65,32 +72,6 @@ const Map = () => {
     }
   };
 
-  const outlinesFetch = async (map) => {
-    const response = await fetch('/stateOutlines');
-    const body = await response.json();
-    return body;
-  };
-
-  const addStateLines = async (map) => {
-    const stateData = await outlinesFetch();
-
-    checkSrc('states', stateData['stateOutlines']);
-    addPolygon('states', 'states', '#f8f8ff');
-
-    checkSrc('arizona', stateData['az']);
-    checkSrc('michigan', stateData['mi']);
-    checkSrc('virginia', stateData['va']);
-    // VISUALIZE STATES AS POLYGONS
-    addPolygon('arizona', 'arizona', '#523e3c');
-    addPolygon('michigan', 'michigan', '#523e3c');
-    addPolygon('virginia', 'virginia', '#523e3c');
-    // ADD OUTLINES TO STATES
-    addOutline('outline_az', 'arizona');
-    addOutline('outline_mi', 'michigan');
-    addOutline('outline_va', 'virginia');
-  };
-
-  /////////////////////// VISIBILITY //////////////////////////////
   const addLayer = async (id, src, paint) => {
     map.current.addLayer({
       id: id,
@@ -179,16 +160,35 @@ const Map = () => {
     }
   };
 
+  const addStateLines = async (map) => {
+    const stateData = await outlinesFetch();
+
+    checkSrc('states', stateData['stateOutlines']);
+    addPolygon('states', 'states', '#f8f8ff');
+
+    checkSrc('arizona', stateData['az']);
+    checkSrc('michigan', stateData['mi']);
+    checkSrc('virginia', stateData['va']);
+    // VISUALIZE STATES AS POLYGONS
+    addPolygon('arizona', 'arizona', '#523e3c');
+    addPolygon('michigan', 'michigan', '#523e3c');
+    addPolygon('virginia', 'virginia', '#523e3c');
+    // ADD OUTLINES TO STATES
+    addOutline('outline_az', 'arizona');
+    addOutline('outline_mi', 'michigan');
+    addOutline('outline_va', 'virginia');
+  };
+
   /////////////////////// ZOOM INTO STATES //////////////////////////////
   const zoomIn = async (map, state) => {
     if (state == 'Arizona') {
+      const stateData = await handleStateFetch();
+
       map.current.flyTo({
         center: [-112.0693, 34.2537],
         essential: true,
         zoom: 6.2,
       });
-
-      const stateData = await handleStateFetch();
 
       checkSrc('azcd', stateData["districts"]);
       checkSrc('azprecincts', stateData["precincts"]);
