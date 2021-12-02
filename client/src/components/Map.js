@@ -52,7 +52,7 @@ const Map = () => {
     );
     const body = await response.json();
     await setStateData(body);
-    console.log(body)
+    console.log(body);
     return body;
   };
 
@@ -185,14 +185,17 @@ const Map = () => {
       const stateData = await handleStateFetch();
 
       map.current.flyTo({
-        center: [-112.0693, 34.2537],
+        center: [
+          stateData['summary']['centerLon'],
+          stateData['summary']['centerLat'],
+        ],
         essential: true,
         zoom: 6.2,
       });
 
-      checkSrc('azcd', stateData["districts"]);
-      checkSrc('azprecincts', stateData["precincts"]);
-      checkSrc('azcounty', stateData["counties"]);
+      checkSrc('azcd', stateData['districts']);
+      checkSrc('azprecincts', stateData['precincts']);
+      checkSrc('azcounty', stateData['counties']);
       addLayer('azprec-boundary', 'azprecincts', '#e6d1b5');
       addLayer('azcounty-boundary', 'azcounty', '#940f00');
       addLayer('azcd_lines', 'azcd', '#000000');
@@ -383,10 +386,14 @@ const Map = () => {
       <Legend current={map.current} />
       <Flex className='content' direction='column' justify='center'>
         <div ref={mapContainer} className='mapContainer' />
-        {stateData != null ?
-        <StateDrawer isOpen={isOpen} onClose={onClose} active={activeState} stateSummary={stateData["summary"]}/>:
-        null
-        }
+        {stateData != null ? (
+          <StateDrawer
+            isOpen={isOpen}
+            onClose={onClose}
+            active={activeState}
+            stateSummary={stateData['summary']}
+          />
+        ) : null}
       </Flex>
     </>
   );
