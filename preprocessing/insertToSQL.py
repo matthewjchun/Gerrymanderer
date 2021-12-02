@@ -128,11 +128,16 @@ def csvToSQLPrecinct(inFilename, outFilename, state, id, index, districtFile, co
         newData.append([row["id"], row["GEOID20"]])
     writeToCSVFile(state + "_precinct_id.csv", header, newData)
 
-def csvToSQLCB(inFilename, outFilename, state, id, index, districtFile, precinctFile):
+def csvToSQLCB(inFilename, outFilename, state, id, index, districtFile, precinctFile, borderFile):
     data = []
     populationData = []
     districtData = []
     precinctData = []
+    borderData = []
+    with open(borderFile, 'r') as csvfile:
+        csvReader = csv.reader(csvfile)
+        header = next(csvReader)
+        borderData = next(csvReader)
     with open(precinctFile, 'r') as csvfile:
         csvReader = csv.reader(csvfile)
         for row in csvReader:
@@ -144,7 +149,12 @@ def csvToSQLCB(inFilename, outFilename, state, id, index, districtFile, precinct
     with open(inFilename, 'r') as csvfile:
         csvReader = csv.DictReader(csvfile)
         for row in csvReader:
-            rowDict = {"id": str(id), "GEOID20": row["GEOID20"], "path": "districts/" + state + "_censusblock_" + str(index) + ".json"}
+            rowDict = {"id": str(id), "GEOID20": row["GEOID20"], "border": False, "path": "districts/" + state + "_censusblock_" + str(index) + ".json"}
+            for border in borderData:
+                if row["GEOID20"] == border:
+                    rowDict["border"] = True
+                    borderData.remove(border)
+                    break
             for line in districtData:
                 if line[1][2:] == row["CD116"]:
                     rowDict["districtId"] = line[0]
@@ -152,13 +162,18 @@ def csvToSQLCB(inFilename, outFilename, state, id, index, districtFile, precinct
                 if line[1] == row["STATEFP20"]+row["COUNTYFP20"]+row["VTD"]:
                     rowDict["precinctId"] = line[0]
             data.append(rowDict)
-            addToPopulationList(populationData, row, id)
+            populationData.append({"popType": 0, "total": row["P0020001"], "hispanic": row["P0020002"], "white": row["P0020005"], 
+                                "african": row["P0020006"], "native": row["P0020007"], "asian": row["P0020008"], "pacificIslander": row["P0020009"], "id": id})
+            populationData.append({"popType": 1, "total": row["P0040001"], "hispanic": row["P0040002"], "white": row["P0040005"], 
+                                "african": row["P0040006"], "native": row["P0040007"], "asian": row["P0040008"], "pacificIslander": row["P0040009"], "id": id})
+            populationData.append({"popType": 2, "total": row["CVAP_TOT19"], "hispanic": row["CVAP_HSP19"], "white": row["CVAP_WHT19"], "african": row["CVAP_BLK19"],
+                                    "native": row["CVAP_AIA19"], "asian": row["CVAP_ASN19"], "pacificIslander": row["CVAP_NHP19"], "id": id})
             index += 1
             id += 1
     with open(outFilename + ".sql", 'w') as file:
-        sqlStateInsert = "INSERT INTO CensusBlocks (id, path, districtId, precinctId) VALUES \n"
+        sqlStateInsert = "INSERT INTO CensusBlocks (id, path, isBorder, districtId, precinctId) VALUES \n"
         for row in data:
-            sqlStateInsert +=  "('" + str(row["id"]) + "', '" + str(row["path"]) + "', " + str(row["districtId"]) + ", " + str(row["precinctId"]) +"),\n"
+            sqlStateInsert +=  "('" + str(row["id"]) + "', '" + str(row["path"]) + "', " + str(row["border"]) + ", " + str(row["districtId"]) + ", " + str(row["precinctId"]) +"),\n"
         file.write(sqlStateInsert[:-2] + ';')
     with open(outFilename + "_population.sql", 'w') as file:
         sqlPopulationInsert = "INSERT INTO Populations (popType, total, african, white, asian, hispanic, native, pacificIslander, censusBlockId) VALUES\n"
@@ -170,7 +185,7 @@ def csvToSQLCB(inFilename, outFilename, state, id, index, districtFile, precinct
     for row in data:
         newData.append([row["id"], row["GEOID20"]])
     writeToCSVFile(state + "_CB_id.csv", header, newData)
-
+    
 def addToPopulationList(popList, row, id):
     popList.append({"popType": 0, "total": row["P0020001"], "hispanic": row["P0020002"], "white": row["P0020005"], 
                     "african": row["P0020006"], "native": row["P0020007"], "asian": row["P0020008"], "pacificIslander": row["P0020009"], "id": id})
