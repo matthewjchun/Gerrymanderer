@@ -13,17 +13,8 @@ public class StateSummary {
     private List<Election> elections;
     private List<DistrictingSummary> districtingSummaries;
 
-    public StateSummary() {}
 
-    public StateSummary(String name, double centerLon, double centerLat, List<Population> populations,
-                        List<Election> elections, List<DistrictingSummary> districtingSummaries) {
-        this.name = name;
-        this.centerLon = centerLon;
-        this.centerLat = centerLat;
-        this.populations = populations;
-        this.elections = elections;
-        this.districtingSummaries = districtingSummaries;
-    }
+    public StateSummary() {}
 
     public void populateSummary(State state) {
         name = state.getName();

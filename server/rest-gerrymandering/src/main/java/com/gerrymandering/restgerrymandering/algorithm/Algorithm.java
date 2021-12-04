@@ -6,19 +6,12 @@ import com.gerrymandering.restgerrymandering.model.Districting;
 public class Algorithm {
 
     private AlgorithmSummary algoSummary;
-
     private Constants.PopulationType populationType;
-
     private Districting currentDistricting;
-
     private int failedAttempts;
-
     private double popEqualityThresh;
-
     private double polsbyPopperThresh;
-
     private int majorityMinorityThresh;
-
     private boolean terminationFlag;
 
     public Algorithm(AlgorithmSummary algoSummary, Constants.PopulationType populationType,

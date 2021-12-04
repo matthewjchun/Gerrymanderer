@@ -3,9 +3,7 @@ package com.gerrymandering.restgerrymandering.controller;
 import com.gerrymandering.restgerrymandering.algorithm.Algorithm;
 import com.gerrymandering.restgerrymandering.algorithm.AlgorithmSummary;
 import com.gerrymandering.restgerrymandering.constants.Constants;
-import com.gerrymandering.restgerrymandering.model.Districting;
-import com.gerrymandering.restgerrymandering.model.State;
-import com.gerrymandering.restgerrymandering.model.StateSummary;
+import com.gerrymandering.restgerrymandering.model.*;
 import com.gerrymandering.restgerrymandering.services.*;
 
 import com.google.gson.Gson;
@@ -20,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 //@CrossOrigin("http://localhost:3000")
 @RestController
@@ -60,16 +60,16 @@ public class DistrictingController {
     }
 
     @GetMapping("/stateFull")
-    public ResponseEntity<JsonObject> getStateFull(@RequestParam String state, HttpServletRequest request) {
+    public ResponseEntity<JsonObject> getStateFull(@RequestParam(name = "state") String stateName, HttpServletRequest request) {
         HttpSession session = request.getSession();
         JsonObject stateFull = new JsonObject();
         Gson gson = new Gson();
 
-        State stateObj = ss.getStateByName(state);
-        // currentState = stateObj;
-        session.setAttribute("currentState", stateObj);
+        State state = ss.getStateByName(stateName);
+        printTotalNeighborCount(state);
+        session.setAttribute("currentState", state);
 
-        Districting enactedDistricting = stateObj.getEnactedDistricting();
+        Districting enactedDistricting = state.getEnactedDistricting();
         String districtPath = enactedDistricting.getDistrictPath();
         String precinctPath = enactedDistricting.getPrecinctPath();
         String countyPath = enactedDistricting.getCountyPath();
@@ -85,7 +85,7 @@ public class DistrictingController {
         }
 
         StateSummary summaryObj = new StateSummary();
-        summaryObj.populateSummary(stateObj);
+        summaryObj.populateSummary(state);
         String summaryStr = gson.toJson(summaryObj);
         JsonObject summary = JsonParser.parseString(summaryStr).getAsJsonObject();
         stateFull.add("summary", summary);
@@ -137,5 +137,33 @@ public class DistrictingController {
         HttpSession session = request.getSession();
         Algorithm algorithm = (Algorithm) session.getAttribute("algorithm");
         return ResponseEntity.ok(algorithm.getAlgoSummary());
+    }
+
+    // TESTING METHODS
+    public void printNumNeighbors(State state) {
+        Set<CensusBlock> set = state.getEnactedDistricting().getDistricts().get(0).getCensusBlocks();
+        System.out.println("# census blocks: " + set.size());
+        int sum = 0;
+        for (CensusBlock cb: set) {
+            Set<CensusBlock> neighbors = cb.getNeighbors();
+            /*for (CensusBlock neighbor: neighbors) {
+                System.out.println(neighbor.getId());
+            }*/
+            System.out.println("Census Block " + cb.getId() + ": " + neighbors.size());
+            sum += neighbors.size();
+        }
+    }
+
+    public void printTotalNeighborCount(State state) {
+        List<District> districts = state.getEnactedDistricting().getDistricts();
+        int sum = 0;
+        for (District district: districts) {
+            Set<CensusBlock> censusBlocks = district.getCensusBlocks();
+            for (CensusBlock cb: censusBlocks) {
+                Set<CensusBlock> neighbors = cb.getNeighbors();
+                sum += neighbors.size();
+            }
+        }
+        System.out.println("Total Neighbor Count: " + sum);
     }
 }

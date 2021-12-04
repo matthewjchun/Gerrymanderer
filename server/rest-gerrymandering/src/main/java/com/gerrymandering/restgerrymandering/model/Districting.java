@@ -258,7 +258,7 @@ public class Districting implements Cloneable {
                 try {
                     Geometry geometry = geometryJSON.read(cb.getPath());
                     cbCollection.add(geometry);
-                    Geometry districtGeometry = factory.buildGeometry(cbCollection);
+                    Geometry districtGeometry = factory.buildGeometry(cbCollection).getBoundary();
                     districtCollection.add(districtGeometry);
                 } catch (IOException e) {
                     System.out.println("Error reading census block file.");
