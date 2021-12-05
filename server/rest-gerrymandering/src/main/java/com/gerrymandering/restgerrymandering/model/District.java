@@ -100,7 +100,7 @@ public class District implements Cloneable {
         return populations.get(type.ordinal());
     }
 
-    public CensusBlock getRandomBorderCB() {
+    public CensusBlock selectBorderCB() {
         List<CensusBlock> borderCensusBlocks = new ArrayList<>();
         for (CensusBlock cb : censusBlocks) {
             if (cb.isBorder())
@@ -112,14 +112,20 @@ public class District implements Cloneable {
     }
 
     public boolean moveCB(CensusBlock selectedCB, District destDistrict) {
+        System.out.println("move CB start");
         try {
             censusBlocks.remove(selectedCB);
-            calculatePopulation();
-            calculateElection();
+            System.out.println("Source population: " + populations.get(0).getTotal());
+            calculatePopulation(selectedCB, false);
+            //calculateElection(selectedCB, false);
+            System.out.println("Source population: " + populations.get(0).getTotal());
             destDistrict.getCensusBlocks().add(selectedCB);
-            destDistrict.calculatePopulation();
-            destDistrict.calculateElection();
+            System.out.println("Dest population: " + destDistrict.getPopulations().get(0).getTotal());
+            destDistrict.calculatePopulation(selectedCB, true);
+            //calculateElection(selectedCB, true);
+            System.out.println("Dest population: " + destDistrict.getPopulations().get(0).getTotal());
             selectedCB.setDistrict(destDistrict);
+            System.out.println("move CB end");
         } catch (Exception e) {
             System.out.println("moveCB ERROR!");
             return false;
@@ -127,55 +133,50 @@ public class District implements Cloneable {
         return true;
     }
 
-    public void calculatePopulation() {
+    public void calculatePopulation(CensusBlock cb, boolean add) {
         for (int i = 0; i < populations.size(); i++) {
             Population population = populations.get(i);
-            int totalSum = 0;
-            int africanSum = 0;
-            int whiteSum = 0;
-            int asianSum = 0;
-            int hispanicSum = 0;
-            int nativeAmericanSum = 0;
-            int pacificIslanderSum = 0;
-            for (CensusBlock cb : censusBlocks) {
-                Population cbPopulation = cb.getPopulations().get(i);
-                totalSum += cbPopulation.getTotal();
-                africanSum += cbPopulation.getAfrican();
-                whiteSum += cbPopulation.getWhite();
-                asianSum += cbPopulation.getAsian();
-                hispanicSum += cbPopulation.getHispanic();
-                nativeAmericanSum += cbPopulation.getNativeAmerican();
-                pacificIslanderSum += cbPopulation.getPacificIslander();
+            Population cbPopulation = cb.getPopulations().get(i);
+            if (add) {
+                population.setTotal(population.getTotal() + cbPopulation.getTotal());
+                population.setAfrican(population.getAfrican() + cbPopulation.getAfrican());
+                population.setWhite(population.getWhite() + cbPopulation.getWhite());
+                population.setAsian(population.getAsian() + cbPopulation.getAsian());
+                population.setHispanic(population.getHispanic() + cbPopulation.getHispanic());
+                population.setNativeAmerican(population.getNativeAmerican() + cbPopulation.getNativeAmerican());
+                population.setPacificIslander(population.getPacificIslander() + cbPopulation.getPacificIslander());
             }
-            population.setTotal(totalSum);
-            population.setAfrican(africanSum);
-            population.setWhite(whiteSum);
-            population.setAsian(asianSum);
-            population.setHispanic(hispanicSum);
-            population.setNativeAmerican(nativeAmericanSum);
-            population.setPacificIslander(pacificIslanderSum);
+            else {
+                population.setTotal(population.getTotal() - cbPopulation.getTotal());
+                population.setAfrican(population.getAfrican() - cbPopulation.getAfrican());
+                population.setWhite(population.getWhite() - cbPopulation.getWhite());
+                population.setAsian(population.getAsian() - cbPopulation.getAsian());
+                population.setHispanic(population.getHispanic() - cbPopulation.getHispanic());
+                population.setNativeAmerican(population.getNativeAmerican() - cbPopulation.getNativeAmerican());
+                population.setPacificIslander(population.getPacificIslander() - cbPopulation.getPacificIslander());
+            }
         }
     }
 
-    public void calculateElection() {
+    public void calculateElection(CensusBlock cb, boolean add) {
         for (int i = 0; i < elections.size(); i++) {
             Election election = elections.get(i);
-            int democraticSum = 0;
-            int republicanSum = 0;
-            for (CensusBlock cb : censusBlocks) {
-                Election cbElection = cb.getElections().get(i);
-                democraticSum += cbElection.getDemocratic();
-                republicanSum += cbElection.getRepublican();
+            Election cbElection = cb.getElections().get(i);
+            if (add) {
+                election.setDemocratic(election.getDemocratic() + cbElection.getDemocratic());
+                election.setRepublican(election.getRepublican() + cbElection.getRepublican());
             }
-            election.setDemocratic(democraticSum);
-            election.setRepublican(republicanSum);
+            else {
+                election.setDemocratic(election.getDemocratic() - cbElection.getDemocratic());
+                election.setRepublican(election.getRepublican() - cbElection.getRepublican());
+            }
         }
     }
 
     public void calculatePolsbyPopper() {
         GeometryJSON geometryJSON = new GeometryJSON();
         try {
-            Geometry geometry = geometryJSON.read(path);
+            Geometry geometry = geometryJSON.read(Constants.getResourcePath() + path);
             double area = geometry.getArea();
             double perimeter = geometry.getLength();
             setPolsbyPopper((4 * Math.PI * area) / Math.pow(perimeter, 2));

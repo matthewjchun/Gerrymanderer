@@ -62,12 +62,10 @@ public class DistrictingController {
     @GetMapping("/stateFull")
     public ResponseEntity<JsonObject> getStateFull(@RequestParam(name = "state") String stateName, HttpServletRequest request) {
         HttpSession session = request.getSession();
+        session.setAttribute("currentStateName", stateName);
         JsonObject stateFull = new JsonObject();
         Gson gson = new Gson();
-
         State state = ss.getStateByName(stateName);
-        printTotalNeighborCount(state);
-        session.setAttribute("currentState", state);
 
         Districting enactedDistricting = state.getEnactedDistricting();
         String districtPath = enactedDistricting.getDistrictPath();
@@ -107,8 +105,14 @@ public class DistrictingController {
             @RequestParam(name = "popEqThresh") double popEqualityThresh, @RequestParam double polsbyPopperThresh,
             @RequestParam int majorityMinorityThresh, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        State currentState = (State) session.getAttribute("currentState");
+        String currentStateName = (String) session.getAttribute("currentStateName");
+        State currentState = ss.getStateByName(currentStateName);
         Constants.PopulationType populationType = (Constants.PopulationType) session.getAttribute("populationType");
+        if (populationType == null) {
+            populationType = Constants.PopulationType.TOTAL;
+            session.setAttribute("populationType", populationType);
+        }
+        Gson gson = new Gson();
         Districting selectedDistricting = currentState.getSeaWulfDistricting(districtingId);
 
         Algorithm algorithm = (Algorithm) session.getAttribute("algorithm");
@@ -121,15 +125,20 @@ public class DistrictingController {
                     selectedDistricting.getMajorityMinorityCountVAP(),
                     selectedDistricting.getMajorityMinorityCountCVAP(), new ArrayList<>(), null);
             algorithm = new Algorithm(algoSummary, populationType, selectedDistricting, 0, popEqualityThresh,
-                    polsbyPopperThresh, majorityMinorityThresh, false);
+                    majorityMinorityThresh, false);
         } else {
             AlgorithmSummary algoSummary = algorithm.getAlgoSummary();
             algoSummary.setRunning(true);
             algorithm.setTerminationFlag(false);
+            algorithm.setThresholds(popEqualityThresh, majorityMinorityThresh);
         }
-        algorithm.start(popEqualityThresh, polsbyPopperThresh, majorityMinorityThresh);
+        boolean validThresh = Algorithm.validThresholds(popEqualityThresh, majorityMinorityThresh);
+        if (!validThresh)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        algorithm.start(popEqualityThresh, majorityMinorityThresh);
         session.setAttribute("algorithm", algorithm);
-        return null;
+        JsonObject algoSummaryJson = JsonParser.parseString(gson.toJson(algorithm.getAlgoSummary())).getAsJsonObject();
+        return ResponseEntity.ok(algoSummaryJson);
     }
 
     @GetMapping("/algorithmSummary")
@@ -165,5 +174,16 @@ public class DistrictingController {
             }
         }
         System.out.println("Total Neighbor Count: " + sum);
+    }
+
+    public void printDistrictingMeasures(Districting districting) {
+        System.out.println(districting.getId());
+        System.out.println(districting.getPopulationEqualityTotal());
+        System.out.println(districting.getPopulationEqualityVAP());
+        System.out.println(districting.getPopulationEqualityCVAP());
+        System.out.println(districting.getAvgPolsbyPopper());
+        System.out.println(districting.getMajorityMinorityCountTotal());
+        System.out.println(districting.getMajorityMinorityCountVAP());
+        System.out.println(districting.getMajorityMinorityCountCVAP());
     }
 }
