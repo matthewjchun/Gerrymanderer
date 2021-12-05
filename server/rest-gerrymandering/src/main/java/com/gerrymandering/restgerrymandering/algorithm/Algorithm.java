@@ -1,7 +1,11 @@
 package com.gerrymandering.restgerrymandering.algorithm;
 
 import com.gerrymandering.restgerrymandering.constants.Constants;
+import com.gerrymandering.restgerrymandering.model.CensusBlock;
+import com.gerrymandering.restgerrymandering.model.District;
 import com.gerrymandering.restgerrymandering.model.Districting;
+
+import java.util.List;
 
 public class Algorithm {
 
@@ -13,21 +17,27 @@ public class Algorithm {
     //private double polsbyPopperThresh;
     private int majorityMinorityThresh;
     private boolean terminationFlag;
+    private List<District> removed;
+    private List<District> added;
+    private List<CensusBlock> moved;
 
     public Algorithm(AlgorithmSummary algoSummary, Constants.PopulationType populationType,
                      Districting currentDistricting, int failedAttempts, double popEqualityThresh,
-                     /*double polsbyPopperThresh,*/ int majorityMinorityThresh, boolean terminationFlag) {
+                     int majorityMinorityThresh, boolean terminationFlag, List<District> removed,
+                     List<District> added, List<CensusBlock> moved) {
         this.algoSummary = algoSummary;
         this.populationType = populationType;
         this.currentDistricting = currentDistricting;
         this.failedAttempts = failedAttempts;
         this.popEqualityThresh = popEqualityThresh;
-        //this.polsbyPopperThresh = polsbyPopperThresh;
         this.majorityMinorityThresh = majorityMinorityThresh;
         this.terminationFlag = terminationFlag;
+        this.removed = removed;
+        this.added = added;
+        this.moved = moved;
     }
 
-    public void setThresholds(double popEqualityThresh, /*double polsbyPopperThresh, */int majorityMinorityThresh){
+    public void setThresholds(double popEqualityThresh, /*double polsbyPopperThresh, */int majorityMinorityThresh) {
         this.popEqualityThresh = popEqualityThresh;
         //this.polsbyPopperThresh = polsbyPopperThresh;
         this.majorityMinorityThresh = majorityMinorityThresh;
@@ -44,26 +54,22 @@ public class Algorithm {
             System.out.println("Iteration #" + algoSummary.getNumberIterations());
             Districting selectedDistricting = (Districting) currentDistricting.clone();
             boolean failure = false;
-            boolean moveSuccess = selectedDistricting.moveCBFromLargestToSmallestDistrict(selectedDistricting, populationType);
+            boolean moveSuccess = selectedDistricting.moveCBFromLargestToSmallestDistrict(selectedDistricting, populationType, removed, added, moved);
             if (!moveSuccess) {
                 failure = true;
-            }
-            else {
+            } else {
                 System.out.println("Move success");
                 selectedDistricting.calculatePopulationEquality();
                 if (!selectedDistricting.isImproved(currentDistricting, populationType)) {
                     failure = true;
-                }
-                else {
+                } else {
                     System.out.println("Improved");
                     //Geometry geometry = selectedDistricting.calculateDistrictingBoundary();
                     //selectedDistricting.calculateAvgPolsbyPopper();
                     selectedDistricting.calculateMajorityMinorityCount();
                     if (!selectedDistricting.validateThresholds(popEqualityThresh, /*polsbyPopperThresh, */majorityMinorityThresh, populationType)) {
                         failure = true;
-                    }
-                    else {
-                        //algoSummary.setDistrictingBoundary(selectedDistricting.calculateDistrictingBoundary());
+                    } else {
                         System.out.println("Valid");
                         setFailedAttempts(0);
                         setCurrentDistricting(selectedDistricting);
@@ -72,13 +78,18 @@ public class Algorithm {
                     }
                 }
             }
-            if (failure)
+            if (failure) {
                 setFailedAttempts(failedAttempts + 1);
+                removed.remove(removed.size()-1);
+                added.remove(added.size()-1);
+                moved.remove(moved.size()-1);
+            }
             algoSummary.setNumberIterations(algoSummary.getNumberIterations() + 1);
         }
+        algoSummary.setDistrictingBoundary(currentDistricting.calculateDistrictingBoundary(removed, added, moved));
     }
 
-    public void pause(int time){
+    public void pause(int time) {
         //STUB
     }
 
@@ -137,5 +148,29 @@ public class Algorithm {
 
     public void setTerminationFlag(boolean terminationFlag) {
         this.terminationFlag = terminationFlag;
+    }
+
+    public List<District> getRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(List<District> removed) {
+        this.removed = removed;
+    }
+
+    public List<District> getAdded() {
+        return added;
+    }
+
+    public void setAdded(List<District> added) {
+        this.added = added;
+    }
+
+    public List<CensusBlock> getMoved() {
+        return moved;
+    }
+
+    public void setMoved(List<CensusBlock> moved) {
+        this.moved = moved;
     }
 }

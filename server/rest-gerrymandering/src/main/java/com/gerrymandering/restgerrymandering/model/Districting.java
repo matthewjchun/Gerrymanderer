@@ -98,12 +98,14 @@ public class Districting implements Cloneable {
         districts.sort(new DistrictComparator(type));
     }
 
-    public boolean moveCBFromLargestToSmallestDistrict(Districting selectedDistricting, Constants.PopulationType type) {
+    public boolean moveCBFromLargestToSmallestDistrict(Districting selectedDistricting, Constants.PopulationType type,
+                                                       List<District> removed, List<District> added,
+                                                       List<CensusBlock> moved) {
         District sourceDistrict = selectedDistricting.getLargestDistrict(type);
         CensusBlock selectedCB = sourceDistrict.selectBorderCB();
         List<CensusBlock> neighborList = selectedCB.getNeighborCBInDiffDistrict();
         District destDistrict = selectedDistricting.getSmallestDistrictInNeighbors(neighborList, type);
-        return sourceDistrict.moveCB(selectedCB, destDistrict);
+        return sourceDistrict.moveCB(selectedCB, destDistrict, removed, added, moved);
     }
 
     public District getLargestDistrict(Constants.PopulationType type) {
@@ -241,26 +243,53 @@ public class Districting implements Cloneable {
         }
     }
 
-    public Geometry calculateDistrictingBoundary() {
+    public Geometry calculateDistrictingBoundary(List<District> removed, List<District> added, List<CensusBlock> moved) {
         GeometryFactory factory = new GeometryFactory();
         GeometryJSON geometryJSON = new GeometryJSON();
         FeatureJSON featureJSON = new FeatureJSON();
         Collection<Geometry> districtCollection = new ArrayList<>();
-        for (District district : districts) {
+        // Union all census blocks that are left in removed
+        for (District district: removed) {
             Collection<Geometry> cbCollection = new ArrayList<>();
-            for (CensusBlock cb : district.getCensusBlocks()) {
+            for (CensusBlock cb: district.getCensusBlocks()) {
                 try {
-                    //System.out.println("Reading census block #" + cb.getId());
                     File file = new File (Constants.getResourcePath() + cb.getPath());
                     //Geometry geometry = geometryJSON.read(new FileInputStream(file));
                     SimpleFeature feature = featureJSON.readFeature(new FileInputStream(file));
-                    cbCollection.add((Geometry)feature.getDefaultGeometry());
+                    cbCollection.add((Geometry)feature.getAttribute("GEOMETRY"));
                     Geometry districtGeometry = factory.buildGeometry(cbCollection).getBoundary();
                     districtCollection.add(districtGeometry);
-                    return factory.buildGeometry(districtCollection);
                 } catch (IOException e) {
                     System.out.println("Error reading census block file.");
                 }
+            }
+        }
+        // Union census blocks that were moved to other districts with those districts
+        for (CensusBlock cb: moved) {
+            Collection<Geometry> unionCollection = new ArrayList<>();
+            try {
+                District district = cb.getDistrict();
+                File file = new File(Constants.getResourcePath() + district.getPath());
+                SimpleFeature districtFeature = featureJSON.readFeature(new FileInputStream(file));
+                unionCollection.add((Geometry)districtFeature.getAttribute("GEOMETRY"));
+                file = new File (Constants.getResourcePath() + cb.getPath());
+                SimpleFeature cbFeature = featureJSON.readFeature(new FileInputStream(file));
+                unionCollection.add((Geometry)cbFeature.getAttribute("GEOMETRY"));
+                Geometry districtGeometry = factory.buildGeometry(unionCollection).getBoundary();
+                districtCollection.add(districtGeometry);
+            } catch (IOException e) {
+                System.out.println("Error reading district or census block file.");
+            }
+        }
+        for (District district: districts) {
+            if (removed.contains(district) || added.contains(district))
+                continue;
+            try {
+                File file = new File(Constants.getResourcePath() + district.getPath());
+                SimpleFeature districtFeature = featureJSON.readFeature(new FileInputStream(file));
+                districtCollection.add((Geometry)districtFeature.getAttribute("GEOMETRY"));
+            } catch (IOException e) {
+                System.out.println("Error reading district file.");
             }
         }
         return factory.buildGeometry(districtCollection);

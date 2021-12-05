@@ -125,7 +125,7 @@ public class DistrictingController {
                     selectedDistricting.getMajorityMinorityCountVAP(),
                     selectedDistricting.getMajorityMinorityCountCVAP(), new ArrayList<>(), null);
             algorithm = new Algorithm(algoSummary, populationType, selectedDistricting, 0, popEqualityThresh,
-                    majorityMinorityThresh, false);
+                    majorityMinorityThresh, false, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         } else {
             AlgorithmSummary algoSummary = algorithm.getAlgoSummary();
             algoSummary.setRunning(true);
