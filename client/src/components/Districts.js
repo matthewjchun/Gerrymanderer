@@ -19,7 +19,8 @@ StatGroup,
 } from '@chakra-ui/react';
 
 export default function Districts(props) {
-  const { number, population, election, popType } = props;
+  const { number, population, popType } = props;
+  // election
 
   let TOTAL = population[0]["total"].toLocaleString();
   let VAP = population[1]["total"].toLocaleString();
@@ -45,8 +46,12 @@ export default function Districts(props) {
               <Td>{CVAP} </Td>:
              null
             }
-                <Td isNumeric>{election[0]["democratic"].toLocaleString()}</Td>
-                <Td isNumeric>{election[0]["republican"].toLocaleString()}</Td>
+                <Td isNumeric>
+                  {/* {election[0]["democratic"].toLocaleString()} */}
+                </Td>
+                <Td isNumeric>
+                  {/* {election[0]["republican"].toLocaleString()} */}
+                </Td>
             <Tr>
                 <Td></Td>
                 <Td isNumeric>
