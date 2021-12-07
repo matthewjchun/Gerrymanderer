@@ -114,11 +114,11 @@ export default function StateDrawer(props) {
 
   // let dem = stateSummary['elections'][0]['democratic'];
   // let rep = stateSummary['elections'][0]['republican'];
-  // let total = dem + rep;
   let dem = 2;
   let rep = 5;
-  let demPercent = 0.4255;
-  let repPercent = 0.5845;
+  let total = dem + rep;
+  let demPercent = dem / total;
+  let repPercent = rep / total;
 
   const populationFetch = async (value) => {
     setValue(value);
