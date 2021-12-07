@@ -52,7 +52,6 @@ const Map = () => {
     );
     const body = await response.json();
     await setStateData(body);
-    console.log(body);
     return body;
   };
 

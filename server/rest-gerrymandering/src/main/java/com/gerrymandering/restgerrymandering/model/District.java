@@ -43,6 +43,7 @@ public class District implements Cloneable {
     private Set<Precinct> precincts;
 
     @OneToMany(mappedBy = "district")
+    @OrderBy("id")
     private Set<CensusBlock> censusBlocks;
 
     public District() {
