@@ -1,12 +1,20 @@
 package com.gerrymandering.restgerrymandering.model;
 
 import com.gerrymandering.restgerrymandering.constants.Constants;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
+import org.geotools.feature.FeatureCollection;
+import org.geotools.geojson.feature.FeatureJSON;
 import org.geotools.geojson.geom.GeometryJSON;
+import org.geotools.geometry.jts.JTSFactoryFinder;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.opengis.feature.FeatureFactory;
+import org.opengis.feature.simple.SimpleFeature;
 
 import javax.persistence.*;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -44,15 +52,6 @@ public class Districting implements Cloneable {
     private List<District> districts;
 
     @Transient
-    private double populationEqualityThreshold;
-
-    @Transient
-    private double polsbyPopperThreshold;
-
-    @Transient
-    private int majorityMinorityThreshold;
-
-    @Transient
     private int splitPrecincts;
 
     public Districting() {
@@ -61,8 +60,7 @@ public class Districting implements Cloneable {
     public Districting(long id, double populationEqualityTotal, double populationEqualityVAP,
             double populationEqualityCVAP, double avgPolsbyPopper, int majorityMinorityCountTotal,
             int majorityMinorityCountVAP, int majorityMinorityCountCVAP, String districtPath, String precinctPath,
-            String countyPath, List<District> districts, double populationEqualityThreshold,
-            double polsbyPopperThreshold, int majorityMinorityThreshold, int splitPrecincts) {
+            String countyPath, List<District> districts, int splitPrecincts) {
         this.id = id;
         this.populationEqualityTotal = populationEqualityTotal;
         this.populationEqualityVAP = populationEqualityVAP;
@@ -75,9 +73,6 @@ public class Districting implements Cloneable {
         this.precinctPath = precinctPath;
         this.countyPath = countyPath;
         this.districts = districts;
-        this.populationEqualityThreshold = populationEqualityThreshold;
-        this.polsbyPopperThreshold = polsbyPopperThreshold;
-        this.majorityMinorityThreshold = majorityMinorityThreshold;
         this.splitPrecincts = splitPrecincts;
     }
 
@@ -89,8 +84,7 @@ public class Districting implements Cloneable {
         } catch (CloneNotSupportedException e) {
             districting = new Districting(id, populationEqualityTotal, populationEqualityVAP, populationEqualityCVAP,
                     avgPolsbyPopper, majorityMinorityCountTotal, majorityMinorityCountVAP, majorityMinorityCountCVAP,
-                    districtPath, precinctPath, countyPath, districts, populationEqualityThreshold,
-                    polsbyPopperThreshold, majorityMinorityThreshold, splitPrecincts);
+                    districtPath, precinctPath, countyPath, districts, splitPrecincts);
         }
         List<District> districtsClone = new ArrayList<>();
         for (District district : districts) {
@@ -105,12 +99,14 @@ public class Districting implements Cloneable {
         districts.sort(new DistrictComparator(type));
     }
 
-    public boolean moveCBFromLargestToSmallestDistrict(Districting selectedDistricting, Constants.PopulationType type) {
+    public boolean moveCBFromLargestToSmallestDistrict(Districting selectedDistricting, Constants.PopulationType type,
+                                                       List<District> removed, List<District> added,
+                                                       List<CensusBlock> moved) {
         District sourceDistrict = selectedDistricting.getLargestDistrict(type);
-        CensusBlock selectedCB = sourceDistrict.getRandomBorderCB();
+        CensusBlock selectedCB = sourceDistrict.selectBorderCB();
         List<CensusBlock> neighborList = selectedCB.getNeighborCBInDiffDistrict();
         District destDistrict = selectedDistricting.getSmallestDistrictInNeighbors(neighborList, type);
-        return sourceDistrict.moveCB(selectedCB, destDistrict);
+        return sourceDistrict.moveCB(selectedCB, destDistrict, removed, added, moved);
     }
 
     public District getLargestDistrict(Constants.PopulationType type) {
@@ -196,7 +192,7 @@ public class Districting implements Cloneable {
         }
     }
 
-    public void calculateAvgPolsbyPopper() {
+    /*public void calculateAvgPolsbyPopper() {
         double sum = 0;
         int numDistricts = districts.size();
         for (District district : districts) {
@@ -204,7 +200,7 @@ public class Districting implements Cloneable {
             sum += district.getPolsbyPopper();
         }
         setAvgPolsbyPopper(sum / numDistricts);
-    }
+    }*/
 
     public void calculateMajorityMinorityCount() {
         for (Constants.PopulationType type : Constants.PopulationType.values()) {
@@ -248,16 +244,20 @@ public class Districting implements Cloneable {
         }
     }
 
-    public Geometry calculateDistrictingBoundary() {
+    /*public Geometry calculateDistrictingBoundary(List<District> removed, List<District> added, List<CensusBlock> moved) {
         GeometryFactory factory = new GeometryFactory();
-        GeometryJSON geometryJSON = new GeometryJSON();
+        //GeometryJSON geometryJSON = new GeometryJSON();
+        FeatureJSON featureJSON = new FeatureJSON();
         Collection<Geometry> districtCollection = new ArrayList<>();
-        for (District district : districts) {
+        // Union all census blocks that are left in removed
+        for (District district: removed) {
             Collection<Geometry> cbCollection = new ArrayList<>();
-            for (CensusBlock cb : district.getCensusBlocks()) {
+            for (CensusBlock cb: district.getCensusBlocks()) {
                 try {
-                    Geometry geometry = geometryJSON.read(cb.getPath());
-                    cbCollection.add(geometry);
+                    File file = new File (Constants.getResourcePath() + cb.getPath());
+                    //Geometry geometry = geometryJSON.read(new FileInputStream(file));
+                    SimpleFeature feature = featureJSON.readFeature(new FileInputStream(file));
+                    cbCollection.add((Geometry)feature.getAttribute("GEOMETRY"));
                     Geometry districtGeometry = factory.buildGeometry(cbCollection).getBoundary();
                     districtCollection.add(districtGeometry);
                 } catch (IOException e) {
@@ -265,8 +265,36 @@ public class Districting implements Cloneable {
                 }
             }
         }
+        // Union census blocks that were moved to other districts with those districts
+        for (CensusBlock cb: moved) {
+            Collection<Geometry> unionCollection = new ArrayList<>();
+            try {
+                District district = cb.getDistrict();
+                File file = new File(Constants.getResourcePath() + district.getPath());
+                SimpleFeature districtFeature = featureJSON.readFeature(new FileInputStream(file));
+                unionCollection.add((Geometry)districtFeature.getAttribute("GEOMETRY"));
+                file = new File (Constants.getResourcePath() + cb.getPath());
+                SimpleFeature cbFeature = featureJSON.readFeature(new FileInputStream(file));
+                unionCollection.add((Geometry)cbFeature.getAttribute("GEOMETRY"));
+                Geometry districtGeometry = factory.buildGeometry(unionCollection).getBoundary();
+                districtCollection.add(districtGeometry);
+            } catch (IOException e) {
+                System.out.println("Error reading district or census block file.");
+            }
+        }
+        for (District district: districts) {
+            if (removed.contains(district) || added.contains(district))
+                continue;
+            try {
+                File file = new File(Constants.getResourcePath() + district.getPath());
+                SimpleFeature districtFeature = featureJSON.readFeature(new FileInputStream(file));
+                districtCollection.add((Geometry)districtFeature.getAttribute("GEOMETRY"));
+            } catch (IOException e) {
+                System.out.println("Error reading district file.");
+            }
+        }
         return factory.buildGeometry(districtCollection);
-    }
+    }*/
 
     public void calculateSplitPrecincts() {
 
@@ -283,28 +311,24 @@ public class Districting implements Cloneable {
     public boolean isImproved(Districting previousDistricting, Constants.PopulationType type) {
         switch (type) {
         case TOTAL:
-            return populationEqualityTotal > previousDistricting.getPopulationEqualityTotal();
+            return populationEqualityTotal < previousDistricting.getPopulationEqualityTotal();
         case VAP:
-            return populationEqualityVAP > previousDistricting.getPopulationEqualityVAP();
+            return populationEqualityVAP < previousDistricting.getPopulationEqualityVAP();
         case CVAP:
-            return populationEqualityCVAP > previousDistricting.getPopulationEqualityCVAP();
+            return populationEqualityCVAP < previousDistricting.getPopulationEqualityCVAP();
         default:
             return false;
         }
     }
 
-    public boolean validateThresholds(double popEqualityThresh, double polsbyPopperThresh, int majorityMinorityThresh,
-            Constants.PopulationType type) {
+    public boolean validateThresholds(double popEqualityThresh, int majorityMinorityThresh, Constants.PopulationType type) {
         switch (type) {
         case TOTAL:
-            return populationEqualityTotal <= popEqualityThresh && avgPolsbyPopper <= polsbyPopperThresh
-                    && majorityMinorityCountTotal <= majorityMinorityThresh;
+            return populationEqualityTotal <= popEqualityThresh && majorityMinorityCountTotal <= majorityMinorityThresh;
         case VAP:
-            return populationEqualityVAP <= popEqualityThresh && avgPolsbyPopper <= polsbyPopperThresh
-                    && majorityMinorityCountVAP <= majorityMinorityThresh;
+            return populationEqualityVAP <= popEqualityThresh && majorityMinorityCountVAP <= majorityMinorityThresh;
         case CVAP:
-            return populationEqualityCVAP <= popEqualityThresh && avgPolsbyPopper <= polsbyPopperThresh
-                    && majorityMinorityCountCVAP <= majorityMinorityThresh;
+            return populationEqualityCVAP <= popEqualityThresh && majorityMinorityCountCVAP <= majorityMinorityThresh;
         default:
             return false;
         }
@@ -405,30 +429,6 @@ public class Districting implements Cloneable {
 
     public void setDistricts(List<District> districts) {
         this.districts = districts;
-    }
-
-    public double getPopulationEqualityThreshold() {
-        return populationEqualityThreshold;
-    }
-
-    public void setPopulationEqualityThreshold(double populationEqualityThreshold) {
-        this.populationEqualityThreshold = populationEqualityThreshold;
-    }
-
-    public double getPolsbyPopperThreshold() {
-        return polsbyPopperThreshold;
-    }
-
-    public void setPolsbyPopperThreshold(double polsbyPopperThreshold) {
-        this.polsbyPopperThreshold = polsbyPopperThreshold;
-    }
-
-    public int getMajorityMinorityThreshold() {
-        return majorityMinorityThreshold;
-    }
-
-    public void setMajorityMinorityThreshold(int majorityMinorityThreshold) {
-        this.majorityMinorityThreshold = majorityMinorityThreshold;
     }
 
     public int getSplitPrecincts() {
