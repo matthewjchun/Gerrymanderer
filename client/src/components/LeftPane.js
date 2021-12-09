@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 import { DataContext, StateContext } from '../contexts/State';
+import { GeoJSONContext } from '../contexts/GeoJSON';
 import {
   Drawer,
   DrawerBody,
@@ -761,7 +762,7 @@ export default function LeftPane(props) {
   const [majorityMinority, setMajorityMinority] = useState(0);
 
   const [activeState, setActiveState] = useContext(StateContext);
-  const [geoJSONdata, setGeoJSONdata] = useState();
+  const [geoJSON, setGeoJSON] = useContext(GeoJSONContext);
 
   const handlePopEqualityInput = (val) => setPopEquality(val);
   const handleCompactnessInput = (val) => setCompactness(val);
@@ -772,18 +773,15 @@ export default function LeftPane(props) {
     console.log("hi");
   };
 
-  const handleAlgorithmStart = () => {
+  const handleAlgorithmStart = async () => {
     onModalOpen();
+    const response = await fetch(
+      '/algorithm?id=0&popEqThresh=0.02&polsbyPopperThresh=0.3&majorityMinorityThresh=3'
+    );
+    const body = await response.json();
+    console.log(body);
+    setGeoJSON(body);
   }
-
-  // const handleGenerate = async (e) => {
-  //   const response = await fetch(
-  //     `/districtings?state=${activeState}`.toLowerCase()
-  //   );
-  //   const body = await response.json();
-  //   console.log(body);
-  //   setGeoJSONdata(body);
-  // };
 
   const redistrictingTabTooltip =
     'Select one of the following 30 redistrictings to improve on.';

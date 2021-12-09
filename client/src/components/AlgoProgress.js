@@ -40,20 +40,18 @@ export default function AlgoProgress(props) {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <VStack spacing="24px">
-              <Center>
-                <Text>Algorithm in progress...</Text>
-              </Center>
-              <Divider />
-              <Text align="left">Change in Population Equality: </Text>
-              <Text align="left">Change in Polsby Popper: </Text>
-              <Text align="left">Change in Majority Minority: </Text>
-              <Divider />
-              <Text align="left">Number of iterations: </Text>
-              <Text align="left">Algorithm time: </Text>
-              <Text align="left">Estimated time to completion: </Text>
-              <Divider/>
-            </VStack>
+            <Center>
+              <Text fontSize='2xl'>Algorithm in progress...</Text>
+            </Center>
+            <Divider />
+            <Text align="left">Change in Population Equality: </Text>
+            <Text align="left">Change in Polsby Popper: </Text>
+            <Text align="left">Change in Majority Minority: </Text>
+            <Divider />
+            <Text align="left">Number of iterations: </Text>
+            <Text align="left">Algorithm time: </Text>
+            <Text align="left">Estimated time to completion: </Text>
+            <Divider/>
           </ModalBody>
 
           <ModalFooter>

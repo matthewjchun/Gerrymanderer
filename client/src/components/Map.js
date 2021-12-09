@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useContext } from 'react';
-import { DataContext, StateContext } from '../contexts/State/index';
+import { DataContext, StateContext } from '../contexts/State';
+import { GeoJSONContext } from '../contexts/GeoJSON';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { Flex } from '@chakra-ui/react';
 import '../App.css';
@@ -27,6 +28,7 @@ const Map = () => {
   const dummyMsg =
     '<strong>District 1</strong><p><br><b>Total Population:</b> 724,868<br><b>Democratic:</b> 50.1%<br><b>Republican:</b> 48.4%<br><br><b>Race:</b> 64.1% White, 23.2% Am. Indian, 2.4% Black, 1.7% Asian<br><b>Ethnicity:</b> 20.4% Hispanic<br><br><b>Unemployment:</b> 14.2%<br><b>Median household income:</b> $43,377';
   const [activeState, setActiveState] = useContext(StateContext);
+  const [geoJSON, setGeoJSON] = useContext(GeoJSONContext);
   const { isOpen, onOpen, onClose } = useDisclosure(); // open close state drawer
 
   /////////////////////// MARKER METHODS //////////////////////////////
@@ -294,6 +296,10 @@ const Map = () => {
 
     // virginia
     visibToggle('va', 'n');
+  };
+
+  const generatedDistricting = (map) => {
+
   };
 
   /////////////////////// VISUALIZE MAP METHODS //////////////////////////////

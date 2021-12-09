@@ -7,13 +7,16 @@ import { StateProvider } from './contexts/State';
 import './index.css';
 import App from './App';
 import theme from './theme';
+import { GeoJSONProvider } from './contexts/GeoJSON';
 
 ReactDOM.render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
+      <GeoJSONProvider>
       <StateProvider>
         <App />
       </StateProvider>
+      </GeoJSONProvider>
     </ChakraProvider>
   </React.StrictMode>,
   document.getElementById('root')
