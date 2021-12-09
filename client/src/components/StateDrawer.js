@@ -93,21 +93,21 @@ export default function StateDrawer(props) {
   ];
 
   const vData = [
-    { title: 'White', value: vWhite, color: '#ABCEFD' },
-    { title: 'Black or African', value: vAfrican, color: '#C13C37' },
-    { title: 'Asian', value: vAsian, color: '#71DE6A' },
-    { title: 'Hispanic', value: vHispanic, color: '#6A2135' },
-    { title: 'Native American', value: vNative, color: '#FC4040' },
+    { title: 'White', value: vWhite, color: '#87CEEB' },
+    { title: 'Black or African', value: vAfrican, color: '#ADD8E6' },
+    { title: 'Asian', value: vAsian, color: '#A7C7E7' },
+    { title: 'Hispanic', value: vHispanic, color: '#4682B4' },
+    { title: 'Native American', value: vNative, color: '#0F52BA' },
     { title: 'Pacific Islander', value: vPacific, color: '#1C7CFF'},
   ];
 
   const cData = [
-    { title: 'White', value: cWhite, color: '#ABCEFD' },
-    { title: 'Black or African', value: cAfrican, color: '#C13C37' },
-    { title: 'Asian', value: cAsian, color: '#71DE6A' },
-    { title: 'Hispanic', value: cHispanic, color: '#6A2135' },
-    { title: 'Native American', value: cNative, color: '#FC4040' },
-    { title: 'Pacific Islander', value: cPacific, color: '#1C7CFF'},
+    { title: 'White', value: cWhite, color: '#87CEEB' },
+    { title: 'Black or African', value: cAfrican, color: '#ADD8E6' },
+    { title: 'Asian', value: cAsian, color: '#A7C7E7' },
+    { title: 'Hispanic', value: cHispanic, color: '#4682B4' },
+    { title: 'Native American', value: cNative, color: '#0F52BA' },
+    { title: 'Pacific Islander', value: cPacific, color: '#0818A8'},
   ];
 
   // ELECTION SPLIT STATISTICS

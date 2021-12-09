@@ -23,8 +23,10 @@ export default function Districts(props) {
   const { number, population, popType } = props;
   const { arrowFlag, setArrowFlag } = useState(false);
 
-  const dem = election[0]["democratic"];
-  const rep = election[0]["republican"];
+  // const dem = election[0]["democratic"];
+  // const rep = election[0]["republican"];
+  const dem = 2;
+  const rep = 3;
   if (dem > rep) {
     setArrowFlag(true);
   }
