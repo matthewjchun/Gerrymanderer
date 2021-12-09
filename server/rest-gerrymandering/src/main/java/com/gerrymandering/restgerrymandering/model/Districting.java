@@ -1,11 +1,12 @@
 package com.gerrymandering.restgerrymandering.model;
 
 import com.gerrymandering.restgerrymandering.constants.Constants;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.geojson.feature.FeatureJSON;
 import org.geotools.geojson.geom.GeometryJSON;
+import org.geotools.geometry.jts.JTSFactoryFinder;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.FeatureFactory;
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -191,7 +192,7 @@ public class Districting implements Cloneable {
         }
     }
 
-    public void calculateAvgPolsbyPopper() {
+    /*public void calculateAvgPolsbyPopper() {
         double sum = 0;
         int numDistricts = districts.size();
         for (District district : districts) {
@@ -199,7 +200,7 @@ public class Districting implements Cloneable {
             sum += district.getPolsbyPopper();
         }
         setAvgPolsbyPopper(sum / numDistricts);
-    }
+    }*/
 
     public void calculateMajorityMinorityCount() {
         for (Constants.PopulationType type : Constants.PopulationType.values()) {
@@ -243,9 +244,9 @@ public class Districting implements Cloneable {
         }
     }
 
-    public Geometry calculateDistrictingBoundary(List<District> removed, List<District> added, List<CensusBlock> moved) {
+    /*public Geometry calculateDistrictingBoundary(List<District> removed, List<District> added, List<CensusBlock> moved) {
         GeometryFactory factory = new GeometryFactory();
-        GeometryJSON geometryJSON = new GeometryJSON();
+        //GeometryJSON geometryJSON = new GeometryJSON();
         FeatureJSON featureJSON = new FeatureJSON();
         Collection<Geometry> districtCollection = new ArrayList<>();
         // Union all census blocks that are left in removed
@@ -293,7 +294,7 @@ public class Districting implements Cloneable {
             }
         }
         return factory.buildGeometry(districtCollection);
-    }
+    }*/
 
     public void calculateSplitPrecincts() {
 

@@ -7,19 +7,30 @@ import com.gerrymandering.restgerrymandering.model.*;
 import com.gerrymandering.restgerrymandering.services.*;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.geotools.geojson.feature.FeatureJSON;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.opengis.feature.simple.SimpleFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
 
 //@CrossOrigin("http://localhost:3000")
 @RestController
@@ -149,6 +160,36 @@ public class DistrictingController {
     }
 
     // TESTING METHODS
+    @GetMapping("/asyncTest")
+    @Async
+    public CompletableFuture<String> asyncTest() throws InterruptedException {
+        CompletableFuture<String> cf = new CompletableFuture<>();
+
+        Executors.newCachedThreadPool().submit(() -> {
+            System.out.println("running dis");
+            Thread.sleep(500);
+            cf.complete("hello");
+            return null;
+        });
+        System.out.println("im here first buddy");
+        return cf;
+    }
+
+    @GetMapping("/boundaryTest")
+    public ResponseEntity<JsonObject> boundary() {
+        JsonObject featureCollection = new JsonObject();
+        featureCollection.addProperty("type", "FeatureCollection");
+        JsonArray features = new JsonArray();
+        try (FileReader reader = new FileReader(Constants.getResourcePath() + "censusblocks/az_censusblock_0.json")) {
+            JsonObject feature = JsonParser.parseReader(reader).getAsJsonObject();
+            features.add(feature);
+        } catch (Exception e) {
+            System.out.println("Error");
+        }
+        featureCollection.add("features", features);
+        return ResponseEntity.ok(featureCollection);
+    }
+
     public void printNumNeighbors(State state) {
         Set<CensusBlock> set = state.getEnactedDistricting().getDistricts().get(0).getCensusBlocks();
         System.out.println("# census blocks: " + set.size());

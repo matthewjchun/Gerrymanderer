@@ -4,6 +4,7 @@ import com.gerrymandering.restgerrymandering.constants.Constants;
 import com.gerrymandering.restgerrymandering.model.CensusBlock;
 import com.gerrymandering.restgerrymandering.model.District;
 import com.gerrymandering.restgerrymandering.model.Districting;
+import org.springframework.scheduling.annotation.Async;
 
 import java.util.List;
 
@@ -47,6 +48,7 @@ public class Algorithm {
         return popEqualityThresh >= 0 && popEqualityThresh <= 1 && majorityMinorityThresh >= 0;
     }
 
+    @Async
     public void start(double popEqualityThresh,/* double polsbyPopperThresh,*/ int majorityMinorityThresh) {
         currentDistricting.calculatePopulationEquality();
         while (algoSummary.getNumberIterations() < Constants.getMaxIterations() &&
@@ -85,8 +87,10 @@ public class Algorithm {
                 moved.remove(moved.size()-1);
             }
             algoSummary.setNumberIterations(algoSummary.getNumberIterations() + 1);
+            algoSummary.setEstimatedTime((Constants.getMaxIterations() - algoSummary.getNumberIterations()) * Constants.getEstimatedTimePerIteration());
         }
-        algoSummary.setDistrictingBoundary(currentDistricting.calculateDistrictingBoundary(removed, added, moved));
+        algoSummary.setRunning(false);
+        //algoSummary.setDistrictingBoundary(currentDistricting.calculateDistrictingBoundary(removed, added, moved));
     }
 
     public void pause(int time) {
