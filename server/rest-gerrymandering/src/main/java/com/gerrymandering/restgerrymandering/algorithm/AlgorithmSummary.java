@@ -2,6 +2,7 @@ package com.gerrymandering.restgerrymandering.algorithm;
 
 import com.gerrymandering.restgerrymandering.model.Districting;
 import com.gerrymandering.restgerrymandering.model.Precinct;
+import com.google.gson.JsonObject;
 import org.locationtech.jts.geom.Geometry;
 
 import java.util.List;
@@ -32,12 +33,12 @@ public class AlgorithmSummary {
 
     private List<Precinct> splitPrecincts;
 
-    private Geometry districtingBoundary;
+    private List<JsonObject> districtingBoundary;
 
     public AlgorithmSummary(int numberIterations, int estimatedTime, boolean running, String stateName,
                             double populationEqualityTotal, double populationEqualityVAP, double populationEqualityCVAP,
                             double avgPolsbyPopper, int majorityMinorityCountTotal, int majorityMinorityCountVAP,
-                            int majorityMinorityCountCVAP, List<Precinct> splitPrecincts, Geometry districtingBoundary) {
+                            int majorityMinorityCountCVAP, List<Precinct> splitPrecincts, List<JsonObject> districtingBoundary) {
         this.numberIterations = numberIterations;
         this.estimatedTime = estimatedTime;
         this.running = running;
@@ -160,11 +161,11 @@ public class AlgorithmSummary {
         this.splitPrecincts = splitPrecincts;
     }
 
-    public Geometry getDistrictingBoundary() {
+    public List<JsonObject> getDistrictingBoundary() {
         return districtingBoundary;
     }
 
-    public void setDistrictingBoundary(Geometry districtingBoundary) {
+    public void setDistrictingBoundary(List<JsonObject> districtingBoundary) {
         this.districtingBoundary = districtingBoundary;
     }
 }
