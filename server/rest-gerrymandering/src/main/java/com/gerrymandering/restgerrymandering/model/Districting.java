@@ -1,6 +1,9 @@
 package com.gerrymandering.restgerrymandering.model;
 
 import com.gerrymandering.restgerrymandering.constants.Constants;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.geojson.feature.FeatureJSON;
 import org.geotools.geojson.geom.GeometryJSON;
@@ -11,10 +14,7 @@ import org.opengis.feature.FeatureFactory;
 import org.opengis.feature.simple.SimpleFeature;
 
 import javax.persistence.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -242,6 +242,65 @@ public class Districting implements Cloneable {
                 break;
             }
         }
+    }
+
+    public List<JsonObject> calculateDistrictingBoundary(List<District> removed, List<District> added, List<CensusBlock> moved) {
+        if (removed.size() != added.size() || removed.size() != moved.size()) {
+            System.out.println("Error mismatch in counts for moved census blocks and affected districts.");
+            return null;
+        }
+        List<JsonObject> districtBoundaries = new ArrayList<>();
+        for (District district: districts) {
+            int indexRemoved = removed.indexOf(district);
+            if (indexRemoved == -1) {
+                int indexAdded = added.indexOf(district);
+                if (indexAdded == -1) { // if neither in removed or added, the district remains the same
+                    try (FileReader reader = new FileReader(Constants.getResourcePath() + district.getPath())) {
+                        JsonObject districtFeature = JsonParser.parseReader(reader).getAsJsonObject();
+                        districtBoundaries.add(districtFeature);
+                    } catch (Exception e) {
+                        System.out.println("Calculating districting boundary error reading district file.");
+                    }
+                    continue;
+                }
+                else { // district received a census block
+                    CensusBlock addedCb = moved.get(indexAdded);
+                    JsonObject districtFeatureCollection = new JsonObject();
+                    districtFeatureCollection.addProperty("type", "FeatureCollection");
+                    JsonArray features = new JsonArray();
+                    try (FileReader reader = new FileReader(Constants.getResourcePath() + district.getPath())) {
+                        JsonObject districtFeature = JsonParser.parseReader(reader).getAsJsonObject();
+                        features.add(districtFeature);
+                        FileReader cbReader = new FileReader(Constants.getResourcePath() + addedCb.getPath());
+                        JsonObject cbFeature = JsonParser.parseReader(cbReader).getAsJsonObject();
+                        features.add(cbFeature);
+                    } catch (Exception e) {
+                        System.out.println("Calculating districting boundary error reading district or cb file.");
+                    }
+                    districtFeatureCollection.add("features", features);
+                    districtBoundaries.add(districtFeatureCollection);
+                }
+            }
+            else { // district lost a census block
+                CensusBlock removedCb = moved.get(indexRemoved);
+                JsonObject districtFeatureCollection = new JsonObject();
+                districtFeatureCollection.addProperty("type", "FeatureCollection");
+                JsonArray features = new JsonArray();
+                for (CensusBlock cb: district.getCensusBlocks()) {
+                    if (cb.equals(removedCb))
+                        continue;
+                    try (FileReader reader = new FileReader(Constants.getResourcePath() + cb.getPath())) {
+                        JsonObject cbFeature = JsonParser.parseReader(reader).getAsJsonObject();
+                        features.add(cbFeature);
+                    } catch (Exception e) {
+                        System.out.println("Calculating districting boundary error reading cb file.");
+                    }
+                }
+                districtFeatureCollection.add("features", features);
+                districtBoundaries.add(districtFeatureCollection);
+            }
+        }
+        return districtBoundaries;
     }
 
     /*public Geometry calculateDistrictingBoundary(List<District> removed, List<District> added, List<CensusBlock> moved) {

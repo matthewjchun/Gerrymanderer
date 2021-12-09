@@ -90,7 +90,7 @@ public class Algorithm {
             algoSummary.setEstimatedTime((Constants.getMaxIterations() - algoSummary.getNumberIterations()) * Constants.getEstimatedTimePerIteration());
         }
         algoSummary.setRunning(false);
-        //algoSummary.setDistrictingBoundary(currentDistricting.calculateDistrictingBoundary(removed, added, moved));
+        algoSummary.setDistrictingBoundary(currentDistricting.calculateDistrictingBoundary(removed, added, moved));
     }
 
     public void pause(int time) {
