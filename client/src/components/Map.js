@@ -48,7 +48,7 @@ const Map = () => {
   /////////////////////// SERVER INTERACTIONS //////////////////////////////
   const handleStateFetch = async (map) => {
     const response = await fetch(
-      `/stateFull/?state=${constants.stateMap[activeState].toLowerCase()}`
+      `/stateFull?state=${constants.stateMap[activeState].toLowerCase()}`
     );
     const body = await response.json();
     await setStateData(body);
