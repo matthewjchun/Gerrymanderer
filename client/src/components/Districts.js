@@ -17,9 +17,19 @@ StatHelpText,
 StatArrow,
 StatGroup,
 } from '@chakra-ui/react';
+import { useState } from 'react';
 
 export default function Districts(props) {
   const { number, population, popType } = props;
+  const { arrowFlag, setArrowFlag } = useState(false);
+
+  const dem = election[0]["democratic"];
+  const rep = election[0]["republican"];
+  if (dem > rep) {
+    setArrowFlag(true);
+  }
+
+
   // election
 
   let TOTAL = population[0]["total"].toLocaleString();
@@ -52,7 +62,8 @@ export default function Districts(props) {
                 <Td isNumeric>
                   {/* {election[0]["republican"].toLocaleString()} */}
                 </Td>
-            <Tr>
+            {arrowFlag ? 
+              <Tr>
                 <Td></Td>
                 <Td isNumeric>
                 <StatArrow type='increase' />
@@ -60,7 +71,17 @@ export default function Districts(props) {
                 <Td isNumeric>
                 <StatArrow type='decrease' />
                 </Td>
+              </Tr>:
+            <Tr>
+                <Td></Td>
+                <Td isNumeric>
+                <StatArrow type='decrease' />
+                </Td>
+                <Td isNumeric>
+                <StatArrow type='increase' />
+                </Td>
             </Tr>
+            }
             </Tbody>
         </Table>
     </>
