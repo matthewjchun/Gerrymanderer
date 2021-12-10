@@ -1,8 +1,6 @@
 package com.gerrymandering.restgerrymandering.model;
 
 import com.gerrymandering.restgerrymandering.constants.Constants;
-import org.geotools.geojson.geom.GeometryJSON;
-import org.locationtech.jts.geom.Geometry;
 
 import javax.persistence.*;
 import java.io.IOException;
