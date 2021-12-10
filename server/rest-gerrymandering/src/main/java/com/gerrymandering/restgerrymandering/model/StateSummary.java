@@ -2,7 +2,6 @@ package com.gerrymandering.restgerrymandering.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class StateSummary {
 
