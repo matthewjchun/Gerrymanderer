@@ -46,6 +46,7 @@ import mi from '../img/mi.jpg';
 import va from '../img/va.jpg';
 import { BoxZoomHandler } from 'mapbox-gl';
 import Reset from './Reset';
+import postProcessed from '../data/postprocessed4.json';
 
 // maps property names to display names
 const measureMap = {
@@ -83,10 +84,10 @@ const bestMeasure = (data) => {
 const azData = [
   [
     {
-      number: 1,
-      popEquality: '77',
-      compactness: '50',
-      majorityMinority: '43',
+      number: postProcessed["1"]["id"],
+      popEquality: postProcessed["1"]["pop_eq"].toLocaleString(undefined, {minimumFractionDigits: 2}),
+      compactness: postProcessed["1"]["polsby_avg"],
+      majorityMinority: postProcessed["1"]["majority_minority_tot"],
     },
     {
       number: 2,
