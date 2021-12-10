@@ -123,7 +123,7 @@ public class DistrictingController {
         if (algorithmSettings == null) {
             AlgorithmSummary algoSummary = new AlgorithmSummary(0,
                     Constants.getMaxIterations() * Constants.getEstimatedTimePerIteration(), true,
-                    currentState.getName(), selectedDistricting.getPopulationEqualityTotal(),
+                    false, currentState.getName(), selectedDistricting.getPopulationEqualityTotal(),
                     selectedDistricting.getPopulationEqualityVAP(), selectedDistricting.getPopulationEqualityCVAP(),
                     selectedDistricting.getAvgPolsbyPopper(), selectedDistricting.getMajorityMinorityCountTotal(),
                     selectedDistricting.getMajorityMinorityCountVAP(),
@@ -133,6 +133,7 @@ public class DistrictingController {
         } else {
             AlgorithmSummary algoSummary = algorithmSettings.getAlgoSummary();
             algoSummary.setRunning(true);
+            algoSummary.setPaused(false);
             algorithmSettings.setThresholds(popEqualityThresh, majorityMinorityThresh);
         }
         boolean validThresh = AlgorithmSettings.validThresholds(popEqualityThresh, majorityMinorityThresh);
@@ -149,6 +150,26 @@ public class DistrictingController {
         HttpSession session = request.getSession();
         AlgorithmSettings algorithmSettings = (AlgorithmSettings) session.getAttribute("algorithmSettings");
         return ResponseEntity.ok(algorithmSettings.getAlgoSummary());
+    }
+
+    @GetMapping("/pause")
+    public ResponseEntity<AlgorithmSummary> pause(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        AlgorithmSettings algorithmSettings = (AlgorithmSettings) session.getAttribute("algorithmSettings");
+        AlgorithmSummary algoSummary = algorithmSettings.getAlgoSummary();
+        algoSummary.setRunning(false);
+        algoSummary.setPaused(true);
+        return ResponseEntity.ok(algoSummary);
+    }
+
+    @GetMapping("/stop")
+    public ResponseEntity<AlgorithmSummary> stop(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        AlgorithmSettings algorithmSettings = (AlgorithmSettings) session.getAttribute("algorithmSettings");
+        AlgorithmSummary algoSummary = algorithmSettings.getAlgoSummary();
+        algoSummary.setRunning(false);
+        algoSummary.setPaused(false);
+        return ResponseEntity.ok(algoSummary);
     }
 
     // TESTING METHODS
