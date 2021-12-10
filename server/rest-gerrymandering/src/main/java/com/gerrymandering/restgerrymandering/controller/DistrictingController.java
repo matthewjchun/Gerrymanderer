@@ -1,6 +1,7 @@
 package com.gerrymandering.restgerrymandering.controller;
 
-import com.gerrymandering.restgerrymandering.algorithm.Algorithm;
+import com.gerrymandering.restgerrymandering.algorithm.AlgorithmService;
+import com.gerrymandering.restgerrymandering.algorithm.AlgorithmSettings;
 import com.gerrymandering.restgerrymandering.algorithm.AlgorithmSummary;
 import com.gerrymandering.restgerrymandering.constants.Constants;
 import com.gerrymandering.restgerrymandering.model.*;
@@ -10,27 +11,17 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.geotools.geojson.feature.FeatureJSON;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.opengis.feature.simple.SimpleFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
 
 //@CrossOrigin("http://localhost:3000")
 @RestController
@@ -41,13 +32,15 @@ public class DistrictingController {
     private DistrictingService dgs;
     private DistrictService ds;
     private PrecinctService ps;
+    private AlgorithmService algorithmService;
 
     @Autowired
-    public DistrictingController(StateService ss, DistrictingService dgs, DistrictService ds, PrecinctService ps) {
+    public DistrictingController(StateService ss, DistrictingService dgs, DistrictService ds, PrecinctService ps, AlgorithmService algorithmService) {
         this.ss = ss;
         this.dgs = dgs;
         this.ds = ds;
         this.ps = ps;
+        this.algorithmService = algorithmService;
     }
 
     @GetMapping("/stateOutlines")
@@ -126,8 +119,8 @@ public class DistrictingController {
         Gson gson = new Gson();
         Districting selectedDistricting = currentState.getSeaWulfDistricting(districtingId);
 
-        Algorithm algorithm = (Algorithm) session.getAttribute("algorithm");
-        if (algorithm == null) {
+        AlgorithmSettings algorithmSettings = (AlgorithmSettings) session.getAttribute("algorithmSettings");
+        if (algorithmSettings == null) {
             AlgorithmSummary algoSummary = new AlgorithmSummary(0,
                     Constants.getMaxIterations() * Constants.getEstimatedTimePerIteration(), true,
                     currentState.getName(), selectedDistricting.getPopulationEqualityTotal(),
@@ -135,46 +128,30 @@ public class DistrictingController {
                     selectedDistricting.getAvgPolsbyPopper(), selectedDistricting.getMajorityMinorityCountTotal(),
                     selectedDistricting.getMajorityMinorityCountVAP(),
                     selectedDistricting.getMajorityMinorityCountCVAP(), new ArrayList<>(), null);
-            algorithm = new Algorithm(algoSummary, populationType, selectedDistricting, 0, popEqualityThresh,
-                    majorityMinorityThresh, false, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            algorithmSettings = new AlgorithmSettings(algoSummary, populationType, selectedDistricting, 0, popEqualityThresh,
+                    majorityMinorityThresh, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         } else {
-            AlgorithmSummary algoSummary = algorithm.getAlgoSummary();
+            AlgorithmSummary algoSummary = algorithmSettings.getAlgoSummary();
             algoSummary.setRunning(true);
-            algorithm.setTerminationFlag(false);
-            algorithm.setThresholds(popEqualityThresh, majorityMinorityThresh);
+            algorithmSettings.setThresholds(popEqualityThresh, majorityMinorityThresh);
         }
-        boolean validThresh = Algorithm.validThresholds(popEqualityThresh, majorityMinorityThresh);
+        boolean validThresh = AlgorithmSettings.validThresholds(popEqualityThresh, majorityMinorityThresh);
         if (!validThresh)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        algorithm.start(popEqualityThresh, majorityMinorityThresh);
-        session.setAttribute("algorithm", algorithm);
-        JsonObject algoSummaryJson = JsonParser.parseString(gson.toJson(algorithm.getAlgoSummary())).getAsJsonObject();
+        session.setAttribute("algorithmSettings", algorithmSettings);
+        JsonObject algoSummaryJson = JsonParser.parseString(gson.toJson(algorithmSettings.getAlgoSummary())).getAsJsonObject();
+        algorithmService.start(algorithmSettings, popEqualityThresh, majorityMinorityThresh);
         return ResponseEntity.ok(algoSummaryJson);
     }
 
     @GetMapping("/algorithmSummary")
     public ResponseEntity<AlgorithmSummary> getAlgorithmSummary(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        Algorithm algorithm = (Algorithm) session.getAttribute("algorithm");
-        return ResponseEntity.ok(algorithm.getAlgoSummary());
+        AlgorithmSettings algorithmSettings = (AlgorithmSettings) session.getAttribute("algorithmSettings");
+        return ResponseEntity.ok(algorithmSettings.getAlgoSummary());
     }
 
     // TESTING METHODS
-    @GetMapping("/asyncTest")
-    @Async
-    public CompletableFuture<String> asyncTest() throws InterruptedException {
-        CompletableFuture<String> cf = new CompletableFuture<>();
-
-        Executors.newCachedThreadPool().submit(() -> {
-            System.out.println("running dis");
-            Thread.sleep(500);
-            cf.complete("hello");
-            return null;
-        });
-        System.out.println("im here first buddy");
-        return cf;
-    }
-
     @GetMapping("/boundaryTest")
     public ResponseEntity<JsonObject> boundary() {
         JsonObject featureCollection = new JsonObject();
