@@ -1,5 +1,7 @@
 package com.gerrymandering.restgerrymandering.algorithm;
 
+import com.gerrymandering.restgerrymandering.constants.Constants;
+import com.gerrymandering.restgerrymandering.model.District;
 import com.gerrymandering.restgerrymandering.model.Districting;
 import com.gerrymandering.restgerrymandering.model.Precinct;
 import com.google.gson.JsonObject;
@@ -36,11 +38,13 @@ public class AlgorithmSummary {
 
     private List<JsonObject> districtingBoundary;
 
+    private List<Integer> districtPopulations;
+
     public AlgorithmSummary(int numberIterations, int estimatedTime, boolean running, boolean paused, String stateName,
                             double populationEqualityTotal, double populationEqualityVAP, double populationEqualityCVAP,
                             double avgPolsbyPopper, int majorityMinorityCountTotal, int majorityMinorityCountVAP,
                             int majorityMinorityCountCVAP, List<Precinct> splitPrecincts,
-                            List<JsonObject> districtingBoundary) {
+                            List<JsonObject> districtingBoundary, List<Integer> districtPopulations) {
         this.numberIterations = numberIterations;
         this.estimatedTime = estimatedTime;
         this.running = running;
@@ -55,6 +59,7 @@ public class AlgorithmSummary {
         this.majorityMinorityCountCVAP = majorityMinorityCountCVAP;
         this.splitPrecincts = splitPrecincts;
         this.districtingBoundary = districtingBoundary;
+        this.districtPopulations = districtPopulations;
     }
 
     public void updateMeasures(Districting districting) {
@@ -65,6 +70,12 @@ public class AlgorithmSummary {
         setMajorityMinorityCountTotal(districting.getMajorityMinorityCountTotal());
         setMajorityMinorityCountVAP(districting.getMajorityMinorityCountVAP());
         setMajorityMinorityCountCVAP(districting.getMajorityMinorityCountCVAP());
+    }
+
+    public void updateDistrictPopulations(Districting districting, Constants.PopulationType populationType) {
+        for (District district: districting.getDistricts()) {
+            districtPopulations.add(district.getPopulationByType(populationType).getTotal());
+        }
     }
 
     // GETTERS AND SETTERS
@@ -178,5 +189,13 @@ public class AlgorithmSummary {
 
     public void setDistrictingBoundary(List<JsonObject> districtingBoundary) {
         this.districtingBoundary = districtingBoundary;
+    }
+
+    public List<Integer> getDistrictPopulations() {
+        return districtPopulations;
+    }
+
+    public void setDistrictPopulations(List<Integer> districtPopulations) {
+        this.districtPopulations = districtPopulations;
     }
 }

@@ -86,17 +86,35 @@ public class Districting implements Cloneable {
         return districting;
     }
 
-    // May not need this
-    public void sortDistricts(Constants.PopulationType type) {
+    public static void sortDistricts(List<District> districts, Constants.PopulationType type) {
         districts.sort(new DistrictComparator(type));
     }
 
     public boolean moveCBFromLargestToSmallestDistrict(Districting selectedDistricting, Constants.PopulationType type,
                                                        List<District> removed, List<District> added,
                                                        List<CensusBlock> moved) {
-        District sourceDistrict = selectedDistricting.getLargestDistrict(type);
-        CensusBlock selectedCB = sourceDistrict.selectBorderCB();
-        List<CensusBlock> neighborList = selectedCB.getNeighborCBInDiffDistrict();
+        List<District> candidateSourceDistricts = new ArrayList<>(districts);
+        Districting.sortDistricts(candidateSourceDistricts, type);
+        System.out.println("Largest District: " + candidateSourceDistricts.get(0).getPopulations().get(0).getTotal());
+        District sourceDistrict = null;
+        CensusBlock selectedCB = null;
+        List<CensusBlock> neighborList = new ArrayList<>();
+        for (District district: candidateSourceDistricts) {
+            selectedCB = district.selectBorderCB();
+            if (selectedCB != null) {
+                neighborList = selectedCB.getNeighborCBInDiffDistrict();
+                if (neighborList.size() > 0) {
+                    sourceDistrict = district;
+                    break;
+                }
+            }
+            selectedCB = null;
+            neighborList = new ArrayList<>();
+        }
+        if (selectedCB == null || neighborList.size() == 0) {
+            System.out.println("Could not find movable census block.");
+            return false;
+        }
         District destDistrict = selectedDistricting.getSmallestDistrictInNeighbors(neighborList, type);
         return sourceDistrict.moveCB(selectedCB, destDistrict, removed, added, moved);
     }

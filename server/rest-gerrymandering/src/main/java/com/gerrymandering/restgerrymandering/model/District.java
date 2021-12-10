@@ -104,9 +104,16 @@ public class District implements Cloneable {
             if (cb.isBorder())
                 borderCensusBlocks.add(cb);
         }
-        int size = borderCensusBlocks.size();
-        int index = (int) ((Math.random() * (size)));
-        return borderCensusBlocks.get(index);
+        int size;
+        int index;
+        CensusBlock selectedCB;
+        do {
+            size = borderCensusBlocks.size();
+            index = (int) ((Math.random() * (size)));
+            selectedCB = borderCensusBlocks.remove(index);
+        }
+        while(selectedCB.getNeighbors().size() == 0);
+        return selectedCB;
     }
 
     public boolean moveCB(CensusBlock selectedCB, District destDistrict, List<District> removed, List<District> added,
