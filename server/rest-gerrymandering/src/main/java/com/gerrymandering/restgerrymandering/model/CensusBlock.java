@@ -70,7 +70,7 @@ public class CensusBlock implements Cloneable{
         // check through list of neighbors, check if diff district
         District original = this.getDistrict();
         List<CensusBlock> neighborCBInDiffDistrict = new ArrayList<>();
-        for (CensusBlock neighbor : neighbors){
+        for (CensusBlock neighbor: neighbors){
             District neighborDistrict = neighbor.getDistrict();
             if (original.getId() != neighborDistrict.getId()){
                 neighborCBInDiffDistrict.add(neighbor);

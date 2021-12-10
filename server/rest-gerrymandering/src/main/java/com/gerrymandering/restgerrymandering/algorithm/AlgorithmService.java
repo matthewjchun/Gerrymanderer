@@ -25,6 +25,7 @@ public class AlgorithmService {
         while (algoSummary.getNumberIterations() < Constants.getMaxIterations() &&
                 failedAttempts < Constants.getMaxFailedAttempts() && algoSummary.isRunning()) {
             System.out.println("Iteration #" + algoSummary.getNumberIterations());
+            currentDistricting = settings.getCurrentDistricting();
             Districting selectedDistricting = (Districting) currentDistricting.clone();
             boolean failure = false;
             boolean moveSuccess = selectedDistricting.moveCBFromLargestToSmallestDistrict(selectedDistricting, populationType, removed, added, moved);
@@ -32,7 +33,9 @@ public class AlgorithmService {
                 failure = true;
             } else {
                 System.out.println("Move success");
+                System.out.println(selectedDistricting.getPopulationEqualityTotal());
                 selectedDistricting.calculatePopulationEquality();
+                System.out.println(selectedDistricting.getPopulationEqualityTotal());
                 if (!selectedDistricting.isImproved(currentDistricting, populationType)) {
                     failure = true;
                 } else {
@@ -44,16 +47,20 @@ public class AlgorithmService {
                         System.out.println("Valid");
                         settings.setFailedAttempts(0);
                         settings.setCurrentDistricting(selectedDistricting);
-                        algoSummary.updateMeasures(currentDistricting);
-                        System.out.println("Population Equality: " + selectedDistricting.getPopulationEqualityTotal());
+                        algoSummary.updateMeasures(selectedDistricting);
+                        algoSummary.updateDistrictPopulations(selectedDistricting, populationType);
+                        //System.out.println("Population Equality: " + algoSummary.getPopulationEqualityTotal());
                     }
                 }
             }
             if (failure) {
                 settings.setFailedAttempts(failedAttempts + 1);
-                removed.remove(removed.size()-1);
-                added.remove(added.size()-1);
-                moved.remove(moved.size()-1);
+                if (removed.size() > 0)
+                    removed.remove(removed.size()-1);
+                if (added.size() > 0)
+                    added.remove(added.size()-1);
+                if (moved.size() > 0)
+                    moved.remove(moved.size()-1);
             }
             algoSummary.setNumberIterations(algoSummary.getNumberIterations() + 1);
             algoSummary.setEstimatedTime((Constants.getMaxIterations() - algoSummary.getNumberIterations()) * Constants.getEstimatedTimePerIteration());
