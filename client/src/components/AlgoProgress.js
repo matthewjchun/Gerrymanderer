@@ -21,7 +21,7 @@ export default function AlgoProgress(props) {
     const { isOpen, onClose, activeState } = props;
     const [ algorithm, setAlgorithm ] = useContext(AlgorithmContext);
     const [ running, setRunning ] = useState(true);
-    const [ interval, setInterval ] = useState();
+    // const [ interval ] = useState();
 
 
     const handleAlgorithmRun = async () => {
@@ -36,16 +36,12 @@ export default function AlgoProgress(props) {
     }
 
     useEffect(() => {
+      let interval = setInterval(() => {
+        handleAlgorithmRun();
+      }, 5000);
+
       if(running == false){
-        console.log("i here")
-        setInterval(clearInterval(interval));
-        return;
-      }
-      if(interval == null){
-        console.log("i made anotha one for some reason");
-        const interval = setInterval(() => {
-          handleAlgorithmRun();
-        }, 5000); 
+        return () => clearInterval(interval);
       }
     }, [running]);
     
@@ -73,7 +69,7 @@ export default function AlgoProgress(props) {
 
     const handleTerminate = async () => {
       setRunning(false);
-      clearInterval(interval)
+      // clearInterval(interval)
       const response = await fetch(
         `/stop`
       );
@@ -81,7 +77,6 @@ export default function AlgoProgress(props) {
       console.log("terminated");
       console.log(terminate);
       setAlgorithm(terminate);
-      onClose();
     }
 
     return(
