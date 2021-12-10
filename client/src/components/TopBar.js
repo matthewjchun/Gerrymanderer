@@ -6,6 +6,7 @@ import { HStack, Box, Text, Button, Select } from '@chakra-ui/react';
 import LeftPane from './LeftPane';
 import AlgoProgress from './AlgoProgress';
 import BoxAndWhisker from './BoxAndWhisker';
+import Reset from './Reset';
 
 export default function TopBar(props) {
   const { isOpen: isDrawerOpen , onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure()
@@ -18,10 +19,12 @@ export default function TopBar(props) {
     <HStack w='100%' p='5' align='center' justify='center'>
       {activeState != 'Celtics' ? (
         <Box flex='1' mr='auto'>
-          <Button onClick={onDrawerOpen}>
+          <Button onClick={onDrawerOpen} mr='5px'>
             <Text>User Settings</Text>
           </Button>
-
+          {/* <Button onClick={onResetOpen}>
+            <Text>Reset</Text>
+          </Button> */}
           <LeftPane isOpen={isDrawerOpen} onClose={onDrawerClose} onOpen={onDrawerOpen} onModalOpen={onModalOpen} 
             onBoxOpen={onBoxOpen}></LeftPane>
           <AlgoProgress isOpen={isModalOpen} onClose={onModalClose} onModalOpen={onModalOpen} activeState={activeState}> </AlgoProgress>

@@ -17,7 +17,6 @@ export default function Redistricting(props) {
 
   const handleMouseEnter = (e) => {
     e.target.style.boxShadow = '0px 5px 8px #888888';
-    console.log("ji")
   };
 
   const handleMouseLeave = (e) => {
@@ -28,7 +27,7 @@ export default function Redistricting(props) {
     <Popover isLazy trigger='hover'>
       <PopoverTrigger>
         <Box
-          maxW='md'
+          maxW='sm'
           w='100%'
           p='3'
           borderWidth='1px'
@@ -39,20 +38,17 @@ export default function Redistricting(props) {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          {/* <Image maxW='100%' src={thumbnail} /> */}
-          <Box
-            mt='1'
-            fontWeight='semibold'
-            as='h4'
-            lineHeight='tight'
+          <Text 
+            fontSize='2xl'
+            fontWeight='semibold' 
+            lineHeight='tight' mt='1' 
             isTruncated
-          >
-            <Text fontSize='2xl'>District {number}</Text>
-          </Box>
-          <Text maxW='100%' h='50px'> {bestMeasure} </Text>
-          {/* <Box maxW='100%' h='50px' overflow='hidden'>
-            <Text maxW='100%'>{bestMeasure}</Text>
-          </Box> */}
+          > District {number}</Text>
+          <VStack align='left'>
+            <Text>Population Equality: {popEquality}</Text>
+            <Text>Compactness: {compactness}</Text>
+            <Text>Majority-Minority: {majorityMinority}</Text>
+          </VStack>        
         </Box>
       </PopoverTrigger>
       <PopoverContent>

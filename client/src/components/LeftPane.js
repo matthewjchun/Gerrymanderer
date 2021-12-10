@@ -36,6 +36,7 @@ import {
 } from '@chakra-ui/react';
 import { Checkbox, CheckboxGroup } from "@chakra-ui/react"
 import { QuestionIcon } from '@chakra-ui/icons';
+import { useDisclosure } from '@chakra-ui/hooks';
 
 import themes from '../themes';
 import Redistricting from './Redistricting';
@@ -43,7 +44,7 @@ import az from '../img/az.jpg';
 import mi from '../img/mi.jpg';
 import va from '../img/va.jpg';
 import { BoxZoomHandler } from 'mapbox-gl';
-import AlgoProgress from './AlgoProgress';
+import Reset from './Reset';
 
 // maps property names to display names
 const measureMap = {
@@ -760,6 +761,7 @@ export default function LeftPane(props) {
   const [popEquality, setPopEquality] = useState(0);
   const [compactness, setCompactness] = useState(0);
   const [majorityMinority, setMajorityMinority] = useState(0);
+  const { isOpen: isResetOpen, onOpen: onResetOpen, onClose: onResetClose } = useDisclosure()
 
   const [activeState, setActiveState] = useContext(StateContext);
   const [geoJSON, setGeoJSON] = useContext(GeoJSONContext);
@@ -769,8 +771,8 @@ export default function LeftPane(props) {
   const handleMajorityMinorityInput = (val) => setMajorityMinority(val);
 
   const handleRedistrictingClick = (e) => {
-    // console.log(e.target.number);
-    console.log("hi");
+    console.log(e.target.number);
+
   };
 
   const handleAlgorithmStart = async () => {
@@ -800,6 +802,7 @@ export default function LeftPane(props) {
 
   return (
     <>
+      <Reset isOpen={isResetOpen} onClose={onResetClose} onOpen={onResetOpen}></Reset>
       <Drawer
         size='md'
         isOpen={isOpen}
@@ -811,7 +814,10 @@ export default function LeftPane(props) {
         <DrawerContent overflow='scroll'>
           <DrawerCloseButton />
           <DrawerHeader>
-            <Text>User Settings</Text>
+            <HStack spacing='200px'>
+              <Text>User Settings</Text>
+              <Button colorScheme='red' ml='10px' onClick={onResetOpen}>Reset</Button>
+            </HStack>  
           </DrawerHeader>
           <Tabs isFitted variant='enclosed'>
             <TabList mb='1em'>
