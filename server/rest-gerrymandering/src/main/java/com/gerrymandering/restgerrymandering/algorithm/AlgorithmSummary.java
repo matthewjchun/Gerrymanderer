@@ -3,7 +3,6 @@ package com.gerrymandering.restgerrymandering.algorithm;
 import com.gerrymandering.restgerrymandering.model.Districting;
 import com.gerrymandering.restgerrymandering.model.Precinct;
 import com.google.gson.JsonObject;
-import org.locationtech.jts.geom.Geometry;
 
 import java.util.List;
 
@@ -14,6 +13,8 @@ public class AlgorithmSummary {
     private int estimatedTime;
 
     private boolean running;
+
+    private boolean paused;
 
     private String stateName;
 
@@ -35,13 +36,15 @@ public class AlgorithmSummary {
 
     private List<JsonObject> districtingBoundary;
 
-    public AlgorithmSummary(int numberIterations, int estimatedTime, boolean running, String stateName,
+    public AlgorithmSummary(int numberIterations, int estimatedTime, boolean running, boolean paused, String stateName,
                             double populationEqualityTotal, double populationEqualityVAP, double populationEqualityCVAP,
                             double avgPolsbyPopper, int majorityMinorityCountTotal, int majorityMinorityCountVAP,
-                            int majorityMinorityCountCVAP, List<Precinct> splitPrecincts, List<JsonObject> districtingBoundary) {
+                            int majorityMinorityCountCVAP, List<Precinct> splitPrecincts,
+                            List<JsonObject> districtingBoundary) {
         this.numberIterations = numberIterations;
         this.estimatedTime = estimatedTime;
         this.running = running;
+        this.paused = paused;
         this.stateName = stateName;
         this.populationEqualityTotal = populationEqualityTotal;
         this.populationEqualityVAP = populationEqualityVAP;
@@ -87,6 +90,14 @@ public class AlgorithmSummary {
 
     public void setRunning(boolean running) {
         this.running = running;
+    }
+
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
     }
 
     public String getStateName() {
