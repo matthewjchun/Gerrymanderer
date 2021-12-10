@@ -30,6 +30,7 @@ const Map = () => {
   const [activeState, setActiveState] = useContext(StateContext);
   const [geoJSON, setGeoJSON] = useContext(GeoJSONContext);
   const { isOpen, onOpen, onClose } = useDisclosure(); // open close state drawer
+  // let refetch = false;
 
   /////////////////////// MARKER METHODS //////////////////////////////
   const createMarker = async (longitude, latitude, msg) => {
@@ -163,14 +164,14 @@ const Map = () => {
   };
 
   const addStateLines = async (map) => {
-    const stateData = await outlinesFetch();
+    const stateLineData = await outlinesFetch();
 
-    checkSrc('states', stateData['stateOutlines']);
+    checkSrc('states', stateLineData['stateOutlines']);
     addPolygon('states', 'states', '#f8f8ff');
 
-    checkSrc('arizona', stateData['az']);
-    checkSrc('michigan', stateData['mi']);
-    checkSrc('virginia', stateData['va']);
+    checkSrc('arizona', stateLineData['az']);
+    checkSrc('michigan', stateLineData['mi']);
+    checkSrc('virginia', stateLineData['va']);
     // VISUALIZE STATES AS POLYGONS
     addPolygon('arizona', 'arizona', '#523e3c');
     addPolygon('michigan', 'michigan', '#523e3c');
@@ -352,15 +353,18 @@ const Map = () => {
         onClose();
         setActiveState('Celtics');
       });
-
       map.current.on('click', 'arizona', (e) => {
         setActiveState('Arizona');
       });
       map.current.on('click', 'michigan', (e) => {
-        setActiveState('Michigan');
+        if(activeState != 'Michigan'){
+          setActiveState('Michigan');
+        }
       });
       map.current.on('click', 'virginia', (e) => {
-        setActiveState('Virginia');
+        if(activeState != 'Virginia'){
+          setActiveState('Virginia');
+        }
       });
     });
   }, []);

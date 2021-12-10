@@ -37,6 +37,7 @@ import {
 import { Checkbox, CheckboxGroup } from "@chakra-ui/react"
 import { QuestionIcon } from '@chakra-ui/icons';
 import { useDisclosure } from '@chakra-ui/hooks';
+import { AlgorithmContext } from '../contexts/Algorithm';
 
 import themes from '../themes';
 import Redistricting from './Redistricting';
@@ -765,6 +766,7 @@ export default function LeftPane(props) {
 
   const [activeState, setActiveState] = useContext(StateContext);
   const [geoJSON, setGeoJSON] = useContext(GeoJSONContext);
+  const [algorithm, setAlgorithm] = useContext(AlgorithmContext);
 
   const handlePopEqualityInput = (val) => setPopEquality(val);
   const handleCompactnessInput = (val) => setCompactness(val);
@@ -776,13 +778,13 @@ export default function LeftPane(props) {
   };
 
   const handleAlgorithmStart = async () => {
-    onModalOpen();
     const response = await fetch(
-      '/algorithm?id=0&popEqThresh=0.02&polsbyPopperThresh=0.3&majorityMinorityThresh=3'
+      `/algorithm?id=0&popEqThresh=${popEquality/100}&polsbyPopperThresh=0.3&majorityMinorityThresh=${majorityMinority}`
     );
-    const body = await response.json();
-    console.log(body);
-    setGeoJSON(body);
+    const algorithm = await response.json();
+    setAlgorithm(algorithm);
+    console.log(algorithm);
+    onModalOpen();
   }
 
   const redistrictingTabTooltip =
@@ -793,11 +795,11 @@ export default function LeftPane(props) {
     'Construct a box and whisker plot where the measures of your selected districtings are overlayed on top of the 10,000 districtings measures.';
 
   const popEqualityTooltip =
-    'Set the minimum percentage threshold population equality for the improved redistricting. [0, 100]';
+    'Set the minimum percentage threshold population equality for the improved redistricting. The final value will be converted to a percentage. [0, 70]';
   const compactnessTooltip =
     'Set the minimum percentage threshold compactness for the improved redistricting. [0, 100]';
   const majorityMinorityToolTip =
-    'Set the maximum percentage threshold for the minority population per congressional district in the improved redistricting. [0, 100]';
+    'Set the maximum percentage threshold for the minority population per congressional district in the improved redistricting. [0, 8]';
 
 
   return (
@@ -1043,7 +1045,7 @@ export default function LeftPane(props) {
                       </NumberInput>
                     </HStack>
                     <VStack spacing='3' align='right'>
-                      <Button onClick={onModalOpen}>
+                      <Button onClick={handleAlgorithmStart}>
                         <Text>Generate</Text>
                       </Button>
                       <Text fontSize='sm'>Last updated: 10 seconds ago</Text>

@@ -7,6 +7,7 @@ import LeftPane from './LeftPane';
 import AlgoProgress from './AlgoProgress';
 import BoxAndWhisker from './BoxAndWhisker';
 import Reset from './Reset';
+import { AlgorithmContext } from '../contexts/Algorithm';
 
 export default function TopBar(props) {
   const { isOpen: isDrawerOpen , onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure()
@@ -14,6 +15,7 @@ export default function TopBar(props) {
   const { isOpen: isBoxOpen , onOpen: onBoxOpen, onClose: onBoxClose } = useDisclosure()
 
   const [activeState, setActiveState] = useContext(StateContext);
+  const [algorithm, setAlgorithm] = useContext(AlgorithmContext);
 
   return (
     <HStack w='100%' p='5' align='center' justify='center'>
@@ -22,12 +24,12 @@ export default function TopBar(props) {
           <Button onClick={onDrawerOpen} mr='5px'>
             <Text>User Settings</Text>
           </Button>
-          {/* <Button onClick={onResetOpen}>
-            <Text>Reset</Text>
-          </Button> */}
           <LeftPane isOpen={isDrawerOpen} onClose={onDrawerClose} onOpen={onDrawerOpen} onModalOpen={onModalOpen} 
             onBoxOpen={onBoxOpen}></LeftPane>
-          <AlgoProgress isOpen={isModalOpen} onClose={onModalClose} onModalOpen={onModalOpen} activeState={activeState}> </AlgoProgress>
+          {algorithm != null ? 
+            <AlgoProgress isOpen={isModalOpen} onClose={onModalClose} onModalOpen={onModalOpen} activeState={activeState}> </AlgoProgress>:
+            null
+          }
           <BoxAndWhisker isOpen={isBoxOpen} onClose={onBoxClose} onOpen={onBoxOpen} activeState={activeState}></BoxAndWhisker>
         </Box>
       ) : (
