@@ -20,19 +20,9 @@ import { AlgorithmContext } from "../contexts/Algorithm";
 export default function AlgoProgress(props) {
     const { isOpen, onClose, activeState } = props;
     const [ algorithm, setAlgorithm ] = useContext(AlgorithmContext);
+    const [ running, setRunning ] = useState(true);
+    const [ interval, setInterval ] = useState();
 
-    // const { runningFlag, setRunningFlag } = useState();
-    // let runningFlag = true;
-    // useEffect(() => {
-    //     setRunningFlag(runningFlag)
-    // }, [runningFlag])
-
-    // const handlePause = async () => {
-    //     setRunningFlag(!runningFlag);
-    //     console.log(runningFlag)
-    // }
-
-    let isRunning = algorithm["running"];
 
     const handleAlgorithmRun = async () => {
       const response = await fetch(
@@ -42,19 +32,58 @@ export default function AlgoProgress(props) {
       setAlgorithm(algorithm);
       console.log("fetched again")
       console.log(algorithm);
+      
     }
 
-
     useEffect(() => {
-      const interval = setInterval(() => {
-        handleAlgorithmRun();
-      }, 15000);
-      
-      if(isRunning == false){
-        return () => clearInterval(interval);
+      if(running == false){
+        console.log("i here")
+        setInterval(clearInterval(interval));
+        return;
       }
-    });
+      if(interval == null){
+        console.log("i made anotha one for some reason");
+        const interval = setInterval(() => {
+          handleAlgorithmRun();
+        }, 5000); 
+      }
+    }, [running]);
     
+    const handlePause = async () => {
+      setRunning(false);
+      const response = await fetch(
+        `/pause`
+      );
+      const pause = await response.json();
+      console.log("paused");
+      console.log(pause);
+      setAlgorithm(pause);
+    }
+
+    const handleResume = async () => {
+      setRunning(true);
+      const response = await fetch(
+        `/resume`
+      );
+      const resume = await response.json();
+      console.log("resumed");
+      console.log(resume);
+      setAlgorithm(resume);
+    }
+
+    const handleTerminate = async () => {
+      setRunning(false);
+      clearInterval(interval)
+      const response = await fetch(
+        `/stop`
+      );
+      const terminate = await response.json();
+      console.log("terminated");
+      console.log(terminate);
+      setAlgorithm(terminate);
+      onClose();
+    }
+
     return(
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -80,11 +109,11 @@ export default function AlgoProgress(props) {
 
           <ModalFooter>
             {
-            isRunning == true ? <Button colorScheme="blue" mr={3} /*onClick={handlePause}*/>Pause</Button>:
-            isRunning == false ?<Button colorScheme="blue" mr={3} /*onClick={handlePause}*/>Run</Button>:
+            running == true ? <Button colorScheme="blue" mr={3} onClick={handlePause}>Pause</Button>:
+            running == false ? <Button colorScheme="blue" mr={3} onClick={handleResume}>Run</Button>:
             null
             }
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            <Button colorScheme="blue" mr={3} onClick={handleTerminate}>
               Stop Algorithm
             </Button>
           </ModalFooter>

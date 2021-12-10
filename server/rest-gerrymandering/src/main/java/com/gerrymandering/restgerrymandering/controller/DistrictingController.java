@@ -162,6 +162,16 @@ public class DistrictingController {
         return ResponseEntity.ok(algoSummary);
     }
 
+    @GetMapping("/resume")
+    public ResponseEntity<AlgorithmSummary> resume(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        AlgorithmSettings algorithmSettings = (AlgorithmSettings) session.getAttribute("algorithmSettings");
+        AlgorithmSummary algoSummary = algorithmSettings.getAlgoSummary();
+        algoSummary.setRunning(true);
+        algoSummary.setPaused(false);
+        return ResponseEntity.ok(algoSummary);
+    }
+
     @GetMapping("/stop")
     public ResponseEntity<AlgorithmSummary> stop(HttpServletRequest request) {
         HttpSession session = request.getSession();

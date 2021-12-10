@@ -1,5 +1,7 @@
 package com.gerrymandering.restgerrymandering.algorithm;
 
+import com.gerrymandering.restgerrymandering.constants.Constants;
+import com.gerrymandering.restgerrymandering.model.District;
 import com.gerrymandering.restgerrymandering.model.Districting;
 import com.gerrymandering.restgerrymandering.model.Precinct;
 import com.google.gson.JsonObject;
@@ -36,6 +38,8 @@ public class AlgorithmSummary {
 
     private List<JsonObject> districtingBoundary;
 
+    private List<Integer> districtPopulations;
+
     public AlgorithmSummary(int numberIterations, int estimatedTime, boolean running, boolean paused, String stateName,
                             double populationEqualityTotal, double populationEqualityVAP, double populationEqualityCVAP,
                             double avgPolsbyPopper, int majorityMinorityCountTotal, int majorityMinorityCountVAP,
@@ -65,6 +69,12 @@ public class AlgorithmSummary {
         setMajorityMinorityCountTotal(districting.getMajorityMinorityCountTotal());
         setMajorityMinorityCountVAP(districting.getMajorityMinorityCountVAP());
         setMajorityMinorityCountCVAP(districting.getMajorityMinorityCountCVAP());
+    }
+
+    public void updateDistrictPopulations(Districting districting, Constants.PopulationType populationType) {
+        for (District district: districting.getDistricts()) {
+            districtPopulations.add(district.getPopulationByType(populationType).getTotal());
+        }
     }
 
     // GETTERS AND SETTERS
