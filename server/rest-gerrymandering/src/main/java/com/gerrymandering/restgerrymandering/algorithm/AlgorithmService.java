@@ -33,9 +33,7 @@ public class AlgorithmService {
                 failure = true;
             } else {
                 System.out.println("Move success");
-                System.out.println(selectedDistricting.getPopulationEqualityTotal());
                 selectedDistricting.calculatePopulationEquality();
-                System.out.println(selectedDistricting.getPopulationEqualityTotal());
                 if (!selectedDistricting.isImproved(currentDistricting, populationType)) {
                     failure = true;
                 } else {
@@ -49,7 +47,7 @@ public class AlgorithmService {
                         settings.setCurrentDistricting(selectedDistricting);
                         algoSummary.updateMeasures(selectedDistricting);
                         algoSummary.updateDistrictPopulations(selectedDistricting, populationType);
-                        //System.out.println("Population Equality: " + algoSummary.getPopulationEqualityTotal());
+                        System.out.println("Population Equality: " + selectedDistricting.getPopulationEqualityTotal());
                     }
                 }
             }

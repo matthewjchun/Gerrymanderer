@@ -214,43 +214,25 @@ public class Districting implements Cloneable {
 
     public void calculateMajorityMinorityCount() {
         for (Constants.PopulationType type : Constants.PopulationType.values()) {
-            int majorityMinorityCount = 0;
+            int majorityMinorityCountTotal = 0, majorityMinorityCountVAP = 0, majorityMinorityCountCVAP = 0;
             for (District district : districts) {
-                Population population = district.getPopulationByType(type);
-                boolean majorityMinority = (double) population.getAfrican() / population.getTotal() > Constants
-                        .getMinThresholdMajorityMinority()
-                        || (double) population.getAsian() / population.getTotal() > Constants
-                                .getMinThresholdMajorityMinority()
-                        || (double) population.getHispanic() / population.getTotal() > Constants
-                                .getMinThresholdMajorityMinority()
-                        || (double) population.getNativeAmerican() / population.getTotal() > Constants
-                                .getMinThresholdMajorityMinority()
-                        || (double) population.getPacificIslander() / population.getTotal() > Constants
-                                .getMinThresholdMajorityMinority();
-                if (majorityMinority) {
-                    majorityMinorityCount++;
-                    switch (type) {
+                switch (type) {
                     case TOTAL:
-                        district.setMajorityMinorityTotal(true);
+                        if (district.isMajorityMinorityTotal())
+                            majorityMinorityCountTotal++;
                     case VAP:
-                        district.setMajorityMinorityVAP(true);
+                        if (district.isMajorityMinorityVAP())
+                            majorityMinorityCountVAP++;
                     case CVAP:
-                        district.setMajorityMinorityCVAP(true);
+                        if (district.isMajorityMinorityCVAP())
+                            majorityMinorityCountCVAP++;
                     default:
                         break;
-                    }
                 }
             }
-            switch (type) {
-            case TOTAL:
-                setMajorityMinorityCountTotal(majorityMinorityCount);
-            case VAP:
-                setMajorityMinorityCountVAP(majorityMinorityCount);
-            case CVAP:
-                setMajorityMinorityCountCVAP(majorityMinorityCount);
-            default:
-                break;
-            }
+            setMajorityMinorityCountTotal(majorityMinorityCountTotal);
+            setMajorityMinorityCountVAP(majorityMinorityCountVAP);
+            setMajorityMinorityCountCVAP(majorityMinorityCountCVAP);
         }
     }
 
