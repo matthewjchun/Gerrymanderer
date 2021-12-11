@@ -21,8 +21,10 @@ export default function AlgoProgress(props) {
     const { isOpen, onClose, activeState } = props;
     const [ algorithm, setAlgorithm ] = useContext(AlgorithmContext);
     const [ running, setRunning ] = useState(algorithm["running"]);
-    // const [ interval ] = useState();
-
+    const [ interval ] = useState();
+    const [ algoFinish, setAlgoFinish ] = useState(false);
+    const [ created, setCreated ] = useState(false);
+    const [ testCount, setTestCount ] = useState(0);
 
     const handleAlgorithmRun = async () => {
       const response = await fetch(
@@ -35,10 +37,19 @@ export default function AlgoProgress(props) {
     }
 
     useEffect(() => {
-      let interval = setInterval(() => {
-        handleAlgorithmRun();
-      }, 5000);
-
+      let i;
+      if(algorithm["running"] == false && algorithm["paused"] == false){
+        setAlgoFinish(true);
+      }
+      if(created == false){
+        let interval = setInterval(() => {
+          handleAlgorithmRun();
+        }, 5000);
+        setCreated(true);
+        i += 1;
+        setTestCount(i);
+        console.log(testCount);
+      }
       if(running == false){
         return () => clearInterval(interval);
       }
@@ -86,10 +97,22 @@ export default function AlgoProgress(props) {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Center>
-              <Text fontSize='2xl'>Algorithm in progress...</Text>
-            </Center>
-            <Divider />
+            {algoFinish == false ?
+            <>
+              <Center>
+                <Text fontSize='2xl'>Algorithm in progress...</Text>
+              </Center>
+              <Divider />
+            </>:
+            algoFinish == true ?
+            <>
+              <Center>
+                <Text fontSize='2xl'>Algorithm Completed</Text>
+              </Center>
+              <Divider />
+            </>:
+            null
+            }
             <Text align="left">Pop. Equality: {algorithm["populationEqualityTotal"]}</Text>
             <Text align="left">Polsby Popper: {algorithm["avgPolsbyPopper"]}</Text>
             <Text align="left">Majority Minority: {algorithm["majorityMinorityCountTotal"]}</Text>
