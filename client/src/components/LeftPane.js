@@ -775,7 +775,6 @@ export default function LeftPane(props) {
 
   const handleRedistrictingClick = (e) => {
     console.log(e.target.number);
-
   };
 
   const handleAlgorithmStart = async () => {

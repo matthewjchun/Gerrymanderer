@@ -21,7 +21,10 @@ import { StateContext } from "../contexts/State";
       const { isOpen, onClose } = props;  
       const [ activeState, setActiveState ] = useContext(StateContext)
 
-      const handleReset = () => {
+      const handleReset = async () => {
+        const response = await fetch(
+          `/reset`
+        );
         onClose();
         setActiveState('Celtics');
       }

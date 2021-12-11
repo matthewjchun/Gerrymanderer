@@ -20,7 +20,7 @@ import { AlgorithmContext } from "../contexts/Algorithm";
 export default function AlgoProgress(props) {
     const { isOpen, onClose, activeState } = props;
     const [ algorithm, setAlgorithm ] = useContext(AlgorithmContext);
-    const [ running, setRunning ] = useState(true);
+    const [ running, setRunning ] = useState(algorithm["running"]);
     // const [ interval ] = useState();
 
 
@@ -32,7 +32,6 @@ export default function AlgoProgress(props) {
       setAlgorithm(algorithm);
       console.log("fetched again")
       console.log(algorithm);
-      
     }
 
     useEffect(() => {
@@ -69,7 +68,6 @@ export default function AlgoProgress(props) {
 
     const handleTerminate = async () => {
       setRunning(false);
-      // clearInterval(interval)
       const response = await fetch(
         `/stop`
       );
