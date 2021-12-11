@@ -106,8 +106,7 @@ public class DistrictingController {
 
     @GetMapping("/algorithm")
     public ResponseEntity<JsonObject> startAlgorithm(@RequestParam(name = "id") long districtingId,
-            @RequestParam(name = "popEqThresh") double popEqualityThresh, @RequestParam double polsbyPopperThresh,
-            @RequestParam int majorityMinorityThresh, HttpServletRequest request) {
+            @RequestParam(name = "popEqThresh") double popEqualityThresh, @RequestParam int majorityMinorityThresh, HttpServletRequest request) {
         HttpSession session = request.getSession();
         String currentStateName = (String) session.getAttribute("currentStateName");
         State currentState = ss.getStateByName(currentStateName);
@@ -127,7 +126,7 @@ public class DistrictingController {
                     selectedDistricting.getPopulationEqualityVAP(), selectedDistricting.getPopulationEqualityCVAP(),
                     selectedDistricting.getAvgPolsbyPopper(), selectedDistricting.getMajorityMinorityCountTotal(),
                     selectedDistricting.getMajorityMinorityCountVAP(),
-                    selectedDistricting.getMajorityMinorityCountCVAP(), new ArrayList<>(), null);
+                    selectedDistricting.getMajorityMinorityCountCVAP(), new ArrayList<>(), null, new ArrayList<>());
             algorithmSettings = new AlgorithmSettings(algoSummary, populationType, selectedDistricting, 0, popEqualityThresh,
                     majorityMinorityThresh, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         } else {
@@ -180,6 +179,17 @@ public class DistrictingController {
         algoSummary.setRunning(false);
         algoSummary.setPaused(false);
         return ResponseEntity.ok(algoSummary);
+    }
+
+    @GetMapping("/reset")
+    public ResponseEntity<JsonObject> reset(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.setAttribute("currentStateName", null);
+        session.setAttribute("populationType", Constants.PopulationType.TOTAL);
+        session.setAttribute("algorithmSettings", null);
+        JsonObject success = new JsonObject();
+        success.addProperty("success", true);
+        return ResponseEntity.ok(success);
     }
 
     // TESTING METHODS

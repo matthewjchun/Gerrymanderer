@@ -104,9 +104,16 @@ public class District implements Cloneable {
             if (cb.isBorder())
                 borderCensusBlocks.add(cb);
         }
-        int size = borderCensusBlocks.size();
-        int index = (int) ((Math.random() * (size)));
-        return borderCensusBlocks.get(index);
+        int size;
+        int index;
+        CensusBlock selectedCB;
+        do {
+            size = borderCensusBlocks.size();
+            index = (int) ((Math.random() * (size)));
+            selectedCB = borderCensusBlocks.remove(index);
+        }
+        while(selectedCB.getNeighbors().size() == 0);
+        return selectedCB;
     }
 
     public boolean moveCB(CensusBlock selectedCB, District destDistrict, List<District> removed, List<District> added,
@@ -186,21 +193,33 @@ public class District implements Cloneable {
     }*/
 
     public void calculateMajorityMinorty() {
-        // STUB
+        for (int i = 0; i < populations.size(); i++) {
+            Population population = populations.get(i);
+            boolean majorityMinority = (double) population.getAfrican() / population.getTotal() > Constants
+                    .getMinThresholdMajorityMinority()
+                    || (double) population.getAsian() / population.getTotal() > Constants
+                    .getMinThresholdMajorityMinority()
+                    || (double) population.getHispanic() / population.getTotal() > Constants
+                    .getMinThresholdMajorityMinority()
+                    || (double) population.getNativeAmerican() / population.getTotal() > Constants
+                    .getMinThresholdMajorityMinority()
+                    || (double) population.getPacificIslander() / population.getTotal() > Constants
+                    .getMinThresholdMajorityMinority();
+            switch (population.getPopulationType()) {
+                case TOTAL:
+                    setMajorityMinorityTotal(majorityMinority);
+                case VAP:
+                    setMajorityMinorityVAP(majorityMinority);
+                case CVAP:
+                    setMajorityMinorityCVAP(majorityMinority);
+            }
+        }
+
     }
 
     public int countSplitPrecincts() {
         // STUB
         return 0;
-    }
-
-    public int calculatePopulationDifference(District smallestDistrict, Constants.PopulationType type) {
-        // will be called on the largest district in a districting
-        Population smallestDistrictPop = smallestDistrict.getPopulationByType(type);
-        Population largestDistrictPop = getPopulationByType(type);
-        int smallestPopValue = smallestDistrictPop.getTotal();
-        int largestPopValue = largestDistrictPop.getTotal();
-        return Math.abs(smallestPopValue - largestPopValue);
     }
 
     // GETTERS AND SETTERS

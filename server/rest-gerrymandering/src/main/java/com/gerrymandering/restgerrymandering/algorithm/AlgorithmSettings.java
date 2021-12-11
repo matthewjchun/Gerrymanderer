@@ -14,7 +14,6 @@ public class AlgorithmSettings {
     private Districting currentDistricting;
     private int failedAttempts;
     private double popEqualityThresh;
-    //private double polsbyPopperThresh;
     private int majorityMinorityThresh;
     private List<District> removed;
     private List<District> added;
@@ -42,10 +41,6 @@ public class AlgorithmSettings {
 
     public static boolean validThresholds(double popEqualityThresh, int majorityMinorityThresh) {
         return popEqualityThresh >= 0 && popEqualityThresh <= 1 && majorityMinorityThresh >= 0;
-    }
-
-    public void pause(int time) {
-        //STUB
     }
 
     // GETTERS AND SETTERS
