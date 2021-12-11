@@ -79,6 +79,18 @@ public class CensusBlock implements Cloneable{
         return neighborCBInDiffDistrict;
     }
 
+    public List<CensusBlock> getNeighborCBInSameDistrict() {
+        District original = this.getDistrict();
+        List<CensusBlock> neighborCBInDiffDistrict = new ArrayList<>();
+        for (CensusBlock neighbor: neighbors){
+            District neighborDistrict = neighbor.getDistrict();
+            if (original.getId() == neighborDistrict.getId()){
+                neighborCBInDiffDistrict.add(neighbor);
+            }
+        }
+        return neighborCBInDiffDistrict;
+    }
+
     // GETTERS AND SETTERS
     public long getId() {
         return id;

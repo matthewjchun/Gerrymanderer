@@ -95,7 +95,6 @@ public class Districting implements Cloneable {
                                                        List<CensusBlock> moved) {
         List<District> candidateSourceDistricts = new ArrayList<>(districts);
         Districting.sortDistricts(candidateSourceDistricts, type);
-        System.out.println("Largest District: " + candidateSourceDistricts.get(0).getPopulations().get(0).getTotal());
         District sourceDistrict = null;
         CensusBlock selectedCB = null;
         List<CensusBlock> neighborList = new ArrayList<>();

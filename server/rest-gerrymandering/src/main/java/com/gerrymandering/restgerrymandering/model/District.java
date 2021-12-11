@@ -119,20 +119,25 @@ public class District implements Cloneable {
     public boolean moveCB(CensusBlock selectedCB, District destDistrict, List<District> removed, List<District> added,
                           List<CensusBlock> moved) {
         try {
+            System.out.println("INITIAL");
+            System.out.println("Source population: " + populations.get(0).getTotal());
+            System.out.println("Dest population: " + destDistrict.getPopulations().get(0).getTotal());
             moved.add(selectedCB);
             censusBlocks.remove(selectedCB);
             removed.add(this);
-            System.out.println("Source population: " + populations.get(0).getTotal());
             calculatePopulation(selectedCB, false);
             //calculateElection(selectedCB, false);
-            System.out.println("Source population: " + populations.get(0).getTotal());
+            //calculateMajorityMinority();
             destDistrict.getCensusBlocks().add(selectedCB);
             added.add(destDistrict);
-            System.out.println("Dest population: " + destDistrict.getPopulations().get(0).getTotal());
             destDistrict.calculatePopulation(selectedCB, true);
             //calculateElection(selectedCB, true);
-            System.out.println("Dest population: " + destDistrict.getPopulations().get(0).getTotal());
+            //destDistrict.calculateMajorityMinority();
             selectedCB.setDistrict(destDistrict);
+            calculateBorders(selectedCB);
+            System.out.println("FINAL");
+            System.out.println("Source population: " + populations.get(0).getTotal());
+            System.out.println("Dest population: " + destDistrict.getPopulations().get(0).getTotal());
         } catch (Exception e) {
             System.out.println("moveCB ERROR!");
             return false;
@@ -192,9 +197,8 @@ public class District implements Cloneable {
         }
     }*/
 
-    public void calculateMajorityMinorty() {
-        for (int i = 0; i < populations.size(); i++) {
-            Population population = populations.get(i);
+    public void calculateMajorityMinority() {
+        for (Population population : populations) {
             boolean majorityMinority = (double) population.getAfrican() / population.getTotal() > Constants
                     .getMinThresholdMajorityMinority()
                     || (double) population.getAsian() / population.getTotal() > Constants
@@ -214,7 +218,20 @@ public class District implements Cloneable {
                     setMajorityMinorityCVAP(majorityMinority);
             }
         }
+    }
 
+    public void calculateBorders(CensusBlock movedCB) {
+        List<CensusBlock> neighborsInSameDistrict = movedCB.getNeighborCBInSameDistrict();
+        for (CensusBlock same: neighborsInSameDistrict) {
+            boolean isBorder = false;
+            for (CensusBlock neighborsOfSame: same.getNeighbors()) {
+                if (neighborsOfSame.getDistrict() != same.getDistrict()) {
+                    isBorder = true;
+                    break;
+                }
+            }
+            same.setBorder(isBorder);
+        }
     }
 
     public int countSplitPrecincts() {
