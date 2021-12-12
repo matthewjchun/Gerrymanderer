@@ -299,27 +299,31 @@ public class Districting implements Cloneable {
         return districtBoundaries;
     }
 
-    public List<JsonObject> calculateDistrictingBoundaryTest(List<District> removed, List<District> added, List<CensusBlock> moved) {
+    public JsonObject calculateDistrictingBoundaryTest(List<District> removed, List<District> added, List<CensusBlock> moved) {
         if (removed.size() != added.size() || removed.size() != moved.size()) {
             System.out.println("Error mismatch in counts for moved census blocks and affected districts.");
             return null;
         }
         GeometryFactory gf = new GeometryFactory();
-        List<JsonObject> districtBoundaries = new ArrayList<>();
+        JsonObject districtingBoundary = new JsonObject();
+        districtingBoundary.addProperty("type", "FeatureCollection");
+        JsonArray features = new JsonArray();
         for (District district: districts) {
             int indexRemoved = removed.indexOf(district);
             if (indexRemoved == -1) {
                 int indexAdded = added.indexOf(district);
                 if (indexAdded == -1) { // if neither in removed or added, the district remains the same
+                    System.out.println("District is the same.");
                     try (FileReader reader = new FileReader(Constants.getResourcePath() + district.getPath())) {
                         JsonObject districtFeature = JsonParser.parseReader(reader).getAsJsonObject();
-                        districtBoundaries.add(districtFeature);
+                        features.add(districtFeature);
                     } catch (Exception e) {
                         System.out.println("Calculating districting boundary error reading district file.");
                     }
                     continue;
                 }
                 else { // district received a census block
+                    System.out.println("District got new cb.");
                     CensusBlock addedCb = moved.get(indexAdded);
                     JsonObject compositeDistrictFeature = new JsonObject();
                     compositeDistrictFeature.addProperty("type", "Feature");
@@ -344,10 +348,11 @@ public class Districting implements Cloneable {
                     GeoJsonWriter geoWriter = new GeoJsonWriter();
                     String boundary = geoWriter.write(dissolved.getBoundary());
                     compositeDistrictFeature.addProperty("geometry", boundary);
-                    districtBoundaries.add(compositeDistrictFeature);
+                    features.add(compositeDistrictFeature);
                 }
             }
             else { // district lost a census block
+                System.out.println("District lost a cb.");
                 CensusBlock removedCb = moved.get(indexRemoved);
                 JsonObject compositeDistrictFeature = new JsonObject();
                 compositeDistrictFeature.addProperty("type", "Feature");
@@ -376,10 +381,11 @@ public class Districting implements Cloneable {
                 GeoJsonWriter geoWriter = new GeoJsonWriter();
                 String boundary = geoWriter.write(dissolved.getBoundary());
                 compositeDistrictFeature.addProperty("geometry", boundary);
-                districtBoundaries.add(compositeDistrictFeature);
+                features.add(compositeDistrictFeature);
             }
         }
-        return districtBoundaries;
+        districtingBoundary.add("features", features);
+        return districtingBoundary;
     }
 
     public void calculateSplitPrecincts() {

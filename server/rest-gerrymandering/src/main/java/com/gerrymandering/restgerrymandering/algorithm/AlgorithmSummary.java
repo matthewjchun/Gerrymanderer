@@ -36,7 +36,7 @@ public class AlgorithmSummary {
 
     private List<Precinct> splitPrecincts;
 
-    private List<JsonObject> districtingBoundary;
+    private JsonObject districtingBoundary;
 
     private List<Integer> districtPopulations;
 
@@ -44,7 +44,7 @@ public class AlgorithmSummary {
                             double populationEqualityTotal, double populationEqualityVAP, double populationEqualityCVAP,
                             double avgPolsbyPopper, int majorityMinorityCountTotal, int majorityMinorityCountVAP,
                             int majorityMinorityCountCVAP, List<Precinct> splitPrecincts,
-                            List<JsonObject> districtingBoundary, List<Integer> districtPopulations) {
+                            JsonObject districtingBoundary, List<Integer> districtPopulations) {
         this.numberIterations = numberIterations;
         this.estimatedTime = estimatedTime;
         this.running = running;
@@ -183,11 +183,11 @@ public class AlgorithmSummary {
         this.splitPrecincts = splitPrecincts;
     }
 
-    public List<JsonObject> getDistrictingBoundary() {
+    public JsonObject getDistrictingBoundary() {
         return districtingBoundary;
     }
 
-    public void setDistrictingBoundary(List<JsonObject> districtingBoundary) {
+    public void setDistrictingBoundary(JsonObject districtingBoundary) {
         this.districtingBoundary = districtingBoundary;
     }
 

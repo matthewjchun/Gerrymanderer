@@ -112,6 +112,10 @@ public class District implements Cloneable {
             index = (int) ((Math.random() * (size)));
             if (borderCensusBlocks.size() > 0)
                 selectedCB = borderCensusBlocks.remove(index);
+            else {
+                selectedCB = null;
+                break;
+            }
         }
         while(selectedCB.getNeighbors().size() == 0);
         return selectedCB;
