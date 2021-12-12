@@ -64,6 +64,6 @@ public class AlgorithmService {
             algoSummary.setEstimatedTime((Constants.getMaxIterations() - algoSummary.getNumberIterations()) * Constants.getEstimatedTimePerIteration());
         }
         algoSummary.setRunning(false);
-        algoSummary.setDistrictingBoundary(currentDistricting.calculateDistrictingBoundary(removed, added, moved));
+        algoSummary.setDistrictingBoundary(currentDistricting.calculateDistrictingBoundaryTest(removed, added, moved));
     }
 }

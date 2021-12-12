@@ -299,7 +299,7 @@ public class Districting implements Cloneable {
         return districtBoundaries;
     }
 
-    public JsonObject calculateDistrictingBoundaryTest(List<District> removed, List<District> added, List<CensusBlock> moved) {
+    public List<JsonObject> calculateDistrictingBoundaryTest(List<District> removed, List<District> added, List<CensusBlock> moved) {
         if (removed.size() != added.size() || removed.size() != moved.size()) {
             System.out.println("Error mismatch in counts for moved census blocks and affected districts.");
             return null;
@@ -324,11 +324,11 @@ public class Districting implements Cloneable {
                     JsonObject compositeDistrictFeature = new JsonObject();
                     compositeDistrictFeature.addProperty("type", "Feature");
                     List<Geometry> geometries = new ArrayList<>();
-                    JsonObject properties = new JsonObject();
                     try (FileReader reader = new FileReader(Constants.getResourcePath() + district.getPath())) {
                         GeoJsonReader geoReader = new GeoJsonReader();
                         JsonObject districtFeature = JsonParser.parseReader(reader).getAsJsonObject();
-                        properties = districtFeature.getAsJsonObject("properties");
+                        JsonObject properties = districtFeature.getAsJsonObject("properties");
+                        compositeDistrictFeature.add("properties", properties);
                         String districtGeometryStr = districtFeature.getAsJsonObject("geometry").toString();
                         Geometry districtGeometry = geoReader.read(new StringReader(districtGeometryStr));
                         geometries.add(districtGeometry);
@@ -342,29 +342,41 @@ public class Districting implements Cloneable {
                     }
                     Geometry dissolved = LineDissolver.dissolve(gf.createGeometryCollection(geometries.toArray(new Geometry[] {})));
                     GeoJsonWriter geoWriter = new GeoJsonWriter();
-                    String dissolvedStr = geoWriter.write(dissolved);
-                    compositeDistrictFeature.addProperty("geometry", dissolvedStr);
-                    compositeDistrictFeature.add("properties", properties);
+                    String boundary = geoWriter.write(dissolved.getBoundary());
+                    compositeDistrictFeature.addProperty("geometry", boundary);
                     districtBoundaries.add(compositeDistrictFeature);
                 }
             }
             else { // district lost a census block
                 CensusBlock removedCb = moved.get(indexRemoved);
-                JsonObject districtFeatureCollection = new JsonObject();
-                districtFeatureCollection.addProperty("type", "FeatureCollection");
-                JsonArray features = new JsonArray();
+                JsonObject compositeDistrictFeature = new JsonObject();
+                compositeDistrictFeature.addProperty("type", "Feature");
+                try (FileReader reader = new FileReader(Constants.getResourcePath() + district.getPath())) {
+                    JsonObject districtFeature = JsonParser.parseReader(reader).getAsJsonObject();
+                    JsonObject properties = districtFeature.getAsJsonObject("properties");
+                    compositeDistrictFeature.add("properties", properties);
+                } catch (Exception e) {
+                    System.out.println("Calculating districting boundary error reading district file.");
+                }
+                List<Geometry> geometries = new ArrayList<>();
+                GeoJsonReader geoReader = new GeoJsonReader();
                 for (CensusBlock cb: district.getCensusBlocks()) {
                     if (cb.equals(removedCb))
                         continue;
                     try (FileReader reader = new FileReader(Constants.getResourcePath() + cb.getPath())) {
                         JsonObject cbFeature = JsonParser.parseReader(reader).getAsJsonObject();
-                        features.add(cbFeature);
+                        String cbGeometryStr = cbFeature.getAsJsonObject("geometry").toString();
+                        Geometry cbGeometry = geoReader.read(new StringReader(cbGeometryStr));
+                        geometries.add(cbGeometry);
                     } catch (Exception e) {
                         System.out.println("Calculating districting boundary error reading cb file.");
                     }
                 }
-                districtFeatureCollection.add("features", features);
-                districtBoundaries.add(districtFeatureCollection);
+                Geometry dissolved = LineDissolver.dissolve(gf.createGeometryCollection(geometries.toArray(new Geometry[] {})));
+                GeoJsonWriter geoWriter = new GeoJsonWriter();
+                String boundary = geoWriter.write(dissolved.getBoundary());
+                compositeDistrictFeature.addProperty("geometry", boundary);
+                districtBoundaries.add(compositeDistrictFeature);
             }
         }
         return districtBoundaries;
