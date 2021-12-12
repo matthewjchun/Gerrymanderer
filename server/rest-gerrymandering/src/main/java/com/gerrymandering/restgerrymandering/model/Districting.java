@@ -99,6 +99,7 @@ public class Districting implements Cloneable {
                                                        List<District> removed, List<District> added,
                                                        List<CensusBlock> moved) {
         List<District> candidateSourceDistricts = new ArrayList<>(districts);
+        System.out.println("Sort");
         Districting.sortDistricts(candidateSourceDistricts, type);
         District sourceDistrict = null;
         CensusBlock selectedCB = null;
@@ -154,6 +155,7 @@ public class Districting implements Cloneable {
     }
 
     public District getSmallestDistrictInNeighbors(List<CensusBlock> neighbors, Constants.PopulationType type) {
+        System.out.println("Finding smallest district in neighbors.");
         District smallestDistrict = neighbors.get(0).getDistrict();
         Population leastPopulation = neighbors.get(0).getDistrict().getPopulationByType(type);
         int leastPopulationValue = leastPopulation.getTotal();

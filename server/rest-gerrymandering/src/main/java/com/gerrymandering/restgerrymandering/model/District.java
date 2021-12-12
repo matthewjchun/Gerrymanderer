@@ -99,6 +99,7 @@ public class District implements Cloneable {
     }
 
     public CensusBlock selectBorderCB() {
+        System.out.println("Selecting border cb.");
         List<CensusBlock> borderCensusBlocks = new ArrayList<>();
         for (CensusBlock cb : censusBlocks) {
             if (cb.isBorder())
