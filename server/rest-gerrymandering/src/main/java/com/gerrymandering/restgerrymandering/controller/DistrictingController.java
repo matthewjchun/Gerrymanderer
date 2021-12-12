@@ -11,6 +11,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.locationtech.jts.dissolve.LineDissolver;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.io.geojson.GeoJsonReader;
+import org.locationtech.jts.io.geojson.GeoJsonWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.FileReader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -196,6 +203,26 @@ public class DistrictingController {
         }
         featureCollection.add("features", features);
         return ResponseEntity.ok(featureCollection);
+    }
+
+    @GetMapping("/jtsTest")
+    public ResponseEntity<String> jts() {
+        GeometryFactory gf = new GeometryFactory();
+        List<Geometry> geometries = new ArrayList<>();
+        try (FileReader reader = new FileReader(Constants.getResourcePath() + "censusblocks/az_censusblock_0.json")) {
+            JsonObject feature = JsonParser.parseReader(reader).getAsJsonObject();
+            String geometryStr = feature.getAsJsonObject("geometry").toString();
+            GeoJsonReader geoReader = new GeoJsonReader();
+            Geometry geometry = geoReader.read(new StringReader(geometryStr));
+            geometries.add(geometry);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Error");
+        }
+        Geometry boundary = LineDissolver.dissolve(gf.createGeometryCollection(geometries.toArray(new Geometry[] {})));
+        GeoJsonWriter geoWriter = new GeoJsonWriter();
+        String response = geoWriter.write(boundary);
+        return ResponseEntity.ok(response);
     }
 
     public void printNumNeighbors(State state) {
