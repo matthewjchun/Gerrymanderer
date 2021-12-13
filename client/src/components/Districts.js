@@ -17,7 +17,6 @@ StatHelpText,
 StatArrow,
 StatGroup,
 } from '@chakra-ui/react';
-import { PieChart } from 'react-minimal-pie-chart';
 import { useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 

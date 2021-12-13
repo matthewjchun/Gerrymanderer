@@ -40,6 +40,7 @@ import {
 import { useContext, useState, useEffect } from 'react';
 import { DataContext, StateContext } from '../contexts/State';
 import { Pie } from 'react-chartjs-2';
+import Chart from 'chart.js/auto';
 import Districts from './Districts';
 
 export default function StateDrawer(props) {
