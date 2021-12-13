@@ -16,8 +16,8 @@ public class AlgorithmService {
         Districting currentDistricting = settings.getCurrentDistricting();
         AlgorithmSummary algoSummary = settings.getAlgoSummary();
         int failedAttempts = settings.getFailedAttempts();
-        List<District> removed = settings.getRemoved();
-        List<District> added = settings.getAdded();
+        List<Long> removed = settings.getRemoved();
+        List<Long> added = settings.getAdded();
         List<CensusBlock> moved = settings.getMoved();
         Constants.PopulationType populationType = settings.getPopulationType();
 
@@ -64,6 +64,6 @@ public class AlgorithmService {
             algoSummary.setEstimatedTime((Constants.getMaxIterations() - algoSummary.getNumberIterations()) * Constants.getEstimatedTimePerIteration());
         }
         algoSummary.setRunning(false);
-        algoSummary.setDistrictingBoundary(currentDistricting.calculateDistrictingBoundary(removed, added, moved));
+        algoSummary.setDistrictingBoundary(currentDistricting.calculateDistrictingBoundaryTest(removed, added, moved));
     }
 }

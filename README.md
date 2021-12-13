@@ -6,7 +6,7 @@ Frontend:
 * React
 * Mapbox API
 * ChakraUI
-* Minimal Pie Chart
+* Chart.js
 
 Backend:
 * Java Spring Boot

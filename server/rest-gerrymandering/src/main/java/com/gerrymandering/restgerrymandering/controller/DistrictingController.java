@@ -11,6 +11,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.locationtech.jts.dissolve.LineDissolver;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.io.geojson.GeoJsonReader;
+import org.locationtech.jts.io.geojson.GeoJsonWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.FileReader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -193,8 +200,16 @@ public class DistrictingController {
     }
 
     // TESTING METHODS
+    @GetMapping("/boundary")
+    public ResponseEntity<JsonObject> boundary(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        AlgorithmSettings algorithmSettings = (AlgorithmSettings) session.getAttribute("algorithmSettings");
+        AlgorithmSummary algoSummary = algorithmSettings.getAlgoSummary();
+        return ResponseEntity.ok(algoSummary.getDistrictingBoundary());
+    }
+
     @GetMapping("/boundaryTest")
-    public ResponseEntity<JsonObject> boundary() {
+    public ResponseEntity<JsonObject> boundaryTest() {
         JsonObject featureCollection = new JsonObject();
         featureCollection.addProperty("type", "FeatureCollection");
         JsonArray features = new JsonArray();
@@ -206,6 +221,69 @@ public class DistrictingController {
         }
         featureCollection.add("features", features);
         return ResponseEntity.ok(featureCollection);
+    }
+
+    @GetMapping("/jtsTest")
+    public ResponseEntity<JsonObject> jts() {
+        GeometryFactory gf = new GeometryFactory();
+        GeoJsonReader geoReader = new GeoJsonReader();
+        List<Geometry> geometries = new ArrayList<>();
+        try (FileReader reader = new FileReader(Constants.getResourcePath() + "districts/enacted/az_district_0.json")) {
+            JsonObject feature = JsonParser.parseReader(reader).getAsJsonObject();
+            String geometryStr = feature.getAsJsonObject("geometry").toString();
+            Geometry geometry = geoReader.read(new StringReader(geometryStr));
+            geometries.add(geometry);
+            FileReader reader2 = new FileReader(Constants.getResourcePath() + "districts/enacted/az_district_1.json");
+            feature = JsonParser.parseReader(reader2).getAsJsonObject();
+            geometryStr = feature.getAsJsonObject("geometry").toString();
+            geometry = geoReader.read(new StringReader(geometryStr));
+            geometries.add(geometry);
+            reader2 = new FileReader(Constants.getResourcePath() + "districts/enacted/az_district_2.json");
+            feature = JsonParser.parseReader(reader2).getAsJsonObject();
+            geometryStr = feature.getAsJsonObject("geometry").toString();
+            geometry = geoReader.read(new StringReader(geometryStr));
+            geometries.add(geometry);
+            reader2 = new FileReader(Constants.getResourcePath() + "districts/enacted/az_district_3.json");
+            feature = JsonParser.parseReader(reader2).getAsJsonObject();
+            geometryStr = feature.getAsJsonObject("geometry").toString();
+            geometry = geoReader.read(new StringReader(geometryStr));
+            geometries.add(geometry);
+            reader2 = new FileReader(Constants.getResourcePath() + "districts/enacted/az_district_4.json");
+            feature = JsonParser.parseReader(reader2).getAsJsonObject();
+            geometryStr = feature.getAsJsonObject("geometry").toString();
+            geometry = geoReader.read(new StringReader(geometryStr));
+            geometries.add(geometry);
+            reader2 = new FileReader(Constants.getResourcePath() + "districts/enacted/az_district_5.json");
+            feature = JsonParser.parseReader(reader2).getAsJsonObject();
+            geometryStr = feature.getAsJsonObject("geometry").toString();
+            geometry = geoReader.read(new StringReader(geometryStr));
+            geometries.add(geometry);
+            reader2 = new FileReader(Constants.getResourcePath() + "districts/enacted/az_district_6.json");
+            feature = JsonParser.parseReader(reader2).getAsJsonObject();
+            geometryStr = feature.getAsJsonObject("geometry").toString();
+            geometry = geoReader.read(new StringReader(geometryStr));
+            geometries.add(geometry);
+            reader2 = new FileReader(Constants.getResourcePath() + "districts/enacted/az_district_7.json");
+            feature = JsonParser.parseReader(reader2).getAsJsonObject();
+            geometryStr = feature.getAsJsonObject("geometry").toString();
+            geometry = geoReader.read(new StringReader(geometryStr));
+            geometries.add(geometry);
+            reader2 = new FileReader(Constants.getResourcePath() + "districts/enacted/az_district_8.json");
+            feature = JsonParser.parseReader(reader2).getAsJsonObject();
+            geometryStr = feature.getAsJsonObject("geometry").toString();
+            geometry = geoReader.read(new StringReader(geometryStr));
+            geometries.add(geometry);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Error");
+        }
+        //Geometry boundary = LineDissolver.dissolve(gf.createGeometryCollection(geometries.toArray(new Geometry[] {})));
+        Geometry boundary = gf.createGeometryCollection(geometries.toArray(new Geometry[] {})).union().getBoundary();
+        GeoJsonWriter geoWriter = new GeoJsonWriter();
+        String responseStr = geoWriter.write(boundary);
+        JsonObject response = JsonParser.parseString(responseStr).getAsJsonObject();
+        response.addProperty("type", "LineString");
+        return ResponseEntity.ok(response);
     }
 
     public void printNumNeighbors(State state) {
