@@ -43,6 +43,7 @@ public class AlgorithmService {
                         failure = true;
                     } else {
                         System.out.println("Valid");
+                        algoSummary.setNumberCensusBlocksMoved(algoSummary.getNumberCensusBlocksMoved() + 1);
                         settings.setFailedAttempts(0);
                         settings.setCurrentDistricting(selectedDistricting);
                         algoSummary.updateMeasures(selectedDistricting);

@@ -127,7 +127,7 @@ public class DistrictingController {
 
         AlgorithmSettings algorithmSettings = (AlgorithmSettings) session.getAttribute("algorithmSettings");
         if (algorithmSettings == null) {
-            AlgorithmSummary algoSummary = new AlgorithmSummary(0,
+            AlgorithmSummary algoSummary = new AlgorithmSummary(0, 0,
                     Constants.getMaxIterations() * Constants.getEstimatedTimePerIteration(), true,
                     false, currentState.getName(), selectedDistricting.getPopulationEqualityTotal(),
                     selectedDistricting.getPopulationEqualityVAP(), selectedDistricting.getPopulationEqualityCVAP(),
