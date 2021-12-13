@@ -14,31 +14,95 @@ import {
 import { useContext, useState, useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 import boxData from '../data/finalboxwhisker/a_tot.json';
-import ApexCharts from 'apexcharts'
-
+import ReactApexChart from 'react-apexcharts';
 import plot from '../img/dummy.jpg';
+import { StateDataContext } from "../contexts/StateData";
 
 export default function BoxAndWhisker(props) {
     const { isOpen, onClose } = props;
+    const [stateData, setStateData] = useContext(StateDataContext);
 
-    const boxplotData = {
-      labels: ['District 1', 'District 2', 'District 3', 'District 4', 'District 5', 'District 6', 'District 7', 'District 8',
-      'District 9'],
-      datasets: [{
-        label: 'Seawulf Data',
-        backgroundColor: 'rgba(255, 0, 0, 0.5)',
-        borderColor: 'red',
-        borderWidth: 1,
-        padding: 10,
-        itemRadius: 0,
-        data: boxData
-      }]
+    const districtPops = stateData["summary"]["districtingSummaries"][0]["districtSummaries"];
+
+    const sortedDistrictArray = () => {
+      
     };
 
-    const loggingConsole = () => {
-      console.log(boxData);
-    }
-    
+    const series = [
+      {
+        name: "Seawulf Districtings",
+        type: 'boxPlot',
+        data: [
+          {
+            x: "district one",
+            y: [ boxData[0]["min"].toPrecision(3), boxData[0]["1q"].toPrecision(3), boxData[0]["med"].toPrecision(3),
+             boxData[0]["3q"].toPrecision(3), boxData[0]["max"].toPrecision(3)]
+          },
+          {
+            x: "district two",
+            y: [ boxData[1]["min"].toPrecision(3), boxData[1]["1q"].toPrecision(3), boxData[1]["med"].toPrecision(3), 
+            boxData[1]["3q"].toPrecision(3), boxData[1]["max"].toPrecision(3)]
+          },
+          {
+            x: "district three",
+            y: [ boxData[2]["min"].toPrecision(3), boxData[2]["1q"].toPrecision(3), boxData[2]["med"].toPrecision(3),
+             boxData[2]["3q"].toPrecision(3), boxData[2]["max"].toPrecision(3)]
+          },
+          {
+            x: "district four",
+            y: [ boxData[3]["min"].toPrecision(3), boxData[3]["1q"].toPrecision(3), boxData[3]["med"].toPrecision(3), 
+            boxData[3]["3q"].toPrecision(3), boxData[3]["max"].toPrecision(3)]
+          },
+          {
+            x: "district five",
+            y: [ boxData[4]["min"].toPrecision(3), boxData[4]["1q"].toPrecision(3), boxData[4]["med"].toPrecision(3),
+             boxData[4]["3q"].toPrecision(3), boxData[4]["max"].toPrecision(3)]
+          },
+          {
+            x: "district six",
+            y: [ boxData[5]["min"].toPrecision(3), boxData[5]["1q"].toPrecision(3), boxData[5]["med"].toPrecision(3), 
+            boxData[5]["3q"].toPrecision(3), boxData[5]["max"].toPrecision(3)]
+          },
+          {
+            x: "district seven",
+            y: [ boxData[6]["min"].toPrecision(3), boxData[6]["1q"].toPrecision(3),
+             boxData[6]["med"].toPrecision(3), boxData[6]["3q"].toPrecision(3), boxData[6]["max"].toPrecision(3)]
+          },
+          {
+            x: "district eight",
+            y: [ boxData[7]["min"].toPrecision(3), boxData[7]["1q"].toPrecision(3),
+              boxData[7]["med"].toPrecision(3), boxData[7]["3q"].toPrecision(3),
+              boxData[7]["max"].toPrecision(3)]
+          },
+          {
+            x: "district nine",
+            y: [ boxData[8]["min"].toPrecision(3), boxData[8]["1q"].toPrecision(3),
+             boxData[8]["med"].toPrecision(3), boxData[8]["3q"].toPrecision(3),
+              boxData[8]["max"].toPrecision(3)]
+          },
+        ],
+      },
+      {
+        name: 'Selected Districting',
+        type: 'scatter',
+        data: [
+          {
+            x: "district one",
+            y: districtPops
+          }
+        ],
+      }
+    ];
+
+    const options = {
+      title: {
+        text: 'BoxPlot - Scatter Chart',
+        align: 'left',
+        visiblity: false
+      },
+      colors: ['#008FFB', '#FEB019'],
+    };
+  
     return(
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -47,13 +111,10 @@ export default function BoxAndWhisker(props) {
           <ModalCloseButton />
           <ModalBody>
             <Divider />
-            {/* <Image maxW='100%' src={plot} /> */}
+            <ReactApexChart options={options} series={series} type='boxPlot' height={350}/>
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={loggingConsole}>
-              test
-            </Button>
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Close
             </Button>
