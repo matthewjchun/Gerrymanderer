@@ -68,11 +68,24 @@ public class CensusBlock implements Cloneable{
 
     public List<CensusBlock> getNeighborCBInDiffDistrict() {
         // check through list of neighbors, check if diff district
+        System.out.println("Finding neighbors of border cb.");
         District original = this.getDistrict();
         List<CensusBlock> neighborCBInDiffDistrict = new ArrayList<>();
         for (CensusBlock neighbor: neighbors){
             District neighborDistrict = neighbor.getDistrict();
             if (original.getId() != neighborDistrict.getId()){
+                neighborCBInDiffDistrict.add(neighbor);
+            }
+        }
+        return neighborCBInDiffDistrict;
+    }
+
+    public List<CensusBlock> getNeighborCBInSameDistrict() {
+        District original = this.getDistrict();
+        List<CensusBlock> neighborCBInDiffDistrict = new ArrayList<>();
+        for (CensusBlock neighbor: neighbors){
+            District neighborDistrict = neighbor.getDistrict();
+            if (original.getId() == neighborDistrict.getId()){
                 neighborCBInDiffDistrict.add(neighbor);
             }
         }
