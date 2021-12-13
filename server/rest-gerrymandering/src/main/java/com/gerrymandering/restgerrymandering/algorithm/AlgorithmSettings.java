@@ -15,14 +15,14 @@ public class AlgorithmSettings {
     private int failedAttempts;
     private double popEqualityThresh;
     private int majorityMinorityThresh;
-    private List<District> removed;
-    private List<District> added;
+    private List<Long> removed;
+    private List<Long> added;
     private List<CensusBlock> moved;
 
     public AlgorithmSettings(AlgorithmSummary algoSummary, Constants.PopulationType populationType,
                              Districting currentDistricting, int failedAttempts, double popEqualityThresh,
-                             int majorityMinorityThresh, List<District> removed,
-                             List<District> added, List<CensusBlock> moved) {
+                             int majorityMinorityThresh, List<Long> removed,
+                             List<Long> added, List<CensusBlock> moved) {
         this.algoSummary = algoSummary;
         this.populationType = populationType;
         this.currentDistricting = currentDistricting;
@@ -92,19 +92,19 @@ public class AlgorithmSettings {
         this.majorityMinorityThresh = majorityMinorityThresh;
     }
 
-    public List<District> getRemoved() {
+    public List<Long> getRemoved() {
         return removed;
     }
 
-    public void setRemoved(List<District> removed) {
+    public void setRemoved(List<Long> removed) {
         this.removed = removed;
     }
 
-    public List<District> getAdded() {
+    public List<Long> getAdded() {
         return added;
     }
 
-    public void setAdded(List<District> added) {
+    public void setAdded(List<Long> added) {
         this.added = added;
     }
 

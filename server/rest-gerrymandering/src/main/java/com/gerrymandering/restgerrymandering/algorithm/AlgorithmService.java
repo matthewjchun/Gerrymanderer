@@ -16,8 +16,8 @@ public class AlgorithmService {
         Districting currentDistricting = settings.getCurrentDistricting();
         AlgorithmSummary algoSummary = settings.getAlgoSummary();
         int failedAttempts = settings.getFailedAttempts();
-        List<District> removed = settings.getRemoved();
-        List<District> added = settings.getAdded();
+        List<Long> removed = settings.getRemoved();
+        List<Long> added = settings.getAdded();
         List<CensusBlock> moved = settings.getMoved();
         Constants.PopulationType populationType = settings.getPopulationType();
 

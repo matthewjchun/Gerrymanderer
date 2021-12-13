@@ -122,7 +122,7 @@ public class District implements Cloneable {
         return selectedCB;
     }
 
-    public boolean moveCB(CensusBlock selectedCB, District destDistrict, List<District> removed, List<District> added,
+    public boolean moveCB(CensusBlock selectedCB, District destDistrict, List<Long> removed, List<Long> added,
                           List<CensusBlock> moved) {
         try {
             System.out.println("INITIAL");
@@ -130,15 +130,15 @@ public class District implements Cloneable {
             System.out.println("Dest population: " + destDistrict.getPopulations().get(0).getTotal());
             moved.add(selectedCB);
             censusBlocks.remove(selectedCB);
-            removed.add(this);
+            removed.add(id);
             calculatePopulation(selectedCB, false);
             //calculateElection(selectedCB, false);
-            //calculateMajorityMinority();
+            calculateMajorityMinority();
             destDistrict.getCensusBlocks().add(selectedCB);
-            added.add(destDistrict);
+            added.add(destDistrict.getId());
             destDistrict.calculatePopulation(selectedCB, true);
             //calculateElection(selectedCB, true);
-            //destDistrict.calculateMajorityMinority();
+            destDistrict.calculateMajorityMinority();
             selectedCB.setDistrict(destDistrict);
             calculateBorders(selectedCB);
             System.out.println("FINAL");
