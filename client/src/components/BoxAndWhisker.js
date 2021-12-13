@@ -13,8 +13,8 @@ import {
 } from "@chakra-ui/react";
 import { useContext, useState, useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
-import Chart from 'chart.js/auto';
 import boxData from '../data/finalboxwhisker/a_tot.json';
+import ApexCharts from 'apexcharts'
 
 import plot from '../img/dummy.jpg';
 
@@ -35,24 +35,9 @@ export default function BoxAndWhisker(props) {
       }]
     };
 
-    window.onload = () => {
-      console.log("hi")
-      const ctx = document.getElementById("canvas").getContext("2d");
-      window.myBar = new Chart(ctx, {
-        type: 'boxplot',
-        data: boxplotData,
-        options: {
-          responsive: true,
-          legend: {
-            position: 'top',
-          },
-          title: {
-            display: true,
-            text: 'Box and Whisker Data'
-          }
-        }
-      });
-    };
+    const loggingConsole = () => {
+      console.log(boxData);
+    }
     
     return(
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -63,10 +48,12 @@ export default function BoxAndWhisker(props) {
           <ModalBody>
             <Divider />
             {/* <Image maxW='100%' src={plot} /> */}
-            <canvas id="canvas"></canvas>
           </ModalBody>
 
           <ModalFooter>
+            <Button onClick={loggingConsole}>
+              test
+            </Button>
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Close
             </Button>
