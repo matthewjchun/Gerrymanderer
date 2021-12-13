@@ -196,7 +196,7 @@ export default function Districts(props) {
         popType == 2 ?
           <Pie data={cData}></Pie>:
         null
-      }
+        }
     </>
   );
 }

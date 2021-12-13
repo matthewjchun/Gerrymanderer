@@ -21,11 +21,6 @@ import plot from '../img/dummy.jpg';
 export default function BoxAndWhisker(props) {
     const { isOpen, onClose } = props;
 
-    function randomValues(count, min, max) {
-      const delta = max - min;
-      return Array.from({length: count}).map(() => Math.random() * delta + min);
-    }
-
     const boxplotData = {
       labels: ['District 1', 'District 2', 'District 3', 'District 4', 'District 5', 'District 6', 'District 7', 'District 8',
       'District 9'],
@@ -41,6 +36,7 @@ export default function BoxAndWhisker(props) {
     };
 
     window.onload = () => {
+      console.log("hi")
       const ctx = document.getElementById("canvas").getContext("2d");
       window.myBar = new Chart(ctx, {
         type: 'boxplot',

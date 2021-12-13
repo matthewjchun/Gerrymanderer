@@ -261,7 +261,7 @@ export default function StateDrawer(props) {
                 {value == '0' ? (
                   <Text> Population: {TOTAL.toLocaleString()} 
                   <br/>
-                  Total Districts: {stateData.districts.length}
+                  Total Congressional Districts: {stateData['districts']['features'].length}
                   <br/>
                   Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
                   <br/>
@@ -272,6 +272,8 @@ export default function StateDrawer(props) {
                 ) : value == '1' ? (
                   <Text> Population: {VAP.toLocaleString()}
                   <br/>
+                  Total Congressional Districts: {stateData['districts']['features'].length}
+                  <br/>
                   Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
                   <br/>
                   Compactness: 0
@@ -280,6 +282,8 @@ export default function StateDrawer(props) {
                   </Text>
                 ) : value == '2' ? (
                   <Text> Population: {CVAP.toLocaleString()}
+                  <br/>
+                  Total Congressional Districts: {stateData['districts']['features'].length}
                   <br/>
                   Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
                   <br/>
