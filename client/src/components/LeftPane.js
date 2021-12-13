@@ -323,6 +323,16 @@ export default function LeftPane(props) {
     onModalOpen();
   }
 
+  const handleAlgorithmRun = async () => {
+    const response = await fetch(
+      `/algorithmSummary`
+    );
+    const algorithm = await response.json();
+    setAlgorithm(algorithm);
+    console.log("fetched again")
+    console.log(algorithm);
+  }
+
   const redistrictingTabTooltip =
     'Select one of the following 30 redistrictings to improve on.';
   const constraintsTabTooltip =
@@ -340,7 +350,12 @@ export default function LeftPane(props) {
 
   return (
     <>
-      <Reset isOpen={isResetOpen} onClose={onResetClose} onOpen={onResetOpen}></Reset>
+      <Reset 
+        isOpen={isResetOpen} 
+        onClose={onResetClose} 
+        onOpen={onResetOpen} 
+        handleAlgorithmRun={handleAlgorithmRun}
+      ></Reset>
       <Drawer
         size='md'
         isOpen={isOpen}
