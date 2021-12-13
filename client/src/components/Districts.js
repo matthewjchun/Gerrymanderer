@@ -19,11 +19,13 @@ StatGroup,
 } from '@chakra-ui/react';
 import { PieChart } from 'react-minimal-pie-chart';
 import { useState } from 'react';
+import { Pie } from 'react-chartjs-2';
 
 export default function Districts(props) {
-  const { number, population, popType } = props;
+  const { number, population, popType, election } = props;
   const { arrowFlag, setArrowFlag } = useState(false);
 
+  // election
   // const dem = election[0]["democratic"];
   // const rep = election[0]["republican"];
   const dem = 2;
@@ -31,9 +33,6 @@ export default function Districts(props) {
   if (dem > rep) {
     setArrowFlag(true);
   }
-
-
-  // election
 
   let TOTAL = population[0]["total"].toLocaleString();
   let VAP = population[1]["total"].toLocaleString();
@@ -60,32 +59,86 @@ export default function Districts(props) {
   let cNative = population[2]['nativeAmerican'];
   let cPacific = population[2]['pacificIslander'];
 
-  const tData = [
-    { title: 'White', value: tWhite, color: '#87CEEB' },
-    { title: 'Black or African', value: tAfrican, color: '#ADD8E6' },
-    { title: 'Asian', value: tAsian, color: '#A7C7E7' },
-    { title: 'Hispanic', value: tHispanic, color: '#4682B4' },
-    { title: 'Native American', value: tNative, color: '#0F52BA' },
-    { title: 'Pacific Islander', value: tPacific, color: '#0818A8'},
-  ];
+  const tData = {
+    labels: ['White', 'Black or African', 'Asian', 'Hispanic', 'Native American', 'Pacific Islander'],
+    datasets: [
+      {
+        label: '# of people',
+        data: [ tWhite, tAfrican, tAsian, tHispanic, tNative, tPacific ],
+        backgroundColor: [
+          '#87CEEB',
+          '#ADD8E6',
+          '#A7C7E7',
+          '#4682B4',
+          '#0F52BA',
+          '#0818A8'
+        ],
+        borderColor:  [
+          '#87CEEB',
+          '#ADD8E6',
+          '#A7C7E7',
+          '#4682B4',
+          '#0F52BA',
+          '#0818A8'
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
 
-  const vData = [
-    { title: 'White', value: vWhite, color: '#87CEEB' },
-    { title: 'Black or African', value: vAfrican, color: '#ADD8E6' },
-    { title: 'Asian', value: vAsian, color: '#A7C7E7' },
-    { title: 'Hispanic', value: vHispanic, color: '#4682B4' },
-    { title: 'Native American', value: vNative, color: '#0F52BA' },
-    { title: 'Pacific Islander', value: vPacific, color: '#1C7CFF'},
-  ];
+  const vData = {
+    labels: ['White', 'Black or African', 'Asian', 'Hispanic', 'Native American', 'Pacific Islander'],
+    datasets: [
+      {
+        label: '# of people',
+        data: [ vWhite, vAfrican, vAsian, vHispanic, vNative, vPacific ],
+        backgroundColor: [
+          '#87CEEB',
+          '#ADD8E6',
+          '#A7C7E7',
+          '#4682B4',
+          '#0F52BA',
+          '#0818A8'
+        ],
+        borderColor:  [
+          '#87CEEB',
+          '#ADD8E6',
+          '#A7C7E7',
+          '#4682B4',
+          '#0F52BA',
+          '#0818A8'
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
 
-  const cData = [
-    { title: 'White', value: cWhite, color: '#87CEEB' },
-    { title: 'Black or African', value: cAfrican, color: '#ADD8E6' },
-    { title: 'Asian', value: cAsian, color: '#A7C7E7' },
-    { title: 'Hispanic', value: cHispanic, color: '#4682B4' },
-    { title: 'Native American', value: cNative, color: '#0F52BA' },
-    { title: 'Pacific Islander', value: cPacific, color: '#0818A8'},
-  ];
+  const cData = {
+    labels: ['White', 'Black or African', 'Asian', 'Hispanic', 'Native American', 'Pacific Islander'],
+    datasets: [
+      {
+        label: '# of people',
+        data: [ cWhite, cAfrican, cAsian, cHispanic, cNative, cPacific ],
+        backgroundColor: [
+          '#87CEEB',
+          '#ADD8E6',
+          '#A7C7E7',
+          '#4682B4',
+          '#0F52BA',
+          '#0818A8'
+        ],
+        borderColor:  [
+          '#87CEEB',
+          '#ADD8E6',
+          '#A7C7E7',
+          '#4682B4',
+          '#0F52BA',
+          '#0818A8'
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
 
 
   return (
@@ -137,47 +190,11 @@ export default function Districts(props) {
             </Tbody>
         </Table>
         {popType == 0 ?
-        <PieChart
-            data={tData}
-            label={({ dataEntry }) =>
-              Math.round(dataEntry.percentage) + '%'
-            }
-            labelStyle={(index) => ({
-              fill: tData[index].color,
-              fontSize: '5px',
-              fontFamily: 'sans-serif',
-            })}
-            radius={25}
-            labelPosition={112}
-        />:
+          <Pie data={tData}></Pie>:
         popType == 1 ?
-        <PieChart
-            data={vData}
-            label={({ dataEntry }) =>
-              Math.round(dataEntry.percentage) + '%'
-            }
-            labelStyle={(index) => ({
-              fill: vData[index].color,
-              fontSize: '5px',
-              fontFamily: 'sans-serif',
-            })}
-            radius={25}
-            labelPosition={112}
-        />:
+          <Pie data={vData}></Pie>:
         popType == 2 ?
-        <PieChart
-            data={cData}
-            label={({ dataEntry }) =>
-              Math.round(dataEntry.percentage) + '%'
-            }
-            labelStyle={(index) => ({
-              fill: cData[index].color,
-              fontSize: '5px',
-              fontFamily: 'sans-serif',
-            })}
-            radius={25}
-            labelPosition={112}
-        />:
+          <Pie data={cData}></Pie>:
         null
       }
     </>

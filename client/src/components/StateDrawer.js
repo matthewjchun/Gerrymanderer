@@ -39,11 +39,11 @@ import {
 } from '@chakra-ui/react';
 import { useContext, useState, useEffect } from 'react';
 import { DataContext, StateContext } from '../contexts/State';
-import { PieChart } from 'react-minimal-pie-chart';
+import { Pie } from 'react-chartjs-2';
 import Districts from './Districts';
 
 export default function StateDrawer(props) {
-  const { isOpen, onOpen, onClose, stateSummary } = props;
+  const { isOpen, onOpen, onClose, stateSummary, stateData } = props;
   const [activeState] = useContext(StateContext);
   const [value, setValue] = useState('0');
 
@@ -83,32 +83,87 @@ export default function StateDrawer(props) {
   let cNative = stateSummary['populations'][2]['nativeAmerican'];
   let cPacific = stateSummary['populations'][2]['pacificIslander'];
 
-  const tData = [
-    { title: 'White', value: tWhite, color: '#87CEEB' },
-    { title: 'Black or African', value: tAfrican, color: '#ADD8E6' },
-    { title: 'Asian', value: tAsian, color: '#A7C7E7' },
-    { title: 'Hispanic', value: tHispanic, color: '#4682B4' },
-    { title: 'Native American', value: tNative, color: '#0F52BA' },
-    { title: 'Pacific Islander', value: tPacific, color: '#0818A8'},
-  ];
 
-  const vData = [
-    { title: 'White', value: vWhite, color: '#87CEEB' },
-    { title: 'Black or African', value: vAfrican, color: '#ADD8E6' },
-    { title: 'Asian', value: vAsian, color: '#A7C7E7' },
-    { title: 'Hispanic', value: vHispanic, color: '#4682B4' },
-    { title: 'Native American', value: vNative, color: '#0F52BA' },
-    { title: 'Pacific Islander', value: vPacific, color: '#1C7CFF'},
-  ];
+  const tData = {
+    labels: ['White', 'Black or African', 'Asian', 'Hispanic', 'Native American', 'Pacific Islander'],
+    datasets: [
+      {
+        label: '# of people',
+        data: [ tWhite, tAfrican, tAsian, tHispanic, tNative, tPacific ],
+        backgroundColor: [
+          '#87CEEB',
+          '#ADD8E6',
+          '#A7C7E7',
+          '#4682B4',
+          '#0F52BA',
+          '#0818A8'
+        ],
+        borderColor:  [
+          '#87CEEB',
+          '#ADD8E6',
+          '#A7C7E7',
+          '#4682B4',
+          '#0F52BA',
+          '#0818A8'
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
 
-  const cData = [
-    { title: 'White', value: cWhite, color: '#87CEEB' },
-    { title: 'Black or African', value: cAfrican, color: '#ADD8E6' },
-    { title: 'Asian', value: cAsian, color: '#A7C7E7' },
-    { title: 'Hispanic', value: cHispanic, color: '#4682B4' },
-    { title: 'Native American', value: cNative, color: '#0F52BA' },
-    { title: 'Pacific Islander', value: cPacific, color: '#0818A8'},
-  ];
+  const vData = {
+    labels: ['White', 'Black or African', 'Asian', 'Hispanic', 'Native American', 'Pacific Islander'],
+    datasets: [
+      {
+        label: '# of people',
+        data: [ vWhite, vAfrican, vAsian, vHispanic, vNative, vPacific ],
+        backgroundColor: [
+          '#87CEEB',
+          '#ADD8E6',
+          '#A7C7E7',
+          '#4682B4',
+          '#0F52BA',
+          '#0818A8'
+        ],
+        borderColor:  [
+          '#87CEEB',
+          '#ADD8E6',
+          '#A7C7E7',
+          '#4682B4',
+          '#0F52BA',
+          '#0818A8'
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const cData = {
+    labels: ['White', 'Black or African', 'Asian', 'Hispanic', 'Native American', 'Pacific Islander'],
+    datasets: [
+      {
+        label: '# of people',
+        data: [ cWhite, cAfrican, cAsian, cHispanic, cNative, cPacific ],
+        backgroundColor: [
+          '#87CEEB',
+          '#ADD8E6',
+          '#A7C7E7',
+          '#4682B4',
+          '#0F52BA',
+          '#0818A8'
+        ],
+        borderColor:  [
+          '#87CEEB',
+          '#ADD8E6',
+          '#A7C7E7',
+          '#4682B4',
+          '#0F52BA',
+          '#0818A8'
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
 
   // ELECTION SPLIT STATISTICS
 
@@ -204,20 +259,39 @@ export default function StateDrawer(props) {
                 <br />
                 <Divider />
                 {value == '0' ? (
-                  <Text> Population: {TOTAL.toLocaleString()} </Text>
+                  <Text> Population: {TOTAL.toLocaleString()} 
+                  <br/>
+                  Total Districts: {stateData.districts.length}
+                  <br/>
+                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
+                  <br/>
+                  Compactness: 0
+                  <br/>
+                  Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']}
+                  </Text>
                 ) : value == '1' ? (
-                  <Text> Population: {VAP.toLocaleString()} </Text>
+                  <Text> Population: {VAP.toLocaleString()}
+                  <br/>
+                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
+                  <br/>
+                  Compactness: 0
+                  <br/>
+                  Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']}
+                  </Text>
                 ) : value == '2' ? (
-                  <Text> Population: {CVAP.toLocaleString()} </Text>
+                  <Text> Population: {CVAP.toLocaleString()}
+                  <br/>
+                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
+                  <br/>
+                  Compactness: 0
+                  <br/>
+                  Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']} 
+                  </Text>
                 ) : null}
                 <Divider />
-                <VStack spacing='24px'>
-                  <br />
-                  <Center>
-                    <Text fontSize='xl'>2018 Attorney General Elections</Text>
-                  </Center>
-                  <br />
-                </VStack>
+                <br />
+                <Text fontSize='xl'>2018 Attorney General Elections</Text>
+                <br />
                 <StatGroup>
                   <Stat>
                     <StatLabel>Democratic</StatLabel>
@@ -249,114 +323,13 @@ export default function StateDrawer(props) {
                 <Divider />
                 <p id='chartTitle'>Demographics</p>
                 {value == 0 ?
-                  <PieChart
-                      data={tData}
-                      label={({ dataEntry }) =>
-                        Math.round(dataEntry.percentage) + '%'
-                      }
-                      labelStyle={(index) => ({
-                        fill: tData[index].color,
-                        fontSize: '5px',
-                        fontFamily: 'sans-serif',
-                      })}
-                      radius={35}
-                      labelPosition={112}
-                  />:
+                  <Pie data={tData}></Pie>:
                  value == 1 ?
-                  <PieChart
-                      data={vData}
-                      label={({ dataEntry }) =>
-                        Math.round(dataEntry.percentage) + '%'
-                      }
-                      labelStyle={(index) => ({
-                        fill: vData[index].color,
-                        fontSize: '5px',
-                        fontFamily: 'sans-serif',
-                      })}
-                      radius={35}
-                      labelPosition={112}
-                  />:
+                  <Pie data={vData}></Pie>:
                  value == 2 ?
-                  <PieChart
-                      data={cData}
-                      label={({ dataEntry }) =>
-                        Math.round(dataEntry.percentage) + '%'
-                      }
-                      labelStyle={(index) => ({
-                        fill: cData[index].color,
-                        fontSize: '5px',
-                        fontFamily: 'sans-serif',
-                      })}
-                      radius={35}
-                      labelPosition={112}
-                  />:
+                  <Pie data={cData}></Pie>:
                  null
                 }
-                <Table variant='simple'>
-                  <Thead>
-                    <Tr>
-                      <Th>Race</Th>
-                      <Th>Population</Th>
-                      <Th>Color</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    <Tr>
-                      <Td>White</Td>
-                      {value == 1 ?
-                        <Td isNumeric>{vWhite.toLocaleString()}</Td>:
-                       value == 2 ?
-                        <Td isNumeric>{cWhite.toLocaleString()}</Td>:
-                       <Td isNumeric>{tWhite.toLocaleString()}</Td>}
-                      <Td bg='#87CEEB'></Td>
-                    </Tr>
-                    <Tr>
-                      <Td>Black or African</Td>
-                      {value == 1 ?
-                        <Td isNumeric>{vAfrican.toLocaleString()}</Td>:
-                       value == 2 ?
-                        <Td isNumeric>{cAfrican.toLocaleString()}</Td>:
-                       <Td isNumeric>{tAfrican.toLocaleString()}</Td>}
-                      <Td bg='#ADD8E6'></Td>
-                    </Tr>
-                    <Tr>
-                      <Td>Asian</Td>
-                      {value == 1 ?
-                        <Td isNumeric>{vAsian.toLocaleString()}</Td>:
-                       value == 2 ?
-                        <Td isNumeric>{cAsian.toLocaleString()}</Td>:
-                       <Td isNumeric>{tAsian.toLocaleString()}</Td>}
-                      <Td bg='#A7C7E7'></Td>
-                    </Tr>
-                    <Tr>
-                      <Td>Hispanic</Td>
-                      {value == 1 ?
-                        <Td isNumeric>{vHispanic.toLocaleString()}</Td>:
-                       value == 2 ?
-                        <Td isNumeric>{cHispanic.toLocaleString()}</Td>:
-                       <Td isNumeric>{tHispanic.toLocaleString()}</Td>}
-                      <Td bg='#4682B4'></Td>
-                    </Tr>
-                    <Tr>
-                      <Td>Native American</Td>
-                      {value == 1 ?
-                        <Td isNumeric>{vNative.toLocaleString()}</Td>:
-                       value == 2 ?
-                        <Td isNumeric>{cNative.toLocaleString()}</Td>:
-                       <Td isNumeric>{tNative.toLocaleString()}</Td>}
-                      <Td bg='#0F52BA'></Td>
-                    </Tr>
-                    <Tr>
-                      <Td>Pacific Islander</Td>
-                      {value == 1 ?
-                        <Td isNumeric>{vPacific.toLocaleString()}</Td>:
-                       value == 2 ?
-                        <Td isNumeric>{cPacific.toLocaleString()}</Td>:
-                       <Td isNumeric>{tPacific.toLocaleString()}</Td>}
-                      <Td bg='#0818A8'></Td>
-                    </Tr>
-                  </Tbody>
-                </Table>
               </TabPanel>
               <TabPanel>
                {districts.map((district) => {
@@ -364,7 +337,7 @@ export default function StateDrawer(props) {
                   <Districts 
                     number={district.districtId} 
                     population={district.populations} 
-                    // election={district.elections} 
+                    election={district.elections} 
                     popType={value}>  
                   </Districts>
                   )

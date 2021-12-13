@@ -402,6 +402,7 @@ const Map = () => {
             onClose={onClose}
             active={activeState}
             stateSummary={stateData['summary']}
+            stateData={stateData}
           />
         ) : null}
       </Flex>

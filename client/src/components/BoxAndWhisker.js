@@ -36,14 +36,7 @@ export default function BoxAndWhisker(props) {
         borderWidth: 1,
         padding: 10,
         itemRadius: 0,
-        data: [
-          randomValues(100, 0, 100),
-          randomValues(100, 0, 20),
-          randomValues(100, 20, 70),
-          randomValues(100, 60, 100),
-          randomValues(40, 50, 100),
-          randomValues(100, 60, 120),
-          randomValues(100, 80, 100)]
+        data: boxData
       }]
     };
 
