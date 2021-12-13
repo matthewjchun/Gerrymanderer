@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 
 export default function Redistricting(props) {
-  const { number, thumbnail, bestMeasure, measures } = props;
+  const { number, bestMeasure, measures } = props;
   const { popEquality, compactness, majorityMinority } =
     measures;
 
@@ -22,31 +22,33 @@ export default function Redistricting(props) {
   const handleMouseLeave = (e) => {
     e.target.style.boxShadow = 'none';
   };
+  
   return (
     <Popover isLazy trigger='hover'>
       <PopoverTrigger>
         <Box
           maxW='sm'
+          w='100%'
           p='3'
           borderWidth='1px'
           borderRadius='lg'
           overflow='hidden'
           cursor='pointer'
           onClick={props.handleRedistrictingClick}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
-          <Image maxW='100%' src={thumbnail} />
-          <Box
-            mt='1'
-            fontWeight='semibold'
-            as='h4'
-            lineHeight='tight'
+          <Text 
+            fontSize='2xl'
+            fontWeight='semibold' 
+            lineHeight='tight' mt='1' 
             isTruncated
-          >
-            <Text>District {number}</Text>
-          </Box>
-          <Box maxW='100%' h='50px' overflow='hidden'>
-            <Text maxW='100%'>{bestMeasure}</Text>
-          </Box>
+          > District {number}</Text>
+          <VStack align='left'>
+            <Text>Population Equality: {popEquality}</Text>
+            <Text>Compactness: {compactness}</Text>
+            <Text>Majority-Minority: {majorityMinority}</Text>
+          </VStack>        
         </Box>
       </PopoverTrigger>
       <PopoverContent>

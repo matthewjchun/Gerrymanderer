@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 import { DataContext, StateContext } from '../contexts/State';
+import { GeoJSONContext } from '../contexts/GeoJSON';
 import {
   Drawer,
   DrawerBody,
@@ -35,6 +36,8 @@ import {
 } from '@chakra-ui/react';
 import { Checkbox, CheckboxGroup } from "@chakra-ui/react"
 import { QuestionIcon } from '@chakra-ui/icons';
+import { useDisclosure } from '@chakra-ui/hooks';
+import { AlgorithmContext } from '../contexts/Algorithm';
 
 import themes from '../themes';
 import Redistricting from './Redistricting';
@@ -42,7 +45,8 @@ import az from '../img/az.jpg';
 import mi from '../img/mi.jpg';
 import va from '../img/va.jpg';
 import { BoxZoomHandler } from 'mapbox-gl';
-import AlgoProgress from './AlgoProgress';
+import Reset from './Reset';
+import postProcessed from '../data/postprocessed4.json';
 
 // maps property names to display names
 const measureMap = {
@@ -80,10 +84,10 @@ const bestMeasure = (data) => {
 const azData = [
   [
     {
-      number: 1,
-      popEquality: '77',
-      compactness: '50',
-      majorityMinority: '43',
+      number: postProcessed["1"]["id"],
+      popEquality: postProcessed["1"]["pop_eq"].toLocaleString(undefined, {minimumFractionDigits: 2}),
+      compactness: postProcessed["1"]["polsby_avg"],
+      majorityMinority: postProcessed["1"]["majority_minority_tot"],
     },
     {
       number: 2,
@@ -286,470 +290,6 @@ const azData = [
       popEquality: '15',
       compactness: '36',
       majorityMinority: '45',
-    },
-  ],
-];
-const miData = [
-  [
-    {
-      number: 1,
-      popEquality: '77',
-      compactness: '50',
-      majorityMinority: '43',
-      enactedDeviation: '10',
-    },
-    {
-      number: 2,
-      popEquality: '59',
-      compactness: '28',
-      majorityMinority: '59',
-      enactedDeviation: '83',
-    },
-    {
-      number: 3,
-      popEquality: '53',
-      compactness: '46',
-      majorityMinority: '99',
-      enactedDeviation: '55',
-    },
-  ],
-  [
-    {
-      number: 4,
-      popEquality: '72',
-      compactness: '54',
-      majorityMinority: '42',
-      enactedDeviation: '60',
-    },
-    {
-      number: 5,
-      popEquality: '53',
-      compactness: '46',
-      majorityMinority: '99',
-      enactedDeviation: '55',
-    },
-    {
-      number: 6,
-      popEquality: '77',
-      compactness: '50',
-      majorityMinority: '43',
-      enactedDeviation: '10',
-    },
-  ],
-  [
-    {
-      number: 7,
-      popEquality: '59',
-      compactness: '28',
-      majorityMinority: '59',
-      enactedDeviation: '83',
-    },
-    {
-      number: 8,
-      popEquality: '72',
-      compactness: '54',
-      majorityMinority: '42',
-      enactedDeviation: '60',
-    },
-    {
-      number: 9,
-      popEquality: '92',
-      compactness: '52',
-      majorityMinority: '58',
-      enactedDeviation: '17',
-    },
-  ],
-  [
-    {
-      number: 10,
-      popEquality: '48',
-      compactness: '27',
-      majorityMinority: '73',
-      enactedDeviation: '14',
-    },
-    {
-      number: 11,
-      popEquality: '49',
-      compactness: '68',
-      majorityMinority: '27',
-      enactedDeviation: '17',
-    },
-    {
-      number: 12,
-      popEquality: '40',
-      compactness: '28',
-      majorityMinority: '57',
-      enactedDeviation: '94',
-    },
-  ],
-  [
-    {
-      number: 13,
-      popEquality: '72',
-      compactness: '45',
-      majorityMinority: '48',
-      enactedDeviation: '52',
-    },
-    {
-      number: 14,
-      popEquality: '95',
-      compactness: '27',
-      majorityMinority: '65',
-      enactedDeviation: '84',
-    },
-    {
-      number: 15,
-      popEquality: '69',
-      compactness: '87',
-      majorityMinority: '53',
-      enactedDeviation: '63',
-    },
-  ],
-  [
-    {
-      number: 16,
-      popEquality: '47',
-      compactness: '94',
-      majorityMinority: '23',
-      enactedDeviation: '48',
-    },
-    {
-      number: 17,
-      popEquality: '37',
-      compactness: '38',
-      majorityMinority: '82',
-      enactedDeviation: '34',
-    },
-    {
-      number: 18,
-      popEquality: '65',
-      compactness: '23',
-      majorityMinority: '54',
-      enactedDeviation: '23',
-    },
-  ],
-  [
-    {
-      number: 19,
-      popEquality: '84',
-      compactness: '36',
-      majorityMinority: '60',
-      enactedDeviation: '48',
-    },
-    {
-      number: 20,
-      popEquality: '73',
-      compactness: '34',
-      majorityMinority: '45',
-      enactedDeviation: '28',
-    },
-    {
-      number: 21,
-      popEquality: '90',
-      compactness: '53',
-      majorityMinority: '50',
-      enactedDeviation: '37',
-    },
-  ],
-  [
-    {
-      number: 22,
-      popEquality: '48',
-      compactness: '26',
-      majorityMinority: '59',
-      enactedDeviation: '48',
-    },
-    {
-      number: 23,
-      popEquality: '27',
-      compactness: '49',
-      majorityMinority: '49',
-      enactedDeviation: '26',
-    },
-    {
-      number: 24,
-      popEquality: '93',
-      compactness: '84',
-      majorityMinority: '27',
-      enactedDeviation: '95',
-    },
-  ],
-  [
-    {
-      number: 25,
-      popEquality: '36',
-      compactness: '73',
-      majorityMinority: '65',
-      enactedDeviation: '42',
-    },
-    {
-      number: 26,
-      popEquality: '33',
-      compactness: '76',
-      majorityMinority: '47',
-      enactedDeviation: '93',
-    },
-    {
-      number: 27,
-      popEquality: '48',
-      compactness: '87',
-      majorityMinority: '53',
-      enactedDeviation: '23',
-    },
-  ],
-  [
-    {
-      number: 28,
-      popEquality: '95',
-      compactness: '57',
-      majorityMinority: '25',
-      enactedDeviation: '37',
-    },
-    {
-      number: 29,
-      popEquality: '59',
-      compactness: '48',
-      majorityMinority: '93',
-      enactedDeviation: '65',
-    },
-    {
-      number: 30,
-      popEquality: '15',
-      compactness: '36',
-      majorityMinority: '45',
-      enactedDeviation: '87',
-    },
-  ],
-];
-const vaData = [
-  [
-    {
-      number: 1,
-      popEquality: '77',
-      compactness: '50',
-      majorityMinority: '43',
-      enactedDeviation: '10',
-    },
-    {
-      number: 2,
-      popEquality: '59',
-      compactness: '28',
-      majorityMinority: '59',
-      enactedDeviation: '83',
-    },
-    {
-      number: 3,
-      popEquality: '53',
-      compactness: '46',
-      majorityMinority: '99',
-      enactedDeviation: '55',
-    },
-  ],
-  [
-    {
-      number: 4,
-      popEquality: '72',
-      compactness: '54',
-      majorityMinority: '42',
-      enactedDeviation: '60',
-    },
-    {
-      number: 5,
-      popEquality: '53',
-      compactness: '46',
-      majorityMinority: '99',
-      enactedDeviation: '55',
-    },
-    {
-      number: 6,
-      popEquality: '77',
-      compactness: '50',
-      majorityMinority: '43',
-      enactedDeviation: '10',
-    },
-  ],
-  [
-    {
-      number: 7,
-      popEquality: '59',
-      compactness: '28',
-      majorityMinority: '59',
-      enactedDeviation: '83',
-    },
-    {
-      number: 8,
-      popEquality: '72',
-      compactness: '54',
-      majorityMinority: '42',
-      enactedDeviation: '60',
-    },
-    {
-      number: 9,
-      popEquality: '92',
-      compactness: '52',
-      majorityMinority: '58',
-      enactedDeviation: '17',
-    },
-  ],
-  [
-    {
-      number: 10,
-      popEquality: '48',
-      compactness: '27',
-      majorityMinority: '73',
-      enactedDeviation: '14',
-    },
-    {
-      number: 11,
-      popEquality: '49',
-      compactness: '68',
-      majorityMinority: '27',
-      enactedDeviation: '17',
-    },
-    {
-      number: 12,
-      popEquality: '40',
-      compactness: '28',
-      majorityMinority: '57',
-      enactedDeviation: '94',
-    },
-  ],
-  [
-    {
-      number: 13,
-      popEquality: '72',
-      compactness: '45',
-      majorityMinority: '48',
-      enactedDeviation: '52',
-    },
-    {
-      number: 14,
-      popEquality: '95',
-      compactness: '27',
-      majorityMinority: '65',
-      enactedDeviation: '84',
-    },
-    {
-      number: 15,
-      popEquality: '69',
-      compactness: '87',
-      majorityMinority: '53',
-      enactedDeviation: '63',
-    },
-  ],
-  [
-    {
-      number: 16,
-      popEquality: '47',
-      compactness: '94',
-      majorityMinority: '23',
-      enactedDeviation: '48',
-    },
-    {
-      number: 17,
-      popEquality: '37',
-      compactness: '38',
-      majorityMinority: '82',
-      enactedDeviation: '34',
-    },
-    {
-      number: 18,
-      popEquality: '65',
-      compactness: '23',
-      majorityMinority: '54',
-      enactedDeviation: '23',
-    },
-  ],
-  [
-    {
-      number: 19,
-      popEquality: '84',
-      compactness: '36',
-      majorityMinority: '60',
-      enactedDeviation: '48',
-    },
-    {
-      number: 20,
-      popEquality: '73',
-      compactness: '34',
-      majorityMinority: '45',
-      enactedDeviation: '28',
-    },
-    {
-      number: 21,
-      popEquality: '90',
-      compactness: '53',
-      majorityMinority: '50',
-      enactedDeviation: '37',
-    },
-  ],
-  [
-    {
-      number: 22,
-      popEquality: '48',
-      compactness: '26',
-      majorityMinority: '59',
-      enactedDeviation: '48',
-    },
-    {
-      number: 23,
-      popEquality: '27',
-      compactness: '49',
-      majorityMinority: '49',
-      enactedDeviation: '26',
-    },
-    {
-      number: 24,
-      popEquality: '93',
-      compactness: '84',
-      majorityMinority: '27',
-      enactedDeviation: '95',
-    },
-  ],
-  [
-    {
-      number: 25,
-      popEquality: '36',
-      compactness: '73',
-      majorityMinority: '65',
-      enactedDeviation: '42',
-    },
-    {
-      number: 26,
-      popEquality: '33',
-      compactness: '76',
-      majorityMinority: '47',
-      enactedDeviation: '93',
-    },
-    {
-      number: 27,
-      popEquality: '48',
-      compactness: '87',
-      majorityMinority: '53',
-      enactedDeviation: '23',
-    },
-  ],
-  [
-    {
-      number: 28,
-      popEquality: '95',
-      compactness: '57',
-      majorityMinority: '25',
-      enactedDeviation: '37',
-    },
-    {
-      number: 29,
-      popEquality: '59',
-      compactness: '48',
-      majorityMinority: '93',
-      enactedDeviation: '65',
-    },
-    {
-      number: 30,
-      popEquality: '15',
-      compactness: '36',
-      majorityMinority: '45',
-      enactedDeviation: '87',
     },
   ],
 ];
@@ -759,27 +299,39 @@ export default function LeftPane(props) {
   const [popEquality, setPopEquality] = useState(0);
   const [compactness, setCompactness] = useState(0);
   const [majorityMinority, setMajorityMinority] = useState(0);
+  const { isOpen: isResetOpen, onOpen: onResetOpen, onClose: onResetClose } = useDisclosure()
 
   const [activeState, setActiveState] = useContext(StateContext);
-  const [geoJSONdata, setGeoJSONdata] = useState();
+  const [geoJSON, setGeoJSON] = useContext(GeoJSONContext);
+  const [algorithm, setAlgorithm] = useContext(AlgorithmContext);
 
   const handlePopEqualityInput = (val) => setPopEquality(val);
   const handleCompactnessInput = (val) => setCompactness(val);
   const handleMajorityMinorityInput = (val) => setMajorityMinority(val);
 
   const handleRedistrictingClick = (e) => {
-    // console.log(e.target.number);
-    console.log("hi");
+    console.log(e.target.number);
   };
 
-  // const handleGenerate = async (e) => {
-  //   const response = await fetch(
-  //     `/districtings?state=${activeState}`.toLowerCase()
-  //   );
-  //   const body = await response.json();
-  //   console.log(body);
-  //   setGeoJSONdata(body);
-  // };
+  const handleAlgorithmStart = async () => {
+    const response = await fetch(
+      `/algorithm?id=0&popEqThresh=${popEquality/100}&polsbyPopperThresh=0.3&majorityMinorityThresh=${majorityMinority}`
+    );
+    const algorithm = await response.json();
+    setAlgorithm(algorithm);
+    console.log(algorithm);
+    onModalOpen();
+  }
+
+  const handleAlgorithmRun = async () => {
+    const response = await fetch(
+      `/algorithmSummary`
+    );
+    const algorithm = await response.json();
+    setAlgorithm(algorithm);
+    console.log("fetched again")
+    console.log(algorithm);
+  }
 
   const redistrictingTabTooltip =
     'Select one of the following 30 redistrictings to improve on.';
@@ -789,15 +341,21 @@ export default function LeftPane(props) {
     'Construct a box and whisker plot where the measures of your selected districtings are overlayed on top of the 10,000 districtings measures.';
 
   const popEqualityTooltip =
-    'Set the minimum percentage threshold population equality for the improved redistricting. [0, 100]';
+    'Set the minimum percentage threshold population equality for the improved redistricting. The final value will be converted to a percentage. [0, 70]';
   const compactnessTooltip =
     'Set the minimum percentage threshold compactness for the improved redistricting. [0, 100]';
   const majorityMinorityToolTip =
-    'Set the maximum percentage threshold for the minority population per congressional district in the improved redistricting. [0, 100]';
+    'Set the maximum percentage threshold for the minority population per congressional district in the improved redistricting. [0, 8]';
 
 
   return (
     <>
+      <Reset 
+        isOpen={isResetOpen} 
+        onClose={onResetClose} 
+        onOpen={onResetOpen} 
+        handleAlgorithmRun={handleAlgorithmRun}
+      ></Reset>
       <Drawer
         size='md'
         isOpen={isOpen}
@@ -809,7 +367,10 @@ export default function LeftPane(props) {
         <DrawerContent overflow='scroll'>
           <DrawerCloseButton />
           <DrawerHeader>
-            <Text>User Settings</Text>
+            <HStack spacing='200px'>
+              <Text>User Settings</Text>
+              <Button colorScheme='red' ml='10px' onClick={onResetOpen}>Reset</Button>
+            </HStack>  
           </DrawerHeader>
           <Tabs isFitted variant='enclosed'>
             <TabList mb='1em'>
@@ -827,7 +388,7 @@ export default function LeftPane(props) {
               </Tab>
               <Tab>
                 <HStack spacing='5'>
-                  <Text>Constraints on Measures</Text>
+                  <Text>Algorithm Measures</Text>
                   <Tooltip
                     label={constraintsTabTooltip}
                     fontSize='md'
@@ -875,7 +436,7 @@ export default function LeftPane(props) {
                     })}
                   </VStack>
                 ) : null}
-                {activeState == 'Michigan' ? (
+                {/* {activeState == 'Michigan' ? (
                   <VStack spacing='3'>
                     {miData.map((set) => {
                       const best = bestMeasure(set);
@@ -918,8 +479,8 @@ export default function LeftPane(props) {
                       );
                     })}
                   </VStack>
-                ) : null}
-              </TabPanel>
+                ) : null}*/}
+              </TabPanel> 
               <TabPanel>
                 <DrawerBody>
                   <VStack align='left' spacing='5'>
@@ -1035,7 +596,7 @@ export default function LeftPane(props) {
                       </NumberInput>
                     </HStack>
                     <VStack spacing='3' align='right'>
-                      <Button onClick={onModalOpen}>
+                      <Button onClick={handleAlgorithmStart}>
                         <Text>Generate</Text>
                       </Button>
                       <Text fontSize='sm'>Last updated: 10 seconds ago</Text>

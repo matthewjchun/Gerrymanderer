@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useContext } from 'react';
-import { DataContext, StateContext } from '../contexts/State/index';
+import { DataContext, StateContext } from '../contexts/State';
+import { GeoJSONContext } from '../contexts/GeoJSON';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { Flex } from '@chakra-ui/react';
 import '../App.css';
@@ -27,7 +28,9 @@ const Map = () => {
   const dummyMsg =
     '<strong>District 1</strong><p><br><b>Total Population:</b> 724,868<br><b>Democratic:</b> 50.1%<br><b>Republican:</b> 48.4%<br><br><b>Race:</b> 64.1% White, 23.2% Am. Indian, 2.4% Black, 1.7% Asian<br><b>Ethnicity:</b> 20.4% Hispanic<br><br><b>Unemployment:</b> 14.2%<br><b>Median household income:</b> $43,377';
   const [activeState, setActiveState] = useContext(StateContext);
+  const [geoJSON, setGeoJSON] = useContext(GeoJSONContext);
   const { isOpen, onOpen, onClose } = useDisclosure(); // open close state drawer
+  // let refetch = false;
 
   /////////////////////// MARKER METHODS //////////////////////////////
   const createMarker = async (longitude, latitude, msg) => {
@@ -48,13 +51,21 @@ const Map = () => {
   /////////////////////// SERVER INTERACTIONS //////////////////////////////
   const handleStateFetch = async (map) => {
     const response = await fetch(
-      `/stateFull/?state=${constants.stateMap[activeState].toLowerCase()}`
+      `/stateFull?state=${constants.stateMap[activeState].toLowerCase()}`
     );
     const body = await response.json();
     await setStateData(body);
+    console.log(body)
     return body;
   };
 
+  const outlinesFetch = async (map) => {
+    const response = await fetch('/stateOutlines');
+    const body = await response.json();
+    return body;
+  };
+
+  /////////////////////// VISIBILITY //////////////////////////////
   const checkSrc = async (name, data) => {
     if (!map.current.getSource(name)) {
       map.current.addSource(name, {
@@ -64,32 +75,6 @@ const Map = () => {
     }
   };
 
-  const outlinesFetch = async (map) => {
-    const response = await fetch('/stateOutlines');
-    const body = await response.json();
-    return body;
-  };
-
-  const addStateLines = async (map) => {
-    const stateData = await outlinesFetch();
-
-    checkSrc('states', stateData['stateOutlines']);
-    addPolygon('states', 'states', '#f8f8ff');
-
-    checkSrc('arizona', stateData['az']);
-    checkSrc('michigan', stateData['mi']);
-    checkSrc('virginia', stateData['va']);
-    // VISUALIZE STATES AS POLYGONS
-    addPolygon('arizona', 'arizona', '#523e3c');
-    addPolygon('michigan', 'michigan', '#523e3c');
-    addPolygon('virginia', 'virginia', '#523e3c');
-    // ADD OUTLINES TO STATES
-    addOutline('outline_az', 'arizona');
-    addOutline('outline_mi', 'michigan');
-    addOutline('outline_va', 'virginia');
-  };
-
-  /////////////////////// VISIBILITY //////////////////////////////
   const addLayer = async (id, src, paint) => {
     map.current.addLayer({
       id: id,
@@ -176,6 +161,25 @@ const Map = () => {
         );
       }
     }
+  };
+
+  const addStateLines = async (map) => {
+    const stateLineData = await outlinesFetch();
+
+    checkSrc('states', stateLineData['stateOutlines']);
+    addPolygon('states', 'states', '#f8f8ff');
+
+    checkSrc('arizona', stateLineData['az']);
+    checkSrc('michigan', stateLineData['mi']);
+    checkSrc('virginia', stateLineData['va']);
+    // VISUALIZE STATES AS POLYGONS
+    addPolygon('arizona', 'arizona', '#523e3c');
+    addPolygon('michigan', 'michigan', '#523e3c');
+    addPolygon('virginia', 'virginia', '#523e3c');
+    // ADD OUTLINES TO STATES
+    addOutline('outline_az', 'arizona');
+    addOutline('outline_mi', 'michigan');
+    addOutline('outline_va', 'virginia');
   };
 
   /////////////////////// ZOOM INTO STATES //////////////////////////////
@@ -295,6 +299,10 @@ const Map = () => {
     visibToggle('va', 'n');
   };
 
+  const generatedDistricting = (map) => {
+
+  };
+
   /////////////////////// VISUALIZE MAP METHODS //////////////////////////////
   const addPolygon = async (id, data, color) => {
     map.current.addLayer({
@@ -345,15 +353,18 @@ const Map = () => {
         onClose();
         setActiveState('Celtics');
       });
-
       map.current.on('click', 'arizona', (e) => {
         setActiveState('Arizona');
       });
       map.current.on('click', 'michigan', (e) => {
-        setActiveState('Michigan');
+        if(activeState != 'Michigan'){
+          setActiveState('Michigan');
+        }
       });
       map.current.on('click', 'virginia', (e) => {
-        setActiveState('Virginia');
+        if(activeState != 'Virginia'){
+          setActiveState('Virginia');
+        }
       });
     });
   }, []);
@@ -391,6 +402,7 @@ const Map = () => {
             onClose={onClose}
             active={activeState}
             stateSummary={stateData['summary']}
+            stateData={stateData}
           />
         ) : null}
       </Flex>
