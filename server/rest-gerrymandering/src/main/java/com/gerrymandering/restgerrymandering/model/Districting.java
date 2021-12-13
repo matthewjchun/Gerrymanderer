@@ -307,6 +307,8 @@ public class Districting implements Cloneable {
             return null;
         }
         GeometryFactory gf = new GeometryFactory();
+        GeoJsonReader geoReader = new GeoJsonReader();
+        GeoJsonWriter geoWriter = new GeoJsonWriter();
         JsonObject districtingBoundary = new JsonObject();
         districtingBoundary.addProperty("type", "FeatureCollection");
         JsonArray features = new JsonArray();
@@ -331,7 +333,6 @@ public class Districting implements Cloneable {
                     List<Geometry> geometries = new ArrayList<>();
                     JsonObject properties = new JsonObject();
                     try (FileReader reader = new FileReader(Constants.getResourcePath() + district.getPath())) {
-                        GeoJsonReader geoReader = new GeoJsonReader();
                         JsonObject districtFeature = JsonParser.parseReader(reader).getAsJsonObject();
                         properties = districtFeature.getAsJsonObject("properties");
                         String districtGeometryStr = districtFeature.getAsJsonObject("geometry").toString();
@@ -347,15 +348,16 @@ public class Districting implements Cloneable {
                     }
                     //Geometry dissolved = LineDissolver.dissolve(gf.createGeometryCollection(geometries.toArray(new Geometry[] {})));
                     Geometry union = gf.createGeometryCollection(geometries.toArray(new Geometry[] {})).union();
-                    GeoJsonWriter geoWriter = new GeoJsonWriter();
-                    String boundary = geoWriter.write(union.getBoundary());
-                    compositeDistrictFeature.addProperty("geometry", boundary);
+                    String boundaryStr = geoWriter.write(union.getBoundary());
+                    JsonObject boundary = JsonParser.parseString(boundaryStr).getAsJsonObject();
+                    boundary.addProperty("type", "LineString");
+                    compositeDistrictFeature.add("geometry", boundary);
                     compositeDistrictFeature.add("properties", properties);
                     features.add(compositeDistrictFeature);
                 }
             }
             else { // district lost a census block
-                System.out.println("District " + district.getId() + " lost a cb.");
+                System.out.println("District " + district.getId() + " lost cb.");
                 CensusBlock removedCb = moved.get(indexRemoved);
                 JsonObject compositeDistrictFeature = new JsonObject();
                 compositeDistrictFeature.addProperty("type", "Feature");
@@ -367,9 +369,8 @@ public class Districting implements Cloneable {
                     System.out.println("Calculating districting boundary error reading district file.");
                 }
                 List<Geometry> geometries = new ArrayList<>();
-                GeoJsonReader geoReader = new GeoJsonReader();
                 for (CensusBlock cb: district.getCensusBlocks()) {
-                    if (cb.equals(removedCb))
+                    if (cb.getId() == removedCb.getId())
                         continue;
                     try (FileReader reader = new FileReader(Constants.getResourcePath() + cb.getPath())) {
                         JsonObject cbFeature = JsonParser.parseReader(reader).getAsJsonObject();
@@ -382,9 +383,10 @@ public class Districting implements Cloneable {
                 }
                 //Geometry dissolved = LineDissolver.dissolve(gf.createGeometryCollection(geometries.toArray(new Geometry[] {})));
                 Geometry union = gf.createGeometryCollection(geometries.toArray(new Geometry[] {})).union();
-                GeoJsonWriter geoWriter = new GeoJsonWriter();
-                String boundary = geoWriter.write(union.getBoundary());
-                compositeDistrictFeature.addProperty("geometry", boundary);
+                String boundaryStr = geoWriter.write(union.getBoundary());
+                JsonObject boundary = JsonParser.parseString(boundaryStr).getAsJsonObject();
+                boundary.addProperty("type", "LineString");
+                compositeDistrictFeature.add("geometry", boundary);
                 compositeDistrictFeature.add("properties", properties);
                 features.add(compositeDistrictFeature);
             }

@@ -190,8 +190,16 @@ public class DistrictingController {
     }
 
     // TESTING METHODS
+    @GetMapping("/boundary")
+    public ResponseEntity<JsonObject> boundary(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        AlgorithmSettings algorithmSettings = (AlgorithmSettings) session.getAttribute("algorithmSettings");
+        AlgorithmSummary algoSummary = algorithmSettings.getAlgoSummary();
+        return ResponseEntity.ok(algoSummary.getDistrictingBoundary());
+    }
+
     @GetMapping("/boundaryTest")
-    public ResponseEntity<JsonObject> boundary() {
+    public ResponseEntity<JsonObject> boundaryTest() {
         JsonObject featureCollection = new JsonObject();
         featureCollection.addProperty("type", "FeatureCollection");
         JsonArray features = new JsonArray();
@@ -206,7 +214,7 @@ public class DistrictingController {
     }
 
     @GetMapping("/jtsTest")
-    public ResponseEntity<String> jts() {
+    public ResponseEntity<JsonObject> jts() {
         GeometryFactory gf = new GeometryFactory();
         GeoJsonReader geoReader = new GeoJsonReader();
         List<Geometry> geometries = new ArrayList<>();
@@ -260,9 +268,11 @@ public class DistrictingController {
             System.out.println("Error");
         }
         //Geometry boundary = LineDissolver.dissolve(gf.createGeometryCollection(geometries.toArray(new Geometry[] {})));
-        Geometry boundary = gf.createGeometryCollection(geometries.toArray(new Geometry[] {})).union();
+        Geometry boundary = gf.createGeometryCollection(geometries.toArray(new Geometry[] {})).union().getBoundary();
         GeoJsonWriter geoWriter = new GeoJsonWriter();
-        String response = geoWriter.write(boundary.getBoundary());
+        String responseStr = geoWriter.write(boundary);
+        JsonObject response = JsonParser.parseString(responseStr).getAsJsonObject();
+        response.addProperty("type", "LineString");
         return ResponseEntity.ok(response);
     }
 
