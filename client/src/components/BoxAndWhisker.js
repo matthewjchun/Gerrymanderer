@@ -16,13 +16,17 @@ import { useDisclosure } from '@chakra-ui/react';
 import boxData from '../data/finalboxwhisker/a_tot.json';
 import ReactApexChart from 'react-apexcharts';
 import plot from '../img/dummy.jpg';
-import { StateDataContext } from "../contexts/StateData";
+import { Radio, RadioGroup, Stack } from '@chakra-ui/react';
+import { SelectedDistrictingContext } from "../contexts/SelectedDistricting";
 
 export default function BoxAndWhisker(props) {
     const { isOpen, onClose } = props;
-    const [stateData, setStateData] = useContext(StateDataContext);
+    const [value, setValue] = useState('0');
+    const [selectedDistricting, setSelectedDistricting] = useContext(SelectedDistrictingContext);
 
-    const districtPops = stateData["summary"]["districtingSummaries"][0]["districtSummaries"];
+    // const districtPops = stateData['summary']["districtingSummaries"][0]["districtSummaries"];
+
+
 
     const sortedDistrictArray = () => {
       
@@ -88,7 +92,7 @@ export default function BoxAndWhisker(props) {
         data: [
           {
             x: "district one",
-            y: districtPops
+            y: 0.02
           }
         ],
       }
@@ -110,6 +114,36 @@ export default function BoxAndWhisker(props) {
           <ModalHeader>Box And Whisker</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+            <Divider />
+            <RadioGroup
+              onChange={setValue}
+              value={value}
+              defaultValue='0'
+            >
+              <Stack>
+                <Radio size='md' value='0' colorScheme='blue' defaultChecked>
+                  African American
+                </Radio>
+                <Radio size='md' value='1' colorScheme='blue'>
+                  Asian
+                </Radio>
+                <Radio size='md' value='2' colorScheme='blue'>
+                  Hispanic
+                </Radio>
+                <Radio size='md' value='3' colorScheme='blue'>
+                  Native American
+                </Radio>
+                <Radio size='md' value='4' colorScheme='blue'>
+                  Pacific Islander
+                </Radio>
+                <Radio size='md' value='5' colorScheme='blue'>
+                  Democratic
+                </Radio>
+                <Radio size='md' value='6' colorScheme='blue'>
+                  Republican
+                </Radio>
+              </Stack>
+            </RadioGroup>
             <Divider />
             <ReactApexChart options={options} series={series} type='boxPlot' height={350}/>
           </ModalBody>

@@ -8,6 +8,7 @@ import AlgoProgress from './AlgoProgress';
 import BoxAndWhisker from './BoxAndWhisker';
 import Reset from './Reset';
 import { AlgorithmContext } from '../contexts/Algorithm';
+import { SelectedDistrictingContext } from '../contexts/SelectedDistricting';
 
 export default function TopBar(props) {
   const { isOpen: isDrawerOpen , onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure()
@@ -16,6 +17,7 @@ export default function TopBar(props) {
 
   const [activeState, setActiveState] = useContext(StateContext);
   const [algorithm, setAlgorithm] = useContext(AlgorithmContext);
+  const [selectedDistricting, setSelectedDistricting] = useContext(SelectedDistrictingContext);
 
   return (
     <HStack w='100%' p='5' align='center' justify='center'>
@@ -24,13 +26,19 @@ export default function TopBar(props) {
           <Button onClick={onDrawerOpen} mr='5px'>
             <Text>User Settings</Text>
           </Button>
-          <LeftPane isOpen={isDrawerOpen} onClose={onDrawerClose} onOpen={onDrawerOpen} onModalOpen={onModalOpen} 
+          {selectedDistricting != null ?
+            <>
+            <LeftPane isOpen={isDrawerOpen} onClose={onDrawerClose} onOpen={onDrawerOpen} onModalOpen={onModalOpen} 
             onBoxOpen={onBoxOpen}></LeftPane>
+            <BoxAndWhisker isOpen={isBoxOpen} onClose={onBoxClose} onOpen={onBoxOpen} activeState={activeState}></BoxAndWhisker>
+            </>
+            :
+            null          
+          }
           {algorithm != null ? 
             <AlgoProgress isOpen={isModalOpen} onClose={onModalClose} onModalOpen={onModalOpen} activeState={activeState}> </AlgoProgress>:
             null
           }
-          <BoxAndWhisker isOpen={isBoxOpen} onClose={onBoxClose} onOpen={onBoxOpen} activeState={activeState}></BoxAndWhisker>
         </Box>
       ) : (
         <Box flex='1' mr='auto' />

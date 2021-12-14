@@ -9,12 +9,12 @@ import App from './App';
 import theme from './theme';
 import { GeoJSONProvider } from './contexts/GeoJSON';
 import { AlgorithmProvider } from './contexts/Algorithm';
-import { StateDataProvider } from './contexts/StateData';
+import { SelectedDistrictingProvider } from './contexts/SelectedDistricting';
 
 ReactDOM.render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
-      <StateDataProvider>
+      <SelectedDistrictingProvider>
       <AlgorithmProvider>
       <GeoJSONProvider>
       <StateProvider>
@@ -22,7 +22,7 @@ ReactDOM.render(
       </StateProvider>
       </GeoJSONProvider>
       </AlgorithmProvider>
-      </StateDataProvider>
+      </SelectedDistrictingProvider>
     </ChakraProvider>
   </React.StrictMode>,
   document.getElementById('root')

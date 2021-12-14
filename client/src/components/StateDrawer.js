@@ -16,18 +16,6 @@ import {
 } from '@chakra-ui/react';
 import { Text, Button, Flex, Spacer, Divider } from '@chakra-ui/react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  VStack,
-  Center,
-} from '@chakra-ui/react';
 import { Radio, RadioGroup, Stack } from '@chakra-ui/react';
 import {
   Accordion,
@@ -47,6 +35,9 @@ export default function StateDrawer(props) {
   const { isOpen, onOpen, onClose, stateSummary, stateData } = props;
   const [activeState] = useContext(StateContext);
   const [value, setValue] = useState('0');
+
+  console.log(stateData);
+  console.log(stateSummary);
 
   // POPULATION MEASURE
   const typeMap = {
