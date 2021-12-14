@@ -44,9 +44,9 @@ export default function BoxAndWhisker(props) {
     };
 
 
-    const sortedDistrictArray = () => {
-      
-    };
+    // const sortedDistrictArray = () => {
+    //   selectedDistricting['summary']
+    // };
 
     // change to boxData / basisMap[value]
     const azBoxData = [

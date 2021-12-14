@@ -36,9 +36,6 @@ export default function StateDrawer(props) {
   const [activeState] = useContext(StateContext);
   const [value, setValue] = useState('0');
 
-  console.log(stateData);
-  console.log(stateSummary);
-
   // POPULATION MEASURE
   const typeMap = {
     0: 'TOTAL',
@@ -257,7 +254,7 @@ export default function StateDrawer(props) {
                   <br/>
                   Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
                   <br/>
-                  Compactness: 0
+                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper']}
                   <br/>
                   Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']}
                   </Text>
@@ -268,7 +265,7 @@ export default function StateDrawer(props) {
                   <br/>
                   Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
                   <br/>
-                  Compactness: 0
+                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper']}
                   <br/>
                   Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']}
                   </Text>
@@ -279,7 +276,7 @@ export default function StateDrawer(props) {
                   <br/>
                   Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
                   <br/>
-                  Compactness: 0
+                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper']}
                   <br/>
                   Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']} 
                   </Text>

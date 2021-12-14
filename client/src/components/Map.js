@@ -189,6 +189,8 @@ const Map = () => {
   const zoomIn = async (map, state) => {
     if (state == 'Arizona') {
       const stateData = await handleStateFetch();
+      const selectedDistricting = stateData;
+      // console.log(selectedDistricting)
 
       map.current.flyTo({
         center: [

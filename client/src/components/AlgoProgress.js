@@ -16,15 +16,19 @@ import {
 import { useContext, useState, useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 import { AlgorithmContext } from "../contexts/Algorithm";
+import { SelectedDistrictingContext } from "../contexts/SelectedDistricting";
 
 export default function AlgoProgress(props) {
-    const { isOpen, onClose, activeState } = props;
+    const { isOpen, onClose, activeState, algorithmURL } = props;
+
     const [ algorithm, setAlgorithm ] = useContext(AlgorithmContext);
+    const [ selectedDistricting, setSelectedDistricting] = useContext(SelectedDistrictingContext);
+
     const [ running, setRunning ] = useState(algorithm["running"]);
-    const [ interval ] = useState();
-    const [ algoFinish, setAlgoFinish ] = useState(false);
-    const [ created, setCreated ] = useState(false);
-    const [ testCount, setTestCount ] = useState(0);
+
+    let interval;
+
+    console.log(selectedDistricting)
 
     const handleAlgorithmRun = async () => {
       const response = await fetch(
@@ -34,24 +38,20 @@ export default function AlgoProgress(props) {
       setAlgorithm(algorithm);
       console.log("fetched again")
       console.log(algorithm);
+      if(algorithm['running'] == false) {
+        clearInterval(interval);
+        interval = undefined;
+        while (interval !== undefined){
+            interval = undefined;
+        }
+      }
     }
 
     useEffect(() => {
-      let i;
-      if(algorithm["running"] == false && algorithm["paused"] == false){
-        setAlgoFinish(true);
-      }
-      if(created == false){
-        let interval = setInterval(() => {
+      if(running == true && typeof(interval) === 'undefined'){
+        interval = setInterval(() => {
           handleAlgorithmRun();
         }, 5000);
-        setCreated(true);
-        i += 1;
-        setTestCount(i);
-        console.log(testCount);
-      }
-      if(running == false){
-        return () => clearInterval(interval);
       }
     }, [running]);
     
@@ -61,15 +61,13 @@ export default function AlgoProgress(props) {
         `/pause`
       );
       const pause = await response.json();
-      console.log("paused");
-      console.log(pause);
       setAlgorithm(pause);
     }
 
     const handleResume = async () => {
       setRunning(true);
       const response = await fetch(
-        `/resume`
+        algorithmURL
       );
       const resume = await response.json();
       console.log("resumed");
@@ -97,41 +95,79 @@ export default function AlgoProgress(props) {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {algoFinish == false ?
-            <>
-              <Center>
-                <Text fontSize='2xl'>Algorithm in progress...</Text>
-              </Center>
-              <Divider />
-            </>:
-            algoFinish == true ?
-            <>
-              <Center>
-                <Text fontSize='2xl'>Algorithm Completed</Text>
-              </Center>
-              <Divider />
-            </>:
-            null
+            {algorithm['running'] == false && algorithm['paused'] == false ?
+              <>
+                <Center>
+                  <Text fontSize='2xl'>Algorithm Completed</Text>
+                </Center>
+                <br/>
+                <Divider /> 
+                <Text align="left">Original Pop. Equality: {selectedDistricting['summary']['districtingSummaries']['0']['populationEqualityTotal']}
+                </Text> 
+                <Text align="left">Post-Algo Pop. Equality: {algorithm["populationEqualityTotal"]}</Text>
+                <Divider />
+                <Text align="left">Original Polsby Popper: {selectedDistricting['summary']['districtingSummaries']['0']['avgPolsbyPopper']}</Text>
+                <Text align="left">Post-Algo Polsby Popper: {algorithm["avgPolsbyPopper"]}</Text>
+                <Divider />
+                <Text align="left">Original Majority Minority: {selectedDistricting['summary']['districtingSummaries']['0']['majorityMinorityCountTotal']}
+                </Text>
+                <Text align="left">Post-Algo Majority Minority: {algorithm["majorityMinorityCountTotal"]}</Text>
+                <Divider />
+                <Text align='left'>Total Census Blocks Moved: {algorithm['numberCensusBlocksMoved']}</Text>
+                <Text align="left">Number of iterations: {algorithm["numberIterations"]}</Text>
+                <Divider/>              
+              </>
+              
+              :
+              algorithm['running'] == true ?
+                <>
+                  <Center>
+                    <Text fontSize='2xl'>Algorithm in progress...</Text>
+                  </Center>
+                  <br/>
+                  <Divider />
+                  <Text align="left">Pop. Equality: {algorithm["populationEqualityTotal"]}</Text>
+                  <Text align="left">Polsby Popper: {algorithm["avgPolsbyPopper"]}</Text>
+                  <Text align="left">Majority Minority: {algorithm["majorityMinorityCountTotal"]}</Text>
+
+                  <Divider />
+                  <Text align='left'>Census Blocks Moved: {algorithm['numberCensusBlocksMoved']}</Text>
+                  <Text align="left">Number of iterations: {algorithm["numberIterations"]}</Text>
+                  <Text align="left">Estimated time: {algorithm["estimatedTime"]} seconds</Text>
+                  <Divider/>
+                </>:
+                <>
+                  <Center>
+                    <Text fontSize='2xl'>Algorithm Paused</Text>
+                  </Center>
+                  <br/>
+                  <Divider/>
+                  <Text align="left">Pop. Equality: {algorithm["populationEqualityTotal"]}</Text>
+                  <Text align="left">Polsby Popper: {algorithm["avgPolsbyPopper"]}</Text>
+                  <Text align="left">Majority Minority: {algorithm["majorityMinorityCountTotal"]}</Text>
+                  <Divider />
+                  <Text align='left'>Census Blocks Moved: {algorithm['numberCensusBlocksMoved']}</Text>
+                  <Text align="left">Number of iterations: {algorithm["numberIterations"]}</Text>
+                  <Text align="left">Estimated time: {algorithm["estimatedTime"]} seconds</Text>
+                  <Divider/>
+                </>
             }
-            <Text align="left">Pop. Equality: {algorithm["populationEqualityTotal"]}</Text>
-            <Text align="left">Polsby Popper: {algorithm["avgPolsbyPopper"]}</Text>
-            <Text align="left">Majority Minority: {algorithm["majorityMinorityCountTotal"]}</Text>
-            <Divider />
-            <Text align="left">Number of iterations: {algorithm["numberIterations"]}</Text>
-            <Text align="left">Algorithm time: {algorithm["estimatedTime"]}</Text>
-            {/* <Text align="left">Estimated time to completion: </Text> */}
-            <Divider/>
           </ModalBody>
 
           <ModalFooter>
             {
             running == true ? <Button colorScheme="blue" mr={3} onClick={handlePause}>Pause</Button>:
-            running == false ? <Button colorScheme="blue" mr={3} onClick={handleResume}>Run</Button>:
+            running == false && algorithm['paused'] == true ? <Button colorScheme="blue" mr={3} onClick={handleResume}>Run</Button>:
             null
             }
-            <Button colorScheme="blue" mr={3} onClick={handleTerminate}>
+            {
+            algorithm['running'] == false && algorithm['paused'] == false ? 
+              <Button colorScheme='blue' mr={3} onClick={onClose}>Close Summary</Button>:
+              <Button colorScheme="blue" mr={3} onClick={handleTerminate}>
               Stop Algorithm
-            </Button>
+              </Button>
+            }
+            
           </ModalFooter>
         </ModalContent>
       </Modal>
