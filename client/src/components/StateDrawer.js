@@ -44,7 +44,7 @@ export default function StateDrawer(props) {
     1: 'VAP',
     2: 'CVAP',
   };
-  
+
   let TOTAL = stateSummary['populations'][0]['total'];
   let VAP = stateSummary['populations'][1]['total'];
   let CVAP = stateSummary['populations'][2]['total'];
@@ -166,7 +166,7 @@ export default function StateDrawer(props) {
 
   const populationFetch = async (value) => {
     setValue(value);
-    setPopulationType(value);
+    setPopulationType(typeMap[value]);
     const response = await fetch('/populationType', {
       method: 'POST',
       body: JSON.stringify({ populationType: typeMap[value] }),
