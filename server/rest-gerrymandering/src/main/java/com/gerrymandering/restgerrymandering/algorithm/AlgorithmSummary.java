@@ -12,6 +12,8 @@ public class AlgorithmSummary {
 
     private int numberIterations;
 
+    private int numberCensusBlocksMoved;
+
     private int estimatedTime;
 
     private boolean running;
@@ -40,12 +42,14 @@ public class AlgorithmSummary {
 
     private List<Integer> districtPopulations;
 
-    public AlgorithmSummary(int numberIterations, int estimatedTime, boolean running, boolean paused, String stateName,
-                            double populationEqualityTotal, double populationEqualityVAP, double populationEqualityCVAP,
+    public AlgorithmSummary(int numberIterations, int numberCensusBlocksMoved, int estimatedTime, boolean running,
+                            boolean paused, String stateName, double populationEqualityTotal,
+                            double populationEqualityVAP, double populationEqualityCVAP,
                             double avgPolsbyPopper, int majorityMinorityCountTotal, int majorityMinorityCountVAP,
                             int majorityMinorityCountCVAP, List<Precinct> splitPrecincts,
                             JsonObject districtingBoundary, List<Integer> districtPopulations) {
         this.numberIterations = numberIterations;
+        this.numberCensusBlocksMoved = numberCensusBlocksMoved;
         this.estimatedTime = estimatedTime;
         this.running = running;
         this.paused = paused;
@@ -85,6 +89,14 @@ public class AlgorithmSummary {
 
     public void setNumberIterations(int numberIterations) {
         this.numberIterations = numberIterations;
+    }
+
+    public int getNumberCensusBlocksMoved() {
+        return numberCensusBlocksMoved;
+    }
+
+    public void setNumberCensusBlocksMoved(int numberCensusBlocksMoved) {
+        this.numberCensusBlocksMoved = numberCensusBlocksMoved;
     }
 
     public int getEstimatedTime() {
