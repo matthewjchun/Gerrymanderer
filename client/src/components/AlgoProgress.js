@@ -31,8 +31,6 @@ export default function AlgoProgress(props) {
 
     let interval;
 
-    console.log(selectedDistricting)
-
     useEffect(() => {
       if(running == true && typeof(interval) === 'undefined'){
         interval = setInterval(() => {

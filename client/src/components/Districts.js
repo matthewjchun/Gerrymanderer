@@ -22,15 +22,14 @@ import { Pie } from 'react-chartjs-2';
 
 export default function Districts(props) {
   const { number, population, popType, election } = props;
-  const { arrowFlag, setArrowFlag } = useState(false);
+
+  let arrowFlag = false;
 
   // election
-  // const dem = election[0]["democratic"];
-  // const rep = election[0]["republican"];
-  const dem = 2;
-  const rep = 3;
+  const dem = election[0]["democratic"];
+  const rep = election[0]["republican"];
   if (dem > rep) {
-    setArrowFlag(true);
+    arrowFlag = true;
   }
 
   let TOTAL = population[0]["total"].toLocaleString();
@@ -161,10 +160,10 @@ export default function Districts(props) {
              null
             }
                 <Td isNumeric>
-                  {/* {election[0]["democratic"].toLocaleString()} */}
+                  {election[0]["democratic"].toLocaleString()}
                 </Td>
                 <Td isNumeric>
-                  {/* {election[0]["republican"].toLocaleString()} */}
+                  {election[0]["republican"].toLocaleString()}
                 </Td>
             {arrowFlag ? 
               <Tr>

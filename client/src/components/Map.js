@@ -9,6 +9,7 @@ import StateDrawer from './StateDrawer';
 import Legend from './Legend';
 import { useDisclosure } from '@chakra-ui/react';
 import * as constants from '../constants/constants';
+import { StateSummaryContext } from '../contexts/StateSummary';
 
 
 mapboxgl.accessToken =
@@ -31,6 +32,7 @@ const Map = () => {
   const [activeState, setActiveState] = useContext(StateContext);
   const [geoJSON, setGeoJSON] = useContext(GeoJSONContext);
   const [selectedDistricting, setSelectedDistricting] = useContext(SelectedDistrictingContext);
+  const [stateSummary, setStateSummary] = useContext(StateSummaryContext);
   const { isOpen, onOpen, onClose } = useDisclosure(); // open close state drawer
   // let refetch = false;
 
@@ -70,6 +72,7 @@ const Map = () => {
     const body = await response.json();
     await setStateData(body);
     await setSelectedDistricting(body);
+    await setStateSummary(body['summary']);
     console.log(body)
     return body;
   };
@@ -201,8 +204,7 @@ const Map = () => {
   const zoomIn = async (map, state) => {
     if (state == 'Arizona') {
       const stateData = await handleStateFetch();
-      const selectedDistricting = stateData;
-      // console.log(selectedDistricting)
+      const stateSummary = stateData['summary'];
 
       map.current.flyTo({
         center: [
@@ -213,9 +215,9 @@ const Map = () => {
         zoom: 6.2,
       });
 
-      checkSrc('azcd', stateData['districts']);
-      checkSrc('azprecincts', stateData['precincts']);
-      checkSrc('azcounty', stateData['counties']);
+      checkSrc('azcd', stateData['enacted']['districts']);
+      checkSrc('azprecincts', stateData['enacted']['precincts']);
+      checkSrc('azcounty', stateData['enacted']['counties']);
       addLayer('azprec-boundary', 'azprecincts', '#e6d1b5');
       addLayer('azcounty-boundary', 'azcounty', '#940f00');
       addLayer('azcd_lines', 'azcd', '#000000');

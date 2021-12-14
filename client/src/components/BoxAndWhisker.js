@@ -27,75 +27,76 @@ import ReactApexChart from 'react-apexcharts';
 import { Radio, RadioGroup, Stack } from '@chakra-ui/react';
 import { SelectedDistrictingContext } from "../contexts/SelectedDistricting";
 import { StateContext } from "../contexts/State";
+import { StateSummaryContext } from "../contexts/StateSummary";
+import { PopulationTypeContext } from "../contexts/PopulationType";
 
 export default function BoxAndWhisker(props) {
     const { isOpen, onClose } = props;
     const [value, setValue] = useState('0');
-    const [selectedDistricting, setSelectedDistricting] = useContext(SelectedDistrictingContext);
+    // const [selectedDistricting, setSelectedDistricting] = useContext(SelectedDistrictingContext);
+    const [stateSummary] = useContext(StateSummaryContext);
+    const [populationType] = useContext(PopulationTypeContext);
     const [activeState, setActiveState] = useContext(StateContext);
     const [series, setSeries] = useState();
 
     // const districtPops = stateData['summary']["districtingSummaries"][0]["districtSummaries"];
 
-    const basisMap = {
-      0: boxData2,
-      1: boxData,
-      Virginia: 'va',
-    };
+    const allBoxData = stateSummary['boxAndWhiskerData'];
 
+    console.log(stateSummary);
+    console.log(stateSummary["boxAndWhiskerData"]);
 
     // const sortedDistrictArray = () => {
     //   selectedDistricting['summary']
     // };
 
-    // change to boxData / basisMap[value]
     const azBoxData = [
       {
         x: "district one",
-        y: [ basisMap[value][0]["min"].toPrecision(2), basisMap[value][0]["1q"].toPrecision(2), basisMap[value][0]["med"].toPrecision(2),
-         basisMap[value][0]["3q"].toPrecision(2), basisMap[value][0]["max"].toPrecision(2)]
+        y: [ boxData[0]["min"].toPrecision(2), boxData[0]["1q"].toPrecision(2), boxData[0]["med"].toPrecision(2),
+         boxData[0]["3q"].toPrecision(2), boxData[0]["max"].toPrecision(2)]
       },
       {
         x: "district two",
-        y: [ basisMap[value][1]["min"].toPrecision(2), basisMap[value][1]["1q"].toPrecision(2), basisMap[value][1]["med"].toPrecision(2), 
-        basisMap[value][1]["3q"].toPrecision(2), basisMap[value][1]["max"].toPrecision(2)]
+        y: [ boxData[1]["min"].toPrecision(2), boxData[1]["1q"].toPrecision(2), boxData[1]["med"].toPrecision(2), 
+        boxData[1]["3q"].toPrecision(2), boxData[1]["max"].toPrecision(2)]
       },
       {
         x: "district three",
-        y: [ basisMap[value][2]["min"].toPrecision(2), basisMap[value][2]["1q"].toPrecision(2), basisMap[value][2]["med"].toPrecision(2),
-         basisMap[value][2]["3q"].toPrecision(2), basisMap[value][2]["max"].toPrecision(2)]
+        y: [ boxData[2]["min"].toPrecision(2), boxData[2]["1q"].toPrecision(2), boxData[2]["med"].toPrecision(2),
+         boxData[2]["3q"].toPrecision(2), boxData[2]["max"].toPrecision(2)]
       },
       {
         x: "district four",
-        y: [ basisMap[value][3]["min"].toPrecision(2), basisMap[value][3]["1q"].toPrecision(2), basisMap[value][3]["med"].toPrecision(2), 
-        basisMap[value][3]["3q"].toPrecision(2), basisMap[value][3]["max"].toPrecision(2)]
+        y: [ boxData[3]["min"].toPrecision(2), boxData[3]["1q"].toPrecision(2), boxData[3]["med"].toPrecision(2), 
+        boxData[3]["3q"].toPrecision(2), boxData[3]["max"].toPrecision(2)]
       },
       {
         x: "district five",
-        y: [ basisMap[value][4]["min"].toPrecision(2), basisMap[value][4]["1q"].toPrecision(2), basisMap[value][4]["med"].toPrecision(2),
-         basisMap[value][4]["3q"].toPrecision(2), basisMap[value][4]["max"].toPrecision(2)]
+        y: [ boxData[4]["min"].toPrecision(2), boxData[4]["1q"].toPrecision(2), boxData[4]["med"].toPrecision(2),
+         boxData[4]["3q"].toPrecision(2), boxData[4]["max"].toPrecision(2)]
       },
       {
         x: "district six",
-        y: [ basisMap[value][5]["min"].toPrecision(2), basisMap[value][5]["1q"].toPrecision(2), basisMap[value][5]["med"].toPrecision(2), 
-        basisMap[value][5]["3q"].toPrecision(2), basisMap[value][5]["max"].toPrecision(2)]
+        y: [ boxData[5]["min"].toPrecision(2), boxData[5]["1q"].toPrecision(2), boxData[5]["med"].toPrecision(2), 
+        boxData[5]["3q"].toPrecision(2), boxData[5]["max"].toPrecision(2)]
       },
       {
         x: "district seven",
-        y: [ basisMap[value][6]["min"].toPrecision(2), basisMap[value][6]["1q"].toPrecision(2),
-         basisMap[value][6]["med"].toPrecision(2), basisMap[value][6]["3q"].toPrecision(2), basisMap[value][6]["max"].toPrecision(2)]
+        y: [ boxData[6]["min"].toPrecision(2), boxData[6]["1q"].toPrecision(2),
+         boxData[6]["med"].toPrecision(2), boxData[6]["3q"].toPrecision(2), boxData[6]["max"].toPrecision(2)]
       },
       {
         x: "district eight",
-        y: [ basisMap[value][7]["min"].toPrecision(2), basisMap[value][7]["1q"].toPrecision(2),
-          basisMap[value][7]["med"].toPrecision(2), basisMap[value][7]["3q"].toPrecision(2),
-          basisMap[value][7]["max"].toPrecision(2)]
+        y: [ boxData[7]["min"].toPrecision(2), boxData[7]["1q"].toPrecision(2),
+          boxData[7]["med"].toPrecision(2), boxData[7]["3q"].toPrecision(2),
+          boxData[7]["max"].toPrecision(2)]
       },
       {
         x: "district nine",
-        y: [ basisMap[value][8]["min"].toPrecision(2), basisMap[value][8]["1q"].toPrecision(2),
-         basisMap[value][8]["med"].toPrecision(2), basisMap[value][8]["3q"].toPrecision(2),
-          basisMap[value][8]["max"].toPrecision(2)]
+        y: [ boxData[8]["min"].toPrecision(2), boxData[8]["1q"].toPrecision(2),
+         boxData[8]["med"].toPrecision(2), boxData[8]["3q"].toPrecision(2),
+          boxData[8]["max"].toPrecision(2)]
       },
     ];
 

@@ -30,11 +30,13 @@ import { DataContext, StateContext } from '../contexts/State';
 import { Pie } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import Districts from './Districts';
+import { PopulationTypeContext } from '../contexts/PopulationType';
 
 export default function StateDrawer(props) {
   const { isOpen, onOpen, onClose, stateSummary, stateData } = props;
   const [activeState] = useContext(StateContext);
   const [value, setValue] = useState('0');
+  const [populationType, setPopulationType] = useContext(PopulationTypeContext);
 
   // POPULATION MEASURE
   const typeMap = {
@@ -156,16 +158,15 @@ export default function StateDrawer(props) {
 
   // ELECTION SPLIT STATISTICS
 
-  // let dem = stateSummary['elections'][0]['democratic'];
-  // let rep = stateSummary['elections'][0]['republican'];
-  let dem = 2;
-  let rep = 5;
+  let dem = stateSummary['elections'][0]['democratic'];
+  let rep = stateSummary['elections'][0]['republican'];
   let total = dem + rep;
   let demPercent = dem / total;
   let repPercent = rep / total;
 
   const populationFetch = async (value) => {
     setValue(value);
+    setPopulationType(value);
     const response = await fetch('/populationType', {
       method: 'POST',
       body: JSON.stringify({ populationType: typeMap[value] }),
@@ -250,7 +251,7 @@ export default function StateDrawer(props) {
                 {value == '0' ? (
                   <Text> Population: {TOTAL.toLocaleString()} 
                   <br/>
-                  Total Congressional Districts: {stateData['districts']['features'].length}
+                  Total Congressional Districts: {stateData['enacted']['districts']['features'].length}
                   <br/>
                   Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
                   <br/>
@@ -261,7 +262,7 @@ export default function StateDrawer(props) {
                 ) : value == '1' ? (
                   <Text> Population: {VAP.toLocaleString()}
                   <br/>
-                  Total Congressional Districts: {stateData['districts']['features'].length}
+                  Total Congressional Districts: {stateData['enacted']['districts']['features'].length}
                   <br/>
                   Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
                   <br/>
@@ -272,7 +273,7 @@ export default function StateDrawer(props) {
                 ) : value == '2' ? (
                   <Text> Population: {CVAP.toLocaleString()}
                   <br/>
-                  Total Congressional Districts: {stateData['districts']['features'].length}
+                  Total Congressional Districts: {stateData['enacted']['districts']['features'].length}
                   <br/>
                   Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
                   <br/>
@@ -289,27 +290,27 @@ export default function StateDrawer(props) {
                   <Stat>
                     <StatLabel>Democratic</StatLabel>
                     <StatNumber>
-                      {dem}
+                      {dem.toLocaleString()}
                     </StatNumber>
                     <StatHelpText>
                     {dem > rep ? 
                     <StatArrow type='increase' />:
                     <StatArrow type='decrease' />
                     }
-                      {demPercent.toLocaleString("en", {style: "percent"})}
+                      {demPercent.toLocaleString("en", {style: "percent", minimumFractionDigits: 2})}
                     </StatHelpText>
                   </Stat>
                   <Stat>
                     <StatLabel>Republican</StatLabel>
                     <StatNumber>
-                      {rep}
+                      {rep.toLocaleString()}
                     </StatNumber>
                     <StatHelpText>
                     {dem < rep ? 
                     <StatArrow type='increase' />:
                     <StatArrow type='decrease' />
                     }
-                      {repPercent.toLocaleString("en", {style: "percent"})}
+                      {repPercent.toLocaleString("en", {style: "percent", minimumFractionDigits: 2})}
                     </StatHelpText>
                   </Stat>
                 </StatGroup>
@@ -325,6 +326,7 @@ export default function StateDrawer(props) {
                 }
               </TabPanel>
               <TabPanel>
+               
                {districts.map((district) => {
                   return(
                   <Districts 
