@@ -1,5 +1,8 @@
 package com.gerrymandering.restgerrymandering.model;
 
+import com.gerrymandering.restgerrymandering.constants.Constants;
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +13,14 @@ public class StateSummary {
     private double centerLat;
     private List<Population> populations;
     private List<Election> elections;
-    private List<BoxAndWhisker> boxAndWhiskerData;
+    private List<BoxAndWhisker> african;
+    private List<BoxAndWhisker> asian;
+    private List<BoxAndWhisker> hispanic;
+    private List<BoxAndWhisker> nativeAmerican;
+    private List<BoxAndWhisker> pacificIslander;
+    private List<BoxAndWhisker> democratic;
+    private List<BoxAndWhisker> republican;
     private List<DistrictingSummary> districtingSummaries;
-
 
     public StateSummary() {}
 
@@ -28,7 +36,32 @@ public class StateSummary {
             summary.populateSummary(districting);
             summaryList.add(summary);
         }
-        boxAndWhiskerData = state.getBoxAndWhiskerData();
+        setAfrican(new ArrayList<>());
+        setAsian(new ArrayList<>());
+        setHispanic(new ArrayList<>());
+        setNativeAmerican(new ArrayList<>());
+        setPacificIslander(new ArrayList<>());
+        setDemocratic(new ArrayList<>());
+        setRepublican(new ArrayList<>());
+        for (BoxAndWhisker boxAndWhisker: state.getBoxAndWhiskerData()) {
+            Constants.Demographic basis = boxAndWhisker.getBasis();
+            switch (basis) {
+                case AFRICAN:
+                    african.add(boxAndWhisker);
+                case ASIAN:
+                    asian.add(boxAndWhisker);
+                case HISPANIC:
+                    hispanic.add(boxAndWhisker);
+                case NATIVE:
+                    hispanic.add(boxAndWhisker);
+                case PACIFICISLANDER:
+                    pacificIslander.add(boxAndWhisker);
+                case DEMOCRATIC:
+                    democratic.add(boxAndWhisker);
+                case REPUBLICAN:
+                    republican.add(boxAndWhisker);
+            }
+        }
         districtingSummaries = summaryList;
     }
 
@@ -73,12 +106,60 @@ public class StateSummary {
         this.elections = elections;
     }
 
-    public List<BoxAndWhisker> getBoxAndWhiskerData() {
-        return boxAndWhiskerData;
+    public List<BoxAndWhisker> getAfrican() {
+        return african;
     }
 
-    public void setBoxAndWhiskerData(List<BoxAndWhisker> boxAndWhiskerData) {
-        this.boxAndWhiskerData = boxAndWhiskerData;
+    public void setAfrican(List<BoxAndWhisker> african) {
+        this.african = african;
+    }
+
+    public List<BoxAndWhisker> getAsian() {
+        return asian;
+    }
+
+    public void setAsian(List<BoxAndWhisker> asian) {
+        this.asian = asian;
+    }
+
+    public List<BoxAndWhisker> getHispanic() {
+        return hispanic;
+    }
+
+    public void setHispanic(List<BoxAndWhisker> hispanic) {
+        this.hispanic = hispanic;
+    }
+
+    public List<BoxAndWhisker> getNativeAmerican() {
+        return nativeAmerican;
+    }
+
+    public void setNativeAmerican(List<BoxAndWhisker> nativeAmerican) {
+        this.nativeAmerican = nativeAmerican;
+    }
+
+    public List<BoxAndWhisker> getPacificIslander() {
+        return pacificIslander;
+    }
+
+    public void setPacificIslander(List<BoxAndWhisker> pacificIslander) {
+        this.pacificIslander = pacificIslander;
+    }
+
+    public List<BoxAndWhisker> getDemocratic() {
+        return democratic;
+    }
+
+    public void setDemocratic(List<BoxAndWhisker> democratic) {
+        this.democratic = democratic;
+    }
+
+    public List<BoxAndWhisker> getRepublican() {
+        return republican;
+    }
+
+    public void setRepublican(List<BoxAndWhisker> republican) {
+        this.republican = republican;
     }
 
     public List<DistrictingSummary> getDistrictingSummaries() {

@@ -98,6 +98,10 @@ public class Districting implements Cloneable {
         districts.sort(new DistrictComparator(type));
     }
 
+    public void recalculateObjective() {
+        setObjectiveValue(0.6 * (1 - populationEqualityTotal) + 0.4 * avgPolsbyPopper);
+    }
+
     public boolean moveCBFromLargestToSmallestDistrict(Districting selectedDistricting, Constants.PopulationType type,
                                                        List<Long> removed, List<Long> added,
                                                        List<CensusBlock> moved) {
