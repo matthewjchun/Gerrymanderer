@@ -34,6 +34,18 @@ const Map = () => {
   const { isOpen, onOpen, onClose } = useDisclosure(); // open close state drawer
   // let refetch = false;
 
+  /////////////////////// SETTING GEOJSON //////////////////////////////
+  useEffect(() => {
+    if(activeState == 'Arizona'){
+      map.current.removeLayer('azcd_lines');
+      map.current.removeSource('azcd');
+
+      checkSrc('azcd', geoJSON);
+      addLayer('azcd_lines', 'azcd', '#000000');
+    }
+  }, [geoJSON]);
+
+  
   /////////////////////// MARKER METHODS //////////////////////////////
   const createMarker = async (longitude, latitude, msg) => {
     return new mapboxgl.Marker({ color: '#cfaf5b' })

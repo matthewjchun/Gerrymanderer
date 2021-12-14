@@ -17,35 +17,21 @@ import { useContext, useState, useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 import { AlgorithmContext } from "../contexts/Algorithm";
 import { SelectedDistrictingContext } from "../contexts/SelectedDistricting";
+import { GeoJSONContext } from "../contexts/GeoJSON";
 
 export default function AlgoProgress(props) {
     const { isOpen, onClose, activeState, algorithmURL } = props;
 
     const [ algorithm, setAlgorithm ] = useContext(AlgorithmContext);
     const [ selectedDistricting, setSelectedDistricting] = useContext(SelectedDistrictingContext);
+    const [ geoJSON, setGeoJSON ] = useContext(GeoJSONContext);
+
 
     const [ running, setRunning ] = useState(algorithm["running"]);
 
     let interval;
 
     console.log(selectedDistricting)
-
-    const handleAlgorithmRun = async () => {
-      const response = await fetch(
-        `/algorithmSummary`
-      );
-      const algorithm = await response.json();
-      setAlgorithm(algorithm);
-      console.log("fetched again")
-      console.log(algorithm);
-      if(algorithm['running'] == false) {
-        clearInterval(interval);
-        interval = undefined;
-        while (interval !== undefined){
-            interval = undefined;
-        }
-      }
-    }
 
     useEffect(() => {
       if(running == true && typeof(interval) === 'undefined'){
@@ -55,6 +41,24 @@ export default function AlgoProgress(props) {
       }
     }, [running]);
     
+
+    const handleAlgorithmRun = async () => {
+      const response = await fetch(
+        `/algorithmSummary`
+      );
+      const algorithm = await response.json();
+      if(algorithm['running'] == false) {
+        clearInterval(interval);
+        interval = undefined;
+        while (interval !== undefined){
+            interval = undefined;
+        }
+      }
+      setAlgorithm(algorithm);
+      console.log("fetched again")
+      console.log(algorithm);
+    }
+
     const handlePause = async () => {
       setRunning(false);
       const response = await fetch(
@@ -84,6 +88,24 @@ export default function AlgoProgress(props) {
       console.log("terminated");
       console.log(terminate);
       setAlgorithm(terminate);
+    }
+
+    const handlePostAlgo = async () => {
+      const response = await fetch(
+        `/algorithmSummary`
+      );
+      const body = await response.json();
+      if(body['districtingBoundary'] == null){
+        while(body['districtingBoundary'] == null){
+          const response = await fetch(
+            `/algorithmSummary`
+          );
+          const body = await response.json();    
+        }
+      }
+
+      setGeoJSON(body['districtingBoundary']);
+      onClose();
     }
 
     return(
@@ -117,7 +139,6 @@ export default function AlgoProgress(props) {
                 <Text align="left">Number of iterations: {algorithm["numberIterations"]}</Text>
                 <Divider/>              
               </>
-              
               :
               algorithm['running'] == true ?
                 <>
@@ -162,7 +183,7 @@ export default function AlgoProgress(props) {
             }
             {
             algorithm['running'] == false && algorithm['paused'] == false ? 
-              <Button colorScheme='blue' mr={3} onClick={onClose}>Close Summary</Button>:
+              <Button colorScheme='blue' mr={3} onClick={handlePostAlgo}>Close Summary</Button>:
               <Button colorScheme="blue" mr={3} onClick={handleTerminate}>
               Stop Algorithm
               </Button>
