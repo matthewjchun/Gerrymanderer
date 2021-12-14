@@ -353,7 +353,11 @@ public class Districting implements Cloneable {
                     Geometry union = gf.createGeometryCollection(geometries.toArray(new Geometry[] {})).union();
                     String boundaryStr = geoWriter.write(union.getBoundary());
                     JsonObject boundary = JsonParser.parseString(boundaryStr).getAsJsonObject();
-                    boundary.addProperty("type", "LineString");
+                    JsonArray coordinates = boundary.get("coordinates").getAsJsonArray();
+                    if (coordinates.get(0).getAsJsonArray().get(0).isJsonArray())
+                        boundary.addProperty("type", "Polygon");
+                    else
+                        boundary.addProperty("type", "LineString");
                     compositeDistrictFeature.add("geometry", boundary);
                     compositeDistrictFeature.add("properties", properties);
                     features.add(compositeDistrictFeature);
@@ -388,7 +392,11 @@ public class Districting implements Cloneable {
                 Geometry union = gf.createGeometryCollection(geometries.toArray(new Geometry[] {})).union();
                 String boundaryStr = geoWriter.write(union.getBoundary());
                 JsonObject boundary = JsonParser.parseString(boundaryStr).getAsJsonObject();
-                boundary.addProperty("type", "LineString");
+                JsonArray coordinates = boundary.get("coordinates").getAsJsonArray();
+                if (coordinates.get(0).getAsJsonArray().get(0).isJsonArray())
+                    boundary.addProperty("type", "Polygon");
+                else
+                    boundary.addProperty("type", "LineString");
                 compositeDistrictFeature.add("geometry", boundary);
                 compositeDistrictFeature.add("properties", properties);
                 features.add(compositeDistrictFeature);
