@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static com.gerrymandering.restgerrymandering.constants.Constants.SortCriteria.POPEQ;
+
 //@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/")
@@ -74,6 +76,8 @@ public class DistrictingController {
     public ResponseEntity<JsonObject> getStateFull(@RequestParam(name = "state") String stateName, HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.setAttribute("currentStateName", stateName);
+        session.setAttribute("sortCriteria", POPEQ);
+        session.setAttribute("populationType", Constants.PopulationType.TOTAL);
         JsonObject stateFull = new JsonObject();
         Gson gson = new Gson();
         State state = ss.getStateByName(stateName);
@@ -83,19 +87,34 @@ public class DistrictingController {
         String precinctPath = enactedDistricting.getPrecinctPath();
         String countyPath = enactedDistricting.getCountyPath();
         String[] paths = { districtPath, precinctPath, countyPath };
+        JsonObject enactedGeoJson = new JsonObject();
         for (String path : paths) {
             try (FileReader reader = new FileReader(Constants.getResourcePath() + path)) {
                 JsonObject geoJson = JsonParser.parseReader(reader).getAsJsonObject();
-                stateFull.add(path.split("/")[0], geoJson);
+                enactedGeoJson.add(path.split("/")[0], geoJson);
             } catch (Exception e) {
-                System.out.println("Error");
+                System.out.println("Error reading enacted GeoJSON.");
                 System.out.println(path);
             }
         }
-
+        stateFull.add("enacted", enactedGeoJson);
+        List<Districting> seawulfDistrictings = state.getDistrictings();
+        seawulfDistrictings.sort(new DistrictingComparator(POPEQ, Constants.PopulationType.TOTAL));
+        JsonArray seawulfGeoJsonArray = new JsonArray();
+        for (int i = 1; i < seawulfDistrictings.size(); i++) {
+            Districting seawulfDistricting = seawulfDistrictings.get(i);
+            try (FileReader reader = new FileReader(Constants.getResourcePath() + seawulfDistricting.getDistrictPath())) {
+                JsonObject geoJson = JsonParser.parseReader(reader).getAsJsonObject();
+                seawulfGeoJsonArray.add(geoJson);
+            } catch (Exception e) {
+                System.out.println("Error reading SeaWulf GeoJSON.");
+            }
+        }
+        stateFull.add("seawulf", seawulfGeoJsonArray);
         StateSummary summaryObj = new StateSummary();
         summaryObj.populateSummary(state);
         String summaryStr = gson.toJson(summaryObj);
+        System.out.println(summaryStr);
         JsonObject summary = JsonParser.parseString(summaryStr).getAsJsonObject();
         stateFull.add("summary", summary);
         return ResponseEntity.ok(stateFull);
@@ -111,6 +130,23 @@ public class DistrictingController {
         return ResponseEntity.ok("{\"populationType\": \"" + populationType + "\"}");
     }
 
+    @PostMapping("/sortCriteria")
+    public ResponseEntity<List<Districting>> setSortCriteria(@RequestBody JsonObject sortCriteriaJson,
+            HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String currentStateName = (String) session.getAttribute("currentStateName");
+        State currentState = ss.getStateByName(currentStateName);
+        Constants.PopulationType populationType = (Constants.PopulationType) session.getAttribute("populationType");
+
+        String sortCriteriaStr = sortCriteriaJson.get("sortCriteria").getAsString().toUpperCase();
+        Constants.SortCriteria sortCriteria = Constants.SortCriteria.valueOf(sortCriteriaStr);
+        session.setAttribute("sortCriteria", sortCriteria);
+
+        List<Districting> seawulfDistrictings = currentState.getDistrictings();
+        seawulfDistrictings.sort(new DistrictingComparator(sortCriteria, populationType));
+        return ResponseEntity.ok(seawulfDistrictings);
+    }
+
     @GetMapping("/algorithm")
     public ResponseEntity<JsonObject> startAlgorithm(@RequestParam(name = "id") long districtingId,
             @RequestParam(name = "popEqThresh") double popEqualityThresh, @RequestParam int majorityMinorityThresh, HttpServletRequest request) {
@@ -118,12 +154,21 @@ public class DistrictingController {
         String currentStateName = (String) session.getAttribute("currentStateName");
         State currentState = ss.getStateByName(currentStateName);
         Constants.PopulationType populationType = (Constants.PopulationType) session.getAttribute("populationType");
+        Constants.SortCriteria sortCriteria = (Constants.SortCriteria) session.getAttribute("sortCriteria");
         if (populationType == null) {
             populationType = Constants.PopulationType.TOTAL;
             session.setAttribute("populationType", populationType);
         }
+        if (sortCriteria == null) {
+            sortCriteria = POPEQ;
+            session.setAttribute("sortCriteria", sortCriteria);
+        }
         Gson gson = new Gson();
-        Districting selectedDistricting = currentState.getSeaWulfDistricting(districtingId);
+
+        List<Districting> seawulfDistrictings = currentState.getDistrictings();
+        seawulfDistrictings.sort(new DistrictingComparator(sortCriteria, populationType));
+        currentState.setDistrictings(seawulfDistrictings);
+        Districting selectedDistricting = currentState.getDistrictingById(districtingId);
 
         AlgorithmSettings algorithmSettings = (AlgorithmSettings) session.getAttribute("algorithmSettings");
         if (algorithmSettings == null) {
@@ -183,6 +228,7 @@ public class DistrictingController {
         HttpSession session = request.getSession();
         session.setAttribute("currentStateName", null);
         session.setAttribute("populationType", Constants.PopulationType.TOTAL);
+        session.setAttribute("sortCriteria", POPEQ);
         session.setAttribute("algorithmSettings", null);
         JsonObject success = new JsonObject();
         success.addProperty("success", true);
@@ -190,6 +236,7 @@ public class DistrictingController {
     }
 
     // TESTING METHODS
+
     @GetMapping("/boundary")
     public ResponseEntity<JsonObject> boundary(HttpServletRequest request) {
         HttpSession session = request.getSession();

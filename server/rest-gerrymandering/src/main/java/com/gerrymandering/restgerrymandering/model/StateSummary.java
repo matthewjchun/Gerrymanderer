@@ -10,6 +10,7 @@ public class StateSummary {
     private double centerLat;
     private List<Population> populations;
     private List<Election> elections;
+    private List<BoxAndWhisker> boxAndWhiskerData;
     private List<DistrictingSummary> districtingSummaries;
 
 
@@ -27,6 +28,7 @@ public class StateSummary {
             summary.populateSummary(districting);
             summaryList.add(summary);
         }
+        boxAndWhiskerData = state.getBoxAndWhiskerData();
         districtingSummaries = summaryList;
     }
 
@@ -69,6 +71,14 @@ public class StateSummary {
 
     public void setElections(List<Election> elections) {
         this.elections = elections;
+    }
+
+    public List<BoxAndWhisker> getBoxAndWhiskerData() {
+        return boxAndWhiskerData;
+    }
+
+    public void setBoxAndWhiskerData(List<BoxAndWhisker> boxAndWhiskerData) {
+        this.boxAndWhiskerData = boxAndWhiskerData;
     }
 
     public List<DistrictingSummary> getDistrictingSummaries() {
