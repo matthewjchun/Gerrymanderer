@@ -225,6 +225,8 @@ public class District implements Cloneable {
                 case CVAP:
                     setMajorityMinorityCVAP(majorityMinority);
                     break;
+                default:
+                    break;
             }
         }
     }
