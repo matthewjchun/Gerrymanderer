@@ -21,6 +21,7 @@ export default function TopBar(props) {
 
   return (
     <HStack w='100%' p='5' align='center' justify='center'>
+                <BoxAndWhisker isOpen={true} onClose={onBoxClose} onOpen={onBoxOpen} activeState={activeState}></BoxAndWhisker>
       {activeState != 'Celtics' ? (
         <Box flex='1' mr='auto'>
           <Button onClick={onDrawerOpen} mr='5px'>
