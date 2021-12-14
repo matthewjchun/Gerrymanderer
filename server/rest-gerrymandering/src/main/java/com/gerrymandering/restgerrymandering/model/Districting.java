@@ -205,10 +205,13 @@ public class Districting implements Cloneable {
             switch (type) {
             case TOTAL:
                 setPopulationEqualityTotal(populationEquality);
+                break;
             case VAP:
                 setPopulationEqualityVAP(populationEquality);
+                break;
             case CVAP:
                 setPopulationEqualityCVAP(populationEquality);
+                break;
             default:
                 break;
             }
