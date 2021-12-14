@@ -18,6 +18,7 @@ import {
   AccordionPanel,
   AccordionIcon,
   Box,
+  HStack,
 } from '@chakra-ui/react';
 import { useContext, useState, useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
@@ -279,7 +280,7 @@ export default function BoxAndWhisker(props) {
   };
 
   return(
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Box And Whisker</ModalHeader>
@@ -292,8 +293,6 @@ export default function BoxAndWhisker(props) {
               <ReactApexChart options={options} series={azSeries} type='boxPlot' height={350}/>):
             <ReactApexChart options={options} series={azSeries} type='boxPlot' height={350}/>
           }
-          
-          
           <Divider />
           <Accordion allowToggle>
             <AccordionItem>
@@ -339,7 +338,6 @@ export default function BoxAndWhisker(props) {
             </AccordionItem>
           </Accordion>
         </ModalBody>
-
         <ModalFooter>
           <Button colorScheme="blue" mr={3} onClick={onClose}>
             Close
