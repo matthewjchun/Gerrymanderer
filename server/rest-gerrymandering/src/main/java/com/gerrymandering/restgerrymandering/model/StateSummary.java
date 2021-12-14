@@ -65,6 +65,8 @@ public class StateSummary {
                 case REPUBLICAN:
                     republican.add(boxAndWhisker);
                     break;
+                default:
+                    break;
             }
         }
         districtingSummaries = summaryList;
