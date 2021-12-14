@@ -44,7 +44,13 @@ export default function BoxAndWhisker(props) {
     const allBoxData = stateSummary['boxAndWhiskerData'];
 
     console.log(stateSummary);
-    console.log(stateSummary["boxAndWhiskerData"]);
+    console.log(stateSummary["democratic"]);
+
+    // stateSummary['african'].forEach(
+    //   if(bas)
+
+    // )
+    // console.log(stateSummary['african'].forEach()basis);
 
     // const sortedDistrictArray = () => {
     //   selectedDistricting['summary']

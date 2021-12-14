@@ -53,12 +53,11 @@ public class StateSummary {
                 case HISPANIC:
                     hispanic.add(boxAndWhisker);
                 case NATIVE:
-                    hispanic.add(boxAndWhisker);
+                    nativeAmerican.add(boxAndWhisker);
                 case PACIFICISLANDER:
                     pacificIslander.add(boxAndWhisker);
                 case DEMOCRATIC:
-                    democratic.add(boxAndWhisker);
-                case REPUBLICAN:
+                    democratic.add(boxAndWhisker)\                 case REPUBLICAN:
                     republican.add(boxAndWhisker);
             }
         }
