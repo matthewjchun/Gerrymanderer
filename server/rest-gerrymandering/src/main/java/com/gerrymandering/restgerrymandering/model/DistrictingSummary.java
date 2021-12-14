@@ -13,6 +13,7 @@ public class DistrictingSummary {
     private int majorityMinorityCountTotal;
     private int majorityMinorityCountVAP;
     private int majorityMinorityCountCVAP;
+    private double objectiveValue;
     private List<DistrictSummary> districtSummaries;
 
     public DistrictingSummary() {}
@@ -26,6 +27,7 @@ public class DistrictingSummary {
         majorityMinorityCountTotal = districting.getMajorityMinorityCountTotal();
         majorityMinorityCountVAP = districting.getMajorityMinorityCountVAP();
         majorityMinorityCountCVAP = districting.getMajorityMinorityCountCVAP();
+        objectiveValue = districting.getObjectiveValue();
         List<DistrictSummary> summaryList = new ArrayList<>();
         for (District district: districting.getDistricts()) {
             DistrictSummary summary = new DistrictSummary();
@@ -100,7 +102,19 @@ public class DistrictingSummary {
         this.majorityMinorityCountCVAP = majorityMinorityCountCVAP;
     }
 
+    public double getObjectiveValue() {
+        return objectiveValue;
+    }
+
+    public void setObjectiveValue(double objectiveValue) {
+        this.objectiveValue = objectiveValue;
+    }
+
     public List<DistrictSummary> getDistrictSummaries() {
         return districtSummaries;
+    }
+
+    public void setDistrictSummaries(List<DistrictSummary> districtSummaries) {
+        this.districtSummaries = districtSummaries;
     }
 }

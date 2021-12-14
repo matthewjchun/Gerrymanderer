@@ -15,7 +15,7 @@ public class Constants {
     }
     private static final int enactedDistrictingIndex = 0;
     private static final String resourcePath = "src/main/resources/data/";
-    private static final int maxIterations = 100;
+    private static final int maxIterations = 300;
     private static final int estimatedTimePerIteration = 1;
     private static final int maxFailedAttempts = 100;
     private static final double minThresholdMajorityMinority = 0.5;
@@ -35,8 +35,7 @@ public class Constants {
     }
 
     public enum ElectionName {
-        SEN18,
-        AG18,
+        PRE20
     }
 
     public static String[] getStates() {

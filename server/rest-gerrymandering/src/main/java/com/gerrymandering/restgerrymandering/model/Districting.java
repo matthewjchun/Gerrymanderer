@@ -38,6 +38,8 @@ public class Districting implements Cloneable {
 
     private int majorityMinorityCountCVAP;
 
+    private double objectiveValue;
+
     private String districtPath;
 
     private String precinctPath;
@@ -56,8 +58,8 @@ public class Districting implements Cloneable {
 
     public Districting(long id, double populationEqualityTotal, double populationEqualityVAP,
             double populationEqualityCVAP, double avgPolsbyPopper, int majorityMinorityCountTotal,
-            int majorityMinorityCountVAP, int majorityMinorityCountCVAP, String districtPath, String precinctPath,
-            String countyPath, List<District> districts, int splitPrecincts) {
+            int majorityMinorityCountVAP, int majorityMinorityCountCVAP, double objectiveValue, String districtPath,
+            String precinctPath, String countyPath, List<District> districts, int splitPrecincts) {
         this.id = id;
         this.populationEqualityTotal = populationEqualityTotal;
         this.populationEqualityVAP = populationEqualityVAP;
@@ -66,6 +68,7 @@ public class Districting implements Cloneable {
         this.majorityMinorityCountTotal = majorityMinorityCountTotal;
         this.majorityMinorityCountVAP = majorityMinorityCountVAP;
         this.majorityMinorityCountCVAP = majorityMinorityCountCVAP;
+        this.objectiveValue = objectiveValue;
         this.districtPath = districtPath;
         this.precinctPath = precinctPath;
         this.countyPath = countyPath;
@@ -80,7 +83,7 @@ public class Districting implements Cloneable {
             districting = (Districting) super.clone();
         } catch (CloneNotSupportedException e) {
             districting = new Districting(id, populationEqualityTotal, populationEqualityVAP, populationEqualityCVAP,
-                    avgPolsbyPopper, majorityMinorityCountTotal, majorityMinorityCountVAP, majorityMinorityCountCVAP,
+                    avgPolsbyPopper, majorityMinorityCountTotal, majorityMinorityCountVAP, majorityMinorityCountCVAP, objectiveValue,
                     districtPath, precinctPath, countyPath, districts, splitPrecincts);
         }
         List<District> districtsClone = new ArrayList<>();
@@ -496,6 +499,14 @@ public class Districting implements Cloneable {
 
     public void setMajorityMinorityCountCVAP(int majorityMinorityCountCVAP) {
         this.majorityMinorityCountCVAP = majorityMinorityCountCVAP;
+    }
+
+    public double getObjectiveValue() {
+        return objectiveValue;
+    }
+
+    public void setObjectiveValue(double objectiveValue) {
+        this.objectiveValue = objectiveValue;
     }
 
     public String getDistrictPath() {
