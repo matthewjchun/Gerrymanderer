@@ -1,8 +1,6 @@
 package com.gerrymandering.restgerrymandering.model;
 
 import com.gerrymandering.restgerrymandering.constants.Constants;
-import com.google.gson.JsonObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,17 +46,27 @@ public class StateSummary {
             switch (basis) {
                 case AFRICAN:
                     african.add(boxAndWhisker);
+                    break;
                 case ASIAN:
                     asian.add(boxAndWhisker);
+                    break;
                 case HISPANIC:
                     hispanic.add(boxAndWhisker);
+                    break;
                 case NATIVE:
                     nativeAmerican.add(boxAndWhisker);
+                    break;
                 case PACIFICISLANDER:
                     pacificIslander.add(boxAndWhisker);
+                    break;
                 case DEMOCRATIC:
-                    democratic.add(boxAndWhisker)\                 case REPUBLICAN:
+                    democratic.add(boxAndWhisker);
+                    break;
+                case REPUBLICAN:
                     republican.add(boxAndWhisker);
+                    break;
+                default:
+                    break;
             }
         }
         districtingSummaries = summaryList;

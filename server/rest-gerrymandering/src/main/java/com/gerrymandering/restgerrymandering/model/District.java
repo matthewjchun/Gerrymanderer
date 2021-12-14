@@ -218,10 +218,15 @@ public class District implements Cloneable {
             switch (population.getPopulationType()) {
                 case TOTAL:
                     setMajorityMinorityTotal(majorityMinority);
+                    break;
                 case VAP:
                     setMajorityMinorityVAP(majorityMinority);
+                    break;
                 case CVAP:
                     setMajorityMinorityCVAP(majorityMinority);
+                    break;
+                default:
+                    break;
             }
         }
     }
