@@ -4,33 +4,45 @@ import { useDisclosure } from '@chakra-ui/react';
 import { HStack, Box, Text, Button, Select } from '@chakra-ui/react';
 
 import LeftPane from './LeftPane';
-import AlgoProgress from './AlgoProgress';
+
 import BoxAndWhisker from './BoxAndWhisker';
 import Reset from './Reset';
 import { AlgorithmContext } from '../contexts/Algorithm';
+import { SelectedDistrictingContext } from '../contexts/SelectedDistricting';
 
 export default function TopBar(props) {
   const { isOpen: isDrawerOpen , onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure()
-  const { isOpen: isModalOpen , onOpen: onModalOpen, onClose: onModalClose } = useDisclosure()
   const { isOpen: isBoxOpen , onOpen: onBoxOpen, onClose: onBoxClose } = useDisclosure()
+  const { isOpen: isResetOpen, onOpen: onResetOpen, onClose: onResetClose } = useDisclosure()
 
   const [activeState, setActiveState] = useContext(StateContext);
   const [algorithm, setAlgorithm] = useContext(AlgorithmContext);
+  const [selectedDistricting, setSelectedDistricting] = useContext(SelectedDistrictingContext);
 
   return (
     <HStack w='100%' p='5' align='center' justify='center'>
+                {/* <BoxAndWhisker isOpen={true} onClose={onBoxClose} onOpen={onBoxOpen} activeState={activeState}></BoxAndWhisker> */}
       {activeState != 'Celtics' ? (
         <Box flex='1' mr='auto'>
           <Button onClick={onDrawerOpen} mr='5px'>
             <Text>User Settings</Text>
           </Button>
-          <LeftPane isOpen={isDrawerOpen} onClose={onDrawerClose} onOpen={onDrawerOpen} onModalOpen={onModalOpen} 
-            onBoxOpen={onBoxOpen}></LeftPane>
-          {algorithm != null ? 
-            <AlgoProgress isOpen={isModalOpen} onClose={onModalClose} onModalOpen={onModalOpen} activeState={activeState}> </AlgoProgress>:
-            null
+          <Button colorScheme='red' ml='10px' onClick={onResetOpen}>
+            Reset
+          </Button>
+          <Reset 
+            isOpen={isResetOpen} 
+            onClose={onResetClose} 
+            onOpen={onResetOpen} 
+          ></Reset>
+          {selectedDistricting != null ?
+            <>
+            <LeftPane isOpen={isDrawerOpen} onClose={onDrawerClose} onOpen={onDrawerOpen} onBoxOpen={onBoxOpen}></LeftPane>
+            <BoxAndWhisker isOpen={isBoxOpen} onClose={onBoxClose} onOpen={onBoxOpen} activeState={activeState}></BoxAndWhisker>
+            </>
+            :
+            null          
           }
-          <BoxAndWhisker isOpen={isBoxOpen} onClose={onBoxClose} onOpen={onBoxOpen} activeState={activeState}></BoxAndWhisker>
         </Box>
       ) : (
         <Box flex='1' mr='auto' />

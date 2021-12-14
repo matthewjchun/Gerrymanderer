@@ -1,4 +1,3 @@
-//import { reducer, initialState } from './reducer';
 import React, { useState, createContext, useMemo } from 'react';
 
 export const StateContext = createContext();

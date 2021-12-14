@@ -16,18 +16,6 @@ import {
 } from '@chakra-ui/react';
 import { Text, Button, Flex, Spacer, Divider } from '@chakra-ui/react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  VStack,
-  Center,
-} from '@chakra-ui/react';
 import { Radio, RadioGroup, Stack } from '@chakra-ui/react';
 import {
   Accordion,
@@ -40,6 +28,7 @@ import {
 import { useContext, useState, useEffect } from 'react';
 import { DataContext, StateContext } from '../contexts/State';
 import { Pie } from 'react-chartjs-2';
+import Chart from 'chart.js/auto';
 import Districts from './Districts';
 
 export default function StateDrawer(props) {
@@ -261,29 +250,33 @@ export default function StateDrawer(props) {
                 {value == '0' ? (
                   <Text> Population: {TOTAL.toLocaleString()} 
                   <br/>
-                  Total Districts: {stateData.districts.length}
+                  Total Congressional Districts: {stateData['districts']['features'].length}
                   <br/>
                   Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
                   <br/>
-                  Compactness: 0
+                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper']}
                   <br/>
                   Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']}
                   </Text>
                 ) : value == '1' ? (
                   <Text> Population: {VAP.toLocaleString()}
                   <br/>
+                  Total Congressional Districts: {stateData['districts']['features'].length}
+                  <br/>
                   Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
                   <br/>
-                  Compactness: 0
+                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper']}
                   <br/>
                   Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']}
                   </Text>
                 ) : value == '2' ? (
                   <Text> Population: {CVAP.toLocaleString()}
                   <br/>
+                  Total Congressional Districts: {stateData['districts']['features'].length}
+                  <br/>
                   Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
                   <br/>
-                  Compactness: 0
+                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper']}
                   <br/>
                   Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']} 
                   </Text>

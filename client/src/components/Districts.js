@@ -17,7 +17,6 @@ StatHelpText,
 StatArrow,
 StatGroup,
 } from '@chakra-ui/react';
-import { PieChart } from 'react-minimal-pie-chart';
 import { useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 
@@ -196,7 +195,7 @@ export default function Districts(props) {
         popType == 2 ?
           <Pie data={cData}></Pie>:
         null
-      }
+        }
     </>
   );
 }

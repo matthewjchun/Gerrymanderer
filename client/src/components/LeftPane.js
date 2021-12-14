@@ -47,6 +47,7 @@ import va from '../img/va.jpg';
 import { BoxZoomHandler } from 'mapbox-gl';
 import Reset from './Reset';
 import postProcessed from '../data/postprocessed4.json';
+import AlgoProgress from './AlgoProgress';
 
 // maps property names to display names
 const measureMap = {
@@ -295,11 +296,12 @@ const azData = [
 ];
 
 export default function LeftPane(props) {
-  const { isOpen, onClose, isModalOpen, onModalOpen, onBoxOpen } = props;
+  const { isOpen, onClose, onBoxOpen } = props;
   const [popEquality, setPopEquality] = useState(0);
   const [compactness, setCompactness] = useState(0);
   const [majorityMinority, setMajorityMinority] = useState(0);
-  const { isOpen: isResetOpen, onOpen: onResetOpen, onClose: onResetClose } = useDisclosure()
+
+  const { isOpen: isModalOpen , onOpen: onModalOpen, onClose: onModalClose } = useDisclosure()
 
   const [activeState, setActiveState] = useContext(StateContext);
   const [geoJSON, setGeoJSON] = useContext(GeoJSONContext);
@@ -313,6 +315,8 @@ export default function LeftPane(props) {
     console.log(e.target.number);
   };
 
+  const algorithmURL = `/algorithm?id=0&popEqThresh=${popEquality/100}&polsbyPopperThresh=0.3&majorityMinorityThresh=${majorityMinority}`;
+
   const handleAlgorithmStart = async () => {
     const response = await fetch(
       `/algorithm?id=0&popEqThresh=${popEquality/100}&polsbyPopperThresh=0.3&majorityMinorityThresh=${majorityMinority}`
@@ -321,16 +325,6 @@ export default function LeftPane(props) {
     setAlgorithm(algorithm);
     console.log(algorithm);
     onModalOpen();
-  }
-
-  const handleAlgorithmRun = async () => {
-    const response = await fetch(
-      `/algorithmSummary`
-    );
-    const algorithm = await response.json();
-    setAlgorithm(algorithm);
-    console.log("fetched again")
-    console.log(algorithm);
   }
 
   const redistrictingTabTooltip =
@@ -350,12 +344,16 @@ export default function LeftPane(props) {
 
   return (
     <>
-      <Reset 
-        isOpen={isResetOpen} 
-        onClose={onResetClose} 
-        onOpen={onResetOpen} 
-        handleAlgorithmRun={handleAlgorithmRun}
-      ></Reset>
+      {algorithm != null ? 
+        <AlgoProgress 
+          isOpen={isModalOpen} 
+          onClose={onModalClose} 
+          onModalOpen={onModalOpen} 
+          activeState={activeState}
+          algorithmURL={algorithmURL}
+        > </AlgoProgress>:
+        null
+      }
       <Drawer
         size='md'
         isOpen={isOpen}
@@ -369,7 +367,6 @@ export default function LeftPane(props) {
           <DrawerHeader>
             <HStack spacing='200px'>
               <Text>User Settings</Text>
-              <Button colorScheme='red' ml='10px' onClick={onResetOpen}>Reset</Button>
             </HStack>  
           </DrawerHeader>
           <Tabs isFitted variant='enclosed'>
