@@ -47,7 +47,7 @@ public class AlgorithmService {
                         settings.setFailedAttempts(0);
                         settings.setCurrentDistricting(selectedDistricting);
                         algoSummary.updateMeasures(selectedDistricting);
-                        algoSummary.updateDistrictPopulations(selectedDistricting, populationType);
+                        algoSummary.updateDistrictPopulations(selectedDistricting);
                         System.out.println("Population Equality: " + selectedDistricting.getPopulationEqualityTotal());
                     }
                 }
