@@ -114,7 +114,6 @@ public class DistrictingController {
         StateSummary summaryObj = new StateSummary();
         summaryObj.populateSummary(state);
         String summaryStr = gson.toJson(summaryObj);
-        System.out.println(summaryStr);
         JsonObject summary = JsonParser.parseString(summaryStr).getAsJsonObject();
         stateFull.add("summary", summary);
         return ResponseEntity.ok(stateFull);
