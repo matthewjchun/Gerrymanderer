@@ -31,11 +31,17 @@ public class Constants {
         ASIAN,
         HISPANIC,
         WHITE,
-        NATIVE,
+        NATIVE
     }
 
     public enum ElectionName {
         PRE20
+    }
+
+    public enum SortCriteria {
+        OBJECTIVEFUNCTION,
+        POPEQ,
+        POLSBYPOPPER
     }
 
     public static String[] getStates() {

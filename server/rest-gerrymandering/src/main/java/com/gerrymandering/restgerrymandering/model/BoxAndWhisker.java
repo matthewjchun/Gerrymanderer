@@ -14,6 +14,9 @@ public class BoxAndWhisker {
     @Enumerated(EnumType.STRING)
     private Constants.Demographic basis;
 
+    @Enumerated(EnumType.ORDINAL)
+    private Constants.PopulationType populationType;
+
     @Column(name = "minimum")
     private double min;
 
