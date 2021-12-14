@@ -137,7 +137,7 @@ public class District implements Cloneable {
             destDistrict.getCensusBlocks().add(selectedCB);
             added.add(destDistrict.getId());
             destDistrict.calculatePopulation(selectedCB, true);
-            calculateElection(selectedCB, true);
+            destDistrict.calculateElection(selectedCB, true);
             destDistrict.calculateMajorityMinority();
             selectedCB.setDistrict(destDistrict);
             calculateBorders(selectedCB);
