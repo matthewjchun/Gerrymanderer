@@ -21,6 +21,7 @@ import ReactApexChart from "react-apexcharts";
 import { AlgorithmContext } from "../contexts/Algorithm";
 import { StateDataContext } from "../contexts/StateData";
 import { GeoJSONContext } from "../contexts/GeoJSON";
+import { DistrictingSummaryContext } from "../contexts/DistrictingSummary";
 
 export default function AlgoProgress(props) {
     const { isOpen, onClose, activeState, algorithmURL, popEquality } = props;
@@ -28,6 +29,7 @@ export default function AlgoProgress(props) {
     const [ algorithm, setAlgorithm ] = useContext(AlgorithmContext);
     const [ stateData ] = useContext(StateDataContext);
     const [ geoJSON, setGeoJSON ] = useContext(GeoJSONContext);
+    const [ districtingSummary, setDistrictingSummary ] = useContext(DistrictingSummaryContext);
 
     const [ running, setRunning ] = useState(algorithm["running"]);
     const [ loading, setLoading ] = useState(false);
@@ -104,6 +106,40 @@ export default function AlgoProgress(props) {
         }
       }
       await setGeoJSON(body['districtingBoundary']);
+      const postAlgoSummary = [];
+      postAlgoSummary.push({
+        key: 'populationEqualityTotal',
+        value: body['populationEqualityTotal'],
+      });
+      postAlgoSummary.push({
+        key: 'populationEqualityVAP',
+        value: body['populationEqualityVAP'],
+      });
+      postAlgoSummary.push({
+        key: 'populationEqualityCVAP',
+        value: body['populationEqualityCVAP'],
+      });
+      postAlgoSummary.push({
+        key: 'majorityMinorityCountTotal',
+        value: body['majorityMinorityCountTotal'],
+      });
+      postAlgoSummary.push({
+        key: 'majorityMinorityCountVAP',
+        value: body['majorityMinorityCountVAP'],
+      });
+      postAlgoSummary.push({
+        key: 'majorityMinorityCountCVAP',
+        value: body['majorityMinorityCountCVAP'],
+      });
+      postAlgoSummary.push({
+        key: 'avgPolsbyPopper',
+        value: body['avgPolsbyPopper'],
+      });
+      postAlgoSummary.push({
+        key: 'districtSummaries',
+        value: body['districtSummaries'],
+      });      
+      setDistrictingSummary(postAlgoSummary);
       onClose();
       setLoading(false);
     }

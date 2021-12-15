@@ -48,6 +48,7 @@ import { BoxZoomHandler } from 'mapbox-gl';
 import postProcessed from '../data/postprocessed4.json';
 import AlgoProgress from './AlgoProgress';
 import { StateDataContext } from '../contexts/StateData';
+import { DistrictingSummaryContext } from '../contexts/DistrictingSummary';
 
 
 // maps property names to display names
@@ -69,8 +70,11 @@ export default function LeftPane(props) {
   const [stateData, setStateData] = useContext(StateDataContext);
   const [geoJSON, setGeoJSON] = useContext(GeoJSONContext);
   const [algorithm, setAlgorithm] = useContext(AlgorithmContext);
+  const [districtingSummary, setDistrictingSummary] = useContext(DistrictingSummaryContext);
 
   const stateSummary = stateData['summary'];
+  const districtingSummaries = stateSummary['districtingSummaries'];
+  console.log(districtingSummaries);
 
   const handlePopEqualityInput = (val) => setPopEquality(val);
   const handleCompactnessInput = (val) => setCompactness(val);
@@ -80,11 +84,14 @@ export default function LeftPane(props) {
   //   console.log();
   // };
 
-  const algorithmURL = `/algorithm?id=0&popEqThresh=${popEquality/100}&polsbyPopperThresh=${compactness}&majorityMinorityThresh=${majorityMinority}`;
+  const districtingId = districtingSummary["id"];
+  console.log(districtingId);
+
+  const algorithmURL = `/algorithm?id=${districtingId}&popEqThresh=${popEquality/100}&polsbyPopperThresh=${compactness}&majorityMinorityThresh=${majorityMinority}`;
 
   const handleAlgorithmStart = async () => {
     const response = await fetch(
-      `/algorithm?id=0&popEqThresh=${popEquality/100}&polsbyPopperThresh=${compactness}&majorityMinorityThresh=${majorityMinority}`
+      `/algorithm?id=${districtingId}&popEqThresh=${popEquality/100}&polsbyPopperThresh=${compactness}&majorityMinorityThresh=${majorityMinority}`
     );
     const algorithm = await response.json();
     setAlgorithm(algorithm);
@@ -106,7 +113,7 @@ export default function LeftPane(props) {
   const majorityMinorityToolTip =
     'Set the maximum percentage threshold for the minority population per congressional district in the improved redistricting. [0, 8]';
 
-  let i = 0;
+  let i = 1;
 
   return (
     <>
@@ -190,6 +197,7 @@ export default function LeftPane(props) {
                               popEquality={districting.populationEqualityTotal}
                               compactness={districting.avgPolsbyPopper}
                               majorityMinority={districting.majorityMinorityCountTotal}
+                              onClose={onClose}
                             />
                         );
                     })}
