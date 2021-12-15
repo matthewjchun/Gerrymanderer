@@ -162,8 +162,8 @@ export default function StateDrawer(props) {
 
   // ELECTION SPLIT STATISTICS
 
-  let dem = stateSummary['elections'][0]['democratic'];
-  let rep = stateSummary['elections'][0]['republican'];
+  let dem = 0//stateSummary['elections'][0]['democratic'];
+  let rep = 0//stateSummary['elections'][0]['republican'];
   let total = dem + rep;
   let demPercent = dem / total;
   let repPercent = rep / total;

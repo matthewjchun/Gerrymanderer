@@ -87,8 +87,8 @@ export default function TopBar(props) {
         <Box flex='1'/>
       )}
       <Text flex='1.5' fontWeight='bold' fontSize='1.5em' m='auto' align='center'>
-        {activeState} {districtingSummary != null && districtingSummary['id'] == '1' ? ((' - Enacted')) : null}
-        {districtingSummary != null && districtingSummary['id'] != '1' ? ((' - Plan '+districtingSummary['id'])) : null}
+        {activeState} {districtingSummary != null && activeState != 'Celtics' && districtingSummary['id'] == '1' ? ((' - Enacted')) : null}
+        {districtingSummary != null && activeState != 'Celtics' && districtingSummary['id'] != '1' ? ((' - Plan '+districtingSummary['id'])) : null}
       </Text>
       <Select
         flex='1'

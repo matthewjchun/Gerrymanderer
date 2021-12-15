@@ -10,7 +10,7 @@ import { useDisclosure } from '@chakra-ui/react';
 import * as constants from '../constants/constants';
 import { StateDataContext } from '../contexts/StateData';
 import { DistrictingSummaryContext } from '../contexts/DistrictingSummary';
-
+import {DistrictColors} from '../constants/constants.js'
 mapboxgl.accessToken =
   'pk.eyJ1IjoiY2VsdGljczQxNiIsImEiOiJja3R2MGM5dTQxajY4Mm5sNWV5YnNhNHg0In0.t9oiLZZUeZi0QpqUIik13w';
 
@@ -20,7 +20,6 @@ const Map = () => {
   const [lng, setLng] = useState(-100.445882);
   const [lat, setLat] = useState(37.7837304);
   const [zoom, setZoom] = useState(4);
-  let hoveredStateId = null;
   const bounds = [
     [-116.895133, 32.868129], // Southwest coordinates
     [-68.230605, 47.25153], // Northeast coordinates
@@ -63,6 +62,13 @@ const Map = () => {
     }
   };
 
+  // Create a popup, but don't add it to the map yet.
+      var popup = new mapboxgl.Popup({
+        offset: [0, -7],
+        closeButton: false,
+        closeOnClick: false
+      });
+
   /////////////////////// SERVER INTERACTIONS //////////////////////////////
   const handleStateFetch = async (map) => {
     const response = await fetch(
@@ -87,6 +93,7 @@ const Map = () => {
       map.current.addSource(name, {
         type: 'geojson',
         data: data,
+        generateId: true
       });
     }
   };
@@ -143,6 +150,18 @@ const Map = () => {
           'visible'
         );
       }
+
+      visibility = map.current.getLayoutProperty(
+        abbrev + 'cd-fills',
+        'visibility'
+      );
+      if (visibility === 'none') {
+        map.current.setLayoutProperty(
+          abbrev + 'cd-fills',
+          'visibility',
+          'visible'
+        );
+      }
     } else {
       let visibility = map.current.getLayoutProperty(
         abbrev + 'prec-boundary',
@@ -162,6 +181,17 @@ const Map = () => {
       if (visibility === 'visible') {
         map.current.setLayoutProperty(
           abbrev + 'cd_lines',
+          'visibility',
+          'none'
+        );
+      }
+      visibility = map.current.getLayoutProperty(
+        abbrev + 'cd-fills',
+        'visibility'
+      );
+      if (visibility === 'visible') {
+        map.current.setLayoutProperty(
+          abbrev + 'cd-fills',
           'visibility',
           'none'
         );
@@ -199,6 +229,60 @@ const Map = () => {
   };
 
   /////////////////////// ZOOM INTO STATES //////////////////////////////
+
+  const districtsFillColor = [
+    'match',
+    ['get', 'BASENAME'],
+    ...DistrictColors.reduce((r, e, i) => {
+      r.push(i+1 + '', e);
+      return r;
+    }, []),
+    '#FFFFFF'
+  ]
+  const addDistrictColoration = async(id, sourceId) => {
+    map.current.addLayer({
+      'id': id,
+      'type': 'fill',
+      'source': sourceId,
+      'layout': {
+        'visibility': 'visible'
+      },
+      'paint': {
+        'fill-color': districtsFillColor,
+        'fill-opacity': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          1,
+          0.75
+          ]
+      }
+    });
+    let hoveredStateId = null;
+    map.current.on('mousemove', id, (e) => {
+      if (e.features.length > 0) {
+        if (hoveredStateId !== null) {
+          map.current.setFeatureState(
+          { source: sourceId, id: hoveredStateId },
+          { hover: false }
+          );
+        }
+        hoveredStateId = e.features[0].id;
+        map.current.setFeatureState(
+          { source: sourceId, id: hoveredStateId },
+          { hover: true }
+        );
+      }
+    });
+    map.current.on('mouseleave', id, () => {
+      if (hoveredStateId !== null) {
+        map.current.setFeatureState(
+          { source: sourceId, id: hoveredStateId },
+          { hover: false }
+        );
+      }
+      hoveredStateId = null;
+      });
+  }
   const zoomIn = async (map, state) => {
     if (state == 'Arizona') {
       const stateData = await handleStateFetch();
@@ -216,66 +300,16 @@ const Map = () => {
       checkSrc('azcd', stateData['enacted']['districts']);
       checkSrc('azprecincts', stateData['enacted']['precincts']);
       checkSrc('azcounty', stateData['enacted']['counties']);
-      addLayer('azprec-boundary', 'azprecincts', '#e6d1b5');
-      addLayer('azcounty-boundary', 'azcounty', '#940f00');
-      addLayer('azcd_lines', 'azcd', '#000000');
-      addLayer('azcd_lines', 'azcd', '#000000');
-      // map.current.addLayer({
-      //   'id': 'azcd-fills',
-      //   'type': 'fill',
-      //   'source': 'azcd',
-      //   'layout': {},
-      //   'paint': {
-      //   'fill-color': '#627BC1',
-      //   'fill-opacity': [
-      //     'case',
-      //       ['boolean', ['feature-state', 'hover'], false],
-      //       1,
-      //       0.5
-      //   ]
-      //   }
-      //   });
+      map.current.setLayoutProperty('arizona', 'visibility', 'none');
+      addDistrictColoration('azcd-fills', 'azcd');
+      
 
-      // map.current.on('mousemove', 'azcd-fills', (e) => {
-      //   if (e.features.length > 0) {
-      //     if (hoveredStateId !== null) {
-      //       map.current.setFeatureState(
-      //       { source: 'azcd', id: hoveredStateId },
-      //       { hover: false }
-      //       );
-      //     }
-      //     hoveredStateId = e.features[0].id;
-      //     map.current.setFeatureState(
-      //       { source: 'azcd', id: hoveredStateId },
-      //       { hover: true }
-      //     );
-      //   }
-      // });
-         
-      //   // When the mouse leaves the state-fill layer, update the feature state of the
-      //   // previously hovered feature.
-      //   map.current.on('mouseleave', 'azcd-fills', () => {
-      //   if (hoveredStateId !== null) {
-      //   map.current.setFeatureState(
-      //   { source: 'azcd', id: hoveredStateId },
-      //   { hover: false }
-      //   );
-      //   }
-      //   hoveredStateId = null;
-      //   });
+      addLayer('azprec-boundary', 'azprecincts', '#fffae0');
+      addLayer('azcounty-boundary', 'azcounty', '#cc2900');
+      addLayer('azcd_lines', 'azcd', '#000000');
+      
 
       onOpen();
-
-      // AZ CONGRESSIONAL DISTRICT MARKERS
-      // const azd1 = createMarker(-110.7258455, 34.9691324, dummyMsg);
-      // const azd2 = createMarker(-109.9566824, 31.9274371, dummyMsg);
-      // const azd3 = createMarker(-112.4379116, 32.3667129, dummyMsg);
-      // const azd4 = createMarker(-113.2180629, 34.5988732, dummyMsg);
-      // const azd5 = createMarker(-111.7146593, 33.3377517, dummyMsg);
-      // const azd6 = createMarker(-111.890334, 33.6672906, dummyMsg);
-      // const azd7 = createMarker(-112.1190594, 33.4286611, dummyMsg);
-      // const azd8 = createMarker(-112.3000605, 33.6925203, dummyMsg);
-      // const azd9 = createMarker(-111.9492214, 33.4062567, dummyMsg);
 
       visibToggle('az', 'y');
     } else if (state == 'Michigan') {
@@ -293,22 +327,50 @@ const Map = () => {
       addLayer('micounty-boundary', 'micounty', '#940f00');
       addLayer('micd_lines', 'micd', '#000000');
 
-      // MI CONGRESSIONAL DISTRICTS MARKERS
-      const mid1 = createMarker(-86.4367294, 46.1633289, dummyMsg);
-      const mid2 = createMarker(-86.3219007, 43.3968946, dummyMsg);
-      const mid3 = createMarker(-85.2426928, 42.7156275, dummyMsg);
-      const mid4 = createMarker(-85.2426928, 42.7156275, dummyMsg);
-      const mid5 = createMarker(-83.4755262, 43.9135745, dummyMsg);
-      const mid6 = createMarker(-86.1570905, 42.1675303, dummyMsg);
-      const mid7 = createMarker(-84.3029212, 42.0958618, dummyMsg);
-      const mid8 = createMarker(-83.941608, 42.6473743, dummyMsg);
-      const mid9 = createMarker(-83.0505207, 42.5312343, dummyMsg);
-      const mid10 = createMarker(-82.8710307, 43.4603655, dummyMsg);
-      const mid11 = createMarker(-83.4568231, 42.5300018, dummyMsg);
-      const mid12 = createMarker(-83.4482851, 42.2053809, dummyMsg);
-      const mid13 = createMarker(-83.2511525, 42.3803814, dummyMsg);
-      const mid14 = createMarker(-83.1507819, 42.3892242, dummyMsg);
-      const mid15 = createMarker(-86.3928685, 42.6363171, dummyMsg);
+      map.current.addLayer({
+        'id': 'micd-fills',
+        'type': 'fill',
+        'source': 'micd',
+        'layout': {
+          'visibility': 'visible'
+        },
+        'paint': {
+          'fill-color': districtsFillColor,
+          'fill-opacity': [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            1,
+            0.75
+            ]
+        }
+      });
+
+      let hoveredStateId = null;
+      map.current.on('mousemove', 'micd-fills', (e) => {
+        if (e.features.length > 0) {
+          if (hoveredStateId !== null) {
+            map.current.setFeatureState(
+            { source: 'micd', id: hoveredStateId },
+            { hover: false }
+            );
+          }
+          hoveredStateId = e.features[0].id;
+          map.current.setFeatureState(
+            { source: 'micd', id: hoveredStateId },
+            { hover: true }
+          );
+        }
+      });
+        map.current.on('mouseleave', 'micd-fills', () => {
+        if (hoveredStateId !== null) {
+        map.current.setFeatureState(
+        { source: 'micd', id: hoveredStateId },
+        { hover: false }
+        );
+        }
+        hoveredStateId = null;
+        });
+
 
       visibToggle('mi', 'y');
     } else {
@@ -327,18 +389,50 @@ const Map = () => {
       addLayer('vacounty-boundary', 'vacounty', '#940f00');
       addLayer('vacd_lines', 'vacd', '#000000');
 
-      // VA CONGRESSIONAL DISTRICTS MARKERS
-      const va1 = createMarker(-76.9800976, 37.8807201, dummyMsg);
-      const va2 = createMarker(-75.9436791, 37.3936967, dummyMsg);
-      const va3 = createMarker(-76.5714101, 36.9137548, dummyMsg);
-      const va4 = createMarker(-77.1571007, 36.961749, dummyMsg);
-      const va5 = createMarker(-78.7459185, 37.3323415, dummyMsg);
-      const va6 = createMarker(-79.1953112, 38.136543, dummyMsg);
-      const va7 = createMarker(-77.901421, 37.820184, dummyMsg);
-      const va8 = createMarker(-77.1386215, 38.7790638, dummyMsg);
-      const va9 = createMarker(-81.322201, 37.0008631, dummyMsg);
-      const va10 = createMarker(-77.8358695, 39.076162, dummyMsg);
-      const va11 = createMarker(-77.294837, 38.78906, dummyMsg);
+      map.current.addLayer({
+        'id': 'vacd-fills',
+        'type': 'fill',
+        'source': 'vacd',
+        'layout': {
+          'visibility': 'visible'
+        },
+        'paint': {
+          'fill-color': districtsFillColor,
+          'fill-opacity': [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            1,
+            0.75
+            ]
+        }
+      });
+
+      let hoveredStateId = null;
+      map.current.on('mousemove', 'vacd-fills', (e) => {
+        if (e.features.length > 0) {
+          if (hoveredStateId !== null) {
+            map.current.setFeatureState(
+            { source: 'vacd', id: hoveredStateId },
+            { hover: false }
+            );
+          }
+          hoveredStateId = e.features[0].id;
+          map.current.setFeatureState(
+            { source: 'vacd', id: hoveredStateId },
+            { hover: true }
+          );
+        }
+      });
+        map.current.on('mouseleave', 'vacd-fills', () => {
+        if (hoveredStateId !== null) {
+        map.current.setFeatureState(
+        { source: 'vacd', id: hoveredStateId },
+        { hover: false }
+        );
+        }
+        hoveredStateId = null;
+        });
+
 
       visibToggle('va', 'y');
     }
@@ -353,11 +447,14 @@ const Map = () => {
     // arizona
     visibToggle('az', 'n');
 
+    map.current.setLayoutProperty('arizona', 'visibility', 'visible');
+
     // michigan
     visibToggle('mi', 'n');
 
     // virginia
     visibToggle('va', 'n');
+    onClose();
   };
 
   const generatedDistricting = (map) => {

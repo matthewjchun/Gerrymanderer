@@ -26,8 +26,8 @@ export default function Districts(props) {
   let arrowFlag = false;
 
   // election
-  const dem = election[0]["democratic"];
-  const rep = election[0]["republican"];
+  const dem = 0//election[0]["democratic"];
+  const rep = 0//election[0]["republican"];
   if (dem > rep) {
     arrowFlag = true;
   }
@@ -159,12 +159,12 @@ export default function Districts(props) {
               <Td>{CVAP} </Td>:
              null
             }
-                <Td isNumeric>
+                {/* <Td isNumeric>
                   {election[0]["democratic"].toLocaleString()}
                 </Td>
                 <Td isNumeric>
                   {election[0]["republican"].toLocaleString()}
-                </Td>
+                </Td> */}
             {arrowFlag ? 
               <Tr>
                 <Td></Td>
