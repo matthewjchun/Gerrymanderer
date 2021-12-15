@@ -328,7 +328,11 @@ public class DistrictingController {
         GeoJsonWriter geoWriter = new GeoJsonWriter();
         String responseStr = geoWriter.write(boundary);
         JsonObject response = JsonParser.parseString(responseStr).getAsJsonObject();
-        response.addProperty("type", "LineString");
+        JsonArray coordinates = response.getAsJsonArray("coordinates");
+        JsonArray outer = new JsonArray();
+        outer.add(coordinates);
+        response.add("coordinates", outer);
+        response.addProperty("type", "Polygon");
         return ResponseEntity.ok(response);
     }
 
