@@ -44,8 +44,6 @@ export default function BoxAndWhisker(props) {
 
   // SELECTING BASIS AND POPULATION TYPE //
 
-  console.log(stateSummary);
-
   const basisChange = (value) => {
     setValue(value);
     if(value == 0){

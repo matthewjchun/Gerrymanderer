@@ -11,7 +11,7 @@ import {
   Divider,
   Heading,
   Center,
-  VStack
+  CircularProgress,
 } from "@chakra-ui/react";
 import { useContext, useState, useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
@@ -28,6 +28,7 @@ export default function AlgoProgress(props) {
 
 
     const [ running, setRunning ] = useState(algorithm["running"]);
+    const [ loading, setLoading ] = useState(false);
 
     let interval;
 
@@ -89,20 +90,14 @@ export default function AlgoProgress(props) {
     }
 
     const handlePostAlgo = async () => {
+      setLoading(true);
       const response = await fetch(
         `/algorithmSummary`
       );
       const body = await response.json();
-      if(body['districtingBoundary'] == null){
-        while(body['districtingBoundary'] == null){
-          const response = await fetch(
-            `/algorithmSummary`
-          );
-          const body = await response.json();    
-        }
-      }
       console.log("this is post");
       console.log(body);
+      console.log(JSON.stringify(body['districtingBoundary']));
       setGeoJSON(body['districtingBoundary']);
       onClose();
     }
@@ -182,7 +177,9 @@ export default function AlgoProgress(props) {
             }
             {
             algorithm['running'] == false && algorithm['paused'] == false ? 
-              <Button colorScheme='blue' mr={3} onClick={handlePostAlgo}>Close Summary</Button>:
+              loading == true ?
+                <CircularProgress isIndeterminate color='blue.300' />:
+                <Button colorScheme='blue' mr={3} onClick={handlePostAlgo}>Close Summary</Button>:
               <Button colorScheme="blue" mr={3} onClick={handleTerminate}>
               Stop Algorithm
               </Button>

@@ -42,6 +42,7 @@ const Map = () => {
       map.current.removeLayer('azcd_lines');
       map.current.removeSource('azcd');
 
+      console.log(JSON.stringify(geoJSON))
       checkSrc('azcd', geoJSON);
       addLayer('azcd_lines', 'azcd', '#000000');
     }
