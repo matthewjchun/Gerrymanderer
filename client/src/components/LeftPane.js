@@ -84,7 +84,7 @@ export default function LeftPane(props) {
   //   console.log();
   // };
 
-  const districtingId = districtingSummary["id"];
+  const districtingId = districtingSummary["id"] - 1;
   console.log(districtingId);
 
   const algorithmURL = `/algorithm?id=${districtingId}&popEqThresh=${popEquality/100}&polsbyPopperThresh=${compactness}&majorityMinorityThresh=${majorityMinority}`;
@@ -107,11 +107,9 @@ export default function LeftPane(props) {
     'Construct a box and whisker plot where the measures of your selected districtings are overlayed on top of the 10,000 districtings measures.';
 
   const popEqualityTooltip =
-    'Set the minimum percentage threshold population equality for the improved redistricting. The final value will be converted to a percentage. [0, 70]';
-  const compactnessTooltip =
-    'Set the minimum percentage threshold compactness for the improved redistricting. [0, 100]';
+    'Set the minimum percentage threshold population equality for the improved redistricting. The final value will be converted to a percentage. [0, 10]';
   const majorityMinorityToolTip =
-    'Set the maximum percentage threshold for the minority population per congressional district in the improved redistricting. [0, 8]';
+    'Set the maximum percentage threshold for the minority population per congressional district in the improved redistricting. [0, 9]';
 
   let i = 1;
 
@@ -269,7 +267,7 @@ export default function LeftPane(props) {
                         onChange={handlePopEqualityInput}
                         focusThumbOnChange={false}
                         min={0} 
-                        max={70}
+                        max={10}
                       >
                         <SliderTrack>
                           <SliderFilledTrack />
@@ -279,45 +277,8 @@ export default function LeftPane(props) {
                       <NumberInput
                         value={popEquality}
                         min={0}
-                        max={70}
+                        max={10}
                         onChange={handlePopEqualityInput}
-                      >
-                        <NumberInputField />
-                        <NumberInputStepper>
-                          <NumberIncrementStepper />
-                          <NumberDecrementStepper />
-                        </NumberInputStepper>
-                      </NumberInput>
-                    </HStack>
-                    <HStack>
-                      <Text>Compactness</Text>
-                      <Tooltip
-                        label={compactnessTooltip}
-                        fontSize='md'
-                        placement='right'
-                      >
-                        <QuestionIcon />
-                      </Tooltip>
-                    </HStack>
-                    <HStack spacing='5'>
-                      <Slider
-                        aria-label='compactness'
-                        value={compactness}
-                        onChange={handleCompactnessInput}
-                        focusThumbOnChange={false}
-                        min={0} 
-                        max={100}                                                                 // percentage
-                      >
-                        <SliderTrack>
-                          <SliderFilledTrack />
-                        </SliderTrack>
-                        <SliderThumb bg={themes.colors.blue[500]} />
-                      </Slider>
-                      <NumberInput
-                        value={compactness}
-                        min={0}
-                        max={100}
-                        onChange={handleCompactnessInput}
                       >
                         <NumberInputField />
                         <NumberInputStepper>
@@ -367,7 +328,6 @@ export default function LeftPane(props) {
                       <Button onClick={handleAlgorithmStart}>
                         <Text>Generate</Text>
                       </Button>
-                      <Text fontSize='sm'>Last updated: 10 seconds ago</Text>
                     </VStack> 
                   </VStack>
                 </DrawerBody>

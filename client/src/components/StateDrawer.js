@@ -328,7 +328,6 @@ export default function StateDrawer(props) {
                 }
               </TabPanel>
               <TabPanel style={{maxWidth: '100%'}}>
-               
                {districts.map((district) => {
                   return(
                   <Districts

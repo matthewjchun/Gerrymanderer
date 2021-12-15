@@ -235,7 +235,6 @@ export default function AlgoProgress(props) {
                       <Text align="left">Estimated time: {algorithm["estimatedTime"]} seconds</Text>
                       <Divider/>
                     {/* </Box> */}
-                    <ReactApexChart options={options} series={series}></ReactApexChart>
                   {/* </HStack> */}
                 </>:
                 <>
