@@ -101,7 +101,8 @@ export default function AlgoProgress(props) {
           const body = await response.json();    
         }
       }
-
+      console.log("this is post");
+      console.log(body);
       setGeoJSON(body['districtingBoundary']);
       onClose();
     }
