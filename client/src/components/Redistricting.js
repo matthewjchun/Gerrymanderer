@@ -12,15 +12,17 @@ import {
   Center
 } from '@chakra-ui/react';
 import { StateDataContext } from '../contexts/StateData';
+import { GeoJSONContext } from '../contexts/GeoJSON';
 import { DistrictingSummaryContext } from '../contexts/DistrictingSummary';
 
 export default function Redistricting(props) {
-  const { display, number, thumbnail, popEquality, compactness, majorityMinority  } = props;
+  const { display, number, thumbnail, popEquality, compactness, majorityMinority, onClose  } = props;
   // const { popEquality, compactness, majorityMinority } = measures;
 
   const [ stateData, setStateData ] = useContext(StateDataContext);
   const stateSummary = stateData['summary'];
-  const [districtingSummary, setDistrictingSummary] = useContext(DistrictingSummaryContext);
+  const [ geoJSON, setGeoJSON ] = useContext(GeoJSONContext);
+  const [ districtingSummary, setDistrictingSummary] = useContext(DistrictingSummaryContext);
 
   
 // returns an array of best measures for each redistricting in a given state
@@ -55,9 +57,13 @@ const bestMeasure = (data) => {
     //   `/redistrictingClick?id=${number}`
     // )
     // const body = await response.json();
-    console.log(number);
-    // setDistrictingSummary()
-
+    setGeoJSON(stateData['seawulf'][number-2]);
+    for( const summary of stateData['summary']['districtingSummaries'] ){
+      if( summary['id'] == number){
+        await setDistrictingSummary(summary)
+      }
+    }
+    onClose();
   }
 
 

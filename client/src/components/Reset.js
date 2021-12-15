@@ -16,10 +16,20 @@ import {
 import { useContext, useState, useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 import { StateContext } from "../contexts/State";
+import { AlgorithmContext } from "../contexts/Algorithm";
+import { DistrictingSummaryContext } from "../contexts/DistrictingSummary";
+import { GeoJSONContext } from "../contexts/GeoJSON";
+import { PopulationTypeContext } from "../contexts/PopulationType";
+import { StateDataContext } from "../contexts/StateData";
   
   export default function Reset(props) {
       const { isOpen, onClose } = props;  
-      const [ activeState, setActiveState ] = useContext(StateContext)
+      const [ activeState, setActiveState ] = useContext(StateContext);
+      const [ algorithm, setAlgorithm ] = useContext(AlgorithmContext);
+      const [ districtingSummary, setDistrictingSummary ] = useContext(DistrictingSummaryContext);
+      const [ geoJSON, setGeoJSON ] = useContext(GeoJSONContext);
+      const [ populationType, setPopulationType ] = useContext(PopulationTypeContext);
+      const [ stateData, setStateData ] = useContext(StateDataContext);
 
       const handleReset = async () => {
         const response = await fetch(
@@ -27,6 +37,11 @@ import { StateContext } from "../contexts/State";
         );
         onClose();
         setActiveState('Celtics');
+        setAlgorithm(null);
+        setDistrictingSummary(null);
+        setGeoJSON(null);
+        setPopulationType('TOTAL');
+        setStateData(null);
       }
 
       return(

@@ -284,38 +284,98 @@ const Map = () => {
   }
   const zoomIn = async (map, state) => {
     if (state == 'Arizona') {
-      const stateData = await handleStateFetch();
-      const stateSummary = stateData['summary'];
-      for( const summary of stateData['summary']['districtingSummaries'] ){
-        if( summary['id'] == 1){
-          const districtingSummary = summary;
-          await setDistrictingSummary(summary)
-        }
+      if(stateData != null){
+        onOpen();
       }
+      else{
+        const stateData = await handleStateFetch();
+        const stateSummary = stateData['summary'];
+        for( const summary of stateData['summary']['districtingSummaries'] ){
+          if( summary['id'] == 1){
+            const districtingSummary = summary;
+            await setDistrictingSummary(summary)
+          }
+        }
+  
+  
+        map.current.flyTo({
+          center: [
+            stateData['summary']['centerLon'],
+            stateData['summary']['centerLat'],
+          ],
+          essential: true,
+          zoom: 6.2,
+        });
+  
+        checkSrc('azcd', stateData['enacted']['districts']);
+        checkSrc('azprecincts', stateData['enacted']['precincts']);
+        checkSrc('azcounty', stateData['enacted']['counties']);
+        map.current.setLayoutProperty('arizona', 'visibility', 'none');
+        addDistrictColoration('azcd-fills', 'azcd');
 
-
-      map.current.flyTo({
-        center: [
-          stateData['summary']['centerLon'],
-          stateData['summary']['centerLat'],
-        ],
-        essential: true,
-        zoom: 6.2,
-      });
-
-      checkSrc('azcd', stateData['enacted']['districts']);
-      checkSrc('azprecincts', stateData['enacted']['precincts']);
-      checkSrc('azcounty', stateData['enacted']['counties']);
-      map.current.setLayoutProperty('arizona', 'visibility', 'none');
-      addDistrictColoration('azcd-fills', 'azcd');
-      
-      addLayer('azprec-boundary', 'azprecincts', '#fffae0');
-      addLayer('azcounty-boundary', 'azcounty', '#cc2900');
-      addLayer('azcd_lines', 'azcd', '#000000');
-
-      onOpen();
-
-      visibToggle('az', 'y');
+        addLayer('azprec-boundary', 'azprecincts', '#e6d1b5');
+        addLayer('azcounty-boundary', 'azcounty', '#940f00');
+        addLayer('azcd_lines', 'azcd', '#000000');
+        // map.current.addLayer({
+        //   'id': 'azcd-fills',
+        //   'type': 'fill',
+        //   'source': 'azcd',
+        //   'layout': {},
+        //   'paint': {
+        //   'fill-color': '#627BC1',
+        //   'fill-opacity': [
+        //     'case',
+        //       ['boolean', ['feature-state', 'hover'], false],
+        //       1,
+        //       0.5
+        //   ]
+        //   }
+        //   });
+  
+        // map.current.on('mousemove', 'azcd-fills', (e) => {
+        //   if (e.features.length > 0) {
+        //     if (hoveredStateId !== null) {
+        //       map.current.setFeatureState(
+        //       { source: 'azcd', id: hoveredStateId },
+        //       { hover: false }
+        //       );
+        //     }
+        //     hoveredStateId = e.features[0].id;
+        //     map.current.setFeatureState(
+        //       { source: 'azcd', id: hoveredStateId },
+        //       { hover: true }
+        //     );
+        //   }
+        // });
+           
+        //   // When the mouse leaves the state-fill layer, update the feature state of the
+        //   // previously hovered feature.
+        //   map.current.on('mouseleave', 'azcd-fills', () => {
+        //   if (hoveredStateId !== null) {
+        //   map.current.setFeatureState(
+        //   { source: 'azcd', id: hoveredStateId },
+        //   { hover: false }
+        //   );
+        //   }
+        //   hoveredStateId = null;
+        //   });
+  
+        console.log(districtingSummary)
+        onOpen();
+  
+        // AZ CONGRESSIONAL DISTRICT MARKERS
+        // const azd1 = createMarker(-110.7258455, 34.9691324, dummyMsg);
+        // const azd2 = createMarker(-109.9566824, 31.9274371, dummyMsg);
+        // const azd3 = createMarker(-112.4379116, 32.3667129, dummyMsg);
+        // const azd4 = createMarker(-113.2180629, 34.5988732, dummyMsg);
+        // const azd5 = createMarker(-111.7146593, 33.3377517, dummyMsg);
+        // const azd6 = createMarker(-111.890334, 33.6672906, dummyMsg);
+        // const azd7 = createMarker(-112.1190594, 33.4286611, dummyMsg);
+        // const azd8 = createMarker(-112.3000605, 33.6925203, dummyMsg);
+        // const azd9 = createMarker(-111.9492214, 33.4062567, dummyMsg);
+  
+        visibToggle('az', 'y');
+      }
     } else if (state == 'Michigan') {
       map.current.flyTo({
         center: [-84.3271772, 44.2330917],
