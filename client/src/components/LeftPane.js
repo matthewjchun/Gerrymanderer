@@ -41,13 +41,13 @@ import { AlgorithmContext } from '../contexts/Algorithm';
 
 import themes from '../themes';
 import Redistricting from './Redistricting';
-import az from '../img/az.jpg';
-import mi from '../img/mi.jpg';
-import va from '../img/va.jpg';
+import az from '../img/az/az.js';
+import mi from '../img/mi/mi.js';
+import va from '../img/va/va.js';
 import { BoxZoomHandler } from 'mapbox-gl';
-import Reset from './Reset';
 import postProcessed from '../data/postprocessed4.json';
 import AlgoProgress from './AlgoProgress';
+
 
 // maps property names to display names
 const measureMap = {
@@ -311,9 +311,9 @@ export default function LeftPane(props) {
   const handleCompactnessInput = (val) => setCompactness(val);
   const handleMajorityMinorityInput = (val) => setMajorityMinority(val);
 
-  const handleRedistrictingClick = (e) => {
-    console.log(e.target.number);
-  };
+  // const handleRedistrictingClick = (e) => {
+  //   console.log();
+  // };
 
   const algorithmURL = `/algorithm?id=0&popEqThresh=${popEquality/100}&polsbyPopperThresh=0.3&majorityMinorityThresh=${majorityMinority}`;
 
@@ -410,12 +410,12 @@ export default function LeftPane(props) {
             </TabList>
             <TabPanels>
               <TabPanel>
-                {activeState == 'Arizona' ? (
+                {/* {activeState == 'Arizona' ? ( */}
                   <VStack spacing='2'>
                     {azData.map((set) => {
                       const best = bestMeasure(set);
                       return (
-                        <HStack spacing='2'>
+                        <HStack spacing='5px'>
                           {best.map((numMeasure) => {
                             const [number, measure, allMeasures] = numMeasure;
                             return (
@@ -424,7 +424,7 @@ export default function LeftPane(props) {
                                 thumbnail={az}
                                 bestMeasure={measureMap[measure]}
                                 measures={allMeasures}
-                                handleRedistrictingClick={handleRedistrictingClick}
+                                // handleRedistrictingClick={handleRedistrictingClick}
                               />
                             );
                           })}
@@ -432,7 +432,7 @@ export default function LeftPane(props) {
                       );
                     })}
                   </VStack>
-                ) : null}
+                {/* ) : null} */}
                 {/* {activeState == 'Michigan' ? (
                   <VStack spacing='3'>
                     {miData.map((set) => {
@@ -617,7 +617,7 @@ export default function LeftPane(props) {
                                   thumbnail={az}
                                   bestMeasure={measureMap[measure]}
                                   measures={allMeasures}
-                                  onClick={handleRedistrictingClick}
+                                  // onClick={handleRedistrictingClick}
                                 />
                                 <Checkbox> {number} </Checkbox>
                               </>

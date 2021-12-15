@@ -26,17 +26,21 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { useContext, useState, useEffect } from 'react';
-import { DataContext, StateContext } from '../contexts/State';
-import { Pie } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
+import { Pie } from 'react-chartjs-2';
 import Districts from './Districts';
+import { StateContext } from '../contexts/State';
 import { PopulationTypeContext } from '../contexts/PopulationType';
+import { StateDataContext } from '../contexts/StateData';
 
 export default function StateDrawer(props) {
-  const { isOpen, onOpen, onClose, stateSummary, stateData } = props;
+  const { isOpen, onOpen, onClose } = props;
   const [activeState] = useContext(StateContext);
   const [value, setValue] = useState('0');
   const [populationType, setPopulationType] = useContext(PopulationTypeContext);
+  const [stateData, setStateData] = useContext(StateDataContext);
+  const stateSummary = stateData['summary'];
+
 
   // POPULATION MEASURE
   const typeMap = {
@@ -253,7 +257,7 @@ export default function StateDrawer(props) {
                   <br/>
                   Total Congressional Districts: {stateData['enacted']['districts']['features'].length}
                   <br/>
-                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
+                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal'].toPrecision(2)}
                   <br/>
                   Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper']}
                   <br/>
