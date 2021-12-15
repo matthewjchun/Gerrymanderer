@@ -12,6 +12,7 @@ import {
   Center
 } from '@chakra-ui/react';
 import { StateDataContext } from '../contexts/StateData';
+import { DistrictingSummaryContext } from '../contexts/DistrictingSummary';
 
 export default function Redistricting(props) {
   const { number, bestMeasure, measures, thumbnail } = props;
@@ -19,6 +20,7 @@ export default function Redistricting(props) {
 
   const [ stateData, setStateData ] = useContext(StateDataContext);
   const stateSummary = stateData['summary'];
+  const [districtingSummary, setDistrictingSummary] = useContext(DistrictingSummaryContext);
 
 
   const handleRedistrictingClick = async () => {
@@ -27,6 +29,7 @@ export default function Redistricting(props) {
     // )
     // const body = await response.json();
     console.log(number);
+    // setDistrictingSummary()
 
   }
 

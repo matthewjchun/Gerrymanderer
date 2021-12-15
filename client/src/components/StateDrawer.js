@@ -40,7 +40,7 @@ export default function StateDrawer(props) {
   const [populationType, setPopulationType] = useContext(PopulationTypeContext);
   const [stateData, setStateData] = useContext(StateDataContext);
   const stateSummary = stateData['summary'];
-
+  console.log(stateSummary)
 
   // POPULATION MEASURE
   const typeMap = {
@@ -266,22 +266,22 @@ export default function StateDrawer(props) {
                   <br/>
                   Total Congressional Districts: {stateData['enacted']['districts']['features'].length}
                   <br/>
-                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal'].toPrecision(3)}
+                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityVAP'].toPrecision(3)}
                   <br/>
                   Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper'].toPrecision(3)}
                   <br/>
-                  Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']}
+                  Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountVAP']}
                   </Text>
                 ) : value == '2' ? (
                   <Text> Population: {CVAP.toLocaleString()}
                   <br/>
                   Total Congressional Districts: {stateData['enacted']['districts']['features'].length}
                   <br/>
-                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal'].toPrecision(3)}
+                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityCVAP'].toPrecision(3)}
                   <br/>
                   Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper'].toPrecision(3)}
                   <br/>
-                  Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']} 
+                  Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountCVAP']} 
                   </Text>
                 ) : null}
                 <br />

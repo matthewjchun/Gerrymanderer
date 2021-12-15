@@ -9,6 +9,7 @@ import BoxAndWhisker from './BoxAndWhisker';
 import Reset from './Reset';
 import { AlgorithmContext } from '../contexts/Algorithm';
 import { StateDataContext } from '../contexts/StateData';
+import { DistrictingSummaryContext } from '../contexts/DistrictingSummary';
 
 import boxData from '../data/finalboxwhisker/a_tot.json';
 
@@ -20,7 +21,9 @@ export default function TopBar(props) {
   const [activeState, setActiveState] = useContext(StateContext);
   const [algorithm, setAlgorithm] = useContext(AlgorithmContext);
   const [stateData, setStateData] = useContext(StateDataContext);
+  const [districtingSummary, setDistrictingSummary] = useContext(DistrictingSummaryContext);
   let stateSummary;
+
   if(stateData != null){
     stateSummary = stateData['summary'];
   }
@@ -56,7 +59,7 @@ export default function TopBar(props) {
             {/* <LeftPane isOpen={true} onClose={onDrawerClose} onOpen={onDrawerOpen} onBoxOpen={onBoxOpen}></LeftPane> */}
                 {/* <BoxAndWhisker isOpen={true} onClose={onBoxClose} onOpen={onBoxOpen} activeState={activeState}></BoxAndWhisker> */}
       {activeState != 'Celtics' ? (
-        <Box flex='1' mr='auto'>
+        <Box flex='1.5' mr='auto'>
           <Button onClick={onDrawerOpen} mr='5px'>
             <Text>User Settings</Text>
           </Button>
@@ -81,10 +84,11 @@ export default function TopBar(props) {
           }
         </Box>
       ) : (
-        <Box flex='1' mr='auto' />
+        <Box flex='1'/>
       )}
-      <Text flex='2' fontWeight='bold' fontSize='1.5em' m='auto' align='center'>
-        {activeState}
+      <Text flex='1.5' fontWeight='bold' fontSize='1.5em' m='auto' align='center'>
+        {activeState} {districtingSummary != null && districtingSummary['id'] == '1' ? ((' - Enacted')) : null}
+        {districtingSummary != null && districtingSummary['id'] != '1' ? ((' - Plan '+districtingSummary['id'])) : null}
       </Text>
       <Select
         flex='1'
