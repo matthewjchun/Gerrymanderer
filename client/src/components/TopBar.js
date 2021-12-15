@@ -12,7 +12,6 @@ import { StateDataContext } from '../contexts/StateData';
 import { DistrictingSummaryContext } from '../contexts/DistrictingSummary';
 
 import boxData from '../data/finalboxwhisker/a_tot.json';
-import { DistrictingSummaryContext } from '../contexts/DistrictingSummary';
 
 export default function TopBar(props) {
   const { isOpen: isDrawerOpen , onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure()

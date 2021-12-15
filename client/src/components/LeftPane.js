@@ -334,31 +334,12 @@ export default function LeftPane(props) {
               </TabPanel>
               <TabPanel>
                 {activeState == 'Arizona' ? (
-                  <VStack spacing='2'>
-                    {activeState == 'Arizona' ? (
-                    <VStack spacing='2'>
-                      {stateSummary['districtingSummaries'].map((districting) => {
-                        return (
-                          <HStack spacing='5px'>
-                            <Redistricting
-                              number={districting.id}
-                              thumbnail={az}
-                              popEquality={districting.populationEqualityTotal}
-                              compactness={districting.avgPolsbyPopper}
-                              majorityMinority={districting.majorityMinorityCountTotal}
-                            />
-                          </HStack>
-                        );
-                      })}
-                    </VStack>
-                    ) : null}
                     <VStack spacing='3' align='right'>
                       <Button onClick={onBoxOpen}>
                         <Text>Generate</Text>
                       </Button>
                     </VStack> 
-                  </VStack>
-                ) : null}
+                    ) : null}
               </TabPanel>
             </TabPanels>
           </Tabs>

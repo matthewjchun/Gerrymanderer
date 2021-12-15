@@ -63,7 +63,6 @@ const bestMeasure = (data) => {
         await setDistrictingSummary(summary)
       }
     }
-    onClose();
   }
 
 
@@ -112,11 +111,6 @@ const bestMeasure = (data) => {
               onMouseEnter={stopPropagation}
               onMouseLeave={stopPropagation}
             ></Image>
-            <Text
-              fontSize={"xl"}
-              onMouseEnter={stopPropagation}
-              onMouseLeave={stopPropagation}
-            >beep</Text>
           </VStack>        
         </Box>
       </PopoverTrigger>
