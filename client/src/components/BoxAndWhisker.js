@@ -26,15 +26,14 @@ import { useDisclosure } from '@chakra-ui/react';
 // import boxData2 from '../data/finalboxwhisker/aa_tot.json';
 import ReactApexChart from 'react-apexcharts';
 import { Radio, RadioGroup, Stack } from '@chakra-ui/react';
-import { SelectedDistrictingContext } from "../contexts/SelectedDistricting";
 import { StateContext } from "../contexts/State";
-import { StateSummaryContext } from "../contexts/StateSummary";
+import { StateDataContext } from "../contexts/StateData";
 import { PopulationTypeContext } from "../contexts/PopulationType";
 
 export default function BoxAndWhisker(props) {
   const { isOpen, onClose } = props;
   const [value, setValue] = useState('0');
-  const [stateSummary] = useContext(StateSummaryContext);
+  const [stateData] = useContext(StateDataContext);
   const [populationType] = useContext(PopulationTypeContext);
   const [activeState] = useContext(StateContext);
   const [series, setSeries] = useState();
@@ -43,6 +42,8 @@ export default function BoxAndWhisker(props) {
   // const districtPops = stateData['summary']["districtingSummaries"][0]["districtSummaries"];
 
   // SELECTING BASIS AND POPULATION TYPE //
+
+  const stateSummary = stateData['summary'];
 
   const basisChange = (value) => {
     setValue(value);

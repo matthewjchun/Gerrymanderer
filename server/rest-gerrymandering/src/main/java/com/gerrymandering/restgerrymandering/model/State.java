@@ -54,8 +54,7 @@ public class State {
     }
 
     public Districting getDistrictingById(long districtingId) {
-        int index = (int)districtingId + Constants.getDistrictingOffsets().get(name.toLowerCase());
-        return districtings.get(index);
+        return districtings.get((int)districtingId);
     }
 
     // GETTERS AND SETTERS

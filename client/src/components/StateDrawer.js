@@ -26,17 +26,21 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { useContext, useState, useEffect } from 'react';
-import { DataContext, StateContext } from '../contexts/State';
-import { Pie } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
+import { Pie } from 'react-chartjs-2';
 import Districts from './Districts';
+import { StateContext } from '../contexts/State';
 import { PopulationTypeContext } from '../contexts/PopulationType';
+import { StateDataContext } from '../contexts/StateData';
 
 export default function StateDrawer(props) {
-  const { isOpen, onOpen, onClose, stateSummary, stateData } = props;
+  const { isOpen, onOpen, onClose } = props;
   const [activeState] = useContext(StateContext);
   const [value, setValue] = useState('0');
   const [populationType, setPopulationType] = useContext(PopulationTypeContext);
+  const [stateData, setStateData] = useContext(StateDataContext);
+  const stateSummary = stateData['summary'];
+
 
   // POPULATION MEASURE
   const typeMap = {

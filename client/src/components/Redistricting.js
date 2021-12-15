@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import { Box, Text, Image, VStack } from '@chakra-ui/react';
 import {
   Popover,
@@ -8,20 +9,45 @@ import {
   PopoverFooter,
   PopoverArrow,
   PopoverCloseButton,
+  Center
 } from '@chakra-ui/react';
+import { StateDataContext } from '../contexts/StateData';
 
 export default function Redistricting(props) {
-  const { number, bestMeasure, measures } = props;
-  const { popEquality, compactness, majorityMinority } =
-    measures;
+  const { number, bestMeasure, measures, thumbnail } = props;
+  const { popEquality, compactness, majorityMinority } = measures;
+
+  const [ stateData, setStateData ] = useContext(StateDataContext);
+  const stateSummary = stateData['summary'];
+
+
+  const handleRedistrictingClick = async () => {
+    // const response = await fetch (
+    //   `/redistrictingClick?id=${number}`
+    // )
+    // const body = await response.json();
+    console.log(number);
+
+  }
+
 
   const handleMouseEnter = (e) => {
-    e.target.style.boxShadow = '0px 5px 8px #888888';
+    if(e.target == e.currentTarget){
+      e.target.style.boxShadow = '0px 5px 8px #888888';
+      e.target.style.backgroundColor = '#87CEEB';
+    }
   };
 
   const handleMouseLeave = (e) => {
-    e.target.style.boxShadow = 'none';
+    if(e.target == e.currentTarget){
+      e.target.style.boxShadow = 'none';
+      e.target.style.backgroundColor = 'white';
+    }
   };
+
+  const stopPropagation = (e) => {
+    e.stopPropagation();
+}
   
   return (
     <Popover isLazy trigger='hover'>
@@ -34,7 +60,7 @@ export default function Redistricting(props) {
           borderRadius='lg'
           overflow='hidden'
           cursor='pointer'
-          onClick={props.handleRedistrictingClick}
+          onClick={handleRedistrictingClick}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
@@ -43,11 +69,20 @@ export default function Redistricting(props) {
             fontWeight='semibold' 
             lineHeight='tight' mt='1' 
             isTruncated
+            onMouseEnter={stopPropagation}
+            onMouseLeave={stopPropagation}
           > District {number}</Text>
           <VStack align='left'>
-            <Text>Population Equality: {popEquality}</Text>
-            <Text>Compactness: {compactness}</Text>
-            <Text>Majority-Minority: {majorityMinority}</Text>
+            <Image 
+              src={thumbnail[number-1]}
+              onMouseEnter={stopPropagation}
+              onMouseLeave={stopPropagation}
+            ></Image>
+            <Text
+              fontSize={"xl"}
+              onMouseEnter={stopPropagation}
+              onMouseLeave={stopPropagation}
+            >{bestMeasure}</Text>
           </VStack>        
         </Box>
       </PopoverTrigger>

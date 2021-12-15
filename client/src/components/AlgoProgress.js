@@ -14,23 +14,23 @@ import {
   CircularProgress,
 } from "@chakra-ui/react";
 import { useContext, useState, useEffect } from 'react';
-import { useDisclosure } from '@chakra-ui/react';
 import { AlgorithmContext } from "../contexts/Algorithm";
-import { SelectedDistrictingContext } from "../contexts/SelectedDistricting";
+import { StateDataContext } from "../contexts/StateData";
 import { GeoJSONContext } from "../contexts/GeoJSON";
 
 export default function AlgoProgress(props) {
     const { isOpen, onClose, activeState, algorithmURL } = props;
 
     const [ algorithm, setAlgorithm ] = useContext(AlgorithmContext);
-    const [ selectedDistricting, setSelectedDistricting] = useContext(SelectedDistrictingContext);
-    const [ geoJSON, setGeoJSON ] = useContext(GeoJSONContext);
-
+    const [ stateData ] = useContext(StateDataContext);
+    const [ setGeoJSON ] = useContext(GeoJSONContext);
 
     const [ running, setRunning ] = useState(algorithm["running"]);
     const [ loading, setLoading ] = useState(false);
 
     let interval;
+
+    // console.log(running); after reset, running is set to false and never changes
 
     useEffect(() => {
       if(running == true && typeof(interval) === 'undefined'){
@@ -73,8 +73,6 @@ export default function AlgoProgress(props) {
         algorithmURL
       );
       const resume = await response.json();
-      console.log("resumed");
-      console.log(resume);
       setAlgorithm(resume);
     }
 
@@ -84,8 +82,6 @@ export default function AlgoProgress(props) {
         `/stop`
       );
       const terminate = await response.json();
-      console.log("terminated");
-      console.log(terminate);
       setAlgorithm(terminate);
     }
 
@@ -95,9 +91,6 @@ export default function AlgoProgress(props) {
         `/algorithmSummary`
       );
       const body = await response.json();
-      console.log("this is post");
-      console.log(body);
-      console.log(JSON.stringify(body['districtingBoundary']));
       setGeoJSON(body['districtingBoundary']);
       onClose();
     }
@@ -118,14 +111,14 @@ export default function AlgoProgress(props) {
                 </Center>
                 <br/>
                 <Divider /> 
-                <Text align="left">Original Pop. Equality: {selectedDistricting['summary']['districtingSummaries']['0']['populationEqualityTotal']}
+                <Text align="left">Original Pop. Equality: {stateData['summary']['districtingSummaries']['0']['populationEqualityTotal']}
                 </Text> 
                 <Text align="left">Post-Algo Pop. Equality: {algorithm["populationEqualityTotal"]}</Text>
                 <Divider />
-                <Text align="left">Original Polsby Popper: {selectedDistricting['summary']['districtingSummaries']['0']['avgPolsbyPopper']}</Text>
+                <Text align="left">Original Polsby Popper: {stateData['summary']['districtingSummaries']['0']['avgPolsbyPopper']}</Text>
                 <Text align="left">Post-Algo Polsby Popper: {algorithm["avgPolsbyPopper"]}</Text>
                 <Divider />
-                <Text align="left">Original Majority Minority: {selectedDistricting['summary']['districtingSummaries']['0']['majorityMinorityCountTotal']}
+                <Text align="left">Original Majority Minority: {stateData['summary']['districtingSummaries']['0']['majorityMinorityCountTotal']}
                 </Text>
                 <Text align="left">Post-Algo Majority Minority: {algorithm["majorityMinorityCountTotal"]}</Text>
                 <Divider />

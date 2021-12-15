@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState, useContext } from 'react';
 import { DataContext, StateContext } from '../contexts/State';
 import { GeoJSONContext } from '../contexts/GeoJSON';
-import { SelectedDistrictingContext } from '../contexts/SelectedDistricting';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { Flex } from '@chakra-ui/react';
 import '../App.css';
@@ -9,7 +8,7 @@ import StateDrawer from './StateDrawer';
 import Legend from './Legend';
 import { useDisclosure } from '@chakra-ui/react';
 import * as constants from '../constants/constants';
-import { StateSummaryContext } from '../contexts/StateSummary';
+import { StateDataContext } from '../contexts/StateData';
 
 
 mapboxgl.accessToken =
@@ -20,7 +19,6 @@ const Map = () => {
   const map = useRef(null);
   const [lng, setLng] = useState(-100.445882);
   const [lat, setLat] = useState(37.7837304);
-  const [stateData, setStateData] = useState();
   const [zoom, setZoom] = useState(4);
   let hoveredStateId = null;
   const bounds = [
@@ -31,8 +29,7 @@ const Map = () => {
     '<strong>District 1</strong><p><br><b>Total Population:</b> 724,868<br><b>Democratic:</b> 50.1%<br><b>Republican:</b> 48.4%<br><br><b>Race:</b> 64.1% White, 23.2% Am. Indian, 2.4% Black, 1.7% Asian<br><b>Ethnicity:</b> 20.4% Hispanic<br><br><b>Unemployment:</b> 14.2%<br><b>Median household income:</b> $43,377';
   const [activeState, setActiveState] = useContext(StateContext);
   const [geoJSON, setGeoJSON] = useContext(GeoJSONContext);
-  const [selectedDistricting, setSelectedDistricting] = useContext(SelectedDistrictingContext);
-  const [stateSummary, setStateSummary] = useContext(StateSummaryContext);
+  const [stateData, setStateData] = useContext(StateDataContext);
   const { isOpen, onOpen, onClose } = useDisclosure(); // open close state drawer
   // let refetch = false;
 
@@ -72,8 +69,6 @@ const Map = () => {
     );
     const body = await response.json();
     await setStateData(body);
-    await setSelectedDistricting(body);
-    await setStateSummary(body['summary']);
     console.log(body)
     return body;
   };
@@ -465,8 +460,6 @@ const Map = () => {
             isOpen={isOpen}
             onClose={onClose}
             active={activeState}
-            stateSummary={stateData['summary']}
-            stateData={stateData}
           />
         ) : null}
       </Flex>

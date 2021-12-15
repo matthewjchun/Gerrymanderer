@@ -12,9 +12,9 @@ import {
     Heading,
     Center,
     VStack
-  } from "@chakra-ui/react";
-  import { useContext, useState, useEffect } from 'react';
-  import { useDisclosure } from '@chakra-ui/react';
+} from "@chakra-ui/react";
+import { useContext, useState, useEffect } from 'react';
+import { useDisclosure } from '@chakra-ui/react';
 import { StateContext } from "../contexts/State";
   
   export default function Reset(props) {
