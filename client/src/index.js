@@ -9,16 +9,16 @@ import App from './App';
 import theme from './theme';
 import { GeoJSONProvider } from './contexts/GeoJSON';
 import { AlgorithmProvider } from './contexts/Algorithm';
-import { SelectedDistrictingProvider } from './contexts/SelectedDistricting';
-import { StateSummaryProvider } from './contexts/StateSummary';
 import { PopulationTypeProvider } from './contexts/PopulationType';
+import { StateDataProvider } from './contexts/StateData';
+import { DistrictingSummaryProvider } from './contexts/DistrictingSummary';
 
 ReactDOM.render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
-      <SelectedDistrictingProvider>
+      <DistrictingSummaryProvider>
       <PopulationTypeProvider>
-      <StateSummaryProvider>
+      <StateDataProvider>
       <AlgorithmProvider>
       <GeoJSONProvider>
       <StateProvider>
@@ -26,9 +26,9 @@ ReactDOM.render(
       </StateProvider>
       </GeoJSONProvider>
       </AlgorithmProvider>
-      </StateSummaryProvider>
+      </StateDataProvider>
       </PopulationTypeProvider>
-      </SelectedDistrictingProvider>
+      </DistrictingSummaryProvider>
     </ChakraProvider>
   </React.StrictMode>,
   document.getElementById('root')
