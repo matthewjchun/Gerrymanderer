@@ -2,10 +2,12 @@ package com.gerrymandering.restgerrymandering.algorithm;
 
 import com.gerrymandering.restgerrymandering.constants.Constants;
 import com.gerrymandering.restgerrymandering.model.District;
+import com.gerrymandering.restgerrymandering.model.DistrictSummary;
 import com.gerrymandering.restgerrymandering.model.Districting;
 import com.gerrymandering.restgerrymandering.model.Precinct;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AlgorithmSummary {
@@ -40,14 +42,14 @@ public class AlgorithmSummary {
 
     private JsonObject districtingBoundary;
 
-    private List<Integer> districtPopulations;
+    private List<DistrictSummary> districtSummaries;
 
     public AlgorithmSummary(int numberIterations, int numberCensusBlocksMoved, int estimatedTime, boolean running,
                             boolean paused, String stateName, double populationEqualityTotal,
                             double populationEqualityVAP, double populationEqualityCVAP,
                             double avgPolsbyPopper, int majorityMinorityCountTotal, int majorityMinorityCountVAP,
                             int majorityMinorityCountCVAP, List<Precinct> splitPrecincts,
-                            JsonObject districtingBoundary, List<Integer> districtPopulations) {
+                            JsonObject districtingBoundary, List<DistrictSummary> districtSummaries) {
         this.numberIterations = numberIterations;
         this.numberCensusBlocksMoved = numberCensusBlocksMoved;
         this.estimatedTime = estimatedTime;
@@ -63,7 +65,7 @@ public class AlgorithmSummary {
         this.majorityMinorityCountCVAP = majorityMinorityCountCVAP;
         this.splitPrecincts = splitPrecincts;
         this.districtingBoundary = districtingBoundary;
-        this.districtPopulations = districtPopulations;
+        this.districtSummaries = districtSummaries;
     }
 
     public void updateMeasures(Districting districting) {
@@ -76,10 +78,14 @@ public class AlgorithmSummary {
         setMajorityMinorityCountCVAP(districting.getMajorityMinorityCountCVAP());
     }
 
-    public void updateDistrictPopulations(Districting districting, Constants.PopulationType populationType) {
+    public void updateDistrictPopulations(Districting districting) {
+        List<DistrictSummary> summaryList = new ArrayList<>();
         for (District district: districting.getDistricts()) {
-            districtPopulations.add(district.getPopulationByType(populationType).getTotal());
+            DistrictSummary summary = new DistrictSummary();
+            summary.populateSummary(district);
+            summaryList.add(summary);
         }
+        districtSummaries = summaryList;
     }
 
     // GETTERS AND SETTERS
@@ -203,11 +209,11 @@ public class AlgorithmSummary {
         this.districtingBoundary = districtingBoundary;
     }
 
-    public List<Integer> getDistrictPopulations() {
-        return districtPopulations;
+    public List<DistrictSummary> getDistrictSummaries() {
+        return districtSummaries;
     }
 
-    public void setDistrictPopulations(List<Integer> districtPopulations) {
-        this.districtPopulations = districtPopulations;
+    public void setDistrictSummaries(List<DistrictSummary> districtSummaries) {
+        this.districtSummaries = districtSummaries;
     }
 }
