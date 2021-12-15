@@ -4,6 +4,7 @@ import json
 from os import listdir
 from os.path import isfile, join
 from util import writeToCSVFile, calculateAvgPolsbyPopper, calculatePolsbyPopper, getPopulationEquality
+from shapely.geometry import Polygon, MultiPoint
 
 def createGeoJson(inFilename, state, level, folder):
     f = open(inFilename)
@@ -137,13 +138,87 @@ def getAGElectionDistrict(electionFile, precinctFile, districtFile, outFilename)
         newData.append([key, str(districtDict[key]["party_dem"]), str(districtDict[key]["party_rep"])])
     writeToCSVFile(outFilename, header, newData)
 
+def getNeighbors(neighborFile, isPrecinct):
+    if isPrecinct == 0:
+        distance = 60.96
+    else:
+        distance = 30.48 
+    f = open(neighborFile)
+    data = ijson.items(f, 'nodes.item', use_float=True)
+    nodeData = {}
+    neighborData = []
+    for row in data:
+        nodeData[row["id"]] = row["GEOID20"]
+    f = open(neighborFile)
+    data = ijson.items(f, 'adjacency.item', use_float=True)
+    index = 0
+    for row in data:
+        row_neighbors = []
+        for neighbor in row:
+            if neighbor["shared_perim"] <= distance:
+                row_neighbors.append(nodeData[neighbor["id"]])
+        if row_neighbors != []:
+            neighborData.append([nodeData[index]] + row_neighbors)
+        index +=1
+    writeToCSVFile("va_cb_neighbors.csv", [], neighborData)
+
+def getBorder(cdDir, precinctDir):
+    files = [f for f in listdir(cdDir) if isfile(join(cdDir, f))]
+    cdData = []
+    for file in files:
+        f = open(join(cdDir,file), 'r')
+        data = json.load(f)
+        cdData.append({"GEOID20":data["properties"]["GEOID20"], "STATE":data["properties"]["STATEFP20"], "COUNTY": data["properties"]["COUNTYFP20"], "VTD": data["properties"]["VTD"], "CD116": data["properties"]["CD116"], "POLYGON":data["geometry"]["coordinates"]})
+    files = [f for f in listdir(precinctDir) if isfile(join(precinctDir, f))]
+    borderData = []
+    for file in files:
+        with open(join(precinctDir,file), 'r') as precinctFile:
+            data = json.load(precinctFile)
+            precinctGEOID = data["properties"]["GEOID20"]
+            border = [precinctGEOID]
+            count = 0
+            if data["geometry"]["type"] == "MultiPolygon":
+                for poly in data["geometry"]["coordinates"]:
+                    precinctPolygon = Polygon(poly[0])
+                    for row in cdData:
+                        cdPolygon = Polygon(row["POLYGON"][0])
+                        cdVTD = row["STATE"] + row["CD116"]
+                        if cdPolygon.intersects(precinctPolygon) and cdVTD == precinctGEOID:
+                            border.append(row["GEOID20"])
+                            cdData.remove(row)
+                            count += 1
+            else:
+                precinctPolygon = Polygon(data["geometry"]["coordinates"][0])
+                for row in cdData:
+                    cdPolygon = Polygon(row["POLYGON"][0])
+                    cdVTD = row["STATE"] + row["COUNTY"] + row["VTD"]
+                    if cdPolygon.intersects(precinctPolygon) and cdVTD == precinctGEOID:
+                        border.append(row["GEOID20"])
+                        cdData.remove(row)
+                        count += 1
+            borderData.append(border)
+            print(str(join(precinctDir,file)) + "; Count: " + str(count))
+    writeToCSVFile("mi_district_cb_borders.csv", ["precinct", "cb"], borderData)
+
+
 if __name__=="__main__":
     relative_path = "../server/rest-gerrymandering/src/main/resources/data/"
+    # AZ
     # createGeoJson("dataSource/az_county.json", "AZ", "County", relative_path + "counties/")
     # createGeoJson("dataSource/az_district.json", "AZ", "District", relative_path + "districts/enacted/")
     # createGeoJson("dataSource/az_precinct.json", "AZ", "Precinct", relative_path + "precincts/")
-    # createGeoJson("dataSource/az_censusblock.json", "AZ", "CensusBlock", relative_path + "censusblocks/")\
+    # createGeoJson("dataSource/az_censusblock.json", "AZ", "CensusBlock", relative_path + "censusblocks/")
     # createPropertyCSV("dataSource/az_censusblock.json", "AZ", "CensusBlock")
     # createPropertyCSV("dataSource/az_precinct.json", "AZ", "Precinct")
     # createPropertyCSV("dataSource/az_district.json", "AZ", "District")
     # createPropertyCSV("dataSource/az_county.json", "AZ", "County")
+    # MI
+    # createGeoJson("dataSource/mi_pl2020_cnty.json", "MI", "County", relative_path + "counties/")
+    # createGeoJson("dataSource/mi_pl2020_cd.json", "MI", "District", relative_path + "districts/enacted/")
+    # createGeoJson("dataSource/mi_pl2020_vtd.json", "MI", "Precinct", relative_path + "precincts/")
+    createGeoJson("dataSource/mi_cb.json", "MI", "CensusBlock", relative_path + "censusblocks/")
+    # VA
+    createGeoJson("dataSource/va_pl2020_cnty.json", "va", "County", relative_path + "counties/")
+    createGeoJson("dataSource/va_pl2020_cd.json", "va", "District", relative_path + "districts/enacted/")
+    createGeoJson("dataSource/va_pl2020_vtd.json", "va", "Precinct", relative_path + "precincts/")
+    createGeoJson("dataSource/va_pl2020_b.json", "va", "CensusBlock", relative_path + "censusblocks/")
