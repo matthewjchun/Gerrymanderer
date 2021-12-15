@@ -98,7 +98,7 @@ public class DistrictingController {
             }
         }
         stateFull.add("enacted", enactedGeoJson);
-        state.sortDistrictings(new DistrictingComparator(POPEQ, Constants.PopulationType.TOTAL));
+        //state.sortDistrictings(new DistrictingComparator(POPEQ, Constants.PopulationType.TOTAL));
         List<Districting> seawulfDistrictings = state.getDistrictings();
         JsonArray seawulfGeoJsonArray = new JsonArray();
         for (int i = 1; i < seawulfDistrictings.size(); i++) {
@@ -141,7 +141,7 @@ public class DistrictingController {
         Constants.SortCriteria sortCriteria = Constants.SortCriteria.valueOf(sortCriteriaStr);
         session.setAttribute("sortCriteria", sortCriteria);
 
-        currentState.sortDistrictings(new DistrictingComparator(sortCriteria, populationType));
+        //currentState.sortDistrictings(new DistrictingComparator(sortCriteria, populationType));
         List<Districting> districtings = currentState.getDistrictings();
         return ResponseEntity.ok(districtings);
     }
@@ -164,7 +164,7 @@ public class DistrictingController {
         }
         Gson gson = new Gson();
 
-        currentState.sortDistrictings(new DistrictingComparator(sortCriteria, populationType));
+        //currentState.sortDistrictings(new DistrictingComparator(sortCriteria, populationType));
         Districting selectedDistricting = currentState.getDistrictingById(districtingId);
 
         AlgorithmSettings algorithmSettings = (AlgorithmSettings) session.getAttribute("algorithmSettings");
