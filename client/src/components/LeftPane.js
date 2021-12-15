@@ -47,6 +47,7 @@ import va from '../img/va/va.js';
 import { BoxZoomHandler } from 'mapbox-gl';
 import postProcessed from '../data/postprocessed4.json';
 import AlgoProgress from './AlgoProgress';
+import { StateDataContext } from '../contexts/StateData';
 
 
 // maps property names to display names
@@ -55,245 +56,6 @@ const measureMap = {
   compactness: 'Compactness',
   majorityMinority: 'Majority-Minority',
 };
-
-// returns an array of best measures for each redistricting in a given state
-const bestMeasure = (data) => {
-  let best = [];
-  for (let i = 0; i < data.length; i++) {
-    let districting = data[i];
-    let maxProp = 'popEquality';
-    let max = parseInt(districting.popEquality);
-    for (let measure in districting) {
-      if (measure === 'number') continue;
-      if (measure === 'popEquality' || measure === 'compactness') {
-        if (parseInt(districting[measure]) > max) {
-          maxProp = measure;
-          max = parseInt(districting.measure);
-        }
-      } else {
-        if (100 - parseInt(districting[measure]) > max) {
-          maxProp = measure;
-          max = parseInt(districting.measure);
-        }
-      }
-    }
-    best.push([districting.number, maxProp, districting]);
-  }
-  return best;
-};
-
-const azData = [
-  [
-    {
-      number: postProcessed["1"]["id"],
-      popEquality: postProcessed["1"]["pop_eq"].toLocaleString(undefined, {minimumFractionDigits: 2}),
-      compactness: postProcessed["1"]["polsby_avg"],
-      majorityMinority: postProcessed["1"]["majority_minority_tot"],
-    },
-    {
-      number: 2,
-      popEquality: '59',
-      compactness: '28',
-      majorityMinority: '59',
-    },
-  ],
-  [
-    {
-      number: 3,
-      popEquality: '53',
-      compactness: '46',
-      majorityMinority: '99',
-    },
-    {
-      number: 4,
-      popEquality: '72',
-      compactness: '54',
-      majorityMinority: '42',
-    },
-  ],
-  [
-    {
-      number: 5,
-      popEquality: '53',
-      compactness: '46',
-      majorityMinority: '99',
-    },
-    {
-      number: 6,
-      popEquality: '77',
-      compactness: '50',
-      majorityMinority: '43',
-    },
-  ],
-  [
-    {
-      number: 7,
-      popEquality: '59',
-      compactness: '28',
-      majorityMinority: '59',
-    },
-    {
-      number: 8,
-      popEquality: '72',
-      compactness: '54',
-      majorityMinority: '42',
-    },
-  ],
-  [
-    {
-      number: 9,
-      popEquality: '92',
-      compactness: '52',
-      majorityMinority: '58',
-    },
-    {
-      number: 10,
-      popEquality: '48',
-      compactness: '27',
-      majorityMinority: '73',
-    },
-  ],
-  [
-    {
-      number: 11,
-      popEquality: '49',
-      compactness: '68',
-      majorityMinority: '27',
-    },
-    {
-      number: 12,
-      popEquality: '40',
-      compactness: '28',
-      majorityMinority: '57',
-    },
-  ],
-  [
-    {
-      number: 13,
-      popEquality: '72',
-      compactness: '45',
-      majorityMinority: '48',
-    },
-    {
-      number: 14,
-      popEquality: '95',
-      compactness: '27',
-      majorityMinority: '65',
-    },
-  ],
-  [
-    {
-      number: 15,
-      popEquality: '69',
-      compactness: '87',
-      majorityMinority: '53',
-    },
-    {
-      number: 16,
-      popEquality: '47',
-      compactness: '94',
-      majorityMinority: '23',
-    },
-  ],
-  [
-    {
-      number: 17,
-      popEquality: '37',
-      compactness: '38',
-      majorityMinority: '82',
-    },
-    {
-      number: 18,
-      popEquality: '65',
-      compactness: '23',
-      majorityMinority: '54',
-    },
-  ],
-  [
-    {
-      number: 19,
-      popEquality: '84',
-      compactness: '36',
-      majorityMinority: '60',
-    },
-    {
-      number: 20,
-      popEquality: '73',
-      compactness: '34',
-      majorityMinority: '45',
-    },
-  ],
-  [
-    {
-      number: 21,
-      popEquality: '90',
-      compactness: '53',
-      majorityMinority: '50',
-    },
-    {
-      number: 22,
-      popEquality: '48',
-      compactness: '26',
-      majorityMinority: '59',
-    },
-  ],
-  [
-    {
-      number: 23,
-      popEquality: '27',
-      compactness: '49',
-      majorityMinority: '49',
-    },
-    {
-      number: 24,
-      popEquality: '93',
-      compactness: '84',
-      majorityMinority: '27',
-    },
-  ],
-  [
-    {
-      number: 25,
-      popEquality: '36',
-      compactness: '73',
-      majorityMinority: '65',
-    },
-    {
-      number: 26,
-      popEquality: '33',
-      compactness: '76',
-      majorityMinority: '47',
-    },
-  ],
-  [
-    {
-      number: 27,
-      popEquality: '48',
-      compactness: '87',
-      majorityMinority: '53',
-    },
-    {
-      number: 28,
-      popEquality: '95',
-      compactness: '57',
-      majorityMinority: '25',
-    },
-  ],
-  [
-    {
-      number: 29,
-      popEquality: '59',
-      compactness: '48',
-      majorityMinority: '93',
-    },
-    {
-      number: 30,
-      popEquality: '15',
-      compactness: '36',
-      majorityMinority: '45',
-    },
-  ],
-];
 
 export default function LeftPane(props) {
   const { isOpen, onClose, onBoxOpen } = props;
@@ -304,8 +66,11 @@ export default function LeftPane(props) {
   const { isOpen: isModalOpen , onOpen: onModalOpen, onClose: onModalClose } = useDisclosure()
 
   const [activeState, setActiveState] = useContext(StateContext);
+  const [stateData, setStateData] = useContext(StateDataContext);
   const [geoJSON, setGeoJSON] = useContext(GeoJSONContext);
   const [algorithm, setAlgorithm] = useContext(AlgorithmContext);
+
+  const stateSummary = stateData['summary'];
 
   const handlePopEqualityInput = (val) => setPopEquality(val);
   const handleCompactnessInput = (val) => setCompactness(val);
@@ -315,11 +80,11 @@ export default function LeftPane(props) {
   //   console.log();
   // };
 
-  const algorithmURL = `/algorithm?id=0&popEqThresh=${popEquality/100}&polsbyPopperThresh=0.3&majorityMinorityThresh=${majorityMinority}`;
+  const algorithmURL = `/algorithm?id=0&popEqThresh=${popEquality/100}&polsbyPopperThresh=${compactness}&majorityMinorityThresh=${majorityMinority}`;
 
   const handleAlgorithmStart = async () => {
     const response = await fetch(
-      `/algorithm?id=0&popEqThresh=${popEquality/100}&polsbyPopperThresh=0.3&majorityMinorityThresh=${majorityMinority}`
+      `/algorithm?id=0&popEqThresh=${popEquality/100}&polsbyPopperThresh=${compactness}&majorityMinorityThresh=${majorityMinority}`
     );
     const algorithm = await response.json();
     setAlgorithm(algorithm);
@@ -341,6 +106,7 @@ export default function LeftPane(props) {
   const majorityMinorityToolTip =
     'Set the maximum percentage threshold for the minority population per congressional district in the improved redistricting. [0, 8]';
 
+  let i = 0;
 
   return (
     <>
@@ -411,29 +177,25 @@ export default function LeftPane(props) {
             </TabList>
             <TabPanels>
               <TabPanel>
-                {/* {activeState == 'Arizona' ? ( */}
+                {activeState == 'Arizona' ? (
                   <VStack spacing='2'>
-                    {azData.map((set) => {
-                      const best = bestMeasure(set);
-                      return (
-                        <HStack spacing='5px'>
-                          {best.map((numMeasure) => {
-                            const [number, measure, allMeasures] = numMeasure;
-                            return (
-                              <Redistricting
-                                number={number}
-                                thumbnail={az}
-                                bestMeasure={measureMap[measure]}
-                                measures={allMeasures}
-                                // handleRedistrictingClick={handleRedistrictingClick}
-                              />
-                            );
-                          })}
-                        </HStack>
-                      );
+                  {/* <HStack spacing='5px'> */}
+                    {stateSummary['districtingSummaries'].map((districting) => {
+                        
+                        return (
+                            <Redistricting
+                              display={i++}
+                              number={districting.id}
+                              thumbnail={az}
+                              popEquality={districting.populationEqualityTotal}
+                              compactness={districting.avgPolsbyPopper}
+                              majorityMinority={districting.majorityMinorityCountTotal}
+                            />
+                        );
                     })}
+                    {/* </HStack> */}
                   </VStack>
-                {/* ) : null} */}
+                ) : null}
                 {/* {activeState == 'Michigan' ? (
                   <VStack spacing='3'>
                     {miData.map((set) => {
@@ -605,28 +367,23 @@ export default function LeftPane(props) {
               <TabPanel>
                 {activeState == 'Arizona' ? (
                   <VStack spacing='2'>
-                    {azData.map((set) => {
-                      const best = bestMeasure(set);
-                      return (
-                        <HStack spacing='2'>
-                          {best.map((numMeasure) => {
-                            const [number, measure, allMeasures] = numMeasure;
-                            return (
-                              <>
-                                <Redistricting
-                                  number={number}
-                                  thumbnail={az}
-                                  bestMeasure={measureMap[measure]}
-                                  measures={allMeasures}
-                                  // onClick={handleRedistrictingClick}
-                                />
-                                <Checkbox> {number} </Checkbox>
-                              </>
-                            );
-                          })}
-                        </HStack>
-                      );
-                    })}
+                    {activeState == 'Arizona' ? (
+                    <VStack spacing='2'>
+                      {stateSummary['districtingSummaries'].map((districting) => {
+                        return (
+                          <HStack spacing='5px'>
+                            <Redistricting
+                              number={districting.id}
+                              thumbnail={az}
+                              popEquality={districting.populationEqualityTotal}
+                              compactness={districting.avgPolsbyPopper}
+                              majorityMinority={districting.majorityMinorityCountTotal}
+                            />
+                          </HStack>
+                        );
+                      })}
+                    </VStack>
+                    ) : null}
                     <VStack spacing='3' align='right'>
                       <Button onClick={onBoxOpen}>
                         <Text>Generate</Text>

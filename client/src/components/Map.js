@@ -70,7 +70,6 @@ const Map = () => {
     );
     const body = await response.json();
     await setStateData(body);
-    await setDistrictingSummary(body['summary']['districtingSummaries'][0])
     console.log(body)
     return body;
   };
@@ -203,6 +202,13 @@ const Map = () => {
     if (state == 'Arizona') {
       const stateData = await handleStateFetch();
       const stateSummary = stateData['summary'];
+      for( const summary of stateData['summary']['districtingSummaries'] ){
+        if( summary['id'] == 1){
+          const districtingSummary = summary;
+          await setDistrictingSummary(summary)
+        }
+      }
+
 
       map.current.flyTo({
         center: [
@@ -264,6 +270,7 @@ const Map = () => {
       //   hoveredStateId = null;
       //   });
 
+      console.log(districtingSummary)
       onOpen();
 
       // AZ CONGRESSIONAL DISTRICT MARKERS
