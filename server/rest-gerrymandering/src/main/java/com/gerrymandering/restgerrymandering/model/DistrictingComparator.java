@@ -34,6 +34,6 @@ public class DistrictingComparator implements Comparator<Districting> {
                 value1 = o1.getObjectiveValue();
                 value2 = o2.getObjectiveValue();
         }
-        return Double.compare(value2, value1);
+        return Double.compare(value1, value2);
     }
 }

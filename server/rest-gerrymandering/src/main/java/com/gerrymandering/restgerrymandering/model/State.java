@@ -49,12 +49,17 @@ public class State {
     private List<DistrictingSummary> districtingSummaries;
 
     public Districting getEnactedDistricting() {
-        return districtings.get(Constants.getEnactedDistrictingIndex() +
-                Constants.getDistrictingOffsets().get(name.toLowerCase()));
+        return districtings.get(Constants.getEnactedDistrictingIndex());
     }
 
     public Districting getDistrictingById(long districtingId) {
         return districtings.get((int)districtingId);
+    }
+
+    public void sortDistrictings(DistrictingComparator comparator) {
+        Districting enacted = districtings.remove(Constants.getEnactedDistrictingIndex());
+        districtings.sort(comparator);
+        districtings.add(Constants.getEnactedDistrictingIndex(), enacted);
     }
 
     // GETTERS AND SETTERS
