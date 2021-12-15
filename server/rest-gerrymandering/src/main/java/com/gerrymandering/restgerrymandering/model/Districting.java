@@ -365,7 +365,7 @@ public class Districting implements Cloneable {
                     if (!coordinates.get(0).getAsJsonArray().get(0).isJsonArray()) {
                         JsonArray outer = new JsonArray();
                         outer.add(coordinates);
-                        boundary.addProperty("coordinates", "outer");
+                        boundary.add("coordinates", outer);
                     }
                     compositeDistrictFeature.add("geometry", boundary);
                     compositeDistrictFeature.add("properties", properties);
@@ -406,7 +406,7 @@ public class Districting implements Cloneable {
                 if (!coordinates.get(0).getAsJsonArray().get(0).isJsonArray()) {
                     JsonArray outer = new JsonArray();
                     outer.add(coordinates);
-                    boundary.addProperty("coordinates", "outer");
+                    boundary.add("coordinates", outer);
                 }
                 compositeDistrictFeature.add("geometry", boundary);
                 compositeDistrictFeature.add("properties", properties);
