@@ -10,7 +10,8 @@ import Reset from './Reset';
 import { AlgorithmContext } from '../contexts/Algorithm';
 import { SelectedDistrictingContext } from '../contexts/SelectedDistricting';
 import { StateSummaryContext } from '../contexts/StateSummary';
-
+import { GeoJSONContext } from "../contexts/GeoJSON";
+import boxData from '../data/finalboxwhisker/a_tot.json';
 export default function TopBar(props) {
   const { isOpen: isDrawerOpen , onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure()
   const { isOpen: isBoxOpen , onOpen: onBoxOpen, onClose: onBoxClose } = useDisclosure()
@@ -20,6 +21,7 @@ export default function TopBar(props) {
   const [algorithm, setAlgorithm] = useContext(AlgorithmContext);
   // const [selectedDistricting, setSelectedDistricting] = useContext(SelectedDistrictingContext);
   const [stateSummary, setStateSummary] = useContext(StateSummaryContext);
+  const [ geoJSON, setGeoJSON ] = useContext(GeoJSONContext);
 
   return (
     <HStack w='100%' p='5' align='center' justify='center'>
@@ -29,7 +31,15 @@ export default function TopBar(props) {
           <Button onClick={onDrawerOpen} mr='5px'>
             <Text>User Settings</Text>
           </Button>
-          <Button colorScheme='red' ml='10px' onClick={onResetOpen}>
+          <Button ml='10px' 
+            href={`data:text/json;charset=utf-8,${encodeURIComponent(
+            JSON.stringify(boxData)
+            )}`}
+            download="districting_plan_celtics.json"
+            >
+          {`Download JSON`}
+          </Button>
+          <Button colorScheme='red' ml='10px' mr='auto' onClick={onResetOpen}>
             Reset
           </Button>
           <Reset 

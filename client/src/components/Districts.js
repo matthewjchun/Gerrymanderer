@@ -141,8 +141,8 @@ export default function Districts(props) {
 
   return (
       <>
-        <Text> DISTRICT {number} </Text>
-        <Table variant='striped' colorScheme='gray'>
+        <Text fontSize='xl' align='center'><b>District {number}</b></Text>
+        <Table variant='striped' colorScheme='gray' overflow='hidden'>
             <Thead>
             <Tr>
                 <Th>Population</Th>
@@ -195,6 +195,7 @@ export default function Districts(props) {
           <Pie data={cData}></Pie>:
         null
         }
+        <br />
     </>
   );
 }

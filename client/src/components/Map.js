@@ -222,6 +222,50 @@ const Map = () => {
       addLayer('azprec-boundary', 'azprecincts', '#e6d1b5');
       addLayer('azcounty-boundary', 'azcounty', '#940f00');
       addLayer('azcd_lines', 'azcd', '#000000');
+      addLayer('azcd_lines', 'azcd', '#000000');
+      // map.current.addLayer({
+      //   'id': 'azcd-fills',
+      //   'type': 'fill',
+      //   'source': 'azcd',
+      //   'layout': {},
+      //   'paint': {
+      //   'fill-color': '#627BC1',
+      //   'fill-opacity': [
+      //     'case',
+      //       ['boolean', ['feature-state', 'hover'], false],
+      //       1,
+      //       0.5
+      //   ]
+      //   }
+      //   });
+
+      // map.current.on('mousemove', 'azcd-fills', (e) => {
+      //   if (e.features.length > 0) {
+      //     if (hoveredStateId !== null) {
+      //       map.current.setFeatureState(
+      //       { source: 'azcd', id: hoveredStateId },
+      //       { hover: false }
+      //       );
+      //     }
+      //     hoveredStateId = e.features[0].id;
+      //     map.current.setFeatureState(
+      //       { source: 'azcd', id: hoveredStateId },
+      //       { hover: true }
+      //     );
+      //   }
+      // });
+         
+      //   // When the mouse leaves the state-fill layer, update the feature state of the
+      //   // previously hovered feature.
+      //   map.current.on('mouseleave', 'azcd-fills', () => {
+      //   if (hoveredStateId !== null) {
+      //   map.current.setFeatureState(
+      //   { source: 'azcd', id: hoveredStateId },
+      //   { hover: false }
+      //   );
+      //   }
+      //   hoveredStateId = null;
+      //   });
 
       onOpen();
 
