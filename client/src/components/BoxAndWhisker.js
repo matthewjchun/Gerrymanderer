@@ -29,6 +29,7 @@ import { Radio, RadioGroup, Stack } from '@chakra-ui/react';
 import { StateContext } from "../contexts/State";
 import { StateDataContext } from "../contexts/StateData";
 import { PopulationTypeContext } from "../contexts/PopulationType";
+import { DistrictingSummaryContext } from "../contexts/DistrictingSummary";
 
 export default function BoxAndWhisker(props) {
   const { isOpen, onClose } = props;
@@ -36,6 +37,7 @@ export default function BoxAndWhisker(props) {
   const [stateData] = useContext(StateDataContext);
   const [populationType] = useContext(PopulationTypeContext);
   const [activeState] = useContext(StateContext);
+  const [districtingSummary] = useContext(DistrictingSummaryContext);
   const [series, setSeries] = useState();
   const [basis, setBasis] = useState('african');
 
@@ -86,9 +88,29 @@ export default function BoxAndWhisker(props) {
   }
 
 
-  // const sortedDistrictArray = () => {
-  //   selectedDistricting['summary']
-  // };
+  const popDistrictArray = [];
+  if(basis == 'democratic' || basis == 'republican'){
+    for( const population of districtingSummary['districtSummaries']){
+      popDistrictArray.push((population['elections']['0'][basis]/population['populations']['0']['total']).toPrecision(2));
+    }      
+  }
+  else if(populationType == 'TOTAL'){
+    for( const population of districtingSummary['districtSummaries']){
+      popDistrictArray.push((population['populations']['0'][basis]/population['populations']['0']['total']).toPrecision(2));
+    }
+  }
+  else if(populationType == 'VAP'){
+    for( const population of districtingSummary['districtSummaries']){
+      popDistrictArray.push((population['populations']['1'][basis]/population['populations']['1']['total']).toPrecision(2));
+    }
+  }
+  else{
+    for( const population of districtingSummary['districtSummaries']){
+      popDistrictArray.push((population['populations']['2'][basis]/population['populations']['2']['total']).toPrecision(2));
+    }
+  }
+  let sortedOverlay = popDistrictArray.sort((a, b) => a - b);
+  console.log(sortedOverlay);
 
   let azBoxData;
 
@@ -219,8 +241,40 @@ export default function BoxAndWhisker(props) {
       data: [
         {
           x: 'district one',
-          y: [0.02, 0.03, 0.05]
-        }
+          y: sortedOverlay[0]
+        },
+        {
+          x: 'district two',
+          y: sortedOverlay[1]
+        },
+        {
+          x: 'district three',
+          y: sortedOverlay[2]
+        },
+        {
+          x: 'district four',
+          y: sortedOverlay[3]
+        },
+        {
+          x: 'district five',
+          y: sortedOverlay[4]
+        },
+        {
+          x: 'district six',
+          y: sortedOverlay[5]
+        },
+        {
+          x: 'district seven',
+          y: sortedOverlay[6]
+        },
+        {
+          x: 'district eight',
+          y: sortedOverlay[7]
+        },
+        {
+          x: 'district nine',
+          y: sortedOverlay[8]
+        },
       ],
     },
   ];

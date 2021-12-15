@@ -181,7 +181,6 @@ export default function StateDrawer(props) {
       headers: { 'Content-type': 'application/json; charset=UTF-8' },
     });
     const body = await response.json();
-    console.log(body);
     return body;
   };
 
@@ -259,33 +258,33 @@ export default function StateDrawer(props) {
                   <br/>
                   Total Congressional Districts: {stateData['enacted']['districts']['features'].length}
                   <br/>
-                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal'].toPrecision(3)}
+                  Population Equality: {districtingSummary['populationEqualityTotal'].toPrecision(3)}
                   <br/>
-                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper'].toPrecision(3)}
+                  Compactness: {districtingSummary['avgPolsbyPopper'].toPrecision(3)}
                   <br/>
-                  Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']}
+                  Majority Minority Districts: {districtingSummary['majorityMinorityCountTotal']}
                   </Text>
                 ) : value == '1' ? (
                   <Text> Population: {VAP.toLocaleString()}
                   <br/>
                   Total Congressional Districts: {stateData['enacted']['districts']['features'].length}
                   <br/>
-                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal'].toPrecision(3)}
+                  Population Equality: {districtingSummary['populationEqualityVAP'].toPrecision(3)}
                   <br/>
-                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper'].toPrecision(3)}
+                  Compactness: {districtingSummary['avgPolsbyPopper'].toPrecision(3)}
                   <br/>
-                  Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']}
+                  Majority Minority Districts: {districtingSummary['majorityMinorityCountVAP']}
                   </Text>
                 ) : value == '2' ? (
                   <Text> Population: {CVAP.toLocaleString()}
                   <br/>
                   Total Congressional Districts: {stateData['enacted']['districts']['features'].length}
                   <br/>
-                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal'].toPrecision(3)}
+                  Population Equality: {districtingSummary['populationEqualityCVAP'].toPrecision(3)}
                   <br/>
-                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper'].toPrecision(3)}
+                  Compactness: {districtingSummary['avgPolsbyPopper'].toPrecision(3)}
                   <br/>
-                  Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']} 
+                  Majority Minority Districts: {districtingSummary['majorityMinorityCountCVAP']} 
                   </Text>
                 ) : null}
                 <br />
