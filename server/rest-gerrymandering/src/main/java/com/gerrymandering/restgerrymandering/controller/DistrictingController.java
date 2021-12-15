@@ -98,8 +98,8 @@ public class DistrictingController {
             }
         }
         stateFull.add("enacted", enactedGeoJson);
+        state.sortDistrictings(new DistrictingComparator(POPEQ, Constants.PopulationType.TOTAL));
         List<Districting> seawulfDistrictings = state.getDistrictings();
-        seawulfDistrictings.sort(new DistrictingComparator(POPEQ, Constants.PopulationType.TOTAL));
         JsonArray seawulfGeoJsonArray = new JsonArray();
         for (int i = 1; i < seawulfDistrictings.size(); i++) {
             Districting seawulfDistricting = seawulfDistrictings.get(i);
@@ -141,9 +141,9 @@ public class DistrictingController {
         Constants.SortCriteria sortCriteria = Constants.SortCriteria.valueOf(sortCriteriaStr);
         session.setAttribute("sortCriteria", sortCriteria);
 
-        List<Districting> seawulfDistrictings = currentState.getDistrictings();
-        seawulfDistrictings.sort(new DistrictingComparator(sortCriteria, populationType));
-        return ResponseEntity.ok(seawulfDistrictings);
+        currentState.sortDistrictings(new DistrictingComparator(sortCriteria, populationType));
+        List<Districting> districtings = currentState.getDistrictings();
+        return ResponseEntity.ok(districtings);
     }
 
     @GetMapping("/algorithm")
@@ -164,9 +164,7 @@ public class DistrictingController {
         }
         Gson gson = new Gson();
 
-        List<Districting> seawulfDistrictings = currentState.getDistrictings();
-        seawulfDistrictings.sort(new DistrictingComparator(sortCriteria, populationType));
-        currentState.setDistrictings(seawulfDistrictings);
+        currentState.sortDistrictings(new DistrictingComparator(sortCriteria, populationType));
         Districting selectedDistricting = currentState.getDistrictingById(districtingId);
 
         AlgorithmSettings algorithmSettings = (AlgorithmSettings) session.getAttribute("algorithmSettings");
