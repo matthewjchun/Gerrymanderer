@@ -361,10 +361,12 @@ public class Districting implements Cloneable {
                     String boundaryStr = geoWriter.write(union.getBoundary());
                     JsonObject boundary = JsonParser.parseString(boundaryStr).getAsJsonObject();
                     JsonArray coordinates = boundary.get("coordinates").getAsJsonArray();
-                    if (coordinates.get(0).getAsJsonArray().get(0).isJsonArray())
-                        boundary.addProperty("type", "Polygon");
-                    else
-                        boundary.addProperty("type", "LineString");
+                    boundary.addProperty("type", "Polygon");
+                    if (!coordinates.get(0).getAsJsonArray().get(0).isJsonArray()) {
+                        JsonArray outer = new JsonArray();
+                        outer.add(coordinates);
+                        boundary.addProperty("coordinates", "outer");
+                    }
                     compositeDistrictFeature.add("geometry", boundary);
                     compositeDistrictFeature.add("properties", properties);
                     features.add(compositeDistrictFeature);
@@ -400,10 +402,12 @@ public class Districting implements Cloneable {
                 String boundaryStr = geoWriter.write(union.getBoundary());
                 JsonObject boundary = JsonParser.parseString(boundaryStr).getAsJsonObject();
                 JsonArray coordinates = boundary.get("coordinates").getAsJsonArray();
-                if (coordinates.get(0).getAsJsonArray().get(0).isJsonArray())
-                    boundary.addProperty("type", "Polygon");
-                else
-                    boundary.addProperty("type", "LineString");
+                boundary.addProperty("type", "Polygon");
+                if (!coordinates.get(0).getAsJsonArray().get(0).isJsonArray()) {
+                    JsonArray outer = new JsonArray();
+                    outer.add(coordinates);
+                    boundary.addProperty("coordinates", "outer");
+                }
                 compositeDistrictFeature.add("geometry", boundary);
                 compositeDistrictFeature.add("properties", properties);
                 features.add(compositeDistrictFeature);
