@@ -249,17 +249,15 @@ export default function StateDrawer(props) {
                   </AccordionItem>
                 </Accordion>
                 <br />
-                <Text fontSize='3xl'>Statistics</Text>
-                <br />
-                <Divider />
+                <Text fontSize='3xl'><b>Statistics</b></Text>
                 {value == '0' ? (
-                  <Text> Population: {TOTAL.toLocaleString()} 
+                  <Text>Population: {TOTAL.toLocaleString()}
                   <br/>
                   Total Congressional Districts: {stateData['enacted']['districts']['features'].length}
                   <br/>
-                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal'].toPrecision(2)}
+                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal'].toPrecision(3)}
                   <br/>
-                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper']}
+                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper'].toPrecision(3)}
                   <br/>
                   Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']}
                   </Text>
@@ -268,9 +266,9 @@ export default function StateDrawer(props) {
                   <br/>
                   Total Congressional Districts: {stateData['enacted']['districts']['features'].length}
                   <br/>
-                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
+                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal'].toPrecision(3)}
                   <br/>
-                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper']}
+                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper'].toPrecision(3)}
                   <br/>
                   Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']}
                   </Text>
@@ -279,17 +277,15 @@ export default function StateDrawer(props) {
                   <br/>
                   Total Congressional Districts: {stateData['enacted']['districts']['features'].length}
                   <br/>
-                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal']}
+                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal'].toPrecision(3)}
                   <br/>
-                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper']}
+                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper'].toPrecision(3)}
                   <br/>
                   Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']} 
                   </Text>
                 ) : null}
-                <Divider />
                 <br />
-                <Text fontSize='xl'>2018 Attorney General Elections</Text>
-                <br />
+                <Text fontSize='2xl'><b>2018 Attorney General Elections</b></Text>
                 <StatGroup>
                   <Stat>
                     <StatLabel>Democratic</StatLabel>
@@ -318,8 +314,7 @@ export default function StateDrawer(props) {
                     </StatHelpText>
                   </Stat>
                 </StatGroup>
-                <Divider />
-                <p id='chartTitle'>Demographics</p>
+                <Text fontSize='2xl'><p id='chartTitle'><b>Demographics</b></p></Text>
                 {value == 0 ?
                   <Pie data={tData}></Pie>:
                  value == 1 ?
@@ -329,7 +324,7 @@ export default function StateDrawer(props) {
                  null
                 }
               </TabPanel>
-              <TabPanel>
+              <TabPanel style={{maxWidth: '100%'}}>
                
                {districts.map((district) => {
                   return(

@@ -34,13 +34,12 @@ import { StateContext } from "../contexts/State";
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>              
-              <Heading>Confirm</Heading>  
+              <Heading>Reset Your Progress</Heading>  
             </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <Text fontSize='2xl'>Are you sure you want to reset?</Text>
-              <Divider />
-              <Text align="left">You will lose your progress</Text>
+              <Text fontSize='xl'>You will lose your progress.</Text>
             </ModalBody>
             <ModalFooter>
               <Button colorScheme="red" mr={3} onClick={handleReset}>

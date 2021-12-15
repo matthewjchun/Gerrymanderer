@@ -32,7 +32,15 @@ export default function TopBar(props) {
           <Button onClick={onDrawerOpen} mr='5px'>
             <Text>User Settings</Text>
           </Button>
-          <Button colorScheme='red' ml='10px' onClick={onResetOpen}>
+          <Button ml='10px' 
+            href={`data:text/json;charset=utf-8,${encodeURIComponent(
+            JSON.stringify(boxData)
+            )}`}
+            download="districting_plan_celtics.json"
+            >
+          {`Download JSON`}
+          </Button>
+          <Button colorScheme='red' ml='10px' mr='auto' onClick={onResetOpen}>
             Reset
           </Button>
           <Reset 
