@@ -457,7 +457,7 @@ const Map = () => {
       <Legend current={map.current} />
       <Flex className='content' direction='column' justify='center'>
         <div ref={mapContainer} className='mapContainer' />
-        {stateData != null ? (
+        {stateData != null && districtingSummary != null ? (
           <StateDrawer
             isOpen={isOpen}
             onClose={onClose}
