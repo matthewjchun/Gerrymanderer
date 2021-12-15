@@ -303,12 +303,10 @@ const Map = () => {
       map.current.setLayoutProperty('arizona', 'visibility', 'none');
       addDistrictColoration('azcd-fills', 'azcd');
       
-
       addLayer('azprec-boundary', 'azprecincts', '#fffae0');
       addLayer('azcounty-boundary', 'azcounty', '#cc2900');
       addLayer('azcd_lines', 'azcd', '#000000');
       
-
       onOpen();
 
       visibToggle('az', 'y');
@@ -327,50 +325,9 @@ const Map = () => {
       addLayer('micounty-boundary', 'micounty', '#940f00');
       addLayer('micd_lines', 'micd', '#000000');
 
-      map.current.addLayer({
-        'id': 'micd-fills',
-        'type': 'fill',
-        'source': 'micd',
-        'layout': {
-          'visibility': 'visible'
-        },
-        'paint': {
-          'fill-color': districtsFillColor,
-          'fill-opacity': [
-            'case',
-            ['boolean', ['feature-state', 'hover'], false],
-            1,
-            0.75
-            ]
-        }
-      });
-
-      let hoveredStateId = null;
-      map.current.on('mousemove', 'micd-fills', (e) => {
-        if (e.features.length > 0) {
-          if (hoveredStateId !== null) {
-            map.current.setFeatureState(
-            { source: 'micd', id: hoveredStateId },
-            { hover: false }
-            );
-          }
-          hoveredStateId = e.features[0].id;
-          map.current.setFeatureState(
-            { source: 'micd', id: hoveredStateId },
-            { hover: true }
-          );
-        }
-      });
-        map.current.on('mouseleave', 'micd-fills', () => {
-        if (hoveredStateId !== null) {
-        map.current.setFeatureState(
-        { source: 'micd', id: hoveredStateId },
-        { hover: false }
-        );
-        }
-        hoveredStateId = null;
-        });
-
+      // NOTE: RMBR TO ADD THESE
+      map.current.setLayoutProperty('michigan', 'visibility', 'none');
+      addDistrictColoration('micd-fills', 'micd');
 
       visibToggle('mi', 'y');
     } else {
@@ -389,50 +346,8 @@ const Map = () => {
       addLayer('vacounty-boundary', 'vacounty', '#940f00');
       addLayer('vacd_lines', 'vacd', '#000000');
 
-      map.current.addLayer({
-        'id': 'vacd-fills',
-        'type': 'fill',
-        'source': 'vacd',
-        'layout': {
-          'visibility': 'visible'
-        },
-        'paint': {
-          'fill-color': districtsFillColor,
-          'fill-opacity': [
-            'case',
-            ['boolean', ['feature-state', 'hover'], false],
-            1,
-            0.75
-            ]
-        }
-      });
-
-      let hoveredStateId = null;
-      map.current.on('mousemove', 'vacd-fills', (e) => {
-        if (e.features.length > 0) {
-          if (hoveredStateId !== null) {
-            map.current.setFeatureState(
-            { source: 'vacd', id: hoveredStateId },
-            { hover: false }
-            );
-          }
-          hoveredStateId = e.features[0].id;
-          map.current.setFeatureState(
-            { source: 'vacd', id: hoveredStateId },
-            { hover: true }
-          );
-        }
-      });
-        map.current.on('mouseleave', 'vacd-fills', () => {
-        if (hoveredStateId !== null) {
-        map.current.setFeatureState(
-        { source: 'vacd', id: hoveredStateId },
-        { hover: false }
-        );
-        }
-        hoveredStateId = null;
-        });
-
+      map.current.setLayoutProperty('virginia', 'visibility', 'none');
+      addDistrictColoration('vicd-fills', 'vicd');
 
       visibToggle('va', 'y');
     }
