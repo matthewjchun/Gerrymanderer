@@ -9,7 +9,7 @@ import Legend from './Legend';
 import { useDisclosure } from '@chakra-ui/react';
 import * as constants from '../constants/constants';
 import { StateDataContext } from '../contexts/StateData';
-
+import { DistrictingSummaryContext } from '../contexts/DistrictingSummary';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiY2VsdGljczQxNiIsImEiOiJja3R2MGM5dTQxajY4Mm5sNWV5YnNhNHg0In0.t9oiLZZUeZi0QpqUIik13w';
@@ -30,6 +30,7 @@ const Map = () => {
   const [activeState, setActiveState] = useContext(StateContext);
   const [geoJSON, setGeoJSON] = useContext(GeoJSONContext);
   const [stateData, setStateData] = useContext(StateDataContext);
+  const [districtingSummary, setDistrictingSummary] = useContext(DistrictingSummaryContext);
   const { isOpen, onOpen, onClose } = useDisclosure(); // open close state drawer
   // let refetch = false;
 
@@ -69,6 +70,7 @@ const Map = () => {
     );
     const body = await response.json();
     await setStateData(body);
+    await setDistrictingSummary(body['summary']['districtingSummaries'][0])
     console.log(body)
     return body;
   };

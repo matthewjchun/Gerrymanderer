@@ -351,6 +351,7 @@ export default function LeftPane(props) {
           onModalOpen={onModalOpen} 
           activeState={activeState}
           algorithmURL={algorithmURL}
+          popEquality={popEquality/100}
         > </AlgoProgress>:
         null
       }

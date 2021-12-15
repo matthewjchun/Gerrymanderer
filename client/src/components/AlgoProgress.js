@@ -12,18 +12,22 @@ import {
   Heading,
   Center,
   CircularProgress,
+  HStack,
+  Box,
 } from "@chakra-ui/react";
 import { useContext, useState, useEffect } from 'react';
+import { Bar } from 'react-chartjs-2';
+import ReactApexChart from "react-apexcharts";
 import { AlgorithmContext } from "../contexts/Algorithm";
 import { StateDataContext } from "../contexts/StateData";
 import { GeoJSONContext } from "../contexts/GeoJSON";
 
 export default function AlgoProgress(props) {
-    const { isOpen, onClose, activeState, algorithmURL } = props;
+    const { isOpen, onClose, activeState, algorithmURL, popEquality } = props;
 
     const [ algorithm, setAlgorithm ] = useContext(AlgorithmContext);
     const [ stateData ] = useContext(StateDataContext);
-    const [ setGeoJSON ] = useContext(GeoJSONContext);
+    const [ geoJSON, setGeoJSON ] = useContext(GeoJSONContext);
 
     const [ running, setRunning ] = useState(algorithm["running"]);
     const [ loading, setLoading ] = useState(false);
@@ -91,12 +95,62 @@ export default function AlgoProgress(props) {
         `/algorithmSummary`
       );
       const body = await response.json();
-      setGeoJSON(body['districtingBoundary']);
+      if(body['districtingBoundary'] == null){
+        while(body['districtingBoundary'] == null){
+          const response = await fetch(
+            `/algorithmSummary`
+          );
+          const body = await response.json();
+        }
+      }
+      await setGeoJSON(body['districtingBoundary']);
       onClose();
+      setLoading(false);
+    }
+
+    console.log(popEquality)
+
+    const series = [
+      {
+        name: 'blerg',
+        data: [stateData['summary']['districtingSummaries']['0']['populationEqualityTotal'], algorithm["populationEqualityTotal"]]
+      }
+    ];
+
+    const options = {
+      chart: {
+        type: 'bar',
+        height: 350
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+        }
+      },
+      colors: ['#008FFB', '#FEB019'],
+      dataLabels: {
+        enabled: false
+      },
+      xaxis: {
+        categories: ['Original Population Equality', 'Algorithm Population Equality'],
+      },
+      yaxis: {
+        min: 0,
+        max: popEquality,
+        tickAmount: 5,
+        forceNiceScale: true,
+        labels: {
+          formatter: function(val, index) {
+            if(val != null){
+              return val.toPrecision(2);
+            }
+          }
+        }
+      }
     }
 
     return(
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>              
@@ -134,15 +188,19 @@ export default function AlgoProgress(props) {
                   </Center>
                   <br/>
                   <Divider />
-                  <Text align="left">Pop. Equality: {algorithm["populationEqualityTotal"]}</Text>
-                  <Text align="left">Polsby Popper: {algorithm["avgPolsbyPopper"]}</Text>
-                  <Text align="left">Majority Minority: {algorithm["majorityMinorityCountTotal"]}</Text>
-
-                  <Divider />
-                  <Text align='left'>Census Blocks Moved: {algorithm['numberCensusBlocksMoved']}</Text>
-                  <Text align="left">Number of iterations: {algorithm["numberIterations"]}</Text>
-                  <Text align="left">Estimated time: {algorithm["estimatedTime"]} seconds</Text>
-                  <Divider/>
+                  {/* <HStack spacing='5px'>
+                    <Box> */}
+                      <Text align="left">Pop. Equality: {algorithm["populationEqualityTotal"]}</Text>
+                      <Text align="left">Polsby Popper: {algorithm["avgPolsbyPopper"]}</Text>
+                      <Text align="left">Majority Minority: {algorithm["majorityMinorityCountTotal"]}</Text>
+                      <Divider />
+                      <Text align='left'>Census Blocks Moved: {algorithm['numberCensusBlocksMoved']}</Text>
+                      <Text align="left">Number of iterations: {algorithm["numberIterations"]}</Text>
+                      <Text align="left">Estimated time: {algorithm["estimatedTime"]} seconds</Text>
+                      <Divider/>
+                    {/* </Box> */}
+                    <ReactApexChart options={options} series={series}></ReactApexChart>
+                  {/* </HStack> */}
                 </>:
                 <>
                   <Center>
