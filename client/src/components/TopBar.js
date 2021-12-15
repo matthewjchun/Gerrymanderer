@@ -9,6 +9,7 @@ import BoxAndWhisker from './BoxAndWhisker';
 import Reset from './Reset';
 import { AlgorithmContext } from '../contexts/Algorithm';
 import { SelectedDistrictingContext } from '../contexts/SelectedDistricting';
+import { StateSummaryContext } from '../contexts/StateSummary';
 
 export default function TopBar(props) {
   const { isOpen: isDrawerOpen , onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure()
@@ -17,7 +18,8 @@ export default function TopBar(props) {
 
   const [activeState, setActiveState] = useContext(StateContext);
   const [algorithm, setAlgorithm] = useContext(AlgorithmContext);
-  const [selectedDistricting, setSelectedDistricting] = useContext(SelectedDistrictingContext);
+  // const [selectedDistricting, setSelectedDistricting] = useContext(SelectedDistrictingContext);
+  const [stateSummary, setStateSummary] = useContext(StateSummaryContext);
 
   return (
     <HStack w='100%' p='5' align='center' justify='center'>
@@ -35,7 +37,7 @@ export default function TopBar(props) {
             onClose={onResetClose} 
             onOpen={onResetOpen} 
           ></Reset>
-          {selectedDistricting != null ?
+          {stateSummary != null ?
             <>
             <LeftPane isOpen={isDrawerOpen} onClose={onDrawerClose} onOpen={onDrawerOpen} onBoxOpen={onBoxOpen}></LeftPane>
             <BoxAndWhisker isOpen={isBoxOpen} onClose={onBoxClose} onOpen={onBoxOpen} activeState={activeState}></BoxAndWhisker>
