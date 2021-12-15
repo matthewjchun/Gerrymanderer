@@ -32,12 +32,15 @@ import Districts from './Districts';
 import { StateContext } from '../contexts/State';
 import { PopulationTypeContext } from '../contexts/PopulationType';
 import { StateDataContext } from '../contexts/StateData';
+import { DistrictingSummaryContext } from '../contexts/DistrictingSummary';
+
 
 export default function StateDrawer(props) {
   const { isOpen, onOpen, onClose } = props;
   const [activeState] = useContext(StateContext);
   const [value, setValue] = useState('0');
   const [populationType, setPopulationType] = useContext(PopulationTypeContext);
+  const [districtingSummary, setDistrictingSummary] = useContext(DistrictingSummaryContext);
   const [stateData, setStateData] = useContext(StateDataContext);
   const stateSummary = stateData['summary'];
   console.log(stateSummary)
@@ -53,7 +56,8 @@ export default function StateDrawer(props) {
   let VAP = stateSummary['populations'][1]['total'];
   let CVAP = stateSummary['populations'][2]['total'];
   
-  let districts = stateSummary['districtingSummaries'][0]['districtSummaries'];
+  let districts = districtingSummary['districtSummaries'];
+  let districtingId = districtingSummary['id'];
 
   // DEMOGRAPHICS PIE CHART AND TABLE
 
@@ -177,7 +181,6 @@ export default function StateDrawer(props) {
       headers: { 'Content-type': 'application/json; charset=UTF-8' },
     });
     const body = await response.json();
-    console.log(body);
     return body;
   };
 
@@ -255,33 +258,39 @@ export default function StateDrawer(props) {
                   <br/>
                   Total Congressional Districts: {stateData['enacted']['districts']['features'].length}
                   <br/>
-                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityTotal'].toPrecision(3)}
+                  Population Equality: {districtingSummary['populationEqualityTotal'].toPrecision(3)}
                   <br/>
-                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper'].toPrecision(3)}
+                  Compactness: {districtingSummary['avgPolsbyPopper'].toPrecision(3)}
                   <br/>
-                  Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountTotal']}
+                  Majority Minority Districts: {districtingSummary['majorityMinorityCountTotal']}
                   </Text>
                 ) : value == '1' ? (
                   <Text> Population: {VAP.toLocaleString()}
                   <br/>
                   Total Congressional Districts: {stateData['enacted']['districts']['features'].length}
                   <br/>
-                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityVAP'].toPrecision(3)}
+                  Population Equality: {districtingSummary['populationEqualityVAP'].toPrecision(3)}
                   <br/>
-                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper'].toPrecision(3)}
+                  Compactness: {districtingSummary['avgPolsbyPopper'].toPrecision(3)}
                   <br/>
-                  Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountVAP']}
+
+                  Majority Minority Districts: {districtingSummary['majorityMinorityCountVAP']}
+
                   </Text>
                 ) : value == '2' ? (
                   <Text> Population: {CVAP.toLocaleString()}
                   <br/>
                   Total Congressional Districts: {stateData['enacted']['districts']['features'].length}
                   <br/>
-                  Population Equality: {stateSummary['districtingSummaries']['0']['populationEqualityCVAP'].toPrecision(3)}
+
+                  Population Equality: {districtingSummary['populationEqualityCVAP'].toPrecision(3)}
+
                   <br/>
-                  Compactness: {stateSummary['districtingSummaries']['0']['avgPolsbyPopper'].toPrecision(3)}
+                  Compactness: {districtingSummary['avgPolsbyPopper'].toPrecision(3)}
                   <br/>
-                  Majority Minority Districts: {stateSummary['districtingSummaries']['0']['majorityMinorityCountCVAP']} 
+
+                  Majority Minority Districts: {districtingSummary['majorityMinorityCountCVAP']} 
+
                   </Text>
                 ) : null}
                 <br />
@@ -328,7 +337,8 @@ export default function StateDrawer(props) {
                
                {districts.map((district) => {
                   return(
-                  <Districts 
+                  <Districts
+                    districtingId={districtingId} 
                     number={district.districtId} 
                     population={district.populations} 
                     election={district.elections} 

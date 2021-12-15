@@ -15,12 +15,39 @@ import { StateDataContext } from '../contexts/StateData';
 import { DistrictingSummaryContext } from '../contexts/DistrictingSummary';
 
 export default function Redistricting(props) {
-  const { number, bestMeasure, measures, thumbnail } = props;
-  const { popEquality, compactness, majorityMinority } = measures;
+  const { display, number, thumbnail, popEquality, compactness, majorityMinority  } = props;
+  // const { popEquality, compactness, majorityMinority } = measures;
 
   const [ stateData, setStateData ] = useContext(StateDataContext);
   const stateSummary = stateData['summary'];
   const [districtingSummary, setDistrictingSummary] = useContext(DistrictingSummaryContext);
+
+  
+// returns an array of best measures for each redistricting in a given state
+const bestMeasure = (data) => {
+  let best = [];
+  for (let i = 0; i < data.length; i++) {
+    let districting = data[i];
+    let minProp = 'populationEqualityTotal';
+    let min = parseInt(districting.populationEqualityTotal);
+    for (let measure in districting) {
+      if (measure === 'populationEqualityTotal' || measure === 'avgPolsbyPopper') {
+        if (parseInt(districting[measure]) < min) {
+          minProp = measure;
+          min = parseInt(districting.measure);
+        }
+      } 
+      else if (measure === 'majorityMinorityCountTotal') {
+        if (parseInt(districting[measure]) > min) {
+          minProp = measure;
+          min = parseInt(districting.measure);
+        }
+      }
+    }
+    best.push([i, minProp, districting]);
+  }
+  return best;
+};
 
 
   const handleRedistrictingClick = async () => {
@@ -72,7 +99,7 @@ export default function Redistricting(props) {
             isTruncated
             onMouseEnter={stopPropagation}
             onMouseLeave={stopPropagation}
-          > Districting {number}</Text>
+          > Districting {display}</Text>
           <VStack align='left'>
             <Image 
               src={thumbnail[number-1]}
@@ -83,7 +110,7 @@ export default function Redistricting(props) {
               fontSize={"xl"}
               onMouseEnter={stopPropagation}
               onMouseLeave={stopPropagation}
-            >{bestMeasure}</Text>
+            >beep</Text>
           </VStack>        
         </Box>
       </PopoverTrigger>

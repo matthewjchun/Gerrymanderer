@@ -76,7 +76,6 @@ const Map = () => {
     );
     const body = await response.json();
     await setStateData(body);
-    await setDistrictingSummary(body['summary']['districtingSummaries'][0])
     console.log(body)
     return body;
   };
@@ -287,6 +286,13 @@ const Map = () => {
     if (state == 'Arizona') {
       const stateData = await handleStateFetch();
       const stateSummary = stateData['summary'];
+      for( const summary of stateData['summary']['districtingSummaries'] ){
+        if( summary['id'] == 1){
+          const districtingSummary = summary;
+          await setDistrictingSummary(summary)
+        }
+      }
+
 
       map.current.flyTo({
         center: [
@@ -306,7 +312,7 @@ const Map = () => {
       addLayer('azprec-boundary', 'azprecincts', '#fffae0');
       addLayer('azcounty-boundary', 'azcounty', '#cc2900');
       addLayer('azcd_lines', 'azcd', '#000000');
-      
+
       onOpen();
 
       visibToggle('az', 'y');
@@ -469,7 +475,7 @@ const Map = () => {
       <Legend current={map.current} />
       <Flex className='content' direction='column' justify='center'>
         <div ref={mapContainer} className='mapContainer' />
-        {stateData != null ? (
+        {stateData != null && districtingSummary != null ? (
           <StateDrawer
             isOpen={isOpen}
             onClose={onClose}

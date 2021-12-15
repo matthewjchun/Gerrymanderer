@@ -12,6 +12,7 @@ import { StateDataContext } from '../contexts/StateData';
 import { DistrictingSummaryContext } from '../contexts/DistrictingSummary';
 
 import boxData from '../data/finalboxwhisker/a_tot.json';
+import { DistrictingSummaryContext } from '../contexts/DistrictingSummary';
 
 export default function TopBar(props) {
   const { isOpen: isDrawerOpen , onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure()
@@ -22,6 +23,7 @@ export default function TopBar(props) {
   const [algorithm, setAlgorithm] = useContext(AlgorithmContext);
   const [stateData, setStateData] = useContext(StateDataContext);
   const [districtingSummary, setDistrictingSummary] = useContext(DistrictingSummaryContext);
+
   let stateSummary;
 
   if(stateData != null){
@@ -74,7 +76,7 @@ export default function TopBar(props) {
             onClose={onResetClose} 
             onOpen={onResetOpen} 
           ></Reset>
-          {stateSummary != null ?
+          {stateSummary != null && districtingSummary != null ?
             <>
             <LeftPane isOpen={isDrawerOpen} onClose={onDrawerClose} onOpen={onDrawerOpen} onBoxOpen={onBoxOpen}></LeftPane>
             <BoxAndWhisker isOpen={isBoxOpen} onClose={onBoxClose} onOpen={onBoxOpen} activeState={activeState}></BoxAndWhisker>
