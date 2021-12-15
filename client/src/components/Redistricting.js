@@ -12,6 +12,7 @@ import {
   Center
 } from '@chakra-ui/react';
 import { StateDataContext } from '../contexts/StateData';
+import { DistrictingSummaryContext } from '../contexts/DistrictingSummary';
 
 export default function Redistricting(props) {
   const { display, number, thumbnail, popEquality, compactness, majorityMinority  } = props;
@@ -19,6 +20,7 @@ export default function Redistricting(props) {
 
   const [ stateData, setStateData ] = useContext(StateDataContext);
   const stateSummary = stateData['summary'];
+  const [districtingSummary, setDistrictingSummary] = useContext(DistrictingSummaryContext);
 
   
 // returns an array of best measures for each redistricting in a given state
@@ -54,6 +56,7 @@ const bestMeasure = (data) => {
     // )
     // const body = await response.json();
     console.log(number);
+    // setDistrictingSummary()
 
   }
 
