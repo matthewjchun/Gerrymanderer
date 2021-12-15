@@ -43,7 +43,7 @@ export default function StateDrawer(props) {
   const [districtingSummary, setDistrictingSummary] = useContext(DistrictingSummaryContext);
   const [stateData, setStateData] = useContext(StateDataContext);
   const stateSummary = stateData['summary'];
-
+  console.log(stateSummary)
 
   // POPULATION MEASURE
   const typeMap = {
@@ -166,8 +166,8 @@ export default function StateDrawer(props) {
 
   // ELECTION SPLIT STATISTICS
 
-  let dem = stateSummary['elections'][0]['democratic'];
-  let rep = stateSummary['elections'][0]['republican'];
+  let dem = 0//stateSummary['elections'][0]['democratic'];
+  let rep = 0//stateSummary['elections'][0]['republican'];
   let total = dem + rep;
   let demPercent = dem / total;
   let repPercent = rep / total;
@@ -273,18 +273,24 @@ export default function StateDrawer(props) {
                   <br/>
                   Compactness: {districtingSummary['avgPolsbyPopper'].toPrecision(3)}
                   <br/>
+
                   Majority Minority Districts: {districtingSummary['majorityMinorityCountVAP']}
+
                   </Text>
                 ) : value == '2' ? (
                   <Text> Population: {CVAP.toLocaleString()}
                   <br/>
                   Total Congressional Districts: {stateData['enacted']['districts']['features'].length}
                   <br/>
+
                   Population Equality: {districtingSummary['populationEqualityCVAP'].toPrecision(3)}
+
                   <br/>
                   Compactness: {districtingSummary['avgPolsbyPopper'].toPrecision(3)}
                   <br/>
+
                   Majority Minority Districts: {districtingSummary['majorityMinorityCountCVAP']} 
+
                   </Text>
                 ) : null}
                 <br />

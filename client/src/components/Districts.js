@@ -30,10 +30,12 @@ export default function Districts(props) {
     let offset = (districtingId - 1) * 9;
   }
   // election
+
   // const dem = election[0]["democratic"];
   // const rep = election[0]["republican"];
   const dem = 2;
   const rep = 3;
+
   if (dem > rep) {
     arrowFlag = true;
   }
@@ -165,12 +167,14 @@ export default function Districts(props) {
               <Td>{CVAP} </Td>:
              null
             }
+
                 <Td isNumeric>
                   {dem.toLocaleString()}
                 </Td>
                 <Td isNumeric>
                   {rep.toLocaleString()}
                 </Td>
+
             {arrowFlag ? 
               <Tr>
                 <Td></Td>
