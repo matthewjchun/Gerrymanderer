@@ -33,15 +33,13 @@ export default function Redistricting(props) {
 
   const handleMouseEnter = (e) => {
     if(e.target == e.currentTarget){
-      e.target.style.boxShadow = '0px 5px 8px #888888';
-      e.target.style.backgroundColor = '#87CEEB';
+      e.target.style.boxShadow = '0px 1px 1px #888888';
     }
   };
 
   const handleMouseLeave = (e) => {
     if(e.target == e.currentTarget){
       e.target.style.boxShadow = 'none';
-      e.target.style.backgroundColor = 'white';
     }
   };
 
@@ -71,7 +69,7 @@ export default function Redistricting(props) {
             isTruncated
             onMouseEnter={stopPropagation}
             onMouseLeave={stopPropagation}
-          > District {number}</Text>
+          > Districting {number}</Text>
           <VStack align='left'>
             <Image 
               src={thumbnail[number-1]}
