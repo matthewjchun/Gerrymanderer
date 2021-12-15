@@ -21,13 +21,17 @@ import { useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 
 export default function Districts(props) {
-  const { number, population, popType, election } = props;
+  const { districtingId, number, population, popType, election } = props;
 
   let arrowFlag = false;
 
+  let offset = (districtingId - 1) * 9;
+
   // election
-  const dem = election[0]["democratic"];
-  const rep = election[0]["republican"];
+  // const dem = election[0]["democratic"];
+  // const rep = election[0]["republican"];
+  const dem = 2;
+  const rep = 3;
   if (dem > rep) {
     arrowFlag = true;
   }
@@ -141,7 +145,7 @@ export default function Districts(props) {
 
   return (
       <>
-        <Text fontSize='xl' align='center'><b>District {number}</b></Text>
+        <Text fontSize='xl' align='center'><b>District {number-offset}</b></Text>
         <Table variant='striped' colorScheme='gray' overflow='hidden'>
             <Thead>
             <Tr>
@@ -160,10 +164,10 @@ export default function Districts(props) {
              null
             }
                 <Td isNumeric>
-                  {election[0]["democratic"].toLocaleString()}
+                  {dem.toLocaleString()}
                 </Td>
                 <Td isNumeric>
-                  {election[0]["republican"].toLocaleString()}
+                  {rep.toLocaleString()}
                 </Td>
             {arrowFlag ? 
               <Tr>

@@ -32,12 +32,15 @@ import Districts from './Districts';
 import { StateContext } from '../contexts/State';
 import { PopulationTypeContext } from '../contexts/PopulationType';
 import { StateDataContext } from '../contexts/StateData';
+import { DistrictingSummaryContext } from '../contexts/DistrictingSummary';
+
 
 export default function StateDrawer(props) {
   const { isOpen, onOpen, onClose } = props;
   const [activeState] = useContext(StateContext);
   const [value, setValue] = useState('0');
   const [populationType, setPopulationType] = useContext(PopulationTypeContext);
+  const [districtingSummary, setDistrictingSummary] = useContext(DistrictingSummaryContext);
   const [stateData, setStateData] = useContext(StateDataContext);
   const stateSummary = stateData['summary'];
 
@@ -53,7 +56,8 @@ export default function StateDrawer(props) {
   let VAP = stateSummary['populations'][1]['total'];
   let CVAP = stateSummary['populations'][2]['total'];
   
-  let districts = stateSummary['districtingSummaries'][0]['districtSummaries'];
+  let districts = districtingSummary['districtSummaries'];
+  let districtingId = districtingSummary['id'];
 
   // DEMOGRAPHICS PIE CHART AND TABLE
 
@@ -328,7 +332,8 @@ export default function StateDrawer(props) {
                
                {districts.map((district) => {
                   return(
-                  <Districts 
+                  <Districts
+                    districtingId={districtingId} 
                     number={district.districtId} 
                     population={district.populations} 
                     election={district.elections} 
