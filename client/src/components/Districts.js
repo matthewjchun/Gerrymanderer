@@ -27,15 +27,25 @@ export default function Districts(props) {
 
   let offset = 0;
   if(districtingId != 1){
-    offset = (districtingId - 1) * 9;
+    offset = (districtingId) * 9;
   }
   // election
 
-  const dem = election[0]["democratic"];
-  const rep = election[0]["republican"];
+  // const dem = election[0]["democratic"];
+  // const rep = election[0]["republican"];
   // const dem = 2;
   // const rep = 3;
 
+  let dem;
+  let rep;
+  if(districtingId ==1){
+    dem = election[0]["democratic"];
+    rep = election[0]["republican"];
+  }
+  else {
+    dem = 2;
+    rep = 2;
+  }
   if (dem > rep) {
     arrowFlag = true;
   }
