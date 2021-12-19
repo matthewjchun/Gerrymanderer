@@ -10,6 +10,9 @@ Frontend:
 
 Backend:
 * Java Spring Boot
+* GeoPandas
+* Shapely
+* Seawulf HPC
 
 ## Setup
 To run this project, install it locally using npm:
